@@ -6,19 +6,18 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
+import zh.lingvo.rest.LanguagesServlet;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
         Server server = new Server(8080);
 
-        ServletContextHandler context0 = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context0.setContextPath("/ctx0");
-        server.setHandler(context0);
+        ServletContextHandler apiContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        apiContext.setContextPath("/api");
+        server.setHandler(apiContext);
 
-        context0.addServlet(new ServletHolder(new HelloServlet()), "/*");
-        context0.addServlet(new ServletHolder(new HelloServlet("Buongiorno Mondo")), "/it/*");
-        context0.addServlet(new ServletHolder(new HelloServlet("Bunjour le Monde")), "/fr/*");
+        apiContext.addServlet(new ServletHolder(new LanguagesServlet()), "/languages");
 
 
         WebAppContext webapp = new WebAppContext();
@@ -29,7 +28,7 @@ public class Main {
         webapp.setErrorHandler(new MyErrorHandler());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
-        contexts.setHandlers(new Handler[] { context0, webapp });
+        contexts.setHandlers(new Handler[] { apiContext, webapp });
 
         server.setHandler(contexts);
 
