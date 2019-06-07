@@ -1,9 +1,9 @@
-package zh.lingvo.rest.json
+package zh.lingvo.util.json
 
-import org.codehaus.groovy.runtime.NullObject
+
 import spock.lang.Specification
 import spock.lang.Unroll
-import zh.lingvo.rest.entities.RestEntity
+import zh.lingvo.rest.entities.JsonEntity
 
 class JsonFactoryTest extends Specification {
     @Unroll
@@ -56,14 +56,14 @@ class JsonFactoryTest extends Specification {
         [1.0, 2.22, 3] as float[]      | 'float[]'     || '[1.0,2.22,3.0]'
         [1, 2, 3] as short[]           | 'short[]'     || '[1,2,3]'
         [1, 2, 3] as byte[]            | 'byte[]'      || '[1,2,3]'
-        [1, 2, 3] as long[]            | 'long[]'      || '[1,2,3]'
-        [1, 2, 3] as Integer[]         | 'Integer[]'   || '[1,2,3]'
-        [true, false] as boolean[]     | 'boolean[]'   || '[true,false]'
-        [true, false] as Boolean[]     | 'Boolean[]'   || '[true,false]'
-        ['a', 'b', 'c'] as char[]      | 'char[]'      || '["a","b","c"]'
-        ['a', 'b', 'c'] as Character[] | 'Character[]' || '["a","b","c"]'
-        ["aa", "bb", "cc"] as String[] | 'String[]'    || '["aa","bb","cc"]'
-        [new TestableRestEntity(), new TestableRestEntity()] as TestableRestEntity[] | 'TestableRestEntity[]' || "[$TestableRestEntity.expectedJson,$TestableRestEntity.expectedJson]"
+        [1, 2, 3] as long[]                                                          | 'long[]'               || '[1,2,3]'
+        [1, 2, 3] as Integer[]                                                       | 'Integer[]'            || '[1,2,3]'
+        [true, false] as boolean[]                                                   | 'boolean[]'            || '[true,false]'
+        [true, false] as Boolean[]                                                   | 'Boolean[]'            || '[true,false]'
+        ['a', 'b', 'c'] as char[]                                                    | 'char[]'               || '["a","b","c"]'
+        ['a', 'b', 'c'] as Character[]                                               | 'Character[]'          || '["a","b","c"]'
+        ["aa", "bb", "cc"] as String[]                                               | 'String[]'             || '["aa","bb","cc"]'
+        [new TestableJsonEntity(), new TestableJsonEntity()] as TestableJsonEntity[] | 'TestableJsonEntity[]' || "[$TestableJsonEntity.expectedJson,$TestableJsonEntity.expectedJson]"
     }
 
     @Unroll
@@ -86,13 +86,13 @@ class JsonFactoryTest extends Specification {
 
     def "Map should be converted to json"() {
         given: 'a map'
-        Map<Integer, RestEntity> map = [1: new TestableRestEntity(), 2: new TestableRestEntity()]
+        Map<Integer, JsonEntity> map = [1: new TestableJsonEntity(), 2: new TestableJsonEntity()]
 
         when: 'it is converted to json'
         String json = JsonFactory.toJson(map)
 
         then: 'it is converted to json object'
-        json == "{\"1\":$TestableRestEntity.expectedJson,\"2\":$TestableRestEntity.expectedJson}"
+        json == "{\"1\":$TestableJsonEntity.expectedJson,\"2\":$TestableJsonEntity.expectedJson}"
     }
 
     def "Iterator should be converted to json"() {
@@ -119,17 +119,17 @@ class JsonFactoryTest extends Specification {
     }
 
     def "Only fields annotated as Persistable are going into json"() {
-        given: 'a RestEntity'
-        RestEntity obj = new TestableRestEntity()
+        given: 'a JsonEntity'
+        JsonEntity obj = new TestableJsonEntity()
 
         when: 'it is sent to JsonFactory'
         String json = JsonFactory.toJson(obj)
 
         then: 'only persistable fields are serialised'
-        json == TestableRestEntity.expectedJson
+        json == TestableJsonEntity.expectedJson
     }
 
-    private static class TestableRestEntity implements RestEntity {
+    private static class TestableJsonEntity implements JsonEntity {
         static final String expectedJson = '{"intField":10,"boolField":true,"stringField":"abc"}'
 
         @Persistable

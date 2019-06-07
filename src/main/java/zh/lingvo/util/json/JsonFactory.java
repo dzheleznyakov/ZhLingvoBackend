@@ -1,9 +1,9 @@
-package zh.lingvo.rest.json;
+package zh.lingvo.util.json;
 
 import com.google.gson.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import zh.lingvo.rest.entities.RestEntity;
+import zh.lingvo.rest.entities.JsonEntity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -151,14 +151,14 @@ public class JsonFactory {
         return GSON.toJson(jsonArray);
     }
 
-    public static <E extends RestEntity> String toJson(E[] array) {
+    public static <E extends JsonEntity> String toJson(E[] array) {
         JsonArray jsonArray = new JsonArray(array.length);
         for (E e : array)
             jsonArray.add(toJsonElement(e));
         return GSON.toJson(jsonArray);
     }
 
-    public static <E extends RestEntity> String toJson(E obj) {
+    public static <E extends JsonEntity> String toJson(E obj) {
         JsonElement jsonElement = obj == null ? JsonNull.INSTANCE : toJsonElement(obj);
         return GSON.toJson(jsonElement);
     }
@@ -226,13 +226,13 @@ public class JsonFactory {
 
     @NotNull
     @Contract("_ -> new")
-    private static <E extends RestEntity> JsonElement toJsonElement(E obj) {
+    private static <E extends JsonEntity> JsonElement toJsonElement(E obj) {
         JsonObject jsonObject = new JsonObject();
         addPropertiesToJson(obj, jsonObject);
         return jsonObject;
     }
 
-    private static <E extends RestEntity> void addPropertiesToJson(E obj, JsonObject json) {
+    private static <E extends JsonEntity> void addPropertiesToJson(E obj, JsonObject json) {
         Arrays.stream(obj.getClass().getDeclaredFields())
                 .filter(JsonFactory::isPersistable)
                 .forEach(field -> addPropertyToJson(obj, field, json));
@@ -242,7 +242,7 @@ public class JsonFactory {
         return field.getAnnotationsByType(Persistable.class).length != 0;
     }
 
-    private static <E extends RestEntity> void addPropertyToJson(E obj , Field field, JsonObject json) {
+    private static <E extends JsonEntity> void addPropertyToJson(E obj , Field field, JsonObject json) {
         String getterName = convertFieldToGetterName(field);
         Method getter = getMethodByName(obj.getClass(), getterName);
         Object value = invokeGetter(getter, obj);
@@ -262,8 +262,8 @@ public class JsonFactory {
             return toJsonElement((String) value);
         if (value instanceof Boolean)
             return toJsonElement((Boolean) value);
-        if (value instanceof RestEntity)
-            return toJsonElement((RestEntity) value);
+        if (value instanceof JsonEntity)
+            return toJsonElement((JsonEntity) value);
         throw new JsonConversionException(String.format("Cannot convert object [%s] to JSON", value), null);
     }
 

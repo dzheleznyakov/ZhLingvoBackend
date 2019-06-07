@@ -1,4 +1,4 @@
-package zh.lingvo.rest.json;
+package zh.lingvo.util.json;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

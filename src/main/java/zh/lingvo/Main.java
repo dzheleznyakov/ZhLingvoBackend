@@ -6,7 +6,8 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
-import zh.lingvo.rest.LanguagesServlet;
+import zh.lingvo.rest.servlets.LanguagesServlet;
+import zh.lingvo.rest.servlets.PartOfSpeechServlet;
 
 public class Main {
 
@@ -18,6 +19,7 @@ public class Main {
         server.setHandler(apiContext);
 
         apiContext.addServlet(new ServletHolder(new LanguagesServlet()), "/languages");
+        apiContext.addServlet(new ServletHolder(new PartOfSpeechServlet()), "/partsOfSpeeches/*");
 
 
         WebAppContext webapp = new WebAppContext();
