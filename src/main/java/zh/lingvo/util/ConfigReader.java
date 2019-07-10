@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ConfigReader {
     private static final String DEFAULT_CONFIG_PATH = "lingvo";
@@ -68,8 +69,12 @@ public class ConfigReader {
         return config.getBoolean(path);
     }
 
-    public String getAsString(String path) {
+    public String getString(String path) {
         return config.getString(path);
+    }
+
+    public String getStringOrDefault(String path, String defaultValue) {
+        return getOrDefault(path, defaultValue, config::getString);
     }
 
     public <E extends Enum<E>> E getAsEnum(String path, Class<E> eClass) {
@@ -122,6 +127,10 @@ public class ConfigReader {
         return config.getList(path).stream()
                 .map(ConfigReader::new)
                 .collect(ImmutableMap.toImmutableMap(keyMapper, valueMapper));
+    }
+
+    private <E> E getOrDefault(String path, E defaultValue, Function<String, E> valueSupplier) {
+        return config.hasPath(path) ? valueSupplier.apply(path) : defaultValue;
     }
 
     public static ConfigReader get() {

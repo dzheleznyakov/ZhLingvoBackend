@@ -2,6 +2,7 @@ package zh.lingvo.util
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import zh.lingvo.TestEnum
 
 import static zh.lingvo.util.ConfigReader.DEFAULT_PATH
 
@@ -39,7 +40,20 @@ class ConfigReaderSpec extends Specification {
         'getAsDouble'  | 'intValue'    || 42            | Double
         'getAsFloat'   | 'intValue'    || 42            | Float
         'getAsBoolean' | 'boolValue'   || true          | Boolean
-        'getAsString'  | 'stringValue' || 'abc'         | String
+        'getString'    | 'stringValue' || 'abc'         | String
+    }
+
+    @Unroll
+    def "Config can return default primitive values if path does not resolve: #method"() {
+        when: '"getOrDefault" primitive value is requested for non-existing path'
+        def value = config."$method"(path, defaultValue)
+
+        then: 'the default value is returned'
+        value == defaultValue
+
+        where: 'the parameters are'
+        method               | path              | defaultValue
+        'getStringOrDefault' | 'nonExistingPath' | 'default string'
     }
 
     def "Config can return objects"() {
@@ -102,7 +116,7 @@ class ConfigReaderSpec extends Specification {
 
     def "Config can turn lists of objects to maps"() {
         when: 'a map is requested'
-        def value = config.getAsMap('mapValue') { it.getAsString('name') } { new Fruit(it) }
+        def value = config.getAsMap('mapValue') { it.getString('name') } { new Fruit(it) }
         println "value = $value"
 
         then: 'the returned map is correct'
@@ -112,17 +126,13 @@ class ConfigReaderSpec extends Specification {
         ]
     }
 
-    private enum TestEnum {
-        FORTY_TWO, FORTY_THREE
-    }
-
     private class Fruit {
         private final String name
         private final Colour colour
         private final double weight
 
         Fruit(ConfigReader config) {
-            name = config.getAsString('name')
+            name = config.getString('name')
             colour = config.getAsEnum('colour', Colour)
             weight = config.getAsDouble('weight')
         }

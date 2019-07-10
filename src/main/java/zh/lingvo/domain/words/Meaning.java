@@ -1,0 +1,46 @@
+package zh.lingvo.domain.words;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableList;
+import zh.lingvo.util.CollectionUtils;
+
+import java.util.List;
+
+public class Meaning {
+    private String remark;
+    private List<Translation> translations;
+    private List<Example> examples;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public List<Translation> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(List<Translation> translations) {
+        this.translations = CollectionUtils.toImmutableList(translations);
+    }
+
+    public List<Example> getExamples() {
+        return examples;
+    }
+
+    public void setExamples(List<Example> examples) {
+        this.examples = CollectionUtils.toImmutableList(examples);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("remark", remark)
+                .add("translations", translations)
+                .add("examples", examples)
+                .toString();
+    }
+}

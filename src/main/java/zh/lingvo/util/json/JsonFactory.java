@@ -1,5 +1,6 @@
 package zh.lingvo.util.json;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +66,10 @@ public class JsonFactory {
     public static String toJson(String s) {
         JsonElement jsonElement = s == null ? JsonNull.INSTANCE : toJsonElement(s);
         return GSON.toJson(jsonElement);
+    }
+
+    public static String toJson(Enum<?> value) {
+        return toJson(value.name());
     }
 
     public static String toJson(int[] array) {
@@ -151,10 +156,18 @@ public class JsonFactory {
         return GSON.toJson(jsonArray);
     }
 
-    public static <E extends JsonEntity> String toJson(E[] array) {
+    public static <E extends Enum<E>> String toJson(E[] array) {
+        String[] other = Arrays.stream(array)
+                .map(Enum::name)
+                .collect(ImmutableList.toImmutableList())
+                .toArray(new String[array.length]);
+        return toJson(other);
+    }
+
+    public static <J extends JsonEntity> String toJson(J[] array) {
         JsonArray jsonArray = new JsonArray(array.length);
-        for (E e : array)
-            jsonArray.add(toJsonElement(e));
+        for (J j : array)
+            jsonArray.add(toJsonElement(j));
         return GSON.toJson(jsonArray);
     }
 
@@ -164,12 +177,7 @@ public class JsonFactory {
     }
 
     public static <E> String toJson(Iterable<E> iterable) {
-        if (iterable == null)
-            return GSON.toJson(JsonNull.INSTANCE);
-        JsonArray jsonArray = new JsonArray();
-        for (E e : iterable)
-            jsonArray.add(convertToJsonElement(e));
-        return GSON.toJson(jsonArray);
+        return GSON.toJson(toJsonArray(iterable));
     }
 
     public static <E> String toJson(Iterator<E> iterator) {
@@ -232,6 +240,16 @@ public class JsonFactory {
         return jsonObject;
     }
 
+    private static <E> JsonElement toJsonArray(Iterable<E> iterable) {
+        if (iterable == null)
+            return JsonNull.INSTANCE;
+
+        JsonArray jsonArray = new JsonArray();
+        for (E e : iterable)
+            jsonArray.add(convertToJsonElement(e));
+        return jsonArray;
+    }
+
     private static <E extends JsonEntity> void addPropertiesToJson(E obj, JsonObject json) {
         Arrays.stream(obj.getClass().getDeclaredFields())
                 .filter(JsonFactory::isPersistable)
@@ -239,7 +257,7 @@ public class JsonFactory {
     }
 
     private static boolean isPersistable(Field field) {
-        return field.getAnnotationsByType(Persistable.class).length != 0;
+        return field.getAnnotationsByType(Jsonable.class).length != 0;
     }
 
     private static <E extends JsonEntity> void addPropertyToJson(E obj , Field field, JsonObject json) {
@@ -262,8 +280,12 @@ public class JsonFactory {
             return toJsonElement((String) value);
         if (value instanceof Boolean)
             return toJsonElement((Boolean) value);
+        if (value instanceof Enum<?>)
+            return toJsonElement(((Enum) value).name());
         if (value instanceof JsonEntity)
             return toJsonElement((JsonEntity) value);
+        if (value instanceof Iterable)
+            return toJsonArray((Iterable<?>) value);
         throw new JsonConversionException(String.format("Cannot convert object [%s] to JSON", value), null);
     }
 

@@ -3,6 +3,7 @@ package zh.lingvo.util.json
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import zh.lingvo.TestEnum
 import zh.lingvo.rest.entities.JsonEntity
 
 class JsonFactoryTest extends Specification {
@@ -41,6 +42,14 @@ class JsonFactoryTest extends Specification {
         'aa'          | 'string'  || '"aa"'
     }
 
+    def "Enumerations are converted into string"() {
+        when: 'an enum value is converted to json'
+        String json = JsonFactory.toJson(TestEnum.FORTY_TWO)
+
+        then: 'it is directly converted to string'
+        json == '"FORTY_TWO"'
+    }
+
     @Unroll
     def "Array of type #type is converted to json string"() {
         when: 'an array is converted to json'
@@ -50,19 +59,20 @@ class JsonFactoryTest extends Specification {
         json == result
 
         where: 'parameters are'
-        array                          | type          || result
-        [1, 2, 3] as int[]             | 'int[]'       || '[1,2,3]'
-        [1.0, 2.22, 3] as double[]     | 'double[]'    || '[1.0,2.22,3.0]'
-        [1.0, 2.22, 3] as float[]      | 'float[]'     || '[1.0,2.22,3.0]'
-        [1, 2, 3] as short[]           | 'short[]'     || '[1,2,3]'
-        [1, 2, 3] as byte[]            | 'byte[]'      || '[1,2,3]'
-        [1, 2, 3] as long[]                                                          | 'long[]'               || '[1,2,3]'
-        [1, 2, 3] as Integer[]                                                       | 'Integer[]'            || '[1,2,3]'
-        [true, false] as boolean[]                                                   | 'boolean[]'            || '[true,false]'
-        [true, false] as Boolean[]                                                   | 'Boolean[]'            || '[true,false]'
-        ['a', 'b', 'c'] as char[]                                                    | 'char[]'               || '["a","b","c"]'
-        ['a', 'b', 'c'] as Character[]                                               | 'Character[]'          || '["a","b","c"]'
-        ["aa", "bb", "cc"] as String[]                                               | 'String[]'             || '["aa","bb","cc"]'
+        array                                                    | type          || result
+        [1, 2, 3] as int[]                                       | 'int[]'       || '[1,2,3]'
+        [1.0, 2.22, 3] as double[]                               | 'double[]'    || '[1.0,2.22,3.0]'
+        [1.0, 2.22, 3] as float[]                                | 'float[]'     || '[1.0,2.22,3.0]'
+        [1, 2, 3] as short[]                                     | 'short[]'     || '[1,2,3]'
+        [1, 2, 3] as byte[]                                      | 'byte[]'      || '[1,2,3]'
+        [1, 2, 3] as long[]                                      | 'long[]'      || '[1,2,3]'
+        [1, 2, 3] as Integer[]                                   | 'Integer[]'   || '[1,2,3]'
+        [true, false] as boolean[]                               | 'boolean[]'   || '[true,false]'
+        [true, false] as Boolean[]                               | 'Boolean[]'   || '[true,false]'
+        ['a', 'b', 'c'] as char[]                                | 'char[]'      || '["a","b","c"]'
+        ['a', 'b', 'c'] as Character[]                           | 'Character[]' || '["a","b","c"]'
+        ["aa", "bb", "cc"] as String[]                           | 'String[]'    || '["aa","bb","cc"]'
+        [TestEnum.FORTY_TWO, TestEnum.FORTY_THREE] as TestEnum[] | 'enum[]'      || '["FORTY_TWO","FORTY_THREE"]'
         [new TestableJsonEntity(), new TestableJsonEntity()] as TestableJsonEntity[] | 'TestableJsonEntity[]' || "[$TestableJsonEntity.expectedJson,$TestableJsonEntity.expectedJson]"
     }
 
@@ -132,13 +142,13 @@ class JsonFactoryTest extends Specification {
     private static class TestableJsonEntity implements JsonEntity {
         static final String expectedJson = '{"intField":10,"boolField":true,"stringField":"abc"}'
 
-        @Persistable
+        @Jsonable
         private int intField = 10
 
-        @Persistable
+        @Jsonable
         private boolean boolField = true
 
-        @Persistable
+        @Jsonable
         private String stringField = 'abc'
 
         private int intField2 = 20
@@ -159,4 +169,5 @@ class JsonFactoryTest extends Specification {
             return intField2
         }
     }
+
 }

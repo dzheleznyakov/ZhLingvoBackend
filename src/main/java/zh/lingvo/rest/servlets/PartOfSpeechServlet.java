@@ -14,8 +14,11 @@ import java.util.Map;
 public class PartOfSpeechServlet extends HttpServlet {
     private static final ConfigReader config = ConfigReader.get();
 
+    private Map<String, List<String>> partsOfSpeechesMap;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        System.out.println("Request received: [" + req + "]");
         String[] pathSegments = req.getRequestURI().split("/");
         String languageCode = pathSegments[pathSegments.length - 1];
         List<String> partsOfSpeech = getPartsOfSpeeches(languageCode);
@@ -26,10 +29,19 @@ public class PartOfSpeechServlet extends HttpServlet {
     }
 
     private List<String> getPartsOfSpeeches(String languageCode) {
-        String partsOfSpeechesPath = "partsOfSpeeches";
-        Map<String, List<String>> map = config.getAsMap("languages",
-                c -> c.getAsString("code"),
-                c -> c.hasPath(partsOfSpeechesPath) ? c.getAsStringList(partsOfSpeechesPath) : ImmutableList.of());
-        return map.getOrDefault(languageCode, ImmutableList.of());
+        if (partsOfSpeechesMap == null)
+            initialisePartsOfSpeechesMap();
+        return partsOfSpeechesMap.getOrDefault(languageCode, ImmutableList.of());
+    }
+
+    private void initialisePartsOfSpeechesMap() {
+        partsOfSpeechesMap = config.getAsMap("languages",
+                c -> c.getString("code"),
+                this::getPartOfSpeechType
+        );
+    }
+
+    private List<String> getPartOfSpeechType(ConfigReader languageConfig) {
+        return languageConfig.getAsList("partsOfSpeeches", c -> c.getString("name"));
     }
 }

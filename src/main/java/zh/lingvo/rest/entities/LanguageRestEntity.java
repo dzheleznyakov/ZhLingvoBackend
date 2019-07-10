@@ -1,26 +1,25 @@
 package zh.lingvo.rest.entities;
 
 import com.google.common.base.MoreObjects;
-import com.typesafe.config.ConfigObject;
-import com.typesafe.config.ConfigValue;
-import zh.lingvo.util.ConfigReader;
-import zh.lingvo.util.json.Persistable;
+import zh.lingvo.domain.Language;
+import zh.lingvo.util.json.Jsonable;
 
-public class LanguageEntity implements JsonEntity {
-    @Persistable
+public class LanguageRestEntity implements JsonEntity {
+    @Jsonable
     private String code;
 
-    @Persistable
+    @Jsonable
     private String name;
 
-    public LanguageEntity() {
+    public LanguageRestEntity() {
     }
 
-    public LanguageEntity(ConfigReader config) {
-        this(config.getAsString("code"), config.getAsString("name"));
+    public LanguageRestEntity(Language language) {
+        this.code = language.getCode();
+        this.name = language.getName();
     }
 
-    public LanguageEntity(String code, String name) {
+    public LanguageRestEntity(String code, String name) {
         this.code = code;
         this.name = name;
     }
