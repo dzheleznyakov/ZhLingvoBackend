@@ -1,10 +1,9 @@
-package persistence.xml;
+package zh.lingvo.persistence.xml;
 
-import persistence.PersistenceException;
-import persistence.Reader;
+import zh.lingvo.persistence.PersistenceException;
+import zh.lingvo.persistence.Reader;
 import zh.lingvo.domain.Dictionary;
-import persistence.xml.WordFactory;
-import persistence.xml.entities.DictionaryXmlEntity;
+import zh.lingvo.persistence.xml.entities.DictionaryXmlEntity;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -26,6 +25,6 @@ public class XmlReader implements Reader {
         JAXBContext jaxbContext = JAXBContext.newInstance(DictionaryXmlEntity.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         DictionaryXmlEntity xmlDictionary = (DictionaryXmlEntity) unmarshaller.unmarshal(dictionaryFile);
-        return WordFactory.create(xmlDictionary);
+        return XmlWordFactory.create(xmlDictionary);
     }
 }

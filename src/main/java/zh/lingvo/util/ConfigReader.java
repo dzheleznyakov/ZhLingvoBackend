@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ConfigReader {
     private static final String DEFAULT_CONFIG_PATH = "lingvo";
@@ -77,7 +76,7 @@ public class ConfigReader {
         return getOrDefault(path, defaultValue, config::getString);
     }
 
-    public <E extends Enum<E>> E getAsEnum(String path, Class<E> eClass) {
+    public <E extends Enum<E>> E getEnum(String path, Class<E> eClass) {
         return config.getEnum(eClass, path);
     }
 
@@ -111,11 +110,11 @@ public class ConfigReader {
         return config.getEnumList(eClass, path);
     }
 
-    public <E> List<E> getAsList(String path, Function<ConfigReader, E> mapper) {
-        return getAsList(path, mapper, (a, b) -> 1);
+    public <E> List<E> getList(String path, Function<ConfigReader, E> mapper) {
+        return getList(path, mapper, (a, b) -> 1);
     }
 
-    public <E> List<E> getAsList(String path, Function<ConfigReader, E> mapper, Comparator<E> comparator) {
+    public <E> List<E> getList(String path, Function<ConfigReader, E> mapper, Comparator<E> comparator) {
         return config.getList(path).stream()
                 .map(ConfigReader::new)
                 .map(mapper)
@@ -123,7 +122,7 @@ public class ConfigReader {
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public <K, E> Map<K, E> getAsMap(String path, Function<ConfigReader, K> keyMapper, Function<ConfigReader, E> valueMapper) {
+    public <K, E> Map<K, E> getMap(String path, Function<ConfigReader, K> keyMapper, Function<ConfigReader, E> valueMapper) {
         return config.getList(path).stream()
                 .map(ConfigReader::new)
                 .collect(ImmutableMap.toImmutableMap(keyMapper, valueMapper));

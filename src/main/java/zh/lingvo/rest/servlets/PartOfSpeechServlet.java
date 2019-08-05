@@ -35,13 +35,13 @@ public class PartOfSpeechServlet extends HttpServlet {
     }
 
     private void initialisePartsOfSpeechesMap() {
-        partsOfSpeechesMap = config.getAsMap("languages",
+        partsOfSpeechesMap = config.getMap("languages",
                 c -> c.getString("code"),
                 this::getPartOfSpeechType
         );
     }
 
     private List<String> getPartOfSpeechType(ConfigReader languageConfig) {
-        return languageConfig.getAsList("partsOfSpeeches", c -> c.getString("name"));
+        return languageConfig.getList("partsOfSpeeches", c -> c.getString("name"));
     }
 }

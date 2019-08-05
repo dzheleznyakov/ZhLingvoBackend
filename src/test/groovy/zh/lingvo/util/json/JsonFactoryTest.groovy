@@ -105,53 +105,27 @@ class JsonFactoryTest extends Specification {
         json == "{\"1\":$TestableJsonEntity.expectedJson,\"2\":$TestableJsonEntity.expectedJson}"
     }
 
-    def "Iterator should be converted to json"() {
-        given: 'an iterator'
-        Iterator<Integer> iterator = [1, 2, 3].iterator()
-
-        when: 'it is converted to json'
-        String json = JsonFactory.toJson(iterator)
-
-        then: 'it is converted to json array'
-        json == '[1,2,3]'
-    }
-
-    def "With iterator, only remaining elements go into json"() {
-        given: 'an iterator that is already started'
-        Iterator<Integer> iterator = [1, 2, 3].iterator()
-        iterator.next()
-
-        when: 'it is converted to json'
-        String json = JsonFactory.toJson(iterator)
-
-        then: 'only remaining elements go into json'
-        json == '[2,3]'
-    }
-
-    def "Only fields annotated as Persistable are going into json"() {
+    def "Only not transient fields are serialised"() {
         given: 'a JsonEntity'
         JsonEntity obj = new TestableJsonEntity()
 
         when: 'it is sent to JsonFactory'
         String json = JsonFactory.toJson(obj)
 
-        then: 'only persistable fields are serialised'
+        then: 'only jsonable fields are serialised'
         json == TestableJsonEntity.expectedJson
     }
 
     private static class TestableJsonEntity implements JsonEntity {
         static final String expectedJson = '{"intField":10,"boolField":true,"stringField":"abc"}'
 
-        @Jsonable
         private int intField = 10
 
-        @Jsonable
         private boolean boolField = true
 
-        @Jsonable
         private String stringField = 'abc'
 
-        private int intField2 = 20
+        private transient int intField2 = 20
 
         int getIntField() {
             return intField

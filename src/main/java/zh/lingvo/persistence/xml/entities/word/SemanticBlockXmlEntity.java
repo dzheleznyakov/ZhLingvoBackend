@@ -1,10 +1,10 @@
-package persistence.xml.entities.word;
+package zh.lingvo.persistence.xml.entities.word;
 
 import com.google.common.base.MoreObjects;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.SemanticBlock;
 import zh.lingvo.util.CollectionUtils;
-import persistence.xml.entities.XmlEntity;
+import zh.lingvo.persistence.xml.entities.XmlEntity;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;

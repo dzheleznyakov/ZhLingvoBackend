@@ -1,17 +1,20 @@
 package zh.lingvo.rest.entities.word;
 
 import com.google.common.base.MoreObjects;
+import zh.lingvo.domain.words.Translation;
 import zh.lingvo.rest.entities.JsonEntity;
-import zh.lingvo.util.json.Jsonable;
 
 public class TranslationRestEntity implements JsonEntity {
-    @Jsonable
     private String translation;
 
-    @Jsonable
     private String elaboration;
 
     public TranslationRestEntity() {
+    }
+
+    public TranslationRestEntity(Translation tr) {
+        translation = tr.getTranslation();
+        elaboration = tr.getElaboration();
     }
 
     public String getTranslation() {

@@ -1,4 +1,4 @@
-package persistence;
+package zh.lingvo.persistence;
 
 public class PersistenceException extends RuntimeException {
     public PersistenceException(String message) {

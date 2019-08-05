@@ -2,14 +2,12 @@ package zh.lingvo.rest.entities;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
-import zh.lingvo.rest.entities.word.WordRestEntity;
 import zh.lingvo.domain.Dictionary;
-import zh.lingvo.util.json.Jsonable;
+import zh.lingvo.rest.entities.word.WordRestEntity;
 
 import java.util.List;
 
 public class DictionaryRestEntity implements JsonEntity {
-    @Jsonable
     private List<WordRestEntity> words;
 
     public DictionaryRestEntity() {
@@ -17,8 +15,7 @@ public class DictionaryRestEntity implements JsonEntity {
 
     public DictionaryRestEntity(Dictionary dictionary) {
         this.words = dictionary.getWords().stream()
-                .map(e -> new WordRestEntity())
-//                .map(WordRestEntity::new)
+                .map(word -> new WordRestEntity(word, dictionary.getLanguage()))
                 .collect(ImmutableList.toImmutableList());
     }
 

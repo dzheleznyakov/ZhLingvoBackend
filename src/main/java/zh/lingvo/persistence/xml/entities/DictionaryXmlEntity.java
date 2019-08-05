@@ -1,8 +1,8 @@
-package persistence.xml.entities;
+package zh.lingvo.persistence.xml.entities;
 
 import com.google.common.base.MoreObjects;
 import zh.lingvo.domain.Dictionary;
-import persistence.xml.entities.word.WordXmlEntity;
+import zh.lingvo.persistence.xml.entities.word.WordXmlEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

@@ -1,4 +1,4 @@
-package persistence;
+package zh.lingvo.persistence;
 
 import zh.lingvo.domain.Dictionary;
 

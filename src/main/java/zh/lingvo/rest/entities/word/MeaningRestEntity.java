@@ -1,22 +1,26 @@
 package zh.lingvo.rest.entities.word;
 
 import com.google.common.base.MoreObjects;
+import zh.lingvo.domain.words.Meaning;
 import zh.lingvo.rest.entities.JsonEntity;
-import zh.lingvo.util.json.Jsonable;
+import zh.lingvo.util.CollectionUtils;
 
 import java.util.List;
 
 public class MeaningRestEntity implements JsonEntity {
-    @Jsonable
     private String remark;
 
-    @Jsonable
     private List<TranslationRestEntity> translations;
 
-    @Jsonable
     private List<ExampleRestEntity> examples;
 
     public MeaningRestEntity() {
+    }
+
+    public MeaningRestEntity(Meaning meaning) {
+        remark = meaning.getRemark();
+        translations = CollectionUtils.transform(meaning::getTranslations, TranslationRestEntity::new);
+        examples = CollectionUtils.transform(meaning::getExamples, ExampleRestEntity::new);
     }
 
     public String getRemark() {

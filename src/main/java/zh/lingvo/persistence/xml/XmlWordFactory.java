@@ -1,4 +1,4 @@
-package persistence.xml;
+package zh.lingvo.persistence.xml;
 
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
@@ -11,19 +11,19 @@ import zh.lingvo.domain.words.SemanticGroup;
 import zh.lingvo.domain.words.Translation;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.util.CollectionUtils;
-import persistence.xml.entities.DictionaryXmlEntity;
-import persistence.xml.entities.word.ExampleXmlEntity;
-import persistence.xml.entities.word.MeaningXmlEntity;
-import persistence.xml.entities.word.SemanticBlockXmlEntity;
-import persistence.xml.entities.word.SemanticGroupXmlEntity;
-import persistence.xml.entities.word.TranslationXmlEntity;
-import persistence.xml.entities.word.WordXmlEntity;
-import persistence.PersistenceException;
+import zh.lingvo.persistence.xml.entities.DictionaryXmlEntity;
+import zh.lingvo.persistence.xml.entities.word.ExampleXmlEntity;
+import zh.lingvo.persistence.xml.entities.word.MeaningXmlEntity;
+import zh.lingvo.persistence.xml.entities.word.SemanticBlockXmlEntity;
+import zh.lingvo.persistence.xml.entities.word.SemanticGroupXmlEntity;
+import zh.lingvo.persistence.xml.entities.word.TranslationXmlEntity;
+import zh.lingvo.persistence.xml.entities.word.WordXmlEntity;
+import zh.lingvo.persistence.PersistenceException;
 
 import java.util.List;
 
-public class WordFactory {
-    private WordFactory() {
+public class XmlWordFactory {
+    private XmlWordFactory() {
     }
 
     public static Dictionary create(DictionaryXmlEntity xmlDictionary) {
@@ -37,7 +37,7 @@ public class WordFactory {
 
         List<WordXmlEntity> xmlWords = xmlDictionary.getWords();
         if (xmlWords != null) xmlWords.stream()
-                .map(WordFactory::create)
+                .map(XmlWordFactory::create)
                 .forEach(dictionary::add);
 
         return dictionary;
@@ -47,7 +47,7 @@ public class WordFactory {
         Word word = new Word(xmlWord.getId(), xmlWord.getWord());
         word.setTranscriptions(xmlWord.getTranscriptions());
 
-        List<SemanticGroup> semGroups = CollectionUtils.transform(xmlWord::getSemanticGroups, WordFactory::getSemanticGroup);
+        List<SemanticGroup> semGroups = CollectionUtils.transform(xmlWord::getSemanticGroups, XmlWordFactory::getSemanticGroup);
         word.setSemanticGroups(semGroups);
 
         return word;
@@ -55,7 +55,7 @@ public class WordFactory {
 
     private static SemanticGroup getSemanticGroup(SemanticGroupXmlEntity xmlSemGroup) {
         SemanticGroup semGroup = new SemanticGroup();
-        List<SemanticBlock> semBlocks = CollectionUtils.transform(xmlSemGroup::getSemanticBlocks, WordFactory::getSemanticBlock);
+        List<SemanticBlock> semBlocks = CollectionUtils.transform(xmlSemGroup::getSemanticBlocks, XmlWordFactory::getSemanticBlock);
         semGroup.setSemanticBlocks(semBlocks);
         return semGroup;
 
@@ -64,15 +64,15 @@ public class WordFactory {
     private static SemanticBlock getSemanticBlock(SemanticBlockXmlEntity xmlSemBlock) {
         PartOfSpeech partOfSpeech = xmlSemBlock.getPartOfSpeech();
         SemanticBlock semBlock = new SemanticBlock(partOfSpeech);
-        List<Meaning> meanings = CollectionUtils.transform(xmlSemBlock::getMeanings, WordFactory::getMeaning);
+        List<Meaning> meanings = CollectionUtils.transform(xmlSemBlock::getMeanings, XmlWordFactory::getMeaning);
         semBlock.setMeanings(meanings);
         return semBlock;
     }
 
     private static Meaning getMeaning(MeaningXmlEntity xmlMeaning) {
         Meaning meaning = new Meaning();
-        List<Translation> translations = CollectionUtils.transform(xmlMeaning::getTranslations, WordFactory::getTranslation);
-        List<Example> examples = CollectionUtils.transform(xmlMeaning::getExamples, WordFactory::getExample);
+        List<Translation> translations = CollectionUtils.transform(xmlMeaning::getTranslations, XmlWordFactory::getTranslation);
+        List<Example> examples = CollectionUtils.transform(xmlMeaning::getExamples, XmlWordFactory::getExample);
 
         meaning.setRemark(xmlMeaning.getRemark());
         meaning.setTranslations(translations);

@@ -84,7 +84,7 @@ class ConfigReaderSpec extends Specification {
 
     def "Config can return a list of objects"() {
         when: 'the config list is extracted'
-        def list = config.getAsList('intListValue') { it.getAsInt(DEFAULT_PATH) }
+        def list = config.getList('intListValue') { it.getAsInt(DEFAULT_PATH) }
 
         then: 'the values in the list are as in the file'
         list == [1, 2, 3]
@@ -92,7 +92,7 @@ class ConfigReaderSpec extends Specification {
 
     def "Config can return a list of objects in a given order"() {
         when: 'the config list is extracted with the comparator'
-        def list = config.getAsList('intListValue') { it.getAsInt(DEFAULT_PATH) } { a, b -> b - a }
+        def list = config.getList('intListValue') { it.getAsInt(DEFAULT_PATH) } { a, b -> b - a }
 
         then: 'the values in the list are as in the file'
         list == [3, 2, 1]
@@ -100,7 +100,7 @@ class ConfigReaderSpec extends Specification {
 
     def "Config can return enums"() {
         when: 'an enum value is requested'
-        def value = config.getAsEnum('enumValue', TestEnum)
+        def value = config.getEnum('enumValue', TestEnum)
 
         then: 'the returned value is correct'
         value == TestEnum.FORTY_TWO
@@ -116,8 +116,7 @@ class ConfigReaderSpec extends Specification {
 
     def "Config can turn lists of objects to maps"() {
         when: 'a map is requested'
-        def value = config.getAsMap('mapValue') { it.getString('name') } { new Fruit(it) }
-        println "value = $value"
+        def value = config.getMap('mapValue') { it.getString('name') } { new Fruit(it) }
 
         then: 'the returned map is correct'
         value == [
@@ -133,7 +132,7 @@ class ConfigReaderSpec extends Specification {
 
         Fruit(ConfigReader config) {
             name = config.getString('name')
-            colour = config.getAsEnum('colour', Colour)
+            colour = config.getEnum('colour', Colour)
             weight = config.getAsDouble('weight')
         }
 

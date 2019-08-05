@@ -2,8 +2,8 @@ package zh.lingvo.caches;
 
 import zh.lingvo.util.ConfigReader;
 import zh.lingvo.domain.Dictionary;
-import persistence.PersistenceException;
-import persistence.xml.XmlReader;
+import zh.lingvo.persistence.PersistenceException;
+import zh.lingvo.persistence.xml.XmlReader;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -14,9 +14,17 @@ public class DictionaryCache {
     private static Dictionary dictionary;
 
     public static Dictionary get(String languageCode) {
-        if (dictionary == null || !dictionary.getLanguage().getCode().equals(languageCode))
+        if (!dictionaryIsLoaded() || !dictionaryLanguageIsCorrect(languageCode))
             loadDictionary(languageCode);
         return dictionary;
+    }
+
+    private static boolean dictionaryLanguageIsCorrect(String languageCode) {
+        return dictionary.getLanguage().getCode().equals(languageCode);
+    }
+
+    private static boolean dictionaryIsLoaded() {
+        return dictionary != null;
     }
 
     private static void loadDictionary(String languageCode) {

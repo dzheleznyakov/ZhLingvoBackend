@@ -35,6 +35,6 @@ public class LanguagesCache {
 
     private static void initialiseLanguages() {
         languages = ImmutableList.copyOf(
-                config.getAsList("languages", Language::new, Comparator.comparing(Language::getCode)));
+                config.getList("languages", Language::new, Comparator.comparing(Language::getCode)));
     }
 }

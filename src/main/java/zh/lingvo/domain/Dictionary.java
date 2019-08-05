@@ -32,6 +32,11 @@ public class Dictionary {
         this.words.addAll(Arrays.asList(newWords));
     }
 
+    public void setWords(Collection<Word> words) {
+        this.words.clear();
+        this.words.addAll(words);
+    }
+
     public Language getLanguage() {
         return language;
     }

@@ -2,13 +2,10 @@ package zh.lingvo.rest.entities;
 
 import com.google.common.base.MoreObjects;
 import zh.lingvo.domain.Language;
-import zh.lingvo.util.json.Jsonable;
 
 public class LanguageRestEntity implements JsonEntity {
-    @Jsonable
     private String code;
 
-    @Jsonable
     private String name;
 
     public LanguageRestEntity() {
