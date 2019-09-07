@@ -6,6 +6,13 @@ public class Translation {
     private String translation;
     private String elaboration;
 
+    public Translation() {
+    }
+
+    public Translation(String translation) {
+        this.translation = translation;
+    }
+
     public String getTranslation() {
         return translation;
     }

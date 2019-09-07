@@ -11,4 +11,5 @@ resource_path=src/main/resources
 cd $1
 npm run build
 rm -rf ${this_folder}/${resource_path}/public/*
-cp -R build/* ${this_folder}/${resource_path}/public
+cp -R build/ ${this_folder}/${resource_path}/public
+echo "Finshing UI re-deployment..."

@@ -13,3 +13,5 @@
 target
 
 src/main/resources/public
+*_dictionary.xml
+temp.xml

@@ -1,37 +1,25 @@
 package zh.lingvo.domain.words;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableList;
-import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.util.CollectionUtils;
 
 import java.util.List;
 
 public class SemanticBlock {
-    private final PartOfSpeech partOfSpeech;
-    private List<Meaning> meanings;
+    private List<PartOfSpeechBlock> partOfSpeechBlocks;
 
-    public SemanticBlock(PartOfSpeech partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
+    public List<PartOfSpeechBlock> getPartOfSpeechBlocks() {
+        return partOfSpeechBlocks;
     }
 
-    public PartOfSpeech getPartOfSpeech() {
-        return partOfSpeech;
-    }
-
-    public List<Meaning> getMeanings() {
-        return meanings;
-    }
-
-    public void setMeanings(List<Meaning> meanings) {
-        this.meanings = CollectionUtils.toImmutableList(meanings);
+    public void setPartOfSpeechBlocks(List<PartOfSpeechBlock> partOfSpeechBlocks) {
+        this.partOfSpeechBlocks = CollectionUtils.toImmutableList(partOfSpeechBlocks);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("partOfSpeech", partOfSpeech)
-                .add("#OfMeanings", meanings == null ? "null" : meanings.size())
+                .add("semanticBlocks", partOfSpeechBlocks)
                 .toString();
     }
 }

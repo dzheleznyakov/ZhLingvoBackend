@@ -3,27 +3,26 @@ package zh.lingvo.rest.entities;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import zh.lingvo.domain.Dictionary;
-import zh.lingvo.rest.entities.word.WordRestEntity;
 
 import java.util.List;
 
 public class DictionaryRestEntity implements JsonEntity {
-    private List<WordRestEntity> words;
+    private List<WordPreview> words;
 
     public DictionaryRestEntity() {
     }
 
     public DictionaryRestEntity(Dictionary dictionary) {
         this.words = dictionary.getWords().stream()
-                .map(word -> new WordRestEntity(word, dictionary.getLanguage()))
+                .map(WordPreview::new)
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public List<WordRestEntity> getWords() {
+    public List<WordPreview> getWords() {
         return words;
     }
 
-    public void setWords(List<WordRestEntity> words) {
+    public void setWords(List<WordPreview> words) {
         this.words = words;
     }
 

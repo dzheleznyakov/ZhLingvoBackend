@@ -1,5 +1,8 @@
 package zh.lingvo.caches;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 import zh.lingvo.util.ConfigReader;
 import zh.lingvo.domain.Dictionary;
 import zh.lingvo.persistence.PersistenceException;
@@ -8,26 +11,36 @@ import zh.lingvo.persistence.xml.XmlReader;
 import javax.xml.bind.JAXBException;
 import java.io.File;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
+
+@Service
+@Scope(SCOPE_SINGLETON)
 public class DictionaryCache {
     private static final ConfigReader config = ConfigReader.get();
 
-    private static Dictionary dictionary;
+    @Autowired
+    private LanguagesCache languagesCache;
 
-    public static Dictionary get(String languageCode) {
+    @Autowired
+    private XmlReader xmlReader;
+
+    private Dictionary dictionary;
+
+    public Dictionary get(String languageCode) {
         if (!dictionaryIsLoaded() || !dictionaryLanguageIsCorrect(languageCode))
             loadDictionary(languageCode);
         return dictionary;
     }
 
-    private static boolean dictionaryLanguageIsCorrect(String languageCode) {
+    private boolean dictionaryLanguageIsCorrect(String languageCode) {
         return dictionary.getLanguage().getCode().equals(languageCode);
     }
 
-    private static boolean dictionaryIsLoaded() {
+    private boolean dictionaryIsLoaded() {
         return dictionary != null;
     }
 
-    private static void loadDictionary(String languageCode) {
+    private void loadDictionary(String languageCode) {
         String dictionaryFolderName = config.getStringOrDefault("dictionaryFolder", "");
         File dictionaryFolder = new File(new File(dictionaryFolderName).getAbsolutePath());
         String dicFileName = languageCode.toLowerCase() + "_dictionary.xml";
@@ -35,12 +48,12 @@ public class DictionaryCache {
         if (dictionaryFileIsFound(files)) {
             File dictionaryFile = files[0];
             try {
-                dictionary = new XmlReader().loadDictionary(dictionaryFile);
+                dictionary = xmlReader.loadDictionary(dictionaryFile);
             } catch (JAXBException e) {
                 throw new PersistenceException("Failed to fetch the dictionary for language [" + languageCode + "]", e);
             }
-        } else if (LanguagesCache.isRegistered(languageCode)) {
-            dictionary = new Dictionary(LanguagesCache.get(languageCode));
+        } else if (languagesCache.isRegistered(languageCode)) {
+            dictionary = new Dictionary(languagesCache.get(languageCode));
         } else {
             throw new PersistenceException("Language [" + languageCode + "] is not supported");
         }

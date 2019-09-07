@@ -3,11 +3,15 @@ package zh.lingvo.rest.entities.word;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import zh.lingvo.domain.Language;
+import zh.lingvo.domain.words.PartOfSpeechBlock;
+import zh.lingvo.domain.words.SemanticBlock;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.rest.entities.JsonEntity;
 import zh.lingvo.util.CollectionUtils;
 
 import java.util.List;
+
+import static com.google.common.base.MoreObjects.firstNonNull;
 
 public class WordRestEntity implements JsonEntity {
     private String id;
@@ -23,10 +27,12 @@ public class WordRestEntity implements JsonEntity {
 
     public WordRestEntity(Word word, Language language) {
         this.id = word.getId().toString();
-        this.word = word.getWord();
+        this.word = word.getName();
         this.transcriptions = CollectionUtils.toImmutableList(word.getTranscriptions());
-        this.semanticBlocks = word.getSemanticGroups().stream()
-                .map(semanticGroup -> semanticGroup.getSemanticBlocks().stream()
+        List<SemanticBlock> semanticBlocks = word.getSemanticBlocks() == null
+                ? ImmutableList.of() : word.getSemanticBlocks();
+        this.semanticBlocks = semanticBlocks.stream()
+                .map(semanticGroup -> firstNonNull(semanticGroup.getPartOfSpeechBlocks(), ImmutableList.<PartOfSpeechBlock>of()).stream()
                         .map(semanticBlock -> new SemanticBlockRestEntity(semanticBlock, language))
                         .collect(ImmutableList.toImmutableList()))
                 .collect(ImmutableList.toImmutableList());

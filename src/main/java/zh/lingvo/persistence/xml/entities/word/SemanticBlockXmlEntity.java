@@ -1,51 +1,43 @@
 package zh.lingvo.persistence.xml.entities.word;
 
 import com.google.common.base.MoreObjects;
-import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.SemanticBlock;
 import zh.lingvo.util.CollectionUtils;
 import zh.lingvo.persistence.xml.entities.XmlEntity;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "semanticBlock")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class SemanticBlockXmlEntity implements XmlEntity {
-    private PartOfSpeech partOfSpeech;
-    private List<MeaningXmlEntity> meanings;
+    private List<PartOfSpeechBlockXmlEntity> partOfSpeechBlocks;
 
     public SemanticBlockXmlEntity() {
     }
 
     public SemanticBlockXmlEntity(SemanticBlock semanticBlock) {
-        partOfSpeech = semanticBlock.getPartOfSpeech();
-        meanings = CollectionUtils.transform(semanticBlock::getMeanings, MeaningXmlEntity::new);
+        partOfSpeechBlocks = CollectionUtils.transform(semanticBlock::getPartOfSpeechBlocks, PartOfSpeechBlockXmlEntity::new);
     }
 
-    @XmlAttribute
-    public PartOfSpeech getPartOfSpeech() {
-        return partOfSpeech;
+    @XmlElementWrapper(name = "partOfSpeechBlocks")
+    @XmlElement(name = "partOfSpeechBlock")
+    public List<PartOfSpeechBlockXmlEntity> getPartOfSpeechBlocks() {
+        return partOfSpeechBlocks;
     }
 
-    public void setPartOfSpeech(PartOfSpeech partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
-    }
-
-    @XmlElementWrapper(name = "meanings")
-    @XmlElement(name = "meaning")
-    public List<MeaningXmlEntity> getMeanings() {
-        return meanings;
-    }
-
-    public void setMeanings(List<MeaningXmlEntity> meanings) {
-        this.meanings = meanings;
+    public void setPartOfSpeechBlocks(List<PartOfSpeechBlockXmlEntity> partOfSpeechBlocks) {
+        this.partOfSpeechBlocks = partOfSpeechBlocks;
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("partOfSpeech", partOfSpeech)
+                .add("partOfSpeechBlocks", partOfSpeechBlocks)
                 .toString();
     }
 }

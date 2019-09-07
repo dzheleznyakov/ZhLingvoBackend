@@ -1,40 +1,40 @@
 package zh.lingvo.domain;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import zh.lingvo.domain.words.Word;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Map;
+import java.util.UUID;
 
 public class Dictionary {
     private final Language language;
 
-    private final Set<Word> words;
+    private final Map<UUID, Word> words;
 
     public Dictionary(Language language) {
         this.language = language;
-        this.words = new TreeSet<>(Comparator.comparing(Word::getWord));
+        this.words = new HashMap<>();
     }
 
     public void add(Word word) {
-        this.words.add(word);
+        words.put(word.getId(), word);
     }
 
-    public void addAll(Collection<Word> newWords) {
-        this.words.addAll(newWords);
-    }
-
-    public void addAll(Word... newWords) {
-        this.words.addAll(Arrays.asList(newWords));
+    public void set(Word word) {
+        Preconditions.checkArgument(
+                words.containsKey(word.getId()),
+                "Word with id [%s] not found in [%s] dictionary", word.getId(), language.getCode());
+        words.put(word.getId(), word);
     }
 
     public void setWords(Collection<Word> words) {
         this.words.clear();
-        this.words.addAll(words);
+        words.forEach(word -> this.words.put(word.getId(), word));
     }
 
     public Language getLanguage() {
@@ -42,6 +42,12 @@ public class Dictionary {
     }
 
     public List<Word> getWords() {
-        return ImmutableList.copyOf(words);
+        return words.values().stream()
+                .sorted(Comparator.comparing(Word::getName))
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    public Word get(UUID id) {
+        return words.get(id);
     }
 }

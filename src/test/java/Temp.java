@@ -1,9 +1,4 @@
 import org.junit.Test;
-import zh.lingvo.domain.Dictionary;
-import zh.lingvo.persistence.Reader;
-import zh.lingvo.persistence.xml.XmlReader;
-import zh.lingvo.rest.entities.DictionaryRestEntity;
-import zh.lingvo.util.json.JsonFactory;
 
 import java.util.Arrays;
 import java.util.Spliterator;
@@ -11,16 +6,6 @@ import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
 
 public class Temp {
-    @Test
-    public void start() throws Exception {
-        Reader reader = new XmlReader();
-        Dictionary dictionary = reader.loadDictionary("en_dictionary.xml");
-        DictionaryRestEntity restDictionary = new DictionaryRestEntity(dictionary);
-        String json = JsonFactory.toJson(restDictionary);
-        System.out.println("---------");
-        System.out.println(json);
-    }
-
     @Test
     public void streamArrayTest() {
         Integer[] array = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };

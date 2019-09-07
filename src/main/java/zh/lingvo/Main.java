@@ -1,45 +1,13 @@
 package zh.lingvo;
 
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.webapp.WebAppContext;
-import zh.lingvo.rest.servlets.DictionariesServlet;
-import zh.lingvo.rest.servlets.LanguagesServlet;
-import zh.lingvo.rest.servlets.PartOfSpeechServlet;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
+@SpringBootApplication
+@ComponentScan({ "zh.lingvo" })
 public class Main {
-    public static void main(String[] args) throws Exception {
-        Server server = new Server(8080);
-
-        ServletContextHandler apiContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        apiContext.setContextPath("/api");
-        server.setHandler(apiContext);
-
-        apiContext.addServlet(new ServletHolder(new LanguagesServlet()), "/languages");
-        apiContext.addServlet(new ServletHolder(new PartOfSpeechServlet()), "/partsOfSpeeches/*");
-        apiContext.addServlet(new ServletHolder(new DictionariesServlet()), "/dictionaries/*");
-
-
-        WebAppContext webapp = new WebAppContext();
-        String resourceBase = "src/main/resources/public";
-        webapp.setContextPath("/*");
-        webapp.setResourceBase(resourceBase);
-        webapp.setParentLoaderPriority(true);
-        webapp.setErrorHandler(new MyErrorHandler());
-
-        ContextHandlerCollection contexts = new ContextHandlerCollection();
-        contexts.setHandlers(new Handler[] { apiContext, webapp });
-
-        server.setHandler(contexts);
-
-        try {
-            server.start();
-            server.join();
-        } finally {
-            server.destroy();
-        }
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
     }
 }

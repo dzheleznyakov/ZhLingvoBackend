@@ -8,54 +8,23 @@
     <artifactId>zh-lingvo-backend</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
-    <properties>
-        <jetty.version>9.4.15.v20190215</jetty.version>
-        <jersey.version>2.28</jersey.version>
-    </properties>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.6.RELEASE</version>
+    </parent>
 
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-util</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>${jetty.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
             <artifactId>rxjava</artifactId>
             <version>2.2.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet-core</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-jetty-http</artifactId>
-            <version>${jersey.version}</version>
         </dependency>
 
         <dependency>
@@ -86,12 +55,6 @@
             <artifactId>groovy-all</artifactId>
             <version>2.4.12</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>15.0</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -133,6 +96,7 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                    <release>11</release>
                     <testSource>11</testSource>
                     <testTarget>11</testTarget>
                 </configuration>
@@ -174,18 +138,19 @@
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.6.2</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>compile</goal>
-                            <goal>testCompile</goal>
+                            <goal>compileTests</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>

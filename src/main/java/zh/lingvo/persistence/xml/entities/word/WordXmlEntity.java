@@ -15,16 +15,16 @@ public class WordXmlEntity implements XmlEntity {
     private UUID id;
     private String word;
     private List<String> transcriptions;
-    private List<SemanticGroupXmlEntity> semanticGroups;
+    private List<SemanticBlockXmlEntity> semanticBlocks;
 
     public WordXmlEntity() {
     }
 
     public WordXmlEntity(Word word) {
         this.id = word.getId();
-        this.word = word.getWord();
+        this.word = word.getName();
         this.transcriptions = word.getTranscriptions();
-        this.semanticGroups = CollectionUtils.transform(word::getSemanticGroups, SemanticGroupXmlEntity::new);
+        this.semanticBlocks = CollectionUtils.transform(word::getSemanticBlocks, SemanticBlockXmlEntity::new);
     }
 
     @XmlAttribute
@@ -54,14 +54,14 @@ public class WordXmlEntity implements XmlEntity {
         this.transcriptions = transcriptions;
     }
 
-    @XmlElementWrapper(name = "semanticGroups")
-    @XmlElement(name = "semanticGroup")
-    public List<SemanticGroupXmlEntity> getSemanticGroups() {
-        return semanticGroups;
+    @XmlElementWrapper(name = "semanticBlocks")
+    @XmlElement(name = "semanticBlock")
+    public List<SemanticBlockXmlEntity> getSemanticBlocks() {
+        return semanticBlocks;
     }
 
-    public void setSemanticGroups(List<SemanticGroupXmlEntity> semanticGroups) {
-        this.semanticGroups = semanticGroups;
+    public void setSemanticBlocks(List<SemanticBlockXmlEntity> semanticBlocks) {
+        this.semanticBlocks = semanticBlocks;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class WordXmlEntity implements XmlEntity {
                 .add("id", id)
                 .add("word", word)
                 .add("transcriptions", transcriptions)
-                .add("semanticGroups", semanticGroups)
+                .add("semanticBlocks", semanticBlocks)
                 .toString();
     }
 }

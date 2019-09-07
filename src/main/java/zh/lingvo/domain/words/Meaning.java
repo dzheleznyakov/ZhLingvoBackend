@@ -11,6 +11,13 @@ public class Meaning {
     private List<Translation> translations;
     private List<Example> examples;
 
+    public Meaning() {
+    }
+
+    public Meaning(List<Translation> translations) {
+        this.translations = translations;
+    }
+
     public String getRemark() {
         return remark;
     }

@@ -1,7 +1,5 @@
 package zh.lingvo.domain.words;
 
-import com.google.common.collect.ImmutableList;
-import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.util.CollectionUtils;
 
 import java.util.List;
@@ -9,21 +7,25 @@ import java.util.UUID;
 
 public class Word {
     private final UUID id;
-    private final String word;
+    private String name;
     private List<String> transcriptions;
-    private List<SemanticGroup> semanticGroups;
+    private List<SemanticBlock> semanticBlocks;
 
-    public Word(UUID id, String word) {
+    public Word(UUID id, String name) {
         this.id = id;
-        this.word = word;
+        this.name = name;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getWord() {
-        return word;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<String> getTranscriptions() {
@@ -34,11 +36,11 @@ public class Word {
         this.transcriptions = CollectionUtils.toImmutableList(transcriptions);
     }
 
-    public List<SemanticGroup> getSemanticGroups() {
-        return semanticGroups;
+    public List<SemanticBlock> getSemanticBlocks() {
+        return semanticBlocks;
     }
 
-    public void setSemanticGroups(List<SemanticGroup> semanticGroups) {
-        this.semanticGroups = CollectionUtils.toImmutableList(semanticGroups);
+    public void setSemanticBlocks(List<SemanticBlock> semanticBlocks) {
+        this.semanticBlocks = CollectionUtils.toImmutableList(semanticBlocks);
     }
 }

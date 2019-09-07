@@ -1,6 +1,8 @@
 package zh.lingvo.util;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Function;
@@ -19,5 +21,10 @@ public class CollectionUtils {
         return list == null
                 ? null
                 : list instanceof ImmutableList ? (ImmutableList) list : ImmutableList.copyOf(list);
+    }
+
+    @NotNull
+    public static <E> List<E> getNotNull(Supplier<List<E>> getter) {
+        return MoreObjects.firstNonNull(getter.get(), ImmutableList.of());
     }
 }
