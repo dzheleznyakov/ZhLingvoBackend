@@ -1,12 +1,13 @@
 package zh.lingvo.domain.words;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import zh.lingvo.util.CollectionUtils;
 
 import java.util.List;
 
-public class Meaning {
+public class Meaning implements WordEntity {
     private String remark;
     private List<Translation> translations;
     private List<Example> examples;
@@ -40,6 +41,13 @@ public class Meaning {
 
     public void setExamples(List<Example> examples) {
         this.examples = CollectionUtils.toImmutableList(examples);
+    }
+
+    @Override
+    public boolean isVoid() {
+        return Strings.isNullOrEmpty(remark) &&
+                CollectionUtils.isNullOrEmpty(translations) &&
+                CollectionUtils.isNullOrEmpty(examples);
     }
 
     @Override

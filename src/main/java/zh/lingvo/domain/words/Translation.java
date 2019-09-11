@@ -1,8 +1,9 @@
 package zh.lingvo.domain.words;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 
-public class Translation {
+public class Translation implements WordEntity {
     private String translation;
     private String elaboration;
 
@@ -27,6 +28,10 @@ public class Translation {
 
     public void setElaboration(String elaboration) {
         this.elaboration = elaboration;
+    }
+
+    public boolean isVoid() {
+        return Strings.isNullOrEmpty(translation) && Strings.isNullOrEmpty(elaboration);
     }
 
     @Override

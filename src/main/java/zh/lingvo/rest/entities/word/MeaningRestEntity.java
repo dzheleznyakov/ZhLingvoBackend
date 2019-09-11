@@ -1,5 +1,6 @@
 package zh.lingvo.rest.entities.word;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.MoreObjects;
 import zh.lingvo.domain.words.Meaning;
 import zh.lingvo.rest.entities.JsonEntity;
@@ -8,10 +9,13 @@ import zh.lingvo.util.CollectionUtils;
 import java.util.List;
 
 public class MeaningRestEntity implements JsonEntity {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String remark;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<TranslationRestEntity> translations;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ExampleRestEntity> examples;
 
     public MeaningRestEntity() {

@@ -1,5 +1,6 @@
 package zh.lingvo.controllers;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.NotNull;
@@ -16,21 +17,26 @@ import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
 import zh.lingvo.domain.PartOfSpeech;
+import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;
 import zh.lingvo.domain.words.PartOfSpeechBlock;
 import zh.lingvo.domain.words.SemanticBlock;
 import zh.lingvo.domain.words.Translation;
 import zh.lingvo.domain.words.Word;
+import zh.lingvo.domain.words.WordEntity;
 import zh.lingvo.persistence.xml.XmlWriter;
+import zh.lingvo.rest.Payload;
 import zh.lingvo.rest.entities.word.WordRestEntity;
 import zh.lingvo.util.CollectionUtils;
 import zh.lingvo.util.ConfigReader;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 @RestController
@@ -225,7 +231,7 @@ public class WordEditionController {
             @PathVariable("sbIndex") int semanticBlockIndex,
             @PathVariable("posIndex") int posIndex,
             @PathVariable("mIndex") int mIndex,
-            @RequestBody Map<String, String> payload
+            @RequestBody Payload payload
     ) {
         return updateWord(languageCode, wordId, word -> {
             PartOfSpeechBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
@@ -234,23 +240,167 @@ public class WordEditionController {
             List<Meaning> meanings = CollectionUtils.getNotNull(posBlock::getMeanings);
             if (mIndex >= meanings.size()) return;
 
-            String remark = payload.get("data");
+            String payloadData = payload.getData();
+            String remark = Strings.isNullOrEmpty(payloadData) ? null : payloadData;
             Meaning meaning = meanings.get(mIndex);
             meaning.setRemark(remark);
             removeMeaningIfNecessary(meaning, posBlock, meanings, mIndex);
         });
     }
 
+    @PutMapping("/{lang}/{id}/meaning/{sbIndex}/{posIndex}/{mIndex}/translation/{index}")
+    public WordRestEntity editTranslation(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("id") UUID wordId,
+            @PathVariable("sbIndex") int semanticBlockIndex,
+            @PathVariable("posIndex") int posIndex,
+            @PathVariable("mIndex") int mIndex,
+            @PathVariable("index") int trIndex,
+            @RequestBody Payload payload
+    ) {
+        return updateWord(languageCode, wordId, word -> {
+            editTranslation(word, semanticBlockIndex, posIndex, mIndex, trIndex,
+                    translation -> translation.setTranslation(payload.getData()));
+        });
+    }
+
+    @PutMapping("/{lang}/{id}/meaning/{sbIndex}/{posIndex}/{mIndex}/elaboration/{index}")
+    public WordRestEntity editElaboration(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("id") UUID wordId,
+            @PathVariable("sbIndex") int semanticBlockIndex,
+            @PathVariable("posIndex") int posIndex,
+            @PathVariable("mIndex") int mIndex,
+            @PathVariable("index") int trIndex,
+            @RequestBody Payload payload
+    ) {
+        return updateWord(languageCode, wordId, word -> {
+            editTranslation(word, semanticBlockIndex, posIndex, mIndex, trIndex,
+                    translation -> translation.setElaboration(payload.getData()));
+        });
+
+    }
+
+    @PutMapping("/{lang}/{id}/{sbIndex}/{posIndex}/{mIndex}/example/{index}/remark")
+    public WordRestEntity editExampleRemark(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("id") UUID wordId,
+            @PathVariable("sbIndex") int sbIndex,
+            @PathVariable("posIndex") int posIndex,
+            @PathVariable("mIndex") int mIndex,
+            @PathVariable("index") int exIndex,
+            @RequestBody Payload payload
+    ) {
+        return updateWord(languageCode, wordId, word -> {
+            editExample(word, sbIndex, posIndex, mIndex, exIndex,
+                    example -> example.setRemark(payload.getData()));
+        });
+    }
+
+    @PutMapping("/{lang}/{id}/{sbIndex}/{posIndex}/{mIndex}/example/{index}/explanation")
+    public WordRestEntity editExampleExplanation(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("id") UUID wordId,
+            @PathVariable("sbIndex") int sbIndex,
+            @PathVariable("posIndex") int posIndex,
+            @PathVariable("mIndex") int mIndex,
+            @PathVariable("index") int exIndex,
+            @RequestBody Payload payload
+    ) {
+        return updateWord(languageCode, wordId, word -> {
+            editExample(word, sbIndex, posIndex, mIndex, exIndex,
+                    example -> example.setExplanation(payload.getData()));
+        });
+    }
+
+    @PutMapping("/{lang}/{id}/{sbIndex}/{posIndex}/{mIndex}/example/{index}/expression")
+    public WordRestEntity editExampleExpression(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("id") UUID wordId,
+            @PathVariable("sbIndex") int sbIndex,
+            @PathVariable("posIndex") int posIndex,
+            @PathVariable("mIndex") int mIndex,
+            @PathVariable("index") int exIndex,
+            @RequestBody Payload payload
+    ) {
+        return updateWord(languageCode, wordId, word -> {
+            editExample(word, sbIndex, posIndex, mIndex, exIndex,
+                    example -> example.setExpression(payload.getData()));
+        });
+    }
+
+
+
+    private void editTranslation(
+            Word word,
+            int semanticBlockIndex,
+            int posIndex,
+            int mIndex,
+            int trIndex,
+            Consumer<Translation> translationEditor
+    ) {
+        editInMeaning(word, semanticBlockIndex, posIndex, mIndex, trIndex,
+                Meaning::getTranslations, Translation::new, translationEditor, Meaning::setTranslations);
+    }
+
+    private void editExample(
+            Word word,
+            int semanticBlockIndex,
+            int posIndex,
+            int mIndex,
+            int exIndex,
+            Consumer<Example> exampleEditor
+    ) {
+        editInMeaning(word, semanticBlockIndex, posIndex, mIndex, exIndex,
+                Meaning::getExamples, Example::new, exampleEditor, Meaning::setExamples);
+    }
+
+    private <E extends WordEntity> void editInMeaning(
+            Word word,
+            int semanticBlockIndex,
+            int posIndex,
+            int mIndex,
+            int index,
+            Function<Meaning, List<E>> entityListSupplier,
+            Supplier<E> newEntitySupplier,
+            Consumer<E> entityEditor,
+            BiConsumer<Meaning, List<E>> entityListSetter
+    ) {
+        PartOfSpeechBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
+        if (posBlock == null) return;
+
+        List<Meaning> meanings = CollectionUtils.getNotNull(posBlock::getMeanings);
+        if (mIndex >= meanings.size()) return;
+
+        Meaning meaning = meanings.get(mIndex);
+        List<E> list = CollectionUtils.getNotNull(() -> entityListSupplier.apply(meaning));
+        if (index > list.size()) return;
+
+        if (index == list.size())
+            list = CollectionUtils.add(list, newEntitySupplier.get());
+
+        E entity = MoreObjects.firstNonNull(list.get(index), newEntitySupplier.get());
+        entityEditor.accept(entity);
+        entityListSetter.accept(meaning, list);
+        removeWordEntityIfNecessary(entity, index, list, entities -> entityListSetter.accept(meaning, entities));
+        removeMeaningIfNecessary(meaning, posBlock, meanings, mIndex);
+    }
+
+    private <E extends WordEntity> void removeWordEntityIfNecessary(
+            E entity,
+            int index,
+            List<E> list,
+            Consumer<List<E>> entityListSetter
+    ) {
+        if (entity.isVoid()) {
+            List<E> updatedEntities = CollectionUtils.remove(list, index);
+            entityListSetter.accept(updatedEntities);
+        }
+    }
+
     private void removeMeaningIfNecessary(Meaning meaning, PartOfSpeechBlock posBlock, List<Meaning> meanings, int mIndex) {
-        if (
-                Strings.isNullOrEmpty(meaning.getRemark())
-                && CollectionUtils.getNotNull(meaning::getTranslations).isEmpty()
-                && CollectionUtils.getNotNull(meaning::getExamples).isEmpty()
-        ) {
-            List<Meaning> updatedMeanings = IntStream.range(0, meanings.size())
-                    .filter(i -> i != mIndex)
-                    .mapToObj(meanings::get)
-                    .collect(ImmutableList.toImmutableList());
+        if (meaning.isVoid()) {
+            List<Meaning> updatedMeanings = CollectionUtils.remove(meanings, mIndex);
             posBlock.setMeanings(updatedMeanings);
         }
     }
@@ -264,17 +414,6 @@ public class WordEditionController {
         if (posIndex >= posBlocks.size()) return null;
 
         return posBlocks.get(posIndex);
-    }
-
-    @Nullable
-    private List<Meaning> getMeanings(Word word, int semanticBlockIndex, int posIndex, int mIndex) {
-        PartOfSpeechBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
-        if (posBlock == null) return null;
-
-        List<Meaning> meanings = CollectionUtils.getNotNull(posBlock::getMeanings);
-        if (mIndex >= meanings.size()) return null;
-
-        return meanings;
     }
 
 

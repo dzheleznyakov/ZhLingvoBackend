@@ -1,8 +1,9 @@
 package zh.lingvo.domain.words;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 
-public class Example {
+public class Example implements WordEntity {
     private String expression;
     private String explanation;
     private String remark;
@@ -29,6 +30,13 @@ public class Example {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Override
+    public boolean isVoid() {
+        return Strings.isNullOrEmpty(expression)
+                && Strings.isNullOrEmpty(explanation)
+                && Strings.isNullOrEmpty(remark);
     }
 
     @Override
