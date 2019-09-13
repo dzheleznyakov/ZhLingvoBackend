@@ -25,7 +25,7 @@ public class XmlWriter implements Writer {
 
     private void initSubscription() {
         saveDictionarySubscription = saveDictionarySubject.subscribeOn(Schedulers.io())
-                .throttleLatest(5, TimeUnit.SECONDS)
+//                .throttleLatest(5, TimeUnit.SECONDS)
                 .subscribe(this::doSaveDictionary);
     }
 

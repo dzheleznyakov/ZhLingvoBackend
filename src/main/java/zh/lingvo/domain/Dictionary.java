@@ -15,26 +15,33 @@ public class Dictionary {
     private final Language language;
 
     private final Map<UUID, Word> words;
+    private final Map<String, Word> wordsByName;
 
     public Dictionary(Language language) {
         this.language = language;
         this.words = new HashMap<>();
+        this.wordsByName = new HashMap<>();
     }
 
     public void add(Word word) {
-        words.put(word.getId(), word);
+        put(word);
     }
 
     public void set(Word word) {
         Preconditions.checkArgument(
                 words.containsKey(word.getId()),
                 "Word with id [%s] not found in [%s] dictionary", word.getId(), language.getCode());
-        words.put(word.getId(), word);
+        put(word);
     }
 
     public void setWords(Collection<Word> words) {
         this.words.clear();
-        words.forEach(word -> this.words.put(word.getId(), word));
+        words.forEach(this::put);
+    }
+
+    private void put(Word word) {
+        words.put(word.getId(), word);
+        wordsByName.put(word.getName(), word);
     }
 
     public Language getLanguage() {
@@ -47,7 +54,19 @@ public class Dictionary {
                 .collect(ImmutableList.toImmutableList());
     }
 
+    public boolean contains(String wordName) {
+        return wordsByName.containsKey(wordName);
+    }
+
     public Word get(UUID id) {
         return words.get(id);
+    }
+
+    public Word get(String wordName) {
+        return wordsByName.get(wordName);
+    }
+
+    public Word remove(UUID uuid) {
+        return words.remove(uuid);
     }
 }

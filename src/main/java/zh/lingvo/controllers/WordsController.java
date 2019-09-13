@@ -1,6 +1,8 @@
 package zh.lingvo.controllers;
 
 import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +14,10 @@ import zh.lingvo.ApiMapping;
 import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
+import zh.lingvo.domain.LingvoException;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.persistence.xml.XmlWriter;
+import zh.lingvo.rest.Payload;
 import zh.lingvo.rest.entities.word.WordRestEntity;
 import zh.lingvo.util.ConfigReader;
 
@@ -23,7 +27,6 @@ import java.util.UUID;
 @ApiMapping
 @RequestMapping("/api/words")
 public class WordsController {
-    private static final Gson GSON = new Gson();
     private static final ConfigReader config = ConfigReader.get();
     private static final String dictionariesLocation = config.getString("dictionariesLocation");
 
@@ -40,23 +43,41 @@ public class WordsController {
     @GetMapping("/{lang}/{id}")
     public WordRestEntity getWord(
             @PathVariable("id") UUID id,
-            @PathVariable("lang") String languageCode) {
+            @PathVariable("lang") String languageCode) throws LingvoException {
         Dictionary dictionary = dictionaryCache.get(languageCode);
         Word word = dictionary.get(id);
-
+        if (word == null)
+            throw new LingvoException(String.format("Word for id [%s] not found", id));
         return new WordRestEntity(word, languagesCache.get(languageCode));
     }
 
-    @PostMapping("/{wordName}/{lang}")
+    @PostMapping("/{lang}")
     public UUID createWord(
-            @PathVariable("wordName") String wordName,
-            @PathVariable("lang") String languageCode) {
+            @PathVariable("lang") String languageCode,
+            @RequestBody Payload payload
+    ) {
+        String wordName = payload.getData();
+        Dictionary dictionary = dictionaryCache.get(languageCode);
+        if (dictionary.contains(wordName))
+            return dictionary.get(wordName).getId();
+
         UUID id = UUID.randomUUID();
         Word word = new Word(id, wordName);
-        Dictionary dictionary = dictionaryCache.get(languageCode);
         dictionary.add(word);
         writer.saveDictionary(dictionary, dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml");
         return id;
+    }
+
+
+    @DeleteMapping("/{lang}/{id}")
+    public WordRestEntity deleteWord(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("id") UUID wordId
+    ) {
+        Dictionary dictionary = dictionaryCache.get(languageCode);
+        Word removedWord = dictionary.remove(wordId);
+        writer.saveDictionary(dictionary, getDictionaryLocation(languageCode));
+        return new WordRestEntity(removedWord, languagesCache.get(languageCode));
     }
 
     @PutMapping("/{lang}")
@@ -71,6 +92,11 @@ public class WordsController {
 //        writer.saveDictionary(dictionary, dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml");
 //        return new WordRestEntity(word, languagesCache.get(languageCode));
         return null;
+    }
+
+    @NotNull
+    private String getDictionaryLocation(String languageCode) {
+        return dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml";
     }
 
 }
