@@ -1,7 +1,7 @@
 package zh.lingvo.controllers;
 
-import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +28,9 @@ import java.util.UUID;
 @RequestMapping("/api/words")
 public class WordsController {
     private static final ConfigReader config = ConfigReader.get();
-    private static final String dictionariesLocation = config.getString("dictionariesLocation");
+
+    @Value("${app.dictionaries.location}")
+    private String dictionariesLocation;
 
     private DictionaryCache dictionaryCache;
     private LanguagesCache languagesCache;

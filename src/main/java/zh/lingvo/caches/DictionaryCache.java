@@ -1,6 +1,7 @@
 package zh.lingvo.caches;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import zh.lingvo.util.ConfigReader;
@@ -17,6 +18,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @Scope(SCOPE_SINGLETON)
 public class DictionaryCache {
     private static final ConfigReader config = ConfigReader.get();
+    @Value("${app.dictionaries.location}")
+    private String dictionaryFolderName;
 
     @Autowired
     private LanguagesCache languagesCache;
@@ -41,7 +44,6 @@ public class DictionaryCache {
     }
 
     private void loadDictionary(String languageCode) {
-        String dictionaryFolderName = config.getStringOrDefault("dictionaryFolder", "");
         File dictionaryFolder = new File(new File(dictionaryFolderName).getAbsolutePath());
         String dicFileName = languageCode.toLowerCase() + "_dictionary.xml";
         File[] files = dictionaryFolder.listFiles(((dir, name) -> name.equals(dicFileName)));

@@ -3,6 +3,7 @@ package zh.lingvo.controllers;
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +19,6 @@ import zh.lingvo.persistence.xml.XmlWriter;
 import zh.lingvo.rest.entities.DictionaryRestEntity;
 import zh.lingvo.rest.entities.JsonWordFactory;
 import zh.lingvo.rest.entities.word.WordRestEntity;
-import zh.lingvo.util.ConfigReader;
 
 import java.util.List;
 
@@ -26,8 +26,9 @@ import java.util.List;
 @ApiMapping
 @RequestMapping("/api/dictionaries")
 public class DictionariesController {
-    private static final ConfigReader config = ConfigReader.get();
-    private static final String dictionariesLocation = config.getString("dictionariesLocation");
+
+    @Value("${app.dictionaries.location}")
+    private String dictionariesLocation;
 
     private final Writer writer = new XmlWriter();
 

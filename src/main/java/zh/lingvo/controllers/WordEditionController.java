@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +44,9 @@ import java.util.stream.IntStream;
 @RequestMapping("/api/words")
 public class WordEditionController {
     private static final ConfigReader config = ConfigReader.get();
-    private static final String dictionariesLocation = config.getString("dictionariesLocation");
+
+    @Value("${app.dictionaries.location}")
+    private String dictionariesLocation;
 
     private DictionaryCache dictionaryCache;
     private LanguagesCache languagesCache;
