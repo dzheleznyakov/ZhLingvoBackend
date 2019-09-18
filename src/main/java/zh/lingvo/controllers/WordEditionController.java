@@ -30,6 +30,7 @@ import zh.lingvo.rest.entities.word.WordRestEntity;
 import zh.lingvo.util.CollectionUtils;
 import zh.lingvo.util.ConfigReader;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -429,6 +430,6 @@ public class WordEditionController {
 
     @NotNull
     private String getDictionaryLocation(String languageCode) {
-        return dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml";
+        return Paths.get(dictionariesLocation).resolve(languageCode.toLowerCase() + "_dictionary.xml").toString();
     }
 }

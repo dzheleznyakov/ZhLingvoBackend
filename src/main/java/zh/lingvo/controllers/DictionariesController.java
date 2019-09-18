@@ -49,9 +49,4 @@ public class DictionariesController {
         Dictionary dictionary = dictionaryCache.get(languageCode);
         dictionary.setWords(words);
     }
-
-    private void saveDictionary(@NotNull Dictionary dictionary) {
-        String languageCode = dictionary.getLanguage().getCode();
-        writer.saveDictionary(dictionary, dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml");
-    }
 }

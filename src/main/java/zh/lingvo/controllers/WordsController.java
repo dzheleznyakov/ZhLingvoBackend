@@ -21,6 +21,7 @@ import zh.lingvo.rest.Payload;
 import zh.lingvo.rest.entities.word.WordRestEntity;
 import zh.lingvo.util.ConfigReader;
 
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @RestController
@@ -66,7 +67,8 @@ public class WordsController {
         UUID id = UUID.randomUUID();
         Word word = new Word(id, wordName);
         dictionary.add(word);
-        writer.saveDictionary(dictionary, dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml");
+        String fileName = Paths.get(dictionariesLocation).resolve(languageCode.toLowerCase() + "_dictionary.xml").toString();
+        writer.saveDictionary(dictionary, fileName);
         return id;
     }
 
@@ -82,23 +84,9 @@ public class WordsController {
         return new WordRestEntity(removedWord, languagesCache.get(languageCode));
     }
 
-    @PutMapping("/{lang}")
-    public WordRestEntity saveWord(
-            @PathVariable("lang") String languageCode,
-            @RequestBody String wordJson) {
-        System.out.println("languageCode = " + languageCode);
-        System.out.println("wordJson = " + wordJson);
-//        Word word = GSON.fromJson(wordJson, Word.class);
-//        Dictionary dictionary = dictionaryCache.get(languageCode);
-//        dictionary.set(word);
-//        writer.saveDictionary(dictionary, dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml");
-//        return new WordRestEntity(word, languagesCache.get(languageCode));
-        return null;
-    }
-
     @NotNull
     private String getDictionaryLocation(String languageCode) {
-        return dictionariesLocation + languageCode.toLowerCase() + "_dictionary.xml";
+        return Paths.get(dictionariesLocation).resolve(languageCode.toLowerCase() + "_dictionary.xml").toString();
     }
 
 }
