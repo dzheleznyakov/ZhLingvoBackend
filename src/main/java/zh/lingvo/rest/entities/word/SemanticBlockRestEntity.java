@@ -1,7 +1,7 @@
 package zh.lingvo.rest.entities.word;
 
 import com.google.common.base.MoreObjects;
-import zh.lingvo.domain.Language;
+import zh.lingvo.domain.languages.Language;
 import zh.lingvo.domain.words.PartOfSpeechBlock;
 import zh.lingvo.rest.entities.JsonEntity;
 import zh.lingvo.util.CollectionUtils;

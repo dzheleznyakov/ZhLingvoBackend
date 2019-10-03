@@ -1,12 +1,15 @@
 package zh.lingvo.caches;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.reflect.ClassPath;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import zh.lingvo.util.ConfigReader;
-import zh.lingvo.domain.Language;
+import zh.lingvo.domain.languages.Language;
+import zh.lingvo.domain.languages.LanguageFactory;
 
-import java.util.Comparator;
+import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
@@ -14,16 +17,26 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @Service
 @Scope(SCOPE_SINGLETON)
 public class LanguagesCache {
-    private static final ConfigReader config = ConfigReader.get();
-    private ImmutableList<Language> languages;
+    private List<Language> languages;
 
     LanguagesCache() {
-        initialiseLanguages();
+        try {
+            initialiseLanguages();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load languages", e);
+        }
     }
 
-    private void initialiseLanguages() {
-        languages = ImmutableList.copyOf(
-                config.getList("languages", Language::new, Comparator.comparing(Language::getCode)));
+    @SuppressWarnings("UnstableApiUsage")
+    private void initialiseLanguages() throws IOException {
+        ClassPath classPath = ClassPath.from(getClass().getClassLoader());
+        ImmutableSet<ClassPath.ClassInfo> classes = classPath.getTopLevelClassesRecursive("zh.lingvo.domain.languages");
+        languages = classes.stream()
+                .map(ClassPath.ClassInfo::load)
+                .filter(Language.class::isAssignableFrom)
+                .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
+                .map(LanguageFactory::getInstance)
+                .collect(ImmutableList.toImmutableList());
     }
 
     public List<Language> get() {

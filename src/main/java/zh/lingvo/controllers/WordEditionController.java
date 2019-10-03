@@ -166,7 +166,7 @@ public class WordEditionController {
             SemanticBlock semanticBlock = semanticBlocks.get(semanticBlockIndex);
 
             List<PartOfSpeechBlock> posBlocks = CollectionUtils.getNotNull(semanticBlock::getPartOfSpeechBlocks);
-            PartOfSpeechBlock newPosBlock = new PartOfSpeechBlock(PartOfSpeech.fromName(languageCode, partOfSpeech));
+            PartOfSpeechBlock newPosBlock = new PartOfSpeechBlock(PartOfSpeech.fromName(languagesCache.get(languageCode), partOfSpeech));
             List<PartOfSpeechBlock> updatedPosBlocks = ImmutableList.<PartOfSpeechBlock>builder()
                     .addAll(posBlocks)
                     .add(newPosBlock)
@@ -190,7 +190,7 @@ public class WordEditionController {
 
             SemanticBlock semanticBlock = semanticBlocks.get(semanticBlockIndex);
             List<PartOfSpeechBlock> partOfSpeechBlocks = CollectionUtils.getNotNull(semanticBlock::getPartOfSpeechBlocks);
-            PartOfSpeech pos = PartOfSpeech.fromName(languageCode, partOfSpeech);
+            PartOfSpeech pos = PartOfSpeech.fromName(languagesCache.get(languageCode), partOfSpeech);
             PartOfSpeechBlock partOfSpeechBlock = partOfSpeechBlocks.stream()
                     .filter(posBlock -> Objects.equals(posBlock.getPartOfSpeech(), pos))
                     .findAny()

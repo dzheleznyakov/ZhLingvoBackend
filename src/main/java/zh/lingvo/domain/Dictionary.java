@@ -2,6 +2,7 @@ package zh.lingvo.domain;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import zh.lingvo.domain.languages.Language;
 import zh.lingvo.domain.words.Word;
 
 import java.util.Collection;

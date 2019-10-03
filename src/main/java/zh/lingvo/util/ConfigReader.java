@@ -106,7 +106,7 @@ public class ConfigReader {
         return config.getBooleanList(path);
     }
 
-    public <E extends Enum<E>> List<E> getAsEnumList(String path, Class<E> eClass) {
+    public <E extends Enum<E>> List<E> getEnumList(String path, Class<E> eClass) {
         return config.getEnumList(eClass, path);
     }
 

@@ -1,8 +1,10 @@
 package zh.lingvo.domain.words;
 
+import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Word {
@@ -10,6 +12,8 @@ public class Word {
     private String name;
     private List<String> transcriptions;
     private List<SemanticBlock> semanticBlocks;
+
+//    private Map<PartOfSpeech, Map>
 
     public Word(UUID id, String name) {
         this.id = id;

@@ -1,7 +1,7 @@
 package zh.lingvo.rest.entities;
 
 import com.google.common.base.MoreObjects;
-import zh.lingvo.domain.Language;
+import zh.lingvo.domain.languages.Language;
 
 public class LanguageRestEntity implements JsonEntity {
     private String code;

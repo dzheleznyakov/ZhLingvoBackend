@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
-import zh.lingvo.domain.Language;
+import zh.lingvo.domain.languages.Language;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;

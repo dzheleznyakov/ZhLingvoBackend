@@ -2,7 +2,7 @@ package zh.lingvo.rest.entities.word;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
-import zh.lingvo.domain.Language;
+import zh.lingvo.domain.languages.Language;
 import zh.lingvo.domain.words.PartOfSpeechBlock;
 import zh.lingvo.domain.words.SemanticBlock;
 import zh.lingvo.domain.words.Word;

@@ -108,7 +108,7 @@ class ConfigReaderSpec extends Specification {
 
     def "Config can return a list of enums"() {
         when: 'a list of enums is requested'
-        def value = config.getAsEnumList('enumListValue', TestEnum)
+        def value = config.getEnumList('enumListValue', TestEnum)
 
         then: 'the returned list is correct'
         value == [TestEnum.FORTY_THREE, TestEnum.FORTY_TWO]

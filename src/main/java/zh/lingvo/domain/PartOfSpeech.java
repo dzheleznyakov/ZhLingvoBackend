@@ -1,10 +1,10 @@
 package zh.lingvo.domain;
 
-import com.google.common.collect.ImmutableList;
+import zh.lingvo.domain.languages.Language;
 import zh.lingvo.util.ConfigReader;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public enum PartOfSpeech {
     NOUN,
@@ -20,11 +20,10 @@ public enum PartOfSpeech {
                     )
             );
 
-    public static PartOfSpeech fromName(String languageCode, String name) {
-        return nameMap.get(languageCode).get(name);
-    }
-
-    public static List<String> getPosNames(String languageCode) {
-        return ImmutableList.copyOf(nameMap.get(languageCode).keySet());
+    public static PartOfSpeech fromName(Language language, String name) {
+        return language.getPartsOfSpeech().stream()
+                .filter(pos -> Objects.equals(language.getPartsOfSpeechName(pos), name))
+                .findAny()
+                .get();
     }
 }
