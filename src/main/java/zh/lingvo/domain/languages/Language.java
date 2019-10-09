@@ -7,8 +7,8 @@ import zh.lingvo.domain.Declension;
 import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
-import zh.lingvo.domain.changepatterns.BasicNominalChangePattern;
-import zh.lingvo.domain.changepatterns.ChangePattern;
+import zh.lingvo.domain.changepatterns.BasicNounChangeModel;
+import zh.lingvo.domain.changepatterns.ChangeModel;
 import zh.lingvo.domain.forms.WordForm;
 
 import javax.validation.constraints.NotNull;
@@ -22,7 +22,7 @@ public abstract class Language {
 
     protected Map<PartOfSpeech, String> posNamings;
     protected Map<PartOfSpeech, List<WordForm>> wordFormsMappings;
-    protected Map<PartOfSpeech, ChangePattern> changePatternsMap;
+    protected Map<PartOfSpeech, ChangeModel> changePatternsMap;
     protected Map<Number, String> numberNamings;
     protected Map<Declension, String> declensionMappings;
     protected Map<WordForm, String> wordFormNamings;
@@ -51,7 +51,7 @@ public abstract class Language {
     }
 
     @NotNull
-    private Map<PartOfSpeech, String> getPosNamings() {
+    public Map<PartOfSpeech, String> getPosNamings() {
         if (posNamings == null)
             loadPosNamings();
         return posNamings;
@@ -141,11 +141,11 @@ public abstract class Language {
 
     protected abstract void loadGenderNamings();
 
-    public ChangePattern getChangePattern(PartOfSpeech pos) {
-        return getChangePatternsMap().getOrDefault(pos, ChangePattern.EMPTY);
+    public ChangeModel getChangePattern(PartOfSpeech pos) {
+        return getChangePatternsMap().getOrDefault(pos, ChangeModel.EMPTY);
     }
 
-    private Map<PartOfSpeech, ChangePattern> getChangePatternsMap() {
+    private Map<PartOfSpeech, ChangeModel> getChangePatternsMap() {
         if (changePatternsMap == null)
             loadChangePatternMap();
         return changePatternsMap;
@@ -153,7 +153,7 @@ public abstract class Language {
 
     protected void loadChangePatternMap() {
         changePatternsMap = ImmutableMap.of(
-                PartOfSpeech.NOUN, new BasicNominalChangePattern(this)
+                PartOfSpeech.NOUN, new BasicNounChangeModel(this)
         );
     }
 

@@ -1,29 +1,31 @@
 package zh.lingvo.domain.changepatterns;
 
 import com.google.common.collect.ImmutableList;
-import zh.lingvo.domain.Declension;
 import zh.lingvo.domain.Gender;
+import zh.lingvo.domain.Number;
+import zh.lingvo.domain.PartOfSpeech;
+import zh.lingvo.domain.forms.WordForm;
 import zh.lingvo.domain.languages.Language;
 import zh.lingvo.util.Pair;
-import zh.lingvo.domain.Number;
 
 import java.util.List;
 
-public class BasicNominalChangePattern implements ChangePattern {
-    private ImmutableList<Pair<Declension, String>> declensions;
+public class BasicNounChangeModel implements ChangeModel {
     private ImmutableList<Pair<Number, String>> numbers;
+    private ImmutableList<Pair<WordForm, String>> cases;
     private ImmutableList<Pair<Gender, String>> genders;
 
-    public BasicNominalChangePattern() {
+    public BasicNounChangeModel() {
     }
 
-    public BasicNominalChangePattern(Language language) {
+    public BasicNounChangeModel(Language language) {
         this(language, false);
     }
 
-    public BasicNominalChangePattern(Language language, boolean withGenders) {
-        declensions = language.getDeclensions().stream()
-                .map(declension -> Pair.from(declension, language.getDeclensionMapping(declension)))
+    public BasicNounChangeModel(Language language, boolean withGenders) {
+        cases = language.getForms(PartOfSpeech.NOUN)
+                .stream()
+                .map(wordForm -> Pair.from(wordForm, language.getFormName(wordForm)))
                 .collect(ImmutableList.toImmutableList());
         numbers = language.getNumbers().stream()
                 .map(number -> Pair.from(number, language.getNumberName(number)))
@@ -31,16 +33,16 @@ public class BasicNominalChangePattern implements ChangePattern {
         genders = withGenders
                 ? language.getGenders().stream()
                         .map(gender -> Pair.from(gender, language.getGenderName(gender)))
-                        .collect(ImmutableList.toImmutableList())
+                    .collect(ImmutableList.toImmutableList())
                 : ImmutableList.of();
     }
 
-    public List<Pair<Declension, String>> getDeclensions() {
-        return declensions;
+    public List<Pair<WordForm, String>> getCases() {
+        return cases;
     }
 
-    public void setDeclensions(List<Pair<Declension, String>> declensions) {
-        this.declensions = ImmutableList.copyOf(declensions);
+    public void setCases(List<Pair<WordForm, String>> cases) {
+        this.cases = ImmutableList.copyOf(cases);
     }
 
     public ImmutableList<Pair<Number, String>> getNumbers() {
