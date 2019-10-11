@@ -6,6 +6,7 @@ import zh.lingvo.domain.Declension;
 import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
+import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.forms.NounWordForm;
 
 public class Spanish extends Language {
@@ -61,6 +62,12 @@ public class Spanish extends Language {
                 Gender.FEMININE, "f",
                 Gender.MASCULINE, "m"
         );
+    }
+
+    @Override
+    protected void loadWordFormHelpers() {
+        wordFormHelpers = ImmutableMap.<PartOfSpeech, WordFormsHelper>builder()
+                .build();
     }
 
     public static Spanish getInstance() {

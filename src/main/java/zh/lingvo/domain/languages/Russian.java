@@ -6,6 +6,7 @@ import zh.lingvo.domain.Declension;
 import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
+import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.forms.NounWordForm;
 import zh.lingvo.domain.forms.WordForm;
 
@@ -77,6 +78,12 @@ public class Russian extends Language {
                 Gender.FEMININE, "ж",
                 Gender.NEUTRAL, "ср"
         );
+    }
+
+    @Override
+    protected void loadWordFormHelpers() {
+        wordFormHelpers = ImmutableMap.<PartOfSpeech, WordFormsHelper>builder()
+                .build();
     }
 
     public static Russian getInstance() {

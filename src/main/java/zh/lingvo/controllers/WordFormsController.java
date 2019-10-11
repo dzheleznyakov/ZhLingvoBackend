@@ -6,22 +6,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zh.lingvo.ApiMapping;
+import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.caches.LanguagesCache;
+import zh.lingvo.domain.Dictionary;
+import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.ChangeModel;
 import zh.lingvo.domain.languages.Language;
+import zh.lingvo.domain.words.Word;
+import zh.lingvo.util.Pair;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @ApiMapping
 @RequestMapping("/api/words/forms")
 public class WordFormsController {
     private final LanguagesCache languagesCache;
+    private final DictionaryCache dictionaryCache;
 
-    public WordFormsController(LanguagesCache languagesCache) {
+    public WordFormsController(LanguagesCache languagesCache, DictionaryCache dictionaryCache) {
         this.languagesCache = languagesCache;
+        this.dictionaryCache = dictionaryCache;
     }
 
     @GetMapping("/models/{lang}/{pos}")
@@ -36,7 +45,7 @@ public class WordFormsController {
                 .filter(entry -> Objects.equals(entry.getValue(), posName))
                 .findAny()
                 .map(Map.Entry::getKey)
-                .map(language::getChangePattern)
+                .map(language::getChangeModel)
                 .orElse(ChangeModel.EMPTY);
     }
 
@@ -46,11 +55,24 @@ public class WordFormsController {
             @PathVariable("pos") String posName,
             @PathVariable("wordId") UUID wordId
             ) {
-        return ImmutableMap.of(
-                "SINGULAR;NOMINATIVE", "box",
-                "PLURAL;NOMINATIVE", "boxes",
-                "SINGULAR;POSSESSIVE", "box's",
-                "PLURAL;POSSESSIVE", "boxes'"
-        );
+        Language language = languagesCache.get(languageCode);
+        Dictionary dictionary = dictionaryCache.get(languageCode);
+        Word word = dictionary.get(wordId);
+        PartOfSpeech pos = language.getPosNamings().entrySet()
+                .stream()
+                .filter((entry -> Objects.equals(entry.getValue(), posName)))
+                .map(Map.Entry::getKey)
+                .findAny()
+                .orElse(null);
+        Map<Enum<?>[], String> wordForms = language.getWordForms(word, pos);
+        ImmutableMap<String, String> result = wordForms.entrySet().stream()
+                .map(entry -> {
+                    String key = Arrays.stream(entry.getKey())
+                            .map(Enum::name)
+                            .collect(Collectors.joining(";"));
+                    return Pair.from(key, entry.getValue());
+                })
+                .collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
+        return result;
     }
 }

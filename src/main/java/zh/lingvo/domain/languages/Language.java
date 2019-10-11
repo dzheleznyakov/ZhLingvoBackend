@@ -9,7 +9,9 @@ import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.BasicNounChangeModel;
 import zh.lingvo.domain.changepatterns.ChangeModel;
+import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.forms.WordForm;
+import zh.lingvo.domain.words.Word;
 
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
@@ -23,6 +25,7 @@ public abstract class Language {
     protected Map<PartOfSpeech, String> posNamings;
     protected Map<PartOfSpeech, List<WordForm>> wordFormsMappings;
     protected Map<PartOfSpeech, ChangeModel> changePatternsMap;
+    protected Map<PartOfSpeech, WordFormsHelper> wordFormHelpers;
     protected Map<Number, String> numberNamings;
     protected Map<Declension, String> declensionMappings;
     protected Map<WordForm, String> wordFormNamings;
@@ -113,6 +116,20 @@ public abstract class Language {
 
     protected abstract void loadWordFormsMappings();
 
+    public Map<Enum<?>[], String> getWordForms(Word word, PartOfSpeech pos) {
+        WordFormsHelper wordFormsHelper = getWordFormsHelpers().get(pos);
+        ChangeModel changeModel = getChangeModel(pos);
+        return wordFormsHelper.getForms(word);
+    }
+
+    private Map<PartOfSpeech, WordFormsHelper> getWordFormsHelpers() {
+        if (wordFormHelpers == null)
+            loadWordFormHelpers();
+        return wordFormHelpers;
+    }
+
+    protected abstract void loadWordFormHelpers();
+
     public String getFormName(WordForm wordForm) {
         return getWordFormsNamings().getOrDefault(wordForm, "");
     }
@@ -141,7 +158,7 @@ public abstract class Language {
 
     protected abstract void loadGenderNamings();
 
-    public ChangeModel getChangePattern(PartOfSpeech pos) {
+    public ChangeModel getChangeModel(PartOfSpeech pos) {
         return getChangePatternsMap().getOrDefault(pos, ChangeModel.EMPTY);
     }
 

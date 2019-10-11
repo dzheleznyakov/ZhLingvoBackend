@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import zh.lingvo.domain.Declension;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
+import zh.lingvo.domain.changepatterns.helpers.EnNounFormHelper;
+import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.forms.NounWordForm;
 import zh.lingvo.domain.forms.WordForm;
 
@@ -61,6 +63,13 @@ public class English extends Language {
     @Override
     protected void loadGenderNamings() {
         gendersNamings = ImmutableMap.of();
+    }
+
+    @Override
+    protected void loadWordFormHelpers() {
+        wordFormHelpers = ImmutableMap.<PartOfSpeech, WordFormsHelper>builder()
+                .put(PartOfSpeech.NOUN, new EnNounFormHelper())
+                .build();
     }
 
     public static English getInstance() {
