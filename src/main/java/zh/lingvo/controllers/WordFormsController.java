@@ -65,7 +65,7 @@ public class WordFormsController {
                 .findAny()
                 .orElse(null);
         Map<Enum<?>[], String> wordForms = language.getWordForms(word, pos);
-        ImmutableMap<String, String> result = wordForms.entrySet().stream()
+        return wordForms.entrySet().stream()
                 .map(entry -> {
                     String key = Arrays.stream(entry.getKey())
                             .map(Enum::name)
@@ -73,6 +73,5 @@ public class WordFormsController {
                     return Pair.from(key, entry.getValue());
                 })
                 .collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
-        return result;
     }
 }
