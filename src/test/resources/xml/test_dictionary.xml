@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE dictionary SYSTEM "dictionary.dtd">
+
+<dictionary lang="En">
+  <word id="_7a631e0d-5d91-40c8-a0b2-b8cef2eb97e3">
+    <name value="man" />
+    <transcription ipa="man" />
+    <semanticBlock>
+      <posBlock pos="NOUN">
+        <meaning>
+          <translation value="человек" />
+        </meaning>
+        <meaning>
+          <translation value="мужчина" />
+        </meaning>
+      </posBlock>
+    </semanticBlock>
+    <formException pos="NOUN">
+      <name form="Number.PLURAL NounWordForm.NOMINATIVE" value="men" />
+    </formException>
+  </word>
+  <word id="_89b7820d-3e3d-4ea6-a7d5-190e485c5164">
+    <name value="box" />
+    <transcription ipa="bɒks" />
+    <semanticBlock>
+      <posBlock pos="NOUN">
+        <meaning>
+          <translation value="коробка" />
+          <translation value="ящик" />
+          <translation value="сундук" />
+          <translation value="сумка, вместилище" />
+        </meaning>
+        <meaning>
+          <translation value="ящичек" elaboration="стола" />
+          <translation value="коробочка" elaboration="для всяких мелочей" />
+          <translation value="шкатулка" />
+          <example expression="witness box" explanation="место в суде, где сидят свидетели" />
+          <example expression="music box" explanation="музыкальная шкатулка" remark="амер." />
+          <example expression="musical box" explanation="музыкальная шкатулка" remark="брит." />
+          <example expression="shooting box" explanation="охотничья сумка" />
+        </meaning>
+        <meaning remark="рел.">
+          <translation value="дарохранительница" />
+          <translation value="дароносица" />
+        </meaning>
+      </posBlock>
+    </semanticBlock>
+    <semanticBlock>
+      <posBlock pos="NOUN">
+        <meaning>
+          <translation value="удар" />
+        </meaning>
+      </posBlock>
+      <posBlock pos="VERB">
+        <meaning>
+          <translation value="боксировать" />
+        </meaning>
+      </posBlock>
+    </semanticBlock>
+  </word>
+</dictionary>

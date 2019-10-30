@@ -1,4 +1,6 @@
 package zh.lingvo.domain.forms;
 
-public interface WordForm {
+import zh.lingvo.domain.LinguisticCategory;
+
+public interface WordForm extends LinguisticCategory {
 }

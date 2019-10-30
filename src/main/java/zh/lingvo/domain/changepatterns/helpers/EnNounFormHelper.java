@@ -3,6 +3,7 @@ package zh.lingvo.domain.changepatterns.helpers;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import zh.lingvo.domain.LinguisticCategory;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.forms.NounWordForm;
 import zh.lingvo.domain.words.Word;
@@ -11,16 +12,16 @@ import java.util.Map;
 import java.util.Set;
 
 public class EnNounFormHelper implements WordFormsHelper {
-    static final Enum<?>[] SINGULAR_NOMINATIVE = new Enum[] { Number.SINGULAR, NounWordForm.NOMINATIVE };
-    static final Enum<?>[] PLURAL_NOMINATIVE = new Enum[] { Number.PLURAL, NounWordForm.NOMINATIVE };
-    static final Enum<?>[] SINGULAR_POSSESSIVE = new Enum[] { Number.SINGULAR, NounWordForm.POSSESSIVE };
-    static final Enum<?>[] PLURAL_POSSESSIVE = new Enum[] { Number.PLURAL, NounWordForm.POSSESSIVE };
+    static final LinguisticCategory[] SINGULAR_NOMINATIVE = new LinguisticCategory[] { Number.SINGULAR, NounWordForm.NOMINATIVE };
+    static final LinguisticCategory[] PLURAL_NOMINATIVE = new LinguisticCategory[] { Number.PLURAL, NounWordForm.NOMINATIVE };
+    static final LinguisticCategory[] SINGULAR_POSSESSIVE = new LinguisticCategory[] { Number.SINGULAR, NounWordForm.POSSESSIVE };
+    static final LinguisticCategory[] PLURAL_POSSESSIVE = new LinguisticCategory[] { Number.PLURAL, NounWordForm.POSSESSIVE };
 
     private static final Set<String> SIBILANTS = ImmutableSet.of("s", "sh", "x");
     private static final Set<String> VOCALS = ImmutableSet.of("e", "a", "o", "i", "u", "y");
 
     @Override
-    public Map<Enum<?>[], String> getForms(Word word) {
+    public Map<LinguisticCategory[], String> getForms(Word word) {
         String baseForm = word.getName();
         String pluralBaseForm = appendS(baseForm);
         return ImmutableMap.of(

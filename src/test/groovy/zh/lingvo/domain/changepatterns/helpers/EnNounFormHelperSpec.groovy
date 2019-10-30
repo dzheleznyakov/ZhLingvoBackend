@@ -2,6 +2,7 @@ package zh.lingvo.domain.changepatterns.helpers
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import zh.lingvo.domain.LinguisticCategory
 import zh.lingvo.domain.changepatterns.ChangeModel
 import zh.lingvo.domain.languages.English
 import zh.lingvo.domain.languages.Language
@@ -38,10 +39,10 @@ class EnNounFormHelperSpec extends Specification {
         'wife'   || toChangeModel('wife', 'wives', "wife's", "wives'")
     }
 
-    private static Enum[] snKey = EnNounFormHelper.SINGULAR_NOMINATIVE
-    private static Enum[] pnKey = EnNounFormHelper.PLURAL_NOMINATIVE
-    private static Enum[] spKey = EnNounFormHelper.SINGULAR_POSSESSIVE
-    private static Enum[] ppKey = EnNounFormHelper.PLURAL_POSSESSIVE
+    private static LinguisticCategory[] snKey = EnNounFormHelper.SINGULAR_NOMINATIVE
+    private static LinguisticCategory[] pnKey = EnNounFormHelper.PLURAL_NOMINATIVE
+    private static LinguisticCategory[] spKey = EnNounFormHelper.SINGULAR_POSSESSIVE
+    private static LinguisticCategory[] ppKey = EnNounFormHelper.PLURAL_POSSESSIVE
     private static def toChangeModel(sn, pn, sp, pp) {
         [(snKey):sn, (pnKey):pn, (spKey):sp, (ppKey):pp]
     }

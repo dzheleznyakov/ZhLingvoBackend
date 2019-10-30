@@ -9,6 +9,7 @@ import zh.lingvo.ApiMapping;
 import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
+import zh.lingvo.domain.LinguisticCategory;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.ChangeModel;
 import zh.lingvo.domain.languages.Language;
@@ -50,7 +51,7 @@ public class WordFormsController {
     }
 
     @GetMapping("/{lang}/{pos}/{wordId}")
-    public Object getWordForms(
+    public Map<String, String> getWordForms(
             @PathVariable("lang") String languageCode,
             @PathVariable("pos") String posName,
             @PathVariable("wordId") UUID wordId
@@ -64,14 +65,31 @@ public class WordFormsController {
                 .map(Map.Entry::getKey)
                 .findAny()
                 .orElse(null);
-        Map<Enum<?>[], String> wordForms = language.getWordForms(word, pos);
+        Map<LinguisticCategory[], String> wordForms = language.getWordForms(word, pos);
         return wordForms.entrySet().stream()
                 .map(entry -> {
                     String key = Arrays.stream(entry.getKey())
+                            .filter(e -> Enum.class.isAssignableFrom(e.getClass()))
+                            .map(Enum.class::cast)
                             .map(Enum::name)
                             .collect(Collectors.joining(";"));
                     return Pair.from(key, entry.getValue());
                 })
                 .collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
+    }
+
+    @GetMapping("/{lang}/{pos}")
+    public void editWordForm(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("pos") String posName
+    ) {
+        // localhost:8080/api/words/forms/En/noun
+        System.out.println("languageCode = " + languageCode);
+        System.out.println("posName = " + posName);
+        Language language = languagesCache.get(languageCode);
+        Dictionary dictionary = dictionaryCache.get(languageCode);
+
+        Word word = dictionary.get("man");
+        System.out.println(word);
     }
 }

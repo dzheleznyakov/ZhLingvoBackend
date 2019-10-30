@@ -1,0 +1,33 @@
+<!ELEMENT dictionary (word*)>
+<!ATTLIST dictionary lang NMTOKEN #REQUIRED>
+
+<!ELEMENT word (name, transcription*, semanticBlock*, formException*)>
+<!ATTLIST word id ID #REQUIRED>
+
+<!ELEMENT name EMPTY>
+<!ATTLIST name value CDATA #REQUIRED
+               form NMTOKENS #IMPLIED>
+
+<!ELEMENT transcription EMPTY>
+<!ATTLIST transcription remark CDATA #IMPLIED
+                        ipa CDATA #REQUIRED>
+
+<!ELEMENT semanticBlock (posBlock*)>
+
+<!ELEMENT posBlock (meaning*)>
+<!ATTLIST posBlock pos NMTOKEN #REQUIRED>
+
+<!ELEMENT meaning (translation*, example*)>
+<!ATTLIST meaning remark CDATA #IMPLIED>
+
+<!ELEMENT translation EMPTY>
+<!ATTLIST translation value CDATA #REQUIRED
+                      elaboration CDATA #IMPLIED>
+
+<!ELEMENT example EMPTY>
+<!ATTLIST example remark CDATA #IMPLIED
+                  expression CDATA #IMPLIED
+                  explanation CDATA #IMPLIED>
+
+<!ELEMENT formException (name+)>
+<!ATTLIST formException pos NMTOKEN #REQUIRED>

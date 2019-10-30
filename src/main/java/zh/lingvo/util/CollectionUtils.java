@@ -2,9 +2,11 @@ package zh.lingvo.util;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -22,6 +24,13 @@ public class CollectionUtils {
         return list == null
                 ? null
                 : list instanceof ImmutableList ? (ImmutableList) list : ImmutableList.copyOf(list);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K, V> ImmutableMap<K, V> toImmutableMap(Map<K, V> map) {
+        return map == null
+                ? null
+                : map instanceof ImmutableMap ? (ImmutableMap) map : ImmutableMap.copyOf(map);
     }
 
     @NotNull

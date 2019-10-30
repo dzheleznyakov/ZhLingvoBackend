@@ -1,12 +1,19 @@
 package zh.lingvo.persistence.xml.entities.word;
 
 import com.google.common.base.MoreObjects;
+import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Word;
-import zh.lingvo.util.CollectionUtils;
 import zh.lingvo.persistence.xml.entities.XmlEntity;
+import zh.lingvo.util.CollectionUtils;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @XmlRootElement(name = "word")
@@ -16,6 +23,7 @@ public class WordXmlEntity implements XmlEntity {
     private String word;
     private List<String> transcriptions;
     private List<SemanticBlockXmlEntity> semanticBlocks;
+    private Map<PartOfSpeech, Map<Enum<?>, String>> wordFormsExceptions;
 
     public WordXmlEntity() {
     }
@@ -62,6 +70,17 @@ public class WordXmlEntity implements XmlEntity {
 
     public void setSemanticBlocks(List<SemanticBlockXmlEntity> semanticBlocks) {
         this.semanticBlocks = semanticBlocks;
+    }
+
+//    @XmlElementWrapper(name = "wordFormsExceptions")
+//    @XmlJavaTypeAdapter(javax.xml.bind.annotation.adapters.XmlAdapter)
+//    @XmlElement(name = "exception")
+//    public Map<PartOfSpeech, Map<Enum<?>, String>> getWordFormsExceptions() {
+//        return wordFormsExceptions;
+//    }
+
+    public void setWordFormsExceptions(Map<PartOfSpeech, Map<Enum<?>, String>> wordFormsExceptions) {
+        this.wordFormsExceptions = wordFormsExceptions;
     }
 
     @Override

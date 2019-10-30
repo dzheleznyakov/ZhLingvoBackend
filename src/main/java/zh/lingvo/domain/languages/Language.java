@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import zh.lingvo.domain.Declension;
 import zh.lingvo.domain.Gender;
+import zh.lingvo.domain.LinguisticCategory;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.BasicNounChangeModel;
@@ -116,7 +117,7 @@ public abstract class Language {
 
     protected abstract void loadWordFormsMappings();
 
-    public Map<Enum<?>[], String> getWordForms(Word word, PartOfSpeech pos) {
+    public Map<LinguisticCategory[], String> getWordForms(Word word, PartOfSpeech pos) {
         WordFormsHelper wordFormsHelper = getWordFormsHelpers().get(pos);
         ChangeModel changeModel = getChangeModel(pos);
         return wordFormsHelper.getForms(word);
