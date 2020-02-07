@@ -24,11 +24,6 @@ public class DictionaryXml implements XmlEntity {
     public DictionaryXml() {
     }
 
-    public DictionaryXml(String lang, List<WordXml> words) {
-        this.lang = lang;
-        this.words = words;
-    }
-
     public String getLang() {
         return lang;
     }

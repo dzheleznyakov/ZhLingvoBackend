@@ -2,7 +2,7 @@ package zh.lingvo.persistence.xml.entities.word;
 
 import com.google.common.base.MoreObjects;
 import zh.lingvo.domain.PartOfSpeech;
-import zh.lingvo.domain.words.PartOfSpeechBlock;
+import zh.lingvo.domain.words.PosBlock;
 import zh.lingvo.util.CollectionUtils;
 import zh.lingvo.persistence.xml.entities.XmlEntity;
 
@@ -18,9 +18,9 @@ public class PartOfSpeechBlockXmlEntity implements XmlEntity {
     public PartOfSpeechBlockXmlEntity() {
     }
 
-    public PartOfSpeechBlockXmlEntity(PartOfSpeechBlock partOfSpeechBlock) {
-        partOfSpeech = partOfSpeechBlock.getPartOfSpeech();
-        meanings = CollectionUtils.transform(partOfSpeechBlock::getMeanings, MeaningXmlEntity::new);
+    public PartOfSpeechBlockXmlEntity(PosBlock posBlock) {
+        partOfSpeech = posBlock.getPos();
+        meanings = CollectionUtils.transform(posBlock::getMeanings, MeaningXmlEntity::new);
     }
 
     @XmlAttribute

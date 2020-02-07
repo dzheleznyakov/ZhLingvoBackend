@@ -22,7 +22,7 @@ public class EnNounFormHelper implements WordFormsHelper {
 
     @Override
     public Map<LinguisticCategory[], String> getForms(Word word) {
-        String baseForm = word.getName();
+        String baseForm = word.getName().getValue();
         String pluralBaseForm = appendS(baseForm);
         return ImmutableMap.of(
                 SINGULAR_NOMINATIVE, baseForm,

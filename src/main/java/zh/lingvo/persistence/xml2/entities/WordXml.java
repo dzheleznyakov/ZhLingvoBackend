@@ -34,19 +34,6 @@ public class WordXml implements XmlEntity {
     public WordXml() {
     }
 
-    public WordXml(
-            String id,
-            NameXml name,
-            List<TranscriptionXml> transcriptions,
-            List<SemanticBlockXml> semanticBlocks,
-            List<FormExceptionXml> formExceptions) {
-        this.id = id;
-        this.name = name;
-        this.transcriptions = transcriptions;
-        this.semanticBlocks = semanticBlocks;
-        this.formExceptions = formExceptions;
-    }
-
     public String getId() {
         return id;
     }
@@ -84,7 +71,6 @@ public class WordXml implements XmlEntity {
     }
 
     public void setFormExceptions(List<FormExceptionXml> formExceptions) {
-        System.out.println("formExceptions = " + formExceptions);
         this.formExceptions = formExceptions;
     }
 

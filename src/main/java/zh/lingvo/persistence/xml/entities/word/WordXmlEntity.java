@@ -1,7 +1,9 @@
 package zh.lingvo.persistence.xml.entities.word;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.ImmutableList;
 import zh.lingvo.domain.PartOfSpeech;
+import zh.lingvo.domain.words.Transcription;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.persistence.xml.entities.XmlEntity;
 import zh.lingvo.util.CollectionUtils;
@@ -30,8 +32,11 @@ public class WordXmlEntity implements XmlEntity {
 
     public WordXmlEntity(Word word) {
         this.id = word.getId();
-        this.word = word.getName();
-        this.transcriptions = word.getTranscriptions();
+        this.word = word.getName().getValue();
+        this.transcriptions = word.getTranscriptions()
+                .stream()
+                .map(Transcription::getIpa)
+                .collect(ImmutableList.toImmutableList());
         this.semanticBlocks = CollectionUtils.transform(word::getSemanticBlocks, SemanticBlockXmlEntity::new);
     }
 

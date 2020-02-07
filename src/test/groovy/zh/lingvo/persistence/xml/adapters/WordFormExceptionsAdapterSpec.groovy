@@ -1,14 +1,5 @@
+/*
 package zh.lingvo.persistence.xml.adapters
-
-import spock.lang.Specification
-import zh.lingvo.persistence.xml.entities.XmlEntity
-
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Marshaller
-import javax.xml.bind.annotation.XmlAccessType
-import javax.xml.bind.annotation.XmlAccessorType
-import javax.xml.bind.annotation.XmlAttribute
-import javax.xml.bind.annotation.XmlRootElement
 
 class WordFormExceptionsAdapterSpec extends Specification {
     def "blah"() {
@@ -54,3 +45,4 @@ class WordFormExceptionsAdapterSpec extends Specification {
         }
     }
 }
+*/

@@ -1,5 +1,6 @@
 package zh.lingvo.domain;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import zh.lingvo.domain.languages.Language;
@@ -42,7 +43,7 @@ public class Dictionary {
 
     private void put(Word word) {
         words.put(word.getId(), word);
-        wordsByName.put(word.getName(), word);
+        wordsByName.put(word.getName().getValue(), word);
     }
 
     public Language getLanguage() {
@@ -51,7 +52,7 @@ public class Dictionary {
 
     public List<Word> getWords() {
         return words.values().stream()
-                .sorted(Comparator.comparing(Word::getName))
+                .sorted(Comparator.comparing(word -> word.getName().getValue()))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -69,5 +70,20 @@ public class Dictionary {
 
     public Word remove(UUID uuid) {
         return words.remove(uuid);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dictionary that = (Dictionary) o;
+        return Objects.equal(language, that.language) &&
+                Objects.equal(words, that.words) &&
+                Objects.equal(wordsByName, that.wordsByName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(language, words, wordsByName);
     }
 }

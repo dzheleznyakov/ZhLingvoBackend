@@ -17,11 +17,6 @@ public class TranscriptionXml implements XmlEntity {
     public TranscriptionXml() {
     }
 
-    public TranscriptionXml(String remark, String ipa) {
-        this.remark = remark;
-        this.ipa = ipa;
-    }
-
     public String getRemark() {
         return remark;
     }

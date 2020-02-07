@@ -1,11 +1,13 @@
 package zh.lingvo.rest.entities;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;
-import zh.lingvo.domain.words.PartOfSpeechBlock;
+import zh.lingvo.domain.words.PosBlock;
 import zh.lingvo.domain.words.SemanticBlock;
+import zh.lingvo.domain.words.Transcription;
 import zh.lingvo.domain.words.Translation;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.rest.entities.word.ExampleRestEntity;
@@ -41,7 +43,10 @@ public class JsonWordFactory {
 
     public static Word getWord(WordRestEntity jsonWord, String languageCode) {
         Word word = new Word(UUID.fromString(jsonWord.getId()), jsonWord.getWord());
-        word.setTranscriptions(jsonWord.getTranscriptions());
+        word.setTranscriptions(jsonWord.getTranscriptions()
+                .stream()
+                .map(transcription -> new Transcription(null, transcription))
+                .collect(ImmutableList.toImmutableList()));
 
         List<SemanticBlock> semanticBlocks = CollectionUtils.transform(jsonWord::getSemanticBlocks, jsonSemBlocks -> getSemanticGroup(jsonSemBlocks, languageCode));
         word.setSemanticBlocks(semanticBlocks);
@@ -51,15 +56,15 @@ public class JsonWordFactory {
 
     private static SemanticBlock getSemanticGroup(List<SemanticBlockRestEntity> jsonSemanticBlocks, String languageCode) {
         SemanticBlock semanticBlock = new SemanticBlock();
-        List<PartOfSpeechBlock> partOfSpeechBlocks = CollectionUtils.transform(() -> jsonSemanticBlocks, jsonSemBlock -> getSemanticBlock(jsonSemBlock, languageCode));
-        semanticBlock.setPartOfSpeechBlocks(partOfSpeechBlocks);
+        List<PosBlock> posBlocks = CollectionUtils.transform(() -> jsonSemanticBlocks, jsonSemBlock -> getSemanticBlock(jsonSemBlock, languageCode));
+        semanticBlock.setPosBlocks(posBlocks);
         return semanticBlock;
     }
 
-    private static PartOfSpeechBlock getSemanticBlock(SemanticBlockRestEntity jsonSemBlock, String languageCode) {
+    private static PosBlock getSemanticBlock(SemanticBlockRestEntity jsonSemBlock, String languageCode) {
         String posName = jsonSemBlock.getType();
         PartOfSpeech partOfSpeech = posMap.get(languageCode).get(posName);
-        PartOfSpeechBlock semBlock = new PartOfSpeechBlock(partOfSpeech);
+        PosBlock semBlock = new PosBlock(partOfSpeech);
         List<Meaning> meanings = CollectionUtils.transform(jsonSemBlock::getMeanings, JsonWordFactory::getMeaning);
         semBlock.setMeanings(meanings);
         return semBlock;

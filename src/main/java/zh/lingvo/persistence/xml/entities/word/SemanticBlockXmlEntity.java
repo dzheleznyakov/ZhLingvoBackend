@@ -21,7 +21,7 @@ public class SemanticBlockXmlEntity implements XmlEntity {
     }
 
     public SemanticBlockXmlEntity(SemanticBlock semanticBlock) {
-        partOfSpeechBlocks = CollectionUtils.transform(semanticBlock::getPartOfSpeechBlocks, PartOfSpeechBlockXmlEntity::new);
+        partOfSpeechBlocks = CollectionUtils.transform(semanticBlock::getPosBlocks, PartOfSpeechBlockXmlEntity::new);
     }
 
     @XmlElementWrapper(name = "partOfSpeechBlocks")

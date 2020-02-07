@@ -24,11 +24,6 @@ public class PosBlockXml implements XmlEntity {
     public PosBlockXml() {
     }
 
-    public PosBlockXml(String pos, List<MeaningXml> meanings) {
-        this.pos = pos;
-        this.meanings = meanings;
-    }
-
     public String getPos() {
         return pos;
     }

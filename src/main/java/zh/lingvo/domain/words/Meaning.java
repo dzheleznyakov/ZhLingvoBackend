@@ -1,8 +1,8 @@
 package zh.lingvo.domain.words;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import zh.lingvo.util.CollectionUtils;
 
 import java.util.List;
@@ -48,6 +48,21 @@ public class Meaning implements WordEntity {
         return Strings.isNullOrEmpty(remark) &&
                 CollectionUtils.isNullOrEmpty(translations) &&
                 CollectionUtils.isNullOrEmpty(examples);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meaning meaning = (Meaning) o;
+        return Objects.equal(remark, meaning.remark) &&
+                Objects.equal(translations, meaning.translations) &&
+                Objects.equal(examples, meaning.examples);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(remark, translations, examples);
     }
 
     @Override

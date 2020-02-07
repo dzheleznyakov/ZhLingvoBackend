@@ -20,11 +20,6 @@ public class FormExceptionXml {
     public FormExceptionXml() {
     }
 
-    public FormExceptionXml(String pos, List<NameXml> names) {
-        this.pos = pos;
-        this.names = names;
-    }
-
     public String getPos() {
         return pos;
     }

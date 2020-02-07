@@ -17,11 +17,6 @@ public class NameXml implements XmlEntity {
     public NameXml() {
     }
 
-    public NameXml(String value, String form) {
-        this.value = value;
-        this.form = form;
-    }
-
     public String getValue() {
         return value;
     }

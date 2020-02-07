@@ -1,5 +1,6 @@
 package zh.lingvo.persistence.xml;
 
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zh.lingvo.caches.LanguagesCache;
@@ -8,8 +9,9 @@ import zh.lingvo.domain.languages.Language;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;
-import zh.lingvo.domain.words.PartOfSpeechBlock;
+import zh.lingvo.domain.words.PosBlock;
 import zh.lingvo.domain.words.SemanticBlock;
+import zh.lingvo.domain.words.Transcription;
 import zh.lingvo.domain.words.Translation;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.util.CollectionUtils;
@@ -51,7 +53,10 @@ public class XmlWordFactory {
 
     private Word create(WordXmlEntity xmlWord) {
         Word word = new Word(xmlWord.getId(), xmlWord.getWord());
-        word.setTranscriptions(xmlWord.getTranscriptions());
+        word.setTranscriptions(xmlWord.getTranscriptions()
+                .stream()
+                .map(transcription -> new Transcription(null, transcription))
+                .collect(ImmutableList.toImmutableList()));
 
         List<SemanticBlock> semGroups = CollectionUtils.transform(xmlWord::getSemanticBlocks, this::getSemanticGroup);
         word.setSemanticBlocks(semGroups);
@@ -61,15 +66,15 @@ public class XmlWordFactory {
 
     private SemanticBlock getSemanticGroup(SemanticBlockXmlEntity xmlSemGroup) {
         SemanticBlock semGroup = new SemanticBlock();
-        List<PartOfSpeechBlock> semBlocks = CollectionUtils.transform(xmlSemGroup::getPartOfSpeechBlocks, this::getSemanticBlock);
-        semGroup.setPartOfSpeechBlocks(semBlocks);
+        List<PosBlock> semBlocks = CollectionUtils.transform(xmlSemGroup::getPartOfSpeechBlocks, this::getSemanticBlock);
+        semGroup.setPosBlocks(semBlocks);
         return semGroup;
 
     }
 
-    private PartOfSpeechBlock getSemanticBlock(PartOfSpeechBlockXmlEntity xmlSemBlock) {
+    private PosBlock getSemanticBlock(PartOfSpeechBlockXmlEntity xmlSemBlock) {
         PartOfSpeech partOfSpeech = xmlSemBlock.getPartOfSpeech();
-        PartOfSpeechBlock semBlock = new PartOfSpeechBlock(partOfSpeech);
+        PosBlock semBlock = new PosBlock(partOfSpeech);
         List<Meaning> meanings = CollectionUtils.transform(xmlSemBlock::getMeanings, this::getMeaning);
         semBlock.setMeanings(meanings);
         return semBlock;

@@ -20,12 +20,6 @@ public class ExampleXml implements XmlEntity {
     public ExampleXml() {
     }
 
-    public ExampleXml(String expression, String explanation, String remark) {
-        this.expression = expression;
-        this.explanation = explanation;
-        this.remark = remark;
-    }
-
     public String getExpression() {
         return expression;
     }

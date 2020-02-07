@@ -52,6 +52,8 @@ import static zh.lingvo.persistence.xml2.Constants.fullTranslation
 import static zh.lingvo.persistence.xml2.Constants.fullTranslationXml
 import static zh.lingvo.persistence.xml2.Constants.mediumExample
 import static zh.lingvo.persistence.xml2.Constants.mediumExampleXml
+import static zh.lingvo.persistence.xml2.Constants.remarkOnlyMeaning
+import static zh.lingvo.persistence.xml2.Constants.remarkOnlyMeaningXml
 import static zh.lingvo.persistence.xml2.Constants.shortExample
 import static zh.lingvo.persistence.xml2.Constants.shortExampleXml
 import static zh.lingvo.persistence.xml2.Constants.shortFormException
@@ -97,6 +99,7 @@ class XmlWriterSpec extends Specification {
         shortFormException      | FormExceptionXml || shortFormExceptionXml
         nullContentMeaning      | MeaningXml       || emptyMeaningXml
         emptyContentMeaning     | MeaningXml       || emptyMeaningXml
+        remarkOnlyMeaning       | MeaningXml       || remarkOnlyMeaningXml
         translationsOnlyMeaning | MeaningXml       || translationsOnlyMeaningXml
         examplesOnlyMeaning     | MeaningXml       || examplesOnlyMeaningXml
         mixedMeaning            | MeaningXml       || mixedMeaningXml

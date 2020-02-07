@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -17,6 +18,17 @@ public class CollectionUtils {
         return list == null ? null : list.stream()
                 .map(transform)
                 .collect(ImmutableList.toImmutableList());
+    }
+
+    public static <S, K, V> Map<K, V> transformToMap(
+            Supplier<Collection<S>> collectionSupplier,
+            Function<S, K> keyTransformer,
+            Function<S, V> valueTransformer
+    ) {
+        Collection<S> collection = collectionSupplier.get();
+        return collection == null ? null : collection.stream()
+                .map(s -> new Pair<K, V>(keyTransformer.apply(s), valueTransformer.apply(s)))
+                .collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
     }
 
     @SuppressWarnings("unchecked")

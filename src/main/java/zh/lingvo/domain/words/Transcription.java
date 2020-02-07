@@ -10,7 +10,7 @@ public class Transcription {
     public Transcription() {
     }
 
-    Transcription(String remark, String ipa) {
+    public Transcription(String remark, String ipa) {
         this.remark = remark;
         this.ipa = ipa;
     }

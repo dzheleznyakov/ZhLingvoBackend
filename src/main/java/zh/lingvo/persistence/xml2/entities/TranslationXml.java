@@ -17,11 +17,6 @@ public class TranslationXml implements XmlEntity {
     public TranslationXml() {
     }
 
-    public TranslationXml(String value, String elaboration) {
-        this.value = value;
-        this.elaboration = elaboration;
-    }
-
     public String getValue() {
         return value;
     }

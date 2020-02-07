@@ -14,6 +14,9 @@ import java.util.List;
 @JacksonXmlRootElement(localName = "meaning")
 @JsonInclude(Include.NON_NULL)
 public class MeaningXml implements XmlEntity {
+    @JacksonXmlProperty(isAttribute = true)
+    private String remark;
+
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "translation")
     private List<TranslationXml> translations;
@@ -25,9 +28,12 @@ public class MeaningXml implements XmlEntity {
     public MeaningXml() {
     }
 
-    public MeaningXml(List<TranslationXml> translations, List<ExampleXml> examples) {
-        this.translations = translations;
-        this.examples = examples;
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public List<TranslationXml> getTranslations() {
@@ -51,19 +57,21 @@ public class MeaningXml implements XmlEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MeaningXml that = (MeaningXml) o;
-        return Objects.equal(translations, that.translations) &&
+        return Objects.equal(remark, that.remark) &&
+                Objects.equal(translations, that.translations) &&
                 Objects.equal(examples, that.examples);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(translations, examples);
+        return Objects.hashCode(remark, translations, examples);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .omitNullValues()
+                .add("remark", remark)
                 .add("translations", translations)
                 .add("examples", examples)
                 .toString();

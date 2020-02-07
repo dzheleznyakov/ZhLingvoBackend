@@ -1,6 +1,7 @@
 package zh.lingvo.domain.words;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
 public class Translation implements WordEntity {
@@ -31,7 +32,22 @@ public class Translation implements WordEntity {
     }
 
     public boolean isVoid() {
-        return Strings.isNullOrEmpty(translation) && Strings.isNullOrEmpty(elaboration);
+        return Strings.isNullOrEmpty(translation) &&
+                Strings.isNullOrEmpty(elaboration);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Translation that = (Translation) o;
+        return Objects.equal(translation, that.translation) &&
+                Objects.equal(elaboration, that.elaboration);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(translation, elaboration);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class WordPreview implements JsonEntity {
 
     public WordPreview(Word word) {
         this.id = word.getId();
-        this.word = word.getName();
+        this.word = word.getName().getValue();
     }
 
     public UUID getId() {

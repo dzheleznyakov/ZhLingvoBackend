@@ -21,10 +21,6 @@ public class SemanticBlockXml implements XmlEntity {
     public SemanticBlockXml() {
     }
 
-    public SemanticBlockXml(List<PosBlockXml> posBlocks) {
-        this.posBlocks = posBlocks;
-    }
-
     public List<PosBlockXml> getPosBlocks() {
         return posBlocks;
     }

@@ -2,6 +2,9 @@ package zh.lingvo.persistence.xml2
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import zh.lingvo.caches.LanguagesCache
+import zh.lingvo.domain.Dictionary
+import zh.lingvo.domain.languages.English
 import zh.lingvo.persistence.xml2.entities.DictionaryXml
 import zh.lingvo.persistence.xml2.entities.ExampleXml
 import zh.lingvo.persistence.xml2.entities.FormExceptionXml
@@ -51,6 +54,8 @@ import static zh.lingvo.persistence.xml2.Constants.mediumExampleXml
 import static zh.lingvo.persistence.xml2.Constants.mixedMeaning
 import static zh.lingvo.persistence.xml2.Constants.mixedMeaningXml
 import static zh.lingvo.persistence.xml2.Constants.nullContentMeaning
+import static zh.lingvo.persistence.xml2.Constants.remarkOnlyMeaning
+import static zh.lingvo.persistence.xml2.Constants.remarkOnlyMeaningXml
 import static zh.lingvo.persistence.xml2.Constants.shortExample
 import static zh.lingvo.persistence.xml2.Constants.shortExampleXml
 import static zh.lingvo.persistence.xml2.Constants.shortFormException
@@ -69,7 +74,9 @@ import static zh.lingvo.persistence.xml2.Constants.translationsOnlyMeaning
 import static zh.lingvo.persistence.xml2.Constants.translationsOnlyMeaningXml
 
 class XmlReaderSpec extends Specification {
-    private XmlReader reader = []
+    private LanguagesCache languagesCache = [];
+    private WordFactory wordFactory = [languagesCache]
+    private XmlReader reader = [wordFactory]
 
     @Unroll
     def "Reader can read entities: #expectedEntity.toString()"() {
@@ -94,6 +101,7 @@ class XmlReaderSpec extends Specification {
         fullFormExceptionXml       | FormExceptionXml || fullFormException
         shortFormExceptionXml      | FormExceptionXml || shortFormException
         emptyMeaningXml            | MeaningXml       || nullContentMeaning
+        remarkOnlyMeaningXml       | MeaningXml       || remarkOnlyMeaning
         translationsOnlyMeaningXml | MeaningXml       || translationsOnlyMeaning
         examplesOnlyMeaningXml     | MeaningXml       || examplesOnlyMeaning
         mixedMeaningXml            | MeaningXml       || mixedMeaning
@@ -108,5 +116,16 @@ class XmlReaderSpec extends Specification {
         fullWordXml                | WordXml          || fullWord
         emptyDictionaryXml         | DictionaryXml    || emptyDictionary
         fullDictionaryXml          | DictionaryXml    || fullDictionary
+    }
+
+    def "Reader can load dictionary"() {
+        when: "the dictionary file is read"
+        def readDictionary = reader.loadDictionary('xml/test_dictionary.xml')
+        Dictionary expectedDictionary = new Dictionary(English.instance)
+        expectedDictionary.add TestEntities.getBoxWord()
+        expectedDictionary.add TestEntities.getManWord()
+
+        then: 'the loaded dictionary is correct'
+        readDictionary == expectedDictionary
     }
 }

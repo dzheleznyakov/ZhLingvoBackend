@@ -19,8 +19,10 @@ import zh.lingvo.domain.Dictionary;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;
-import zh.lingvo.domain.words.PartOfSpeechBlock;
+import zh.lingvo.domain.words.Name;
+import zh.lingvo.domain.words.PosBlock;
 import zh.lingvo.domain.words.SemanticBlock;
+import zh.lingvo.domain.words.Transcription;
 import zh.lingvo.domain.words.Translation;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.domain.words.WordEntity;
@@ -63,7 +65,7 @@ public class WordEditionController {
     public WordRestEntity updateWordName(
             @PathVariable("lang") String languageCode,
             @PathVariable("id") UUID wordId,
-            @RequestBody String name
+            @RequestBody Name name
     ) {
         return updateWord(languageCode, wordId, word -> word.setName(name));
     }
@@ -72,13 +74,14 @@ public class WordEditionController {
     public WordRestEntity createTranscription(
             @PathVariable("lang") String languageCode,
             @PathVariable("id") UUID wordId,
-            @RequestBody String transcription
+            @RequestBody String ipa
     ) {
         Consumer<Word> addTranscription = (word) -> {
-            List<String> transcriptions = CollectionUtils.getNotNull(word::getTranscriptions);
-            List<String> updatedTranscription = transcriptions == null
+            Transcription transcription = new Transcription(null, ipa);
+            List<Transcription> transcriptions = CollectionUtils.getNotNull(word::getTranscriptions);
+            List<Transcription> updatedTranscription = transcriptions == null
                     ? ImmutableList.of(transcription)
-                    : ImmutableList.<String>builder().addAll(transcriptions).add(transcription).build();
+                    : ImmutableList.<Transcription>builder().addAll(transcriptions).add(transcription).build();
             word.setTranscriptions(updatedTranscription);
         };
         return updateWord(languageCode, wordId, addTranscription);
@@ -89,11 +92,12 @@ public class WordEditionController {
             @PathVariable("lang") String languageCode,
             @PathVariable("id") UUID wordId,
             @PathVariable("index") int index,
-            @RequestBody String transcription
+            @RequestBody String ipa
     ) {
         Consumer<Word> updateTranscription = word -> {
-            List<String> transcriptions = CollectionUtils.getNotNull(word::getTranscriptions);
-            ImmutableList<String> updatedTranscriptions = IntStream.range(0, transcriptions.size())
+            Transcription transcription = new Transcription(null, ipa);
+            List<Transcription> transcriptions = CollectionUtils.getNotNull(word::getTranscriptions);
+            ImmutableList<Transcription> updatedTranscriptions = IntStream.range(0, transcriptions.size())
                     .mapToObj(i -> i == index ? transcription : transcriptions.get(i))
                     .collect(ImmutableList.toImmutableList());
             word.setTranscriptions(updatedTranscriptions);
@@ -108,8 +112,8 @@ public class WordEditionController {
             @PathVariable("index") int index
     ) {
         Consumer<Word> deleteTranscription = word -> {
-            List<String> transcriptions = CollectionUtils.getNotNull(word::getTranscriptions);
-            ImmutableList<String> updatedTranscriptions = IntStream.range(0, transcriptions.size())
+            List<Transcription> transcriptions = CollectionUtils.getNotNull(word::getTranscriptions);
+            ImmutableList<Transcription> updatedTranscriptions = IntStream.range(0, transcriptions.size())
                     .filter(i -> i != index)
                     .mapToObj(transcriptions::get)
                     .collect(ImmutableList.toImmutableList());
@@ -143,7 +147,7 @@ public class WordEditionController {
         Consumer<Word> deleteSemanticBlock = word -> {
             List<SemanticBlock> semanticBlocks = CollectionUtils.getNotNull(word::getSemanticBlocks);
             if (semanticBlocks.size() <= index) return;
-            if (!CollectionUtils.getNotNull(semanticBlocks.get(index)::getPartOfSpeechBlocks).isEmpty()) return;
+            if (!CollectionUtils.getNotNull(semanticBlocks.get(index)::getPosBlocks).isEmpty()) return;
             List<SemanticBlock> updatedSemanticBlocks = IntStream.range(0, semanticBlocks.size())
                     .filter(i -> i != index)
                     .mapToObj(semanticBlocks::get)
@@ -165,14 +169,14 @@ public class WordEditionController {
             if (semanticBlockIndex >= semanticBlocks.size()) return;
             SemanticBlock semanticBlock = semanticBlocks.get(semanticBlockIndex);
 
-            List<PartOfSpeechBlock> posBlocks = CollectionUtils.getNotNull(semanticBlock::getPartOfSpeechBlocks);
-            PartOfSpeechBlock newPosBlock = new PartOfSpeechBlock(PartOfSpeech.fromName(languagesCache.get(languageCode), partOfSpeech));
-            List<PartOfSpeechBlock> updatedPosBlocks = ImmutableList.<PartOfSpeechBlock>builder()
+            List<PosBlock> posBlocks = CollectionUtils.getNotNull(semanticBlock::getPosBlocks);
+            PosBlock newPosBlock = new PosBlock(PartOfSpeech.fromName(languagesCache.get(languageCode), partOfSpeech));
+            List<PosBlock> updatedPosBlocks = ImmutableList.<PosBlock>builder()
                     .addAll(posBlocks)
                     .add(newPosBlock)
                     .build();
 
-            semanticBlock.setPartOfSpeechBlocks(updatedPosBlocks);
+            semanticBlock.setPosBlocks(updatedPosBlocks);
         };
         return updateWord(languageCode, wordId, addPartOfSpeechBlock);
     }
@@ -189,21 +193,21 @@ public class WordEditionController {
             if (semanticBlocks.size() <= semanticBlockIndex) return;
 
             SemanticBlock semanticBlock = semanticBlocks.get(semanticBlockIndex);
-            List<PartOfSpeechBlock> partOfSpeechBlocks = CollectionUtils.getNotNull(semanticBlock::getPartOfSpeechBlocks);
+            List<PosBlock> posBlocks = CollectionUtils.getNotNull(semanticBlock::getPosBlocks);
             PartOfSpeech pos = PartOfSpeech.fromName(languagesCache.get(languageCode), partOfSpeech);
-            PartOfSpeechBlock partOfSpeechBlock = partOfSpeechBlocks.stream()
-                    .filter(posBlock -> Objects.equals(posBlock.getPartOfSpeech(), pos))
+            PosBlock posBlock = posBlocks.stream()
+                    .filter(pBlock -> Objects.equals(pBlock.getPos(), pos))
                     .findAny()
                     .orElse(null);
-            if (partOfSpeechBlock == null) return;
+            if (posBlock == null) return;
 
-            List<Meaning> meanings = CollectionUtils.getNotNull(partOfSpeechBlock::getMeanings);
+            List<Meaning> meanings = CollectionUtils.getNotNull(posBlock::getMeanings);
             if (!meanings.isEmpty()) return;
 
-            ImmutableList<PartOfSpeechBlock> updatedPartOfSpechBlocks = partOfSpeechBlocks.stream()
-                    .filter(posBlock -> !Objects.equals(posBlock.getPartOfSpeech(), pos))
+            ImmutableList<PosBlock> updatedPartOfSpechBlocks = posBlocks.stream()
+                    .filter(pBlock -> !Objects.equals(pBlock.getPos(), pos))
                     .collect(ImmutableList.toImmutableList());
-            semanticBlock.setPartOfSpeechBlocks(updatedPartOfSpechBlocks);
+            semanticBlock.setPosBlocks(updatedPartOfSpechBlocks);
         };
         return updateWord(languageCode, wordId, deletePos);
     }
@@ -217,7 +221,7 @@ public class WordEditionController {
             @RequestBody String translation
     ) {
         return updateWord(languageCode, wordId, word -> {
-            PartOfSpeechBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
+            PosBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
             if (posBlock == null) return;
             List<Meaning> updatedMeanings = ImmutableList.<Meaning>builder()
                     .addAll(CollectionUtils.getNotNull(posBlock::getMeanings))
@@ -237,7 +241,7 @@ public class WordEditionController {
             @RequestBody Payload payload
     ) {
         return updateWord(languageCode, wordId, word -> {
-            PartOfSpeechBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
+            PosBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
             if (posBlock == null) return;
 
             List<Meaning> meanings = CollectionUtils.getNotNull(posBlock::getMeanings);
@@ -369,7 +373,7 @@ public class WordEditionController {
             Consumer<E> entityEditor,
             BiConsumer<Meaning, List<E>> entityListSetter
     ) {
-        PartOfSpeechBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
+        PosBlock posBlock = getPosBlock(word, semanticBlockIndex, posIndex);
         if (posBlock == null) return;
 
         List<Meaning> meanings = CollectionUtils.getNotNull(posBlock::getMeanings);
@@ -401,19 +405,19 @@ public class WordEditionController {
         }
     }
 
-    private void removeMeaningIfNecessary(Meaning meaning, PartOfSpeechBlock posBlock, List<Meaning> meanings, int mIndex) {
+    private void removeMeaningIfNecessary(Meaning meaning, PosBlock posBlock, List<Meaning> meanings, int mIndex) {
         if (meaning.isVoid()) {
             List<Meaning> updatedMeanings = CollectionUtils.remove(meanings, mIndex);
             posBlock.setMeanings(updatedMeanings);
         }
     }
 
-    private PartOfSpeechBlock getPosBlock(Word word, int semanticBlockIndex, int posIndex) {
+    private PosBlock getPosBlock(Word word, int semanticBlockIndex, int posIndex) {
         List<SemanticBlock> semanticBlocks = CollectionUtils.getNotNull(word::getSemanticBlocks);
         if (semanticBlockIndex >= semanticBlocks.size()) return null;
 
         SemanticBlock semanticBlock = semanticBlocks.get(semanticBlockIndex);
-        List<PartOfSpeechBlock> posBlocks = CollectionUtils.getNotNull(semanticBlock::getPartOfSpeechBlocks);
+        List<PosBlock> posBlocks = CollectionUtils.getNotNull(semanticBlock::getPosBlocks);
         if (posIndex >= posBlocks.size()) return null;
 
         return posBlocks.get(posIndex);
