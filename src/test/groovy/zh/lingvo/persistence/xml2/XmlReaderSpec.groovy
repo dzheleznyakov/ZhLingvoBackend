@@ -75,7 +75,7 @@ import static zh.lingvo.persistence.xml2.Constants.translationsOnlyMeaningXml
 
 class XmlReaderSpec extends Specification {
     private LanguagesCache languagesCache = [];
-    private WordFactory wordFactory = [languagesCache]
+    private DictionaryFactory wordFactory = [languagesCache]
     private XmlReader reader = [wordFactory]
 
     @Unroll
@@ -120,12 +120,20 @@ class XmlReaderSpec extends Specification {
 
     def "Reader can load dictionary"() {
         when: "the dictionary file is read"
-        def readDictionary = reader.loadDictionary('xml/test_dictionary.xml')
+        def readDictionary = reader.loadDictionary('src/test/resources/xml/test_dictionary.xml')
         Dictionary expectedDictionary = new Dictionary(English.instance)
         expectedDictionary.add TestEntities.getBoxWord()
         expectedDictionary.add TestEntities.getManWord()
 
         then: 'the loaded dictionary is correct'
         readDictionary == expectedDictionary
+    }
+
+    def "If dictionary file does not exist, the reader returns null"() {
+        when: 'the reader tries to load a dictionary from a non-existent file'
+        def readDictionary = reader.loadDictionary('fake/path/dictionary.xml')
+
+        then: 'the null is returned'
+        readDictionary == null
     }
 }

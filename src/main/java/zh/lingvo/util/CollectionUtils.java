@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -27,8 +28,18 @@ public class CollectionUtils {
     ) {
         Collection<S> collection = collectionSupplier.get();
         return collection == null ? null : collection.stream()
-                .map(s -> new Pair<K, V>(keyTransformer.apply(s), valueTransformer.apply(s)))
+                .map(s -> new Pair<>(keyTransformer.apply(s), valueTransformer.apply(s)))
                 .collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
+    }
+
+    public static <K, V, T> List<T> transformToList(
+            Supplier<Map<K, V>> mapSupplier,
+            BiFunction<K, V, T> transformer
+    ) {
+        Map<K, V> map = mapSupplier.get();
+        return map == null ? null : map.entrySet().stream()
+                .map(e -> transformer.apply(e.getKey(), e.getValue()))
+                .collect(ImmutableList.toImmutableList());
     }
 
     @SuppressWarnings("unchecked")

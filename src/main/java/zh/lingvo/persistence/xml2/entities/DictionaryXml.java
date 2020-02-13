@@ -9,6 +9,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import zh.lingvo.persistence.xml.entities.XmlEntity;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @JacksonXmlRootElement(localName = "dictionary")
@@ -32,6 +33,7 @@ public class DictionaryXml implements XmlEntity {
         this.lang = lang;
     }
 
+    @Nullable
     public List<WordXml> getWords() {
         return words;
     }

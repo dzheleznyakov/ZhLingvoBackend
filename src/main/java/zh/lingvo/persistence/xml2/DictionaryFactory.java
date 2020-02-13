@@ -40,10 +40,10 @@ import java.util.UUID;
 import java.util.function.Function;
 
 @Service
-public class WordFactory {
+public class DictionaryFactory {
     private LanguagesCache languagesCache;
 
-    public WordFactory(LanguagesCache languagesCache) {
+    public DictionaryFactory(LanguagesCache languagesCache) {
         this.languagesCache = languagesCache;
     }
 
