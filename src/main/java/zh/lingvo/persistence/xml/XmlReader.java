@@ -1,36 +1,48 @@
 package zh.lingvo.persistence.xml;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.stereotype.Service;
 import zh.lingvo.domain.Dictionary;
 import zh.lingvo.persistence.PersistenceException;
 import zh.lingvo.persistence.Reader;
-import zh.lingvo.persistence.xml.entities.DictionaryXmlEntity;
+import zh.lingvo.persistence.xml.entities.DictionaryXml;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.annotation.Nullable;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Service
-public class XmlReader implements Reader {
-    @Autowired
-    private XmlWordFactory xmlWordFactory;
+class XmlReader implements Reader {
+    private XmlMapper xmlMapper = new XmlMapper();
+    private DictionaryFactory dictionaryFactory;
 
-    @Override
-    public Dictionary loadDictionary(String fileName) {
-        try {
-            return loadDictionary(new File(fileName));
-        } catch (JAXBException e) {
-            throw new PersistenceException(String.format("Exception when loading dictionary from [%s]", fileName), e);
-        }
+    public XmlReader(DictionaryFactory dictionaryFactory) {
+        this.dictionaryFactory = dictionaryFactory;
     }
 
     @Override
-    public Dictionary loadDictionary(File dictionaryFile) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(DictionaryXmlEntity.class);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        DictionaryXmlEntity xmlDictionary = (DictionaryXmlEntity) unmarshaller.unmarshal(dictionaryFile);
-        return xmlWordFactory.create(xmlDictionary);
+    @Nullable
+    public Dictionary loadDictionary(String fileName) {
+        File dictionaryFile = new File(fileName);
+        return dictionaryFile.exists() ? loadDictionary(dictionaryFile) : null;
+    }
+
+    @Override
+    public Dictionary loadDictionary(File dictionaryFile) {
+        Dictionary dictionary;
+        try (InputStream in = new BufferedInputStream(new FileInputStream(dictionaryFile))) {
+            DictionaryXml dictionaryXml = loadEntity(in, DictionaryXml.class);
+            dictionary = dictionaryFactory.getDictionary(dictionaryXml);
+        } catch (IOException e) {
+            throw new PersistenceException(String.format("Failed to load dictionary [%s]", dictionaryFile.getName()), e);
+        }
+        return dictionary;
+    }
+
+    <E> E loadEntity(InputStream in, Class<E> entityClass) throws IOException {
+        return xmlMapper.readValue(in, entityClass);
     }
 }

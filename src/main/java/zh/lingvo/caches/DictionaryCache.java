@@ -1,15 +1,13 @@
 package zh.lingvo.caches;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import zh.lingvo.util.ConfigReader;
 import zh.lingvo.domain.Dictionary;
 import zh.lingvo.persistence.PersistenceException;
-import zh.lingvo.persistence.xml.XmlReader;
+import zh.lingvo.persistence.Reader;
+import zh.lingvo.persistence.xml.PersistenceManager;
 
-import javax.xml.bind.JAXBException;
 import java.io.File;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
@@ -17,17 +15,19 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @Service
 @Scope(SCOPE_SINGLETON)
 public class DictionaryCache {
-    private static final ConfigReader config = ConfigReader.get();
     @Value("${app.dictionaries.location}")
     private String dictionaryFolderName;
 
-    @Autowired
     private LanguagesCache languagesCache;
 
-    @Autowired
-    private XmlReader xmlReader;
+    private Reader reader;
 
     private Dictionary dictionary;
+
+    public DictionaryCache(LanguagesCache languagesCache, PersistenceManager xmlReader) {
+        this.languagesCache = languagesCache;
+        this.reader = xmlReader;
+    }
 
     public Dictionary get(String languageCode) {
         if (!dictionaryIsLoaded() || !dictionaryLanguageIsCorrect(languageCode))
@@ -49,11 +49,7 @@ public class DictionaryCache {
         File[] files = dictionaryFolder.listFiles(((dir, name) -> name.equals(dicFileName)));
         if (dictionaryFileIsFound(files)) {
             File dictionaryFile = files[0];
-            try {
-                dictionary = xmlReader.loadDictionary(dictionaryFile);
-            } catch (JAXBException e) {
-                throw new PersistenceException("Failed to fetch the dictionary for language [" + languageCode + "]", e);
-            }
+            dictionary = reader.loadDictionary(dictionaryFile);
         } else if (languagesCache.isRegistered(languageCode)) {
             dictionary = new Dictionary(languagesCache.get(languageCode));
         } else {

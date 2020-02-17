@@ -1,68 +1,69 @@
 package zh.lingvo.persistence.xml;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.springframework.stereotype.Service;
 import zh.lingvo.domain.Dictionary;
 import zh.lingvo.persistence.PersistenceException;
 import zh.lingvo.persistence.Writer;
-import zh.lingvo.persistence.xml.entities.DictionaryXmlEntity;
+import zh.lingvo.persistence.xml.entities.DictionaryXml;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.File;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.io.OutputStream;
+import java.util.Objects;
 
-public class XmlWriter implements Writer {
-    private PublishSubject<Payload> saveDictionarySubject = PublishSubject.create();
-    private Disposable saveDictionarySubscription;
+@Service
+class XmlWriter implements Writer {
+    private DictionaryXmlFactory dictionaryXmlFactory;
 
-    public XmlWriter() {
-        initSubscription();
+    private XmlMapper xmlMapper = new XmlMapper();
+    private String currentFileName;
+    private OutputStream outputStream;
+
+    public XmlWriter(DictionaryXmlFactory dictionaryXmlFactory) {
+        this.dictionaryXmlFactory = dictionaryXmlFactory;
     }
-
-    private void initSubscription() {
-        saveDictionarySubscription = saveDictionarySubject.subscribeOn(Schedulers.io())
-                .throttleLatest(5, TimeUnit.SECONDS)
-                .subscribe(this::doSaveDictionary);
-    }
-
 
     @Override
     public void saveDictionary(Dictionary dictionary, String fileName) throws PersistenceException {
-        saveDictionarySubject.onNext(new Payload(dictionary, fileName));
+        try(OutputStream out = getOutputStream(fileName)) {
+            String declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE dictionary SYSTEM \"dictionary.dtd\">\n\n";
+            out.write(declaration.getBytes());
+
+            DictionaryXml dictionaryXml = dictionaryXmlFactory.getDictionaryXml(dictionary);
+            toOutputStream(dictionaryXml, out);
+        } catch (IOException e) {
+            throw new PersistenceException(String.format("Failed to save the dictionary [%s]", fileName), e);
+        }
     }
 
-    private void doSaveDictionary(Payload payload) throws PersistenceException {
-        Dictionary dictionary = payload.dictionary;
-        String fileName = payload.fileName;
+    private OutputStream getOutputStream(String fileName) throws IOException {
+        if (Objects.equals(fileName, currentFileName))
+            return outputStream;
 
-        File dictionaryFile = new File(fileName);
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(DictionaryXmlEntity.class);
-            Marshaller marshaller = jaxbContext.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-            marshaller.marshal(new DictionaryXmlEntity(dictionary), dictionaryFile);
-        } catch (JAXBException e) {
-            throw new PersistenceException(String.format("Error when persisting the dictionary at [%s]", fileName), e);
-        }
+        if (outputStream != null)
+            outputStream.close();
+        currentFileName = fileName;
+        outputStream = new BufferedOutputStream(new FileOutputStream(fileName));
+        return outputStream;
     }
 
     @Override
     public void close() {
-        if (saveDictionarySubscription != null)
-            saveDictionarySubscription.dispose();
+        try {
+            currentFileName = null;
+            if (outputStream != null) {
+                outputStream.close();
+                outputStream = null;
+            }
+        } catch (IOException e) {
+            throw new PersistenceException("Failed to close XmlWriter", e);
+        }
     }
 
-    private static class Payload {
-        final Dictionary dictionary;
-        final String fileName;
 
-        private Payload(Dictionary dictionary, String fileName) {
-            this.dictionary = dictionary;
-            this.fileName = fileName;
-        }
+    <E> void toOutputStream(E entity, OutputStream out) throws IOException {
+        xmlMapper.writeValue(out, entity);
     }
 }

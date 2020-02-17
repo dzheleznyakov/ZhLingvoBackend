@@ -15,7 +15,8 @@ import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
 import zh.lingvo.domain.LingvoException;
 import zh.lingvo.domain.words.Word;
-import zh.lingvo.persistence.xml.XmlWriter;
+import zh.lingvo.persistence.Writer;
+import zh.lingvo.persistence.xml.PersistenceManager;
 import zh.lingvo.rest.Payload;
 import zh.lingvo.rest.entities.word.WordRestEntity;
 import zh.lingvo.util.ConfigReader;
@@ -34,9 +35,9 @@ public class WordsController {
 
     private DictionaryCache dictionaryCache;
     private LanguagesCache languagesCache;
-    private XmlWriter writer;
+    private Writer writer;
 
-    public WordsController(DictionaryCache dictionaryCache, LanguagesCache languagesCache, XmlWriter writer) {
+    public WordsController(DictionaryCache dictionaryCache, LanguagesCache languagesCache, PersistenceManager writer) {
         this.dictionaryCache = dictionaryCache;
         this.languagesCache = languagesCache;
         this.writer = writer;

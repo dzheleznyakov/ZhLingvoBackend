@@ -1,4 +1,4 @@
-package zh.lingvo.persistence.xml2
+package zh.lingvo.persistence.xml
 
 import zh.lingvo.domain.Number
 import zh.lingvo.domain.PartOfSpeech

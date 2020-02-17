@@ -29,10 +29,7 @@ public class WordRestEntity implements JsonEntity {
     public WordRestEntity(Word word, Language language) {
         this.id = word.getId().toString();
         this.word = word.getName().getValue();
-        this.transcriptions = CollectionUtils.toImmutableList(word.getTranscriptions()
-                .stream()
-                .map(Transcription::getIpa)
-                .collect(ImmutableList.toImmutableList()));
+        this.transcriptions = CollectionUtils.transform(word::getTranscriptions, Transcription::getIpa);
         List<SemanticBlock> semanticBlocks = word.getSemanticBlocks() == null
                 ? ImmutableList.of() : word.getSemanticBlocks();
         this.semanticBlocks = semanticBlocks.stream()

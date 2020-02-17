@@ -1,16 +1,16 @@
-package zh.lingvo.persistence.xml2
+package zh.lingvo.persistence.xml
 
 
-import zh.lingvo.persistence.xml2.entities.DictionaryXml
-import zh.lingvo.persistence.xml2.entities.ExampleXml
-import zh.lingvo.persistence.xml2.entities.FormExceptionXml
-import zh.lingvo.persistence.xml2.entities.MeaningXml
-import zh.lingvo.persistence.xml2.entities.NameXml
-import zh.lingvo.persistence.xml2.entities.PosBlockXml
-import zh.lingvo.persistence.xml2.entities.SemanticBlockXml
-import zh.lingvo.persistence.xml2.entities.TranscriptionXml
-import zh.lingvo.persistence.xml2.entities.TranslationXml
-import zh.lingvo.persistence.xml2.entities.WordXml
+import zh.lingvo.persistence.xml.entities.DictionaryXml
+import zh.lingvo.persistence.xml.entities.ExampleXml
+import zh.lingvo.persistence.xml.entities.FormExceptionXml
+import zh.lingvo.persistence.xml.entities.MeaningXml
+import zh.lingvo.persistence.xml.entities.NameXml
+import zh.lingvo.persistence.xml.entities.PosBlockXml
+import zh.lingvo.persistence.xml.entities.SemanticBlockXml
+import zh.lingvo.persistence.xml.entities.TranscriptionXml
+import zh.lingvo.persistence.xml.entities.TranslationXml
+import zh.lingvo.persistence.xml.entities.WordXml
 
 interface Constants {
     static TranscriptionXml fullTranscription = new TranscriptionXml(remark: 'fullTestRemark', ipa: 'fullTestIpa')

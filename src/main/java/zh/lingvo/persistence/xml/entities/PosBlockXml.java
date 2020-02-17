@@ -1,5 +1,7 @@
-package zh.lingvo.persistence.xml2.entities;
+package zh.lingvo.persistence.xml.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -8,16 +10,17 @@ import com.google.common.base.Objects;
 
 import java.util.List;
 
-@JacksonXmlRootElement(localName = "formException")
-public class FormExceptionXml {
+@JacksonXmlRootElement(localName = "posBlock")
+@JsonInclude(Include.NON_NULL)
+public class PosBlockXml implements XmlEntity {
     @JacksonXmlProperty(isAttribute = true)
     private String pos;
 
     @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "name")
-    private List<NameXml> names;
+    @JacksonXmlProperty(localName = "meaning")
+    private List<MeaningXml> meanings;
 
-    public FormExceptionXml() {
+    public PosBlockXml() {
     }
 
     public String getPos() {
@@ -28,26 +31,26 @@ public class FormExceptionXml {
         this.pos = pos;
     }
 
-    public List<NameXml> getNames() {
-        return names;
+    public List<MeaningXml> getMeanings() {
+        return meanings;
     }
 
-    public void setNames(List<NameXml> names) {
-        this.names = names;
+    public void setMeanings(List<MeaningXml> meanings) {
+        this.meanings = meanings;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FormExceptionXml that = (FormExceptionXml) o;
+        PosBlockXml that = (PosBlockXml) o;
         return Objects.equal(pos, that.pos) &&
-                Objects.equal(names, that.names);
+                Objects.equal(meanings, that.meanings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(pos, names);
+        return Objects.hashCode(pos, meanings);
     }
 
     @Override
@@ -55,7 +58,7 @@ public class FormExceptionXml {
         return MoreObjects.toStringHelper(this)
                 .omitNullValues()
                 .add("pos", pos)
-                .add("name", names)
+                .add("meanings", meanings)
                 .toString();
     }
 }

@@ -1,77 +1,77 @@
-package zh.lingvo.persistence.xml2
+package zh.lingvo.persistence.xml
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import zh.lingvo.domain.Dictionary
 import zh.lingvo.domain.languages.English
-import zh.lingvo.persistence.xml2.entities.DictionaryXml
-import zh.lingvo.persistence.xml2.entities.ExampleXml
-import zh.lingvo.persistence.xml2.entities.FormExceptionXml
-import zh.lingvo.persistence.xml2.entities.MeaningXml
-import zh.lingvo.persistence.xml2.entities.NameXml
-import zh.lingvo.persistence.xml2.entities.PosBlockXml
-import zh.lingvo.persistence.xml2.entities.SemanticBlockXml
-import zh.lingvo.persistence.xml2.entities.TranscriptionXml
-import zh.lingvo.persistence.xml2.entities.TranslationXml
-import zh.lingvo.persistence.xml2.entities.WordXml
+import zh.lingvo.persistence.xml.entities.DictionaryXml
+import zh.lingvo.persistence.xml.entities.ExampleXml
+import zh.lingvo.persistence.xml.entities.FormExceptionXml
+import zh.lingvo.persistence.xml.entities.MeaningXml
+import zh.lingvo.persistence.xml.entities.NameXml
+import zh.lingvo.persistence.xml.entities.PosBlockXml
+import zh.lingvo.persistence.xml.entities.SemanticBlockXml
+import zh.lingvo.persistence.xml.entities.TranscriptionXml
+import zh.lingvo.persistence.xml.entities.TranslationXml
+import zh.lingvo.persistence.xml.entities.WordXml
 
-import static zh.lingvo.persistence.xml2.Constants.emptyContentMeaning
-import static zh.lingvo.persistence.xml2.Constants.emptyDictionary
-import static zh.lingvo.persistence.xml2.Constants.emptyDictionaryXml
-import static zh.lingvo.persistence.xml2.Constants.emptyExample
-import static zh.lingvo.persistence.xml2.Constants.emptyExampleXml
-import static zh.lingvo.persistence.xml2.Constants.emptyMeaningXml
-import static zh.lingvo.persistence.xml2.Constants.emptyPosBlock
-import static zh.lingvo.persistence.xml2.Constants.emptyPosBlockXml
-import static zh.lingvo.persistence.xml2.Constants.emptySemanticBlock
-import static zh.lingvo.persistence.xml2.Constants.emptySemanticBlockXml
-import static zh.lingvo.persistence.xml2.Constants.emptyWord
-import static zh.lingvo.persistence.xml2.Constants.emptyWordXml
-import static zh.lingvo.persistence.xml2.Constants.examplesOnlyMeaning
-import static zh.lingvo.persistence.xml2.Constants.examplesOnlyMeaningXml
-import static zh.lingvo.persistence.xml2.Constants.fullDictionary
-import static zh.lingvo.persistence.xml2.Constants.fullDictionaryXml
-import static zh.lingvo.persistence.xml2.Constants.fullExample
-import static zh.lingvo.persistence.xml2.Constants.fullExampleXml
-import static zh.lingvo.persistence.xml2.Constants.fullFormException
-import static zh.lingvo.persistence.xml2.Constants.fullFormExceptionXml
-import static zh.lingvo.persistence.xml2.Constants.fullMeaning
-import static zh.lingvo.persistence.xml2.Constants.fullMeaningXml
-import static zh.lingvo.persistence.xml2.Constants.fullName
-import static zh.lingvo.persistence.xml2.Constants.fullNameXml
-import static zh.lingvo.persistence.xml2.Constants.fullPosBlock
-import static zh.lingvo.persistence.xml2.Constants.fullPosBlockXml
-import static zh.lingvo.persistence.xml2.Constants.fullTranscription
-import static zh.lingvo.persistence.xml2.Constants.fullTranscriptionXml
-import static zh.lingvo.persistence.xml2.Constants.fullTranslation
-import static zh.lingvo.persistence.xml2.Constants.fullTranslationXml
-import static zh.lingvo.persistence.xml2.Constants.fullWord
-import static zh.lingvo.persistence.xml2.Constants.fullWordXml
-import static zh.lingvo.persistence.xml2.Constants.longSemanticBlock
-import static zh.lingvo.persistence.xml2.Constants.longSemanticBlockXml
-import static zh.lingvo.persistence.xml2.Constants.mediumExample
-import static zh.lingvo.persistence.xml2.Constants.mediumExampleXml
-import static zh.lingvo.persistence.xml2.Constants.mixedMeaning
-import static zh.lingvo.persistence.xml2.Constants.mixedMeaningXml
-import static zh.lingvo.persistence.xml2.Constants.nullContentMeaning
-import static zh.lingvo.persistence.xml2.Constants.remarkOnlyMeaning
-import static zh.lingvo.persistence.xml2.Constants.remarkOnlyMeaningXml
-import static zh.lingvo.persistence.xml2.Constants.shortExample
-import static zh.lingvo.persistence.xml2.Constants.shortExampleXml
-import static zh.lingvo.persistence.xml2.Constants.shortFormException
-import static zh.lingvo.persistence.xml2.Constants.shortFormExceptionXml
-import static zh.lingvo.persistence.xml2.Constants.shortName
-import static zh.lingvo.persistence.xml2.Constants.shortNameXml
-import static zh.lingvo.persistence.xml2.Constants.shortPosBlock
-import static zh.lingvo.persistence.xml2.Constants.shortPosBlockXml
-import static zh.lingvo.persistence.xml2.Constants.shortSemanticBlock
-import static zh.lingvo.persistence.xml2.Constants.shortSemanticBlockXml
-import static zh.lingvo.persistence.xml2.Constants.shortTranscription
-import static zh.lingvo.persistence.xml2.Constants.shortTranscriptionXml
-import static zh.lingvo.persistence.xml2.Constants.shortTranslation
-import static zh.lingvo.persistence.xml2.Constants.shortTranslationXml
-import static zh.lingvo.persistence.xml2.Constants.translationsOnlyMeaning
-import static zh.lingvo.persistence.xml2.Constants.translationsOnlyMeaningXml
+import static zh.lingvo.persistence.xml.Constants.emptyContentMeaning
+import static zh.lingvo.persistence.xml.Constants.emptyDictionary
+import static zh.lingvo.persistence.xml.Constants.emptyDictionaryXml
+import static zh.lingvo.persistence.xml.Constants.emptyExample
+import static zh.lingvo.persistence.xml.Constants.emptyExampleXml
+import static zh.lingvo.persistence.xml.Constants.emptyMeaningXml
+import static zh.lingvo.persistence.xml.Constants.emptyPosBlock
+import static zh.lingvo.persistence.xml.Constants.emptyPosBlockXml
+import static zh.lingvo.persistence.xml.Constants.emptySemanticBlock
+import static zh.lingvo.persistence.xml.Constants.emptySemanticBlockXml
+import static zh.lingvo.persistence.xml.Constants.emptyWord
+import static zh.lingvo.persistence.xml.Constants.emptyWordXml
+import static zh.lingvo.persistence.xml.Constants.examplesOnlyMeaning
+import static zh.lingvo.persistence.xml.Constants.examplesOnlyMeaningXml
+import static zh.lingvo.persistence.xml.Constants.fullDictionary
+import static zh.lingvo.persistence.xml.Constants.fullDictionaryXml
+import static zh.lingvo.persistence.xml.Constants.fullExample
+import static zh.lingvo.persistence.xml.Constants.fullExampleXml
+import static zh.lingvo.persistence.xml.Constants.fullFormException
+import static zh.lingvo.persistence.xml.Constants.fullFormExceptionXml
+import static zh.lingvo.persistence.xml.Constants.fullMeaning
+import static zh.lingvo.persistence.xml.Constants.fullMeaningXml
+import static zh.lingvo.persistence.xml.Constants.fullName
+import static zh.lingvo.persistence.xml.Constants.fullNameXml
+import static zh.lingvo.persistence.xml.Constants.fullPosBlock
+import static zh.lingvo.persistence.xml.Constants.fullPosBlockXml
+import static zh.lingvo.persistence.xml.Constants.fullTranscription
+import static zh.lingvo.persistence.xml.Constants.fullTranscriptionXml
+import static zh.lingvo.persistence.xml.Constants.fullTranslation
+import static zh.lingvo.persistence.xml.Constants.fullTranslationXml
+import static zh.lingvo.persistence.xml.Constants.fullWord
+import static zh.lingvo.persistence.xml.Constants.fullWordXml
+import static zh.lingvo.persistence.xml.Constants.longSemanticBlock
+import static zh.lingvo.persistence.xml.Constants.longSemanticBlockXml
+import static zh.lingvo.persistence.xml.Constants.mediumExample
+import static zh.lingvo.persistence.xml.Constants.mediumExampleXml
+import static zh.lingvo.persistence.xml.Constants.mixedMeaning
+import static zh.lingvo.persistence.xml.Constants.mixedMeaningXml
+import static zh.lingvo.persistence.xml.Constants.nullContentMeaning
+import static zh.lingvo.persistence.xml.Constants.remarkOnlyMeaning
+import static zh.lingvo.persistence.xml.Constants.remarkOnlyMeaningXml
+import static zh.lingvo.persistence.xml.Constants.shortExample
+import static zh.lingvo.persistence.xml.Constants.shortExampleXml
+import static zh.lingvo.persistence.xml.Constants.shortFormException
+import static zh.lingvo.persistence.xml.Constants.shortFormExceptionXml
+import static zh.lingvo.persistence.xml.Constants.shortName
+import static zh.lingvo.persistence.xml.Constants.shortNameXml
+import static zh.lingvo.persistence.xml.Constants.shortPosBlock
+import static zh.lingvo.persistence.xml.Constants.shortPosBlockXml
+import static zh.lingvo.persistence.xml.Constants.shortSemanticBlock
+import static zh.lingvo.persistence.xml.Constants.shortSemanticBlockXml
+import static zh.lingvo.persistence.xml.Constants.shortTranscription
+import static zh.lingvo.persistence.xml.Constants.shortTranscriptionXml
+import static zh.lingvo.persistence.xml.Constants.shortTranslation
+import static zh.lingvo.persistence.xml.Constants.shortTranslationXml
+import static zh.lingvo.persistence.xml.Constants.translationsOnlyMeaning
+import static zh.lingvo.persistence.xml.Constants.translationsOnlyMeaningXml
 
 class XmlWriterSpec extends Specification {
     private DictionaryXmlFactory dictionaryXmlFactory = []

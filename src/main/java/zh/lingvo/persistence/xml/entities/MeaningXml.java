@@ -1,4 +1,4 @@
-package zh.lingvo.persistence.xml2.entities;
+package zh.lingvo.persistence.xml.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -7,7 +7,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import zh.lingvo.persistence.xml.entities.XmlEntity;
 
 import java.util.List;
 

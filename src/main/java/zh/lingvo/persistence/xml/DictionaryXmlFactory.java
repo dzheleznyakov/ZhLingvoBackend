@@ -1,4 +1,4 @@
-package zh.lingvo.persistence.xml2;
+package zh.lingvo.persistence.xml;
 
 import org.springframework.stereotype.Service;
 import zh.lingvo.domain.Dictionary;
@@ -11,16 +11,16 @@ import zh.lingvo.domain.words.SemanticBlock;
 import zh.lingvo.domain.words.Transcription;
 import zh.lingvo.domain.words.Translation;
 import zh.lingvo.domain.words.Word;
-import zh.lingvo.persistence.xml2.entities.DictionaryXml;
-import zh.lingvo.persistence.xml2.entities.ExampleXml;
-import zh.lingvo.persistence.xml2.entities.FormExceptionXml;
-import zh.lingvo.persistence.xml2.entities.MeaningXml;
-import zh.lingvo.persistence.xml2.entities.NameXml;
-import zh.lingvo.persistence.xml2.entities.PosBlockXml;
-import zh.lingvo.persistence.xml2.entities.SemanticBlockXml;
-import zh.lingvo.persistence.xml2.entities.TranscriptionXml;
-import zh.lingvo.persistence.xml2.entities.TranslationXml;
-import zh.lingvo.persistence.xml2.entities.WordXml;
+import zh.lingvo.persistence.xml.entities.DictionaryXml;
+import zh.lingvo.persistence.xml.entities.ExampleXml;
+import zh.lingvo.persistence.xml.entities.FormExceptionXml;
+import zh.lingvo.persistence.xml.entities.MeaningXml;
+import zh.lingvo.persistence.xml.entities.NameXml;
+import zh.lingvo.persistence.xml.entities.PosBlockXml;
+import zh.lingvo.persistence.xml.entities.SemanticBlockXml;
+import zh.lingvo.persistence.xml.entities.TranscriptionXml;
+import zh.lingvo.persistence.xml.entities.TranslationXml;
+import zh.lingvo.persistence.xml.entities.WordXml;
 import zh.lingvo.util.CollectionUtils;
 
 import java.util.Arrays;

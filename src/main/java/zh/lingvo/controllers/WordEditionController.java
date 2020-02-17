@@ -26,7 +26,8 @@ import zh.lingvo.domain.words.Transcription;
 import zh.lingvo.domain.words.Translation;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.domain.words.WordEntity;
-import zh.lingvo.persistence.xml.XmlWriter;
+import zh.lingvo.persistence.Writer;
+import zh.lingvo.persistence.xml.PersistenceManager;
 import zh.lingvo.rest.Payload;
 import zh.lingvo.rest.entities.word.WordRestEntity;
 import zh.lingvo.util.CollectionUtils;
@@ -53,9 +54,9 @@ public class WordEditionController {
 
     private DictionaryCache dictionaryCache;
     private LanguagesCache languagesCache;
-    private XmlWriter writer;
+    private Writer writer;
 
-    public WordEditionController(DictionaryCache dictionaryCache, LanguagesCache languagesCache, XmlWriter writer) {
+    public WordEditionController(DictionaryCache dictionaryCache, LanguagesCache languagesCache, PersistenceManager writer) {
         this.dictionaryCache = dictionaryCache;
         this.languagesCache = languagesCache;
         this.writer = writer;
