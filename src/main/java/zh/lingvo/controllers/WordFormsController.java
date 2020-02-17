@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 @RestController
 @ApiMapping
 @RequestMapping("/api/words/forms")

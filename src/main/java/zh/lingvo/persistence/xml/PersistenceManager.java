@@ -9,11 +9,12 @@ import zh.lingvo.persistence.Reader;
 import zh.lingvo.persistence.Writer;
 import zh.lingvo.util.Pair;
 
+import java.io.Closeable;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class PersistenceManager implements Reader, Writer {
+public class PersistenceManager implements Reader, Writer, Closeable {
     private XmlReader xmlReader;
     private XmlWriter xmlWriter;
 
@@ -58,7 +59,6 @@ public class PersistenceManager implements Reader, Writer {
 
     @Override
     public void close() {
-        xmlWriter.close();
         if (saveDictionarySubscription != null && !saveDictionarySubscription.isDisposed()) {
             saveDictionarySubscription.dispose();
         }
