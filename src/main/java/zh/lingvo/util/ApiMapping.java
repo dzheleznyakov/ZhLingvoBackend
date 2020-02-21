@@ -1,4 +1,4 @@
-package zh.lingvo;
+package zh.lingvo.util;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 

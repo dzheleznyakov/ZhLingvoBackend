@@ -1,5 +1,6 @@
 package zh.lingvo.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -85,5 +86,12 @@ public class Dictionary {
     @Override
     public int hashCode() {
         return Objects.hashCode(language, words, wordsByName);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("language", language)
+                .toString();
     }
 }

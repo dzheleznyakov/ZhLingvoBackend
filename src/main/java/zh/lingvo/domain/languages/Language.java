@@ -12,12 +12,15 @@ import zh.lingvo.domain.changepatterns.BasicNounChangeModel;
 import zh.lingvo.domain.changepatterns.ChangeModel;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.forms.WordForm;
+import zh.lingvo.domain.words.Name;
 import zh.lingvo.domain.words.Word;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class Language {
     private final String code;
@@ -59,6 +62,16 @@ public abstract class Language {
         if (posNamings == null)
             loadPosNamings();
         return posNamings;
+    }
+
+    @Nullable
+    public PartOfSpeech getPos(String posName) {
+        return getPosNamings().entrySet()
+                .stream()
+                .filter((entry -> Objects.equals(entry.getValue(), posName)))
+                .map(Map.Entry::getKey)
+                .findAny()
+                .orElse(null);
     }
 
     protected abstract void loadPosNamings();
@@ -119,8 +132,15 @@ public abstract class Language {
 
     public Map<LinguisticCategory[], String> getWordForms(Word word, PartOfSpeech pos) {
         WordFormsHelper wordFormsHelper = getWordFormsHelpers().get(pos);
-        ChangeModel changeModel = getChangeModel(pos);
-        return wordFormsHelper.getForms(word);
+        List<Name> formExceptions = word.getFormExceptions() == null
+                ? ImmutableList.of()
+                : word.getFormExceptions().get(pos);
+        return wordFormsHelper.getForms(word, formExceptions);
+    }
+
+    public LinguisticCategory[] getForm(PartOfSpeech pos, String formName) {
+        WordFormsHelper wordFormsHelper = getWordFormsHelpers().get(pos);
+        return wordFormsHelper.getForm(formName);
     }
 
     private Map<PartOfSpeech, WordFormsHelper> getWordFormsHelpers() {

@@ -3,11 +3,13 @@ package zh.lingvo.util;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -47,6 +49,13 @@ public class CollectionUtils {
         return list == null
                 ? null
                 : list instanceof ImmutableList ? (ImmutableList) list : ImmutableList.copyOf(list);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableSet<E> toImmutableSet(Set<E> set) {
+        return set == null
+                ? null
+                : set instanceof ImmutableSet ? (ImmutableSet) set : ImmutableSet.copyOf(set);
     }
 
     @SuppressWarnings("unchecked")

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zh.lingvo.ApiMapping;
+import zh.lingvo.util.ApiMapping;
 import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.domain.Dictionary;
 import zh.lingvo.domain.words.Word;

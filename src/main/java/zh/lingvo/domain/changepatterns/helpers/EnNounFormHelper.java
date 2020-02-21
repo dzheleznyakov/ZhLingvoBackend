@@ -6,9 +6,13 @@ import com.google.common.collect.ImmutableSet;
 import zh.lingvo.domain.LinguisticCategory;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.forms.NounWordForm;
+import zh.lingvo.domain.words.Name;
 import zh.lingvo.domain.words.Word;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class EnNounFormHelper implements WordFormsHelper {
@@ -16,19 +20,24 @@ public class EnNounFormHelper implements WordFormsHelper {
     static final LinguisticCategory[] PLURAL_NOMINATIVE = new LinguisticCategory[] { Number.PLURAL, NounWordForm.NOMINATIVE };
     static final LinguisticCategory[] SINGULAR_POSSESSIVE = new LinguisticCategory[] { Number.SINGULAR, NounWordForm.POSSESSIVE };
     static final LinguisticCategory[] PLURAL_POSSESSIVE = new LinguisticCategory[] { Number.PLURAL, NounWordForm.POSSESSIVE };
+    private static final Set<LinguisticCategory[]> forms = ImmutableSet.of(SINGULAR_NOMINATIVE, PLURAL_NOMINATIVE, SINGULAR_POSSESSIVE, PLURAL_POSSESSIVE);;
 
     private static final Set<String> SIBILANTS = ImmutableSet.of("s", "sh", "x");
     private static final Set<String> VOCALS = ImmutableSet.of("e", "a", "o", "i", "u", "y");
 
     @Override
-    public Map<LinguisticCategory[], String> getForms(Word word) {
+    public Map<LinguisticCategory[], String> getForms(Word word, List<Name> formExceptions) {
         String baseForm = word.getName().getValue();
-        String pluralBaseForm = appendS(baseForm);
+        String pluralBaseForm = formExceptions == null ? appendS(baseForm) : formExceptions.stream()
+                .filter(name -> Arrays.equals(name.getForm(), PLURAL_NOMINATIVE))
+                .findAny()
+                .map(Name::getValue)
+                .orElseGet(() -> appendS(baseForm));
         return ImmutableMap.of(
                 SINGULAR_NOMINATIVE, baseForm,
                 PLURAL_NOMINATIVE, pluralBaseForm,
                 SINGULAR_POSSESSIVE, baseForm + "'s",
-                PLURAL_POSSESSIVE, pluralBaseForm + '\''
+                PLURAL_POSSESSIVE, pluralBaseForm.endsWith("s") ? pluralBaseForm + '\'' : pluralBaseForm + "'s"
         );
     }
 
@@ -77,5 +86,16 @@ public class EnNounFormHelper implements WordFormsHelper {
 
     private boolean endingIsInSet(String word, Set<String> set) {
         return set.stream().anyMatch(word::endsWith);
+    }
+
+    @Override
+    public LinguisticCategory[] getForm(String formName) {
+        String[] parts = formName.split(";");
+        if (parts.length != 2)
+            throw new IllegalArgumentException(String.format("Form name for English noun should have 2 parts, found %d", parts.length));
+        return forms.stream()
+                .filter(form -> Objects.equals(form[0].name(), parts[0]) && Objects.equals(form[1].name(), parts[1]))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Illegal form name for English noun: [%s]", formName)));
     }
 }
