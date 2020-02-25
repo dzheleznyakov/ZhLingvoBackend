@@ -77,10 +77,6 @@ class XmlWriterSpec extends Specification {
     private DictionaryXmlFactory dictionaryXmlFactory = []
     private XmlWriter writer = [dictionaryXmlFactory]
 
-    void cleanup() {
-        writer.close()
-    }
-
     @Unroll
     def "Writer can write entities: #expectedXml"() {
         when: 'the entity is written'

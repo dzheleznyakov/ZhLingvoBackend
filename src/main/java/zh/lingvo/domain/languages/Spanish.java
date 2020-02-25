@@ -7,6 +7,7 @@ import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
+import zh.lingvo.domain.changepatterns.helpers.es.EsNounFormHelper;
 import zh.lingvo.domain.forms.NounWordForm;
 
 public class Spanish extends Language {
@@ -67,6 +68,7 @@ public class Spanish extends Language {
     @Override
     protected void loadWordFormHelpers() {
         wordFormHelpers = ImmutableMap.<PartOfSpeech, WordFormsHelper>builder()
+                .put(PartOfSpeech.NOUN, new EsNounFormHelper())
                 .build();
     }
 

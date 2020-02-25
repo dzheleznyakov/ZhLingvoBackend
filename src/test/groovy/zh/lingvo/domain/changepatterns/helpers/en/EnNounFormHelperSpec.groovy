@@ -1,25 +1,20 @@
-package zh.lingvo.domain.changepatterns.helpers
+package zh.lingvo.domain.changepatterns.helpers.en
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import zh.lingvo.domain.LinguisticCategory
-import zh.lingvo.domain.changepatterns.ChangeModel
-import zh.lingvo.domain.languages.English
-import zh.lingvo.domain.languages.Language
+import zh.lingvo.domain.NounLinguisticCategories
+import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper
 import zh.lingvo.domain.words.Name
 import zh.lingvo.domain.words.Word
 
-import static zh.lingvo.domain.PartOfSpeech.NOUN
-
 class EnNounFormHelperSpec extends Specification {
-    private Language english = English.instance
     private WordFormsHelper helper = new EnNounFormHelper()
-    private ChangeModel changeModel = english.getChangeModel(NOUN)
 
-    private static LinguisticCategory[] snKey = EnNounFormHelper.SINGULAR_NOMINATIVE
-    private static LinguisticCategory[] pnKey = EnNounFormHelper.PLURAL_NOMINATIVE
-    private static LinguisticCategory[] spKey = EnNounFormHelper.SINGULAR_POSSESSIVE
-    private static LinguisticCategory[] ppKey = EnNounFormHelper.PLURAL_POSSESSIVE
+    private static LinguisticCategory[] snKey = NounLinguisticCategories.SINGULAR_NOMINATIVE
+    private static LinguisticCategory[] pnKey = NounLinguisticCategories.PLURAL_NOMINATIVE
+    private static LinguisticCategory[] spKey = NounLinguisticCategories.SINGULAR_POSSESSIVE
+    private static LinguisticCategory[] ppKey = NounLinguisticCategories.PLURAL_POSSESSIVE
 
     @Unroll
     def "Test change forms for [#wordName]"() {

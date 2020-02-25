@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import zh.lingvo.domain.Declension;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
-import zh.lingvo.domain.changepatterns.helpers.EnNounFormHelper;
+import zh.lingvo.domain.changepatterns.helpers.en.EnNounFormHelper;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.forms.NounWordForm;
 import zh.lingvo.domain.forms.WordForm;

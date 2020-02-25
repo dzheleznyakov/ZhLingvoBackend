@@ -3,14 +3,28 @@ package zh.lingvo.domain.languages
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static zh.lingvo.domain.Declension.*
+import static zh.lingvo.domain.Declension.FIRST_PLURAL
+import static zh.lingvo.domain.Declension.FIRST_SINGULAR
+import static zh.lingvo.domain.Declension.SECOND
+import static zh.lingvo.domain.Declension.SECOND_PLURAL
+import static zh.lingvo.domain.Declension.SECOND_SINGULAR
+import static zh.lingvo.domain.Declension.THIRD_PLURAL
+import static zh.lingvo.domain.Declension.THIRD_SINGULAR
 import static zh.lingvo.domain.Gender.FEMININE
 import static zh.lingvo.domain.Gender.MASCULINE
 import static zh.lingvo.domain.Gender.NEUTRAL
 import static zh.lingvo.domain.Number.PLURAL
 import static zh.lingvo.domain.Number.SINGULAR
-import static zh.lingvo.domain.PartOfSpeech.*
-import static zh.lingvo.domain.forms.NounWordForm.*
+import static zh.lingvo.domain.PartOfSpeech.ADJECTIVE
+import static zh.lingvo.domain.PartOfSpeech.NOUN
+import static zh.lingvo.domain.PartOfSpeech.VERB
+import static zh.lingvo.domain.forms.NounWordForm.ACCUSATIVE
+import static zh.lingvo.domain.forms.NounWordForm.DATIVE
+import static zh.lingvo.domain.forms.NounWordForm.GENITIVE
+import static zh.lingvo.domain.forms.NounWordForm.INSTRUMENTAL
+import static zh.lingvo.domain.forms.NounWordForm.NOMINATIVE
+import static zh.lingvo.domain.forms.NounWordForm.POSSESSIVE
+import static zh.lingvo.domain.forms.NounWordForm.PREPOSITIONAL
 
 class LanguageSpec extends Specification {
     private static final Language english = English.getInstance()

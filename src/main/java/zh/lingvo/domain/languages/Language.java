@@ -130,7 +130,7 @@ public abstract class Language {
 
     protected abstract void loadWordFormsMappings();
 
-    public Map<LinguisticCategory[], String> getWordForms(Word word, PartOfSpeech pos) {
+    public Map<LinguisticCategory[], String> getWordForms(@NotNull Word word, @NotNull PartOfSpeech pos) {
         WordFormsHelper wordFormsHelper = getWordFormsHelpers().get(pos);
         List<Name> formExceptions = word.getFormExceptions() == null
                 ? ImmutableList.of()
