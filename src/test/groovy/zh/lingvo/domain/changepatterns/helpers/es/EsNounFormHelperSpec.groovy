@@ -32,7 +32,7 @@ class EsNounFormHelperSpec extends Specification {
         'pensión' || toChangeModel('pensión', 'pensiones')
         'acción'  || toChangeModel('acción', 'acciones')
         'lápiz'   || toChangeModel('lápiz', 'lápices')
-//        'joven'   || toChangeModel('joven', 'jóvenes')
+        'joven'   || toChangeModel('joven', 'jóvenes')
     }
 
     private static def toChangeModel(sn, pn) {
