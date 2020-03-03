@@ -171,7 +171,8 @@ public abstract class Language {
         return getGendersNamings().getOrDefault(gender, "");
     }
 
-    private Map<Gender, String> getGendersNamings() {
+    @NotNull
+    public Map<Gender, String> getGendersNamings() {
         if (gendersNamings == null)
             loadGenderNamings();
         return gendersNamings;

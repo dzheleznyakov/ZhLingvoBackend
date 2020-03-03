@@ -1,13 +1,15 @@
 package zh.lingvo.controllers;
 
 import com.google.common.collect.ImmutableList;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zh.lingvo.util.ApiMapping;
 import zh.lingvo.caches.LanguagesCache;
+import zh.lingvo.domain.languages.Language;
+import zh.lingvo.rest.entities.LanguageConstants;
 import zh.lingvo.rest.entities.LanguageRestEntity;
+import zh.lingvo.util.ApiMapping;
 
 import java.util.List;
 
@@ -15,13 +17,30 @@ import java.util.List;
 @ApiMapping
 @RequestMapping("/api/languages")
 public class LanguagesController {
-    @Autowired
     private LanguagesCache languagesCache;
+
+    public LanguagesController(LanguagesCache languagesCache) {
+        this.languagesCache = languagesCache;
+    }
 
     @GetMapping
     public List<LanguageRestEntity> getLanguages() {
         return languagesCache.get().stream()
                 .map(LanguageRestEntity::new)
                 .collect(ImmutableList.toImmutableList());
+    }
+
+    @GetMapping("/constants/{lang}")
+    public LanguageConstants getPartOfSpeeches(@PathVariable("lang") String languageCode) {
+        Language language = languagesCache.get(languageCode);
+        ImmutableList<String> genders = language.getGenders()
+                .stream()
+                .map(language::getGenderName)
+                .collect(ImmutableList.toImmutableList());
+
+        LanguageConstants languageConstants = new LanguageConstants();
+        languageConstants.setPos(language.getPosNamings());
+        languageConstants.setGenders(language.getGendersNamings());
+        return languageConstants;
     }
 }

@@ -1,10 +1,12 @@
 package zh.lingvo.persistence.xml;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.stereotype.Service;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
+import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.LinguisticCategory;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
@@ -99,9 +101,13 @@ public class DictionaryFactory {
         String posName = posBlockXml.getPos();
         PartOfSpeech pos = PartOfSpeech.valueOf(posName);
 
+        String genderName = posBlockXml.getGender();
+        Gender gender = Strings.isNullOrEmpty(genderName) ? null : Gender.valueOf(genderName);
+
         List<Meaning> meanings = CollectionUtils.transform(posBlockXml::getMeanings, this::getMeanings);
 
         PosBlock posBlock = new PosBlock(pos);
+        posBlock.setGender(gender);
         posBlock.setMeanings(meanings);
 
         return posBlock;

@@ -15,7 +15,8 @@
 <!ELEMENT semanticBlock (posBlock*)>
 
 <!ELEMENT posBlock (meaning*)>
-<!ATTLIST posBlock pos NMTOKEN #REQUIRED>
+<!ATTLIST posBlock pos NMTOKEN #REQUIRED
+                   gender NMTOKEN #IMPLIED>
 
 <!ELEMENT meaning (translation*, example*)>
 <!ATTLIST meaning remark CDATA #IMPLIED>

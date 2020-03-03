@@ -2,6 +2,7 @@ package zh.lingvo.persistence.xml;
 
 import org.springframework.stereotype.Service;
 import zh.lingvo.domain.Dictionary;
+import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;
@@ -79,10 +80,13 @@ public class DictionaryXmlFactory {
 
     private PosBlockXml getPosBlockXml(PosBlock posBlock) {
         String posName = posBlock.getPos().name();
+        Gender gender = posBlock.getGender();
+        String genderName = gender == null ? null : gender.name();
         List<MeaningXml> meaningsXml = CollectionUtils.transform(posBlock::getMeanings, this::getMeaningXml);
 
         PosBlockXml posBlockXml = new PosBlockXml();
         posBlockXml.setPos(posName);
+        posBlockXml.setGender(genderName);
         posBlockXml.setMeanings(meaningsXml);
         return posBlockXml;
     }

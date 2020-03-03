@@ -16,6 +16,9 @@ public class PosBlockXml implements XmlEntity {
     @JacksonXmlProperty(isAttribute = true)
     private String pos;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private String gender;
+
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "meaning")
     private List<MeaningXml> meanings;
@@ -29,6 +32,14 @@ public class PosBlockXml implements XmlEntity {
 
     public void setPos(String pos) {
         this.pos = pos;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public List<MeaningXml> getMeanings() {

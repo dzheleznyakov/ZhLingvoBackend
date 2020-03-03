@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zh.lingvo.util.ApiMapping;
 import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
+import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;
@@ -30,9 +30,11 @@ import zh.lingvo.persistence.Writer;
 import zh.lingvo.persistence.xml.PersistenceManager;
 import zh.lingvo.rest.Payload;
 import zh.lingvo.rest.entities.word.WordRestEntity;
+import zh.lingvo.util.ApiMapping;
 import zh.lingvo.util.CollectionUtils;
 import zh.lingvo.util.ConfigReader;
 
+import javax.annotation.Nullable;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
@@ -205,12 +207,30 @@ public class WordEditionController {
             List<Meaning> meanings = CollectionUtils.getNotNull(posBlock::getMeanings);
             if (!meanings.isEmpty()) return;
 
-            ImmutableList<PosBlock> updatedPartOfSpechBlocks = posBlocks.stream()
+            ImmutableList<PosBlock> updatedPartOfSpeechBlocks = posBlocks.stream()
                     .filter(pBlock -> !Objects.equals(pBlock.getPos(), pos))
                     .collect(ImmutableList.toImmutableList());
-            semanticBlock.setPosBlocks(updatedPartOfSpechBlocks);
+            semanticBlock.setPosBlocks(updatedPartOfSpeechBlocks);
         };
         return updateWord(languageCode, wordId, deletePos);
+    }
+
+    @PutMapping("/{lang}/{id}/{sbIndex}/{posIndex}/gender")
+    public WordRestEntity updateGender(
+            @PathVariable("lang") String languageCode,
+            @PathVariable("id") UUID wordId,
+            @PathVariable("sbIndex") int sbIndex,
+            @PathVariable("posIndex") int posIndex,
+            @RequestBody Payload payload
+    ) {
+        return updateWord(languageCode, wordId, word -> {
+            String genderName = payload.getData();
+            Gender gender = Strings.isNullOrEmpty(genderName) ? null : Gender.valueOf(genderName);
+
+            PosBlock posBlock = getPosBlock(word, sbIndex, posIndex);
+            if (posBlock != null)
+                posBlock.setGender(gender);
+        });
     }
 
     @PostMapping("/{lang}/{id}/meaning/{sbIndex}/{posIndex}")
@@ -413,6 +433,7 @@ public class WordEditionController {
         }
     }
 
+    @Nullable
     private PosBlock getPosBlock(Word word, int semanticBlockIndex, int posIndex) {
         List<SemanticBlock> semanticBlocks = CollectionUtils.getNotNull(word::getSemanticBlocks);
         if (semanticBlockIndex >= semanticBlocks.size()) return null;
