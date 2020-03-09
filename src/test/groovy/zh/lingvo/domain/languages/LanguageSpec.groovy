@@ -18,13 +18,13 @@ import static zh.lingvo.domain.Number.SINGULAR
 import static zh.lingvo.domain.PartOfSpeech.ADJECTIVE
 import static zh.lingvo.domain.PartOfSpeech.NOUN
 import static zh.lingvo.domain.PartOfSpeech.VERB
-import static zh.lingvo.domain.forms.NounWordForm.ACCUSATIVE
-import static zh.lingvo.domain.forms.NounWordForm.DATIVE
-import static zh.lingvo.domain.forms.NounWordForm.GENITIVE
-import static zh.lingvo.domain.forms.NounWordForm.INSTRUMENTAL
-import static zh.lingvo.domain.forms.NounWordForm.NOMINATIVE
-import static zh.lingvo.domain.forms.NounWordForm.POSSESSIVE
-import static zh.lingvo.domain.forms.NounWordForm.PREPOSITIONAL
+import static zh.lingvo.domain.forms.NounWordFormCategory.ACCUSATIVE
+import static zh.lingvo.domain.forms.NounWordFormCategory.DATIVE
+import static zh.lingvo.domain.forms.NounWordFormCategory.GENITIVE
+import static zh.lingvo.domain.forms.NounWordFormCategory.INSTRUMENTAL
+import static zh.lingvo.domain.forms.NounWordFormCategory.NOMINATIVE
+import static zh.lingvo.domain.forms.NounWordFormCategory.POSSESSIVE
+import static zh.lingvo.domain.forms.NounWordFormCategory.PREPOSITIONAL
 
 class LanguageSpec extends Specification {
     private static final Language english = English.getInstance()

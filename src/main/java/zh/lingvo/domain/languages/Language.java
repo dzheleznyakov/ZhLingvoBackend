@@ -11,7 +11,8 @@ import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.BasicNounChangeModel;
 import zh.lingvo.domain.changepatterns.ChangeModel;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
-import zh.lingvo.domain.forms.WordForm;
+import zh.lingvo.domain.forms.WordFormCategory;
+import zh.lingvo.domain.forms.WordForms;
 import zh.lingvo.domain.words.Name;
 import zh.lingvo.domain.words.Word;
 
@@ -27,12 +28,12 @@ public abstract class Language {
     private final String name;
 
     protected Map<PartOfSpeech, String> posNamings;
-    protected Map<PartOfSpeech, List<WordForm>> wordFormsMappings;
+    protected Map<PartOfSpeech, List<WordFormCategory>> wordFormsMappings;
     protected Map<PartOfSpeech, ChangeModel> changePatternsMap;
     protected Map<PartOfSpeech, WordFormsHelper> wordFormHelpers;
     protected Map<Number, String> numberNamings;
     protected Map<Declension, String> declensionMappings;
-    protected Map<WordForm, String> wordFormNamings;
+    protected Map<WordFormCategory, String> wordFormNamings;
     protected Map<Gender, String> gendersNamings;
 
     protected Language(String code, String name) {
@@ -117,12 +118,12 @@ public abstract class Language {
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public List<WordForm> getForms(PartOfSpeech pos) {
+    public List<WordFormCategory> getForms(PartOfSpeech pos) {
         return getWordFormsMappings().get(pos);
     }
 
     @NotNull
-    private Map<PartOfSpeech, List<WordForm>> getWordFormsMappings() {
+    private Map<PartOfSpeech, List<WordFormCategory>> getWordFormsMappings() {
         if (wordFormsMappings == null)
             loadWordFormsMappings();
         return wordFormsMappings;
@@ -130,7 +131,7 @@ public abstract class Language {
 
     protected abstract void loadWordFormsMappings();
 
-    public Map<LinguisticCategory[], String> getWordForms(@NotNull Word word, @NotNull PartOfSpeech pos) {
+    public WordForms getWordForms(@NotNull Word word, @NotNull PartOfSpeech pos) {
         WordFormsHelper wordFormsHelper = getWordFormsHelpers().get(pos);
         List<Name> formExceptions = word.getFormExceptions() == null
                 ? ImmutableList.of()
@@ -151,11 +152,11 @@ public abstract class Language {
 
     protected abstract void loadWordFormHelpers();
 
-    public String getFormName(WordForm wordForm) {
-        return getWordFormsNamings().getOrDefault(wordForm, "");
+    public String getFormName(WordFormCategory wordFormCategory) {
+        return getWordFormsNamings().getOrDefault(wordFormCategory, "");
     }
 
-    private Map<WordForm, String> getWordFormsNamings() {
+    private Map<WordFormCategory, String> getWordFormsNamings() {
         if (wordFormNamings == null)
             loadWordFormNamings();
         return wordFormNamings;

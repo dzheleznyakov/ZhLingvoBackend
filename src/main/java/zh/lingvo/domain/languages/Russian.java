@@ -7,8 +7,8 @@ import zh.lingvo.domain.Gender;
 import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
-import zh.lingvo.domain.forms.NounWordForm;
-import zh.lingvo.domain.forms.WordForm;
+import zh.lingvo.domain.forms.NounWordFormCategory;
+import zh.lingvo.domain.forms.WordFormCategory;
 
 public class Russian extends Language {
     private static final Russian INSTANCE = new Russian();
@@ -49,25 +49,25 @@ public class Russian extends Language {
     protected void loadWordFormsMappings() {
         wordFormsMappings = ImmutableMap.of(
                 PartOfSpeech.NOUN, ImmutableList.of(
-                        NounWordForm.NOMINATIVE,
-                        NounWordForm.GENITIVE,
-                        NounWordForm.DATIVE,
-                        NounWordForm.ACCUSATIVE,
-                        NounWordForm.INSTRUMENTAL,
-                        NounWordForm.PREPOSITIONAL
+                        NounWordFormCategory.NOMINATIVE,
+                        NounWordFormCategory.GENITIVE,
+                        NounWordFormCategory.DATIVE,
+                        NounWordFormCategory.ACCUSATIVE,
+                        NounWordFormCategory.INSTRUMENTAL,
+                        NounWordFormCategory.PREPOSITIONAL
                 )
         );
     }
 
     @Override
     protected void loadWordFormNamings() {
-        wordFormNamings = ImmutableMap.<WordForm, String>builder()
-                .put(NounWordForm.NOMINATIVE, "именительный падеж")
-                .put(NounWordForm.GENITIVE, "родительный падеж")
-                .put(NounWordForm.DATIVE, "дательный падеж")
-                .put(NounWordForm.ACCUSATIVE, "винительный падеж")
-                .put(NounWordForm.INSTRUMENTAL, "творительный падеж")
-                .put(NounWordForm.PREPOSITIONAL, "предложный падеж")
+        wordFormNamings = ImmutableMap.<WordFormCategory, String>builder()
+                .put(NounWordFormCategory.NOMINATIVE, "именительный падеж")
+                .put(NounWordFormCategory.GENITIVE, "родительный падеж")
+                .put(NounWordFormCategory.DATIVE, "дательный падеж")
+                .put(NounWordFormCategory.ACCUSATIVE, "винительный падеж")
+                .put(NounWordFormCategory.INSTRUMENTAL, "творительный падеж")
+                .put(NounWordFormCategory.PREPOSITIONAL, "предложный падеж")
                 .build();
     }
 

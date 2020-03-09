@@ -2,20 +2,21 @@ package zh.lingvo.domain.changepatterns.helpers
 
 import com.google.common.base.Preconditions
 import zh.lingvo.domain.LinguisticCategory
+import zh.lingvo.domain.forms.WordForms
 import zh.lingvo.domain.words.Name
 import zh.lingvo.domain.words.Word
 
 interface  WordFormsHelper {
-    fun getForms(word: Word, formExceptions: List<Name>?): Map<Array<LinguisticCategory>, String>
+    fun getForms(word: Word, formExceptions: List<Name>?): WordForms
     fun getLanguageForms(): Set<Array<LinguisticCategory>>
     fun getForm(formName: String): Array<LinguisticCategory>
 }
 
 abstract class AbstractWordFormsHelper : WordFormsHelper {
     override fun getForm(formName: String): Array<LinguisticCategory> {
-        val parts = formName.split(";")
+        val parts = formName.split(".")
         if (parts.size != 2)
-            throw IllegalArgumentException("Form name for a noun should have 2 parts, found ${parts.size}")
+            throw IllegalArgumentException("Form name for a noun should have 2 parts, found ${parts.size}, [${formName}]")
         else
             return getLanguageForms().stream()
                     .filter { form -> form[0].name() == parts[0] && form[1].name() == parts[1]}

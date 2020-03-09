@@ -1,11 +1,13 @@
 package zh.lingvo.domain.changepatterns.helpers.en
 
-import zh.lingvo.domain.LinguisticCategory
 import zh.lingvo.domain.NounLinguisticCategories.PLURAL_NOMINATIVE
 import zh.lingvo.domain.NounLinguisticCategories.PLURAL_POSSESSIVE
 import zh.lingvo.domain.NounLinguisticCategories.SINGULAR_NOMINATIVE
 import zh.lingvo.domain.NounLinguisticCategories.SINGULAR_POSSESSIVE
+import zh.lingvo.domain.changepatterns.BasicNounChangeModel
 import zh.lingvo.domain.changepatterns.helpers.AbstractWordFormsHelper
+import zh.lingvo.domain.forms.WordForms
+import zh.lingvo.domain.languages.English
 import zh.lingvo.domain.words.Name
 import zh.lingvo.domain.words.Word
 import java.util.*
@@ -14,8 +16,10 @@ private val FORMS = setOf(SINGULAR_NOMINATIVE, PLURAL_NOMINATIVE, SINGULAR_POSSE
 private val SIBILANTS = setOf("s", "sh", "x")
 private val VOWELS = setOf("e", "a", "o", "i", "u", "y")
 
+private val CHANGE_MODEL = BasicNounChangeModel(English.getInstance())
+
 class EnNounFormHelper : AbstractWordFormsHelper() {
-    override fun getForms(word: Word, formExceptions: List<Name>?): Map<Array<LinguisticCategory>, String> {
+    override fun getForms(word: Word, formExceptions: List<Name>?): WordForms {
         val baseForm = word.name.value
         val pluralBaseForm = (formExceptions ?: listOf())
                 .stream()
@@ -23,13 +27,14 @@ class EnNounFormHelper : AbstractWordFormsHelper() {
                 .findAny()
                 .map(Name::getValue)
                 .orElseGet { baseForm.appendS() }
-        return mapOf(
+        val wordForms = mapOf(
                 SINGULAR_NOMINATIVE to baseForm,
                 PLURAL_NOMINATIVE to pluralBaseForm,
                 SINGULAR_POSSESSIVE to "${baseForm}'s",
                 PLURAL_POSSESSIVE to
                         if (pluralBaseForm.endsWith("s")) "${pluralBaseForm}'"
                         else "${pluralBaseForm}'s")
+        return WordForms().apply { put(wordForms, CHANGE_MODEL) }
     }
 
     private fun String.appendS() = when {

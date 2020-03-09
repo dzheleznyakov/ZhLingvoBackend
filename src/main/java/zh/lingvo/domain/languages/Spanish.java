@@ -8,7 +8,7 @@ import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.changepatterns.helpers.es.EsNounFormHelper;
-import zh.lingvo.domain.forms.NounWordForm;
+import zh.lingvo.domain.forms.NounWordFormCategory;
 
 public class Spanish extends Language {
     private static final Spanish INSTANCE = new Spanish();
@@ -48,13 +48,13 @@ public class Spanish extends Language {
     @Override
     protected void loadWordFormsMappings() {
         wordFormsMappings = ImmutableMap.of(
-                PartOfSpeech.NOUN, ImmutableList.of(NounWordForm.NOMINATIVE)
+                PartOfSpeech.NOUN, ImmutableList.of(NounWordFormCategory.NOMINATIVE)
         );
     }
 
     @Override
     protected void loadWordFormNamings() {
-        wordFormNamings = ImmutableMap.of(NounWordForm.NOMINATIVE, "caso nominativo");
+        wordFormNamings = ImmutableMap.of(NounWordFormCategory.NOMINATIVE, "caso nominativo");
     }
 
     @Override

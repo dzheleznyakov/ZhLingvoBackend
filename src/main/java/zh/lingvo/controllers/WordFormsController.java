@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
-import zh.lingvo.domain.LinguisticCategory;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.ChangeModel;
+import zh.lingvo.domain.forms.WordForms;
 import zh.lingvo.domain.languages.Language;
 import zh.lingvo.domain.words.Name;
 import zh.lingvo.domain.words.Word;
 import zh.lingvo.persistence.Writer;
 import zh.lingvo.persistence.xml.PersistenceManager;
+import zh.lingvo.rest.entities.forms.WordFormsEntity;
 import zh.lingvo.util.ApiMapping;
 import zh.lingvo.util.CollectionUtils;
 import zh.lingvo.util.Pair;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -70,7 +70,7 @@ public class WordFormsController {
     }
 
     @GetMapping("/{lang}/{pos}/{wordId}")
-    public Map<String, String> getWordForms(
+    public WordFormsEntity getWordForms(
             @PathVariable("lang") String languageCode,
             @PathVariable("pos") String posName,
             @PathVariable("wordId") UUID wordId
@@ -83,7 +83,7 @@ public class WordFormsController {
     }
 
     @PutMapping("/{lang}/{pos}/{wordId}")
-    public Map<String, String> editWordForm(
+    public WordFormsEntity editWordForm(
             @PathVariable("lang") String languageCode,
             @PathVariable("pos") String posName,
             @PathVariable("wordId") UUID wordId,
@@ -124,17 +124,8 @@ public class WordFormsController {
         return Paths.get(dictionariesLocation).resolve(languageCode.toLowerCase() + "_dictionary.xml").toString();
     }
 
-    private Map<String, String> getWordForms(Language language, Word word, PartOfSpeech pos) {
-        Map<LinguisticCategory[], String> wordForms = language.getWordForms(word, pos);
-        return wordForms.entrySet().stream()
-                .map(entry -> {
-                    String key = Arrays.stream(entry.getKey())
-                            .filter(e -> Enum.class.isAssignableFrom(e.getClass()))
-                            .map(Enum.class::cast)
-                            .map(Enum::name)
-                            .collect(Collectors.joining(";"));
-                    return Pair.from(key, entry.getValue());
-                })
-                .collect(ImmutableMap.toImmutableMap(Pair::getFirst, Pair::getSecond));
+    private WordFormsEntity getWordForms(Language language, Word word, PartOfSpeech pos) {
+        WordForms wordForms = language.getWordForms(word, pos);
+        return new WordFormsEntity(wordForms);
     }
 }

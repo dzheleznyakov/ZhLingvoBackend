@@ -1,9 +1,11 @@
 package zh.lingvo.domain.changepatterns.helpers.es
 
-import zh.lingvo.domain.LinguisticCategory
 import zh.lingvo.domain.NounLinguisticCategories.PLURAL_NOMINATIVE
 import zh.lingvo.domain.NounLinguisticCategories.SINGULAR_NOMINATIVE
+import zh.lingvo.domain.changepatterns.BasicNounChangeModel
 import zh.lingvo.domain.changepatterns.helpers.AbstractWordFormsHelper
+import zh.lingvo.domain.forms.WordForms
+import zh.lingvo.domain.languages.Spanish
 import zh.lingvo.domain.words.Name
 import zh.lingvo.domain.words.Word
 
@@ -14,12 +16,15 @@ private val WEAK_CONSONANTS = setOf("s", "n")
 
 private val STRESSED_VOWEL_PATTERN = ".*[éáóíú].*".toRegex().toPattern()
 
+private val CHANGE_MODEL = BasicNounChangeModel(Spanish.getInstance())
+
 class EsNounFormHelper : AbstractWordFormsHelper() {
-    override fun getForms(word: Word, formExceptions: List<Name>?): Map<Array<LinguisticCategory>, String> {
+    override fun getForms(word: Word, formExceptions: List<Name>?): WordForms {
         val baseForm = word.name.value
-        return mapOf(
+        val wordForms = mapOf(
                 SINGULAR_NOMINATIVE to baseForm,
                 PLURAL_NOMINATIVE to baseForm.appendS())
+        return WordForms().apply { put(wordForms, CHANGE_MODEL) }
     }
 
     private fun String.appendS() = when {

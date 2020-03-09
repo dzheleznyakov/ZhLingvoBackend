@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.languages.Language;
-import zh.lingvo.rest.entities.LanguageConstants;
+import zh.lingvo.rest.entities.LanguageConstantsEntity;
 import zh.lingvo.rest.entities.LanguageRestEntity;
 import zh.lingvo.util.ApiMapping;
 
@@ -31,14 +31,14 @@ public class LanguagesController {
     }
 
     @GetMapping("/constants/{lang}")
-    public LanguageConstants getPartOfSpeeches(@PathVariable("lang") String languageCode) {
+    public LanguageConstantsEntity getPartOfSpeeches(@PathVariable("lang") String languageCode) {
         Language language = languagesCache.get(languageCode);
         ImmutableList<String> genders = language.getGenders()
                 .stream()
                 .map(language::getGenderName)
                 .collect(ImmutableList.toImmutableList());
 
-        LanguageConstants languageConstants = new LanguageConstants();
+        LanguageConstantsEntity languageConstants = new LanguageConstantsEntity();
         languageConstants.setPos(language.getPosNamings());
         languageConstants.setGenders(language.getGendersNamings());
         return languageConstants;

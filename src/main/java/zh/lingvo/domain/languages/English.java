@@ -7,8 +7,8 @@ import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.changepatterns.helpers.en.EnNounFormHelper;
-import zh.lingvo.domain.forms.NounWordForm;
-import zh.lingvo.domain.forms.WordForm;
+import zh.lingvo.domain.forms.NounWordFormCategory;
+import zh.lingvo.domain.forms.WordFormCategory;
 
 public class English extends Language {
     private static final English INSTANCE = new English();
@@ -48,15 +48,15 @@ public class English extends Language {
     @Override
     protected void loadWordFormsMappings() {
         wordFormsMappings = ImmutableMap.of(
-                PartOfSpeech.NOUN, ImmutableList.of(NounWordForm.NOMINATIVE, NounWordForm.POSSESSIVE)
+                PartOfSpeech.NOUN, ImmutableList.of(NounWordFormCategory.NOMINATIVE, NounWordFormCategory.POSSESSIVE)
         );
     }
 
     @Override
     protected void loadWordFormNamings() {
-        wordFormNamings = ImmutableMap.<WordForm, String>builder()
-                .put(NounWordForm.NOMINATIVE, "nominative case")
-                .put(NounWordForm.POSSESSIVE, "possessive case")
+        wordFormNamings = ImmutableMap.<WordFormCategory, String>builder()
+                .put(NounWordFormCategory.NOMINATIVE, "nominative case")
+                .put(NounWordFormCategory.POSSESSIVE, "possessive case")
                 .build();
     }
 

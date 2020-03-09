@@ -5,11 +5,11 @@ import zh.lingvo.domain.PartOfSpeech;
 
 import java.util.Map;
 
-public class LanguageConstants implements JsonEntity {
+public class LanguageConstantsEntity implements JsonEntity {
     private Map<PartOfSpeech, String> pos;
     private Map<Gender, String> genders;
 
-    public LanguageConstants() {
+    public LanguageConstantsEntity() {
     }
 
     public Map<PartOfSpeech, String> getPos() {
