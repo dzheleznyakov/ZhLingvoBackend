@@ -1,13 +1,13 @@
 package zh.lingvo.domain.changepatterns.helpers
 
 import com.google.common.base.Preconditions
-import zh.lingvo.domain.LinguisticCategory
 import zh.lingvo.domain.forms.WordForms
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory
 import zh.lingvo.domain.words.Name
 import zh.lingvo.domain.words.Word
 
 interface  WordFormsHelper {
-    fun getForms(word: Word, formExceptions: List<Name>?): WordForms
+    fun getForms(word: Word, formExceptions: List<Name> = listOf()): WordForms
     fun getLanguageForms(): Set<Array<LinguisticCategory>>
     fun getForm(formName: String): Array<LinguisticCategory>
 }

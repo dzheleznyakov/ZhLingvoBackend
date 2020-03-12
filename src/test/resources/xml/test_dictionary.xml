@@ -16,7 +16,7 @@
       </posBlock>
     </semanticBlock>
     <formException pos="NOUN">
-      <name value="men" form="Number.PLURAL NounWordForm.NOMINATIVE" />
+      <name value="men" form="Number.PLURAL NounCase.NOMINATIVE" />
     </formException>
   </word>
   <word id="uuid89b7820d-3e3d-4ea6-a7d5-190e485c5164">

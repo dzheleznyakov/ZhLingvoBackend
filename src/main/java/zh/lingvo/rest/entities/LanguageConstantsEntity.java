@@ -1,6 +1,6 @@
 package zh.lingvo.rest.entities;
 
-import zh.lingvo.domain.Gender;
+import zh.lingvo.domain.linguisticcategories.Gender;
 import zh.lingvo.domain.PartOfSpeech;
 
 import java.util.Map;

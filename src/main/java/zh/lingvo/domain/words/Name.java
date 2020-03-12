@@ -2,7 +2,7 @@ package zh.lingvo.domain.words;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
-import zh.lingvo.domain.LinguisticCategory;
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory;
 
 import java.util.stream.IntStream;
 

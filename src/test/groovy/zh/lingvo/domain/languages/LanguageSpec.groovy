@@ -2,29 +2,29 @@ package zh.lingvo.domain.languages
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import zh.lingvo.domain.linguisticcategories.Person
 
-import static zh.lingvo.domain.Declension.FIRST_PLURAL
-import static zh.lingvo.domain.Declension.FIRST_SINGULAR
-import static zh.lingvo.domain.Declension.SECOND
-import static zh.lingvo.domain.Declension.SECOND_PLURAL
-import static zh.lingvo.domain.Declension.SECOND_SINGULAR
-import static zh.lingvo.domain.Declension.THIRD_PLURAL
-import static zh.lingvo.domain.Declension.THIRD_SINGULAR
-import static zh.lingvo.domain.Gender.FEMININE
-import static zh.lingvo.domain.Gender.MASCULINE
-import static zh.lingvo.domain.Gender.NEUTRAL
-import static zh.lingvo.domain.Number.PLURAL
-import static zh.lingvo.domain.Number.SINGULAR
 import static zh.lingvo.domain.PartOfSpeech.ADJECTIVE
 import static zh.lingvo.domain.PartOfSpeech.NOUN
 import static zh.lingvo.domain.PartOfSpeech.VERB
-import static zh.lingvo.domain.forms.NounWordFormCategory.ACCUSATIVE
-import static zh.lingvo.domain.forms.NounWordFormCategory.DATIVE
-import static zh.lingvo.domain.forms.NounWordFormCategory.GENITIVE
-import static zh.lingvo.domain.forms.NounWordFormCategory.INSTRUMENTAL
-import static zh.lingvo.domain.forms.NounWordFormCategory.NOMINATIVE
-import static zh.lingvo.domain.forms.NounWordFormCategory.POSSESSIVE
-import static zh.lingvo.domain.forms.NounWordFormCategory.PREPOSITIONAL
+import static zh.lingvo.domain.forms.VerbConjugationCategory.PRESENT_SIMPLE_PLURAL_FIRST
+import static zh.lingvo.domain.forms.VerbConjugationCategory.PRESENT_SIMPLE_PLURAL_SECOND
+import static zh.lingvo.domain.forms.VerbConjugationCategory.PRESENT_SIMPLE_PLURAL_THIRD
+import static zh.lingvo.domain.forms.VerbConjugationCategory.PRESENT_SIMPLE_SINGULAR_FIRST
+import static zh.lingvo.domain.forms.VerbConjugationCategory.PRESENT_SIMPLE_SINGULAR_SECOND
+import static zh.lingvo.domain.forms.VerbConjugationCategory.PRESENT_SIMPLE_SINGULAR_THIRD
+import static zh.lingvo.domain.linguisticcategories.Gender.FEMININE
+import static zh.lingvo.domain.linguisticcategories.Gender.MASCULINE
+import static zh.lingvo.domain.linguisticcategories.Gender.NEUTRAL
+import static zh.lingvo.domain.linguisticcategories.NounCase.ACCUSATIVE
+import static zh.lingvo.domain.linguisticcategories.NounCase.DATIVE
+import static zh.lingvo.domain.linguisticcategories.NounCase.GENITIVE
+import static zh.lingvo.domain.linguisticcategories.NounCase.INSTRUMENTAL
+import static zh.lingvo.domain.linguisticcategories.NounCase.NOMINATIVE
+import static zh.lingvo.domain.linguisticcategories.NounCase.POSSESSIVE
+import static zh.lingvo.domain.linguisticcategories.NounCase.PREPOSITIONAL
+import static zh.lingvo.domain.linguisticcategories.Number.PLURAL
+import static zh.lingvo.domain.linguisticcategories.Number.SINGULAR
 
 class LanguageSpec extends Specification {
     private static final Language english = English.getInstance()
@@ -83,7 +83,7 @@ class LanguageSpec extends Specification {
         when: 'the number name is requested'
         def numName = language.getNumberName(num)
 
-        then: 'then the short form of the number in the target language is returned'
+        then: 'the short form of the number in the target language is returned'
         numName == numNameInLanguage
 
         where: 'the parameters are'
@@ -96,51 +96,39 @@ class LanguageSpec extends Specification {
         //
         russian  | SINGULAR || 'ед'
         russian  | PLURAL   || 'мн'
-
     }
 
     @Unroll
-    def "Test declensions in #language.getClass().simpleName"() {
-        expect: 'all declensions in the language to be returned in order'
-        language.declensions == expectedDeclensions
+    def "In #language.getClass().simpleName, #person is '#expectedEncoding'"() {
+        when: 'the person encoding is requested'
+        def actualEncoding = language.getPersonEncoding(person)
+
+        then: 'the returned encoding in the target language is correct'
+        actualEncoding == expectedEncoding
 
         where: 'the parameters are'
-        language || expectedDeclensions
-        english  || [FIRST_SINGULAR, FIRST_PLURAL, SECOND, THIRD_SINGULAR, THIRD_PLURAL]
-        spanish  || [FIRST_SINGULAR, FIRST_PLURAL, SECOND_SINGULAR, SECOND_PLURAL, THIRD_SINGULAR, THIRD_PLURAL]
-        russian  || [FIRST_SINGULAR, FIRST_PLURAL, SECOND_SINGULAR, SECOND_PLURAL, THIRD_SINGULAR, THIRD_PLURAL]
+        language | person        || expectedEncoding
+        english  | Person.FIRST  || '1st person'
+        english  | Person.SECOND || '2nd person'
+        english  | Person.THIRD  || '3rd person'
     }
 
     @Unroll
-    def "In #language.getClass().simpleName, #declension is mapped to '#expectedDeclensionMapping'"() {
-        when: 'the declension mapping is requested'
-        def actualDeclensionMapping = language.getDeclensionMapping(declension)
+    def "In #language.getClass().simpleName, #conjugation is #conjugationEncoding"() {
+        when: 'the person name is requested'
+        def personEncoding = language.getConjugationEncodings()
 
-        then:
-        actualDeclensionMapping == expectedDeclensionMapping
+        then: 'the the encoding of the person in the target language is returned'
+        personEncoding.get(conjugation) == conjugationEncoding
 
         where: 'the parameters are'
-        language | declension     || expectedDeclensionMapping
-        english  | FIRST_SINGULAR || 'I'
-        english  | FIRST_PLURAL   || 'we'
-        english  | SECOND         || 'you'
-        english  | THIRD_SINGULAR || 'he, she, it'
-        english  | THIRD_PLURAL   || 'they'
-        english  | SECOND_PLURAL  || ''
-        //
-        spanish  | FIRST_SINGULAR  || 'yo'
-        spanish  | FIRST_PLURAL    || 'nosotros'
-        spanish  | SECOND_SINGULAR || 'tú'
-        spanish  | SECOND_PLURAL   || 'vosotros'
-        spanish  | THIRD_SINGULAR  || 'él, ella, Usted'
-        spanish  | THIRD_PLURAL    || 'ellos, ellas, Ustedes'
-        //
-        russian  | FIRST_SINGULAR  || 'я'
-        russian  | FIRST_PLURAL    || 'мы'
-        russian  | SECOND_SINGULAR || 'ты'
-        russian  | SECOND_PLURAL   || 'вы'
-        russian  | THIRD_SINGULAR  || 'он, она, оно'
-        russian  | THIRD_PLURAL    || 'они'
+        language | conjugation     || conjugationEncoding
+        english  | PRESENT_SIMPLE_SINGULAR_FIRST || 'I'
+        english  | PRESENT_SIMPLE_PLURAL_FIRST || 'we'
+        english  | PRESENT_SIMPLE_SINGULAR_SECOND || 'you'
+        english  | PRESENT_SIMPLE_PLURAL_SECOND || 'you'
+        english  | PRESENT_SIMPLE_SINGULAR_THIRD || 'he, she, it'
+        english  | PRESENT_SIMPLE_PLURAL_THIRD || 'they'
     }
 
     @Unroll

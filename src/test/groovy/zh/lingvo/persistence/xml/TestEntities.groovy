@@ -1,8 +1,8 @@
 package zh.lingvo.persistence.xml
 
-import zh.lingvo.domain.Number
+import zh.lingvo.domain.linguisticcategories.Number
 import zh.lingvo.domain.PartOfSpeech
-import zh.lingvo.domain.forms.NounWordFormCategory
+import zh.lingvo.domain.linguisticcategories.NounCase
 import zh.lingvo.domain.words.Example
 import zh.lingvo.domain.words.Meaning
 import zh.lingvo.domain.words.Name
@@ -27,7 +27,7 @@ class TestEntities {
         nounPosBlock.meanings = [humanMeaning, maleMeaning]
         def semBlock = new SemanticBlock(posBlocks: [nounPosBlock])
 
-        def pluralExceptionName = new Name(value: 'men', form: [Number.PLURAL, NounWordFormCategory.NOMINATIVE])
+        def pluralExceptionName = new Name(value: 'men', form: [Number.PLURAL, NounCase.NOMINATIVE])
         def formException = new HashMap<PartOfSpeech, List<Name>>()
         formException[PartOfSpeech.NOUN] = [pluralExceptionName]
 

@@ -2,7 +2,7 @@ package zh.lingvo.domain.words;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import zh.lingvo.domain.Gender;
+import zh.lingvo.domain.linguisticcategories.Gender;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.util.CollectionUtils;
 

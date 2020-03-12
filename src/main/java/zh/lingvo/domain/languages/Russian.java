@@ -2,12 +2,11 @@ package zh.lingvo.domain.languages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import zh.lingvo.domain.Declension;
-import zh.lingvo.domain.Gender;
-import zh.lingvo.domain.Number;
+import zh.lingvo.domain.linguisticcategories.Gender;
+import zh.lingvo.domain.linguisticcategories.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
-import zh.lingvo.domain.forms.NounWordFormCategory;
+import zh.lingvo.domain.linguisticcategories.NounCase;
 import zh.lingvo.domain.forms.WordFormCategory;
 
 public class Russian extends Language {
@@ -34,27 +33,15 @@ public class Russian extends Language {
     }
 
     @Override
-    protected void loadDeclensionMappings() {
-        declensionMappings = ImmutableMap.<Declension, String>builder()
-                .put(Declension.FIRST_SINGULAR, "я")
-                .put(Declension.FIRST_PLURAL, "мы")
-                .put(Declension.SECOND_SINGULAR, "ты")
-                .put(Declension.SECOND_PLURAL, "вы")
-                .put(Declension.THIRD_SINGULAR, "он, она, оно")
-                .put(Declension.THIRD_PLURAL, "они")
-                .build();
-    }
-
-    @Override
     protected void loadWordFormsMappings() {
         wordFormsMappings = ImmutableMap.of(
                 PartOfSpeech.NOUN, ImmutableList.of(
-                        NounWordFormCategory.NOMINATIVE,
-                        NounWordFormCategory.GENITIVE,
-                        NounWordFormCategory.DATIVE,
-                        NounWordFormCategory.ACCUSATIVE,
-                        NounWordFormCategory.INSTRUMENTAL,
-                        NounWordFormCategory.PREPOSITIONAL
+                        NounCase.NOMINATIVE,
+                        NounCase.GENITIVE,
+                        NounCase.DATIVE,
+                        NounCase.ACCUSATIVE,
+                        NounCase.INSTRUMENTAL,
+                        NounCase.PREPOSITIONAL
                 )
         );
     }
@@ -62,22 +49,32 @@ public class Russian extends Language {
     @Override
     protected void loadWordFormNamings() {
         wordFormNamings = ImmutableMap.<WordFormCategory, String>builder()
-                .put(NounWordFormCategory.NOMINATIVE, "именительный падеж")
-                .put(NounWordFormCategory.GENITIVE, "родительный падеж")
-                .put(NounWordFormCategory.DATIVE, "дательный падеж")
-                .put(NounWordFormCategory.ACCUSATIVE, "винительный падеж")
-                .put(NounWordFormCategory.INSTRUMENTAL, "творительный падеж")
-                .put(NounWordFormCategory.PREPOSITIONAL, "предложный падеж")
+                .put(NounCase.NOMINATIVE, "именительный падеж")
+                .put(NounCase.GENITIVE, "родительный падеж")
+                .put(NounCase.DATIVE, "дательный падеж")
+                .put(NounCase.ACCUSATIVE, "винительный падеж")
+                .put(NounCase.INSTRUMENTAL, "творительный падеж")
+                .put(NounCase.PREPOSITIONAL, "предложный падеж")
                 .build();
     }
 
     @Override
     protected void loadGenderNamings() {
-        gendersNamings = ImmutableMap.of(
+        genderNamings = ImmutableMap.of(
                 Gender.MASCULINE, "м",
                 Gender.FEMININE, "ж",
                 Gender.NEUTRAL, "ср"
         );
+    }
+
+    @Override
+    protected void loadPersonEncodings() {
+        personEncodings = ImmutableMap.of();
+    }
+
+    @Override
+    protected void loadConjugationEncodings() {
+        conjugationEncodings = ImmutableMap.of();
     }
 
     @Override

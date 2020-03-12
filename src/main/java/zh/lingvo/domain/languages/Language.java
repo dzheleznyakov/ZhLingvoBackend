@@ -3,16 +3,16 @@ package zh.lingvo.domain.languages;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import zh.lingvo.domain.Declension;
-import zh.lingvo.domain.Gender;
-import zh.lingvo.domain.LinguisticCategory;
-import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.BasicNounChangeModel;
 import zh.lingvo.domain.changepatterns.ChangeModel;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.forms.WordFormCategory;
 import zh.lingvo.domain.forms.WordForms;
+import zh.lingvo.domain.linguisticcategories.Gender;
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory;
+import zh.lingvo.domain.linguisticcategories.Number;
+import zh.lingvo.domain.linguisticcategories.Person;
 import zh.lingvo.domain.words.Name;
 import zh.lingvo.domain.words.Word;
 
@@ -32,9 +32,10 @@ public abstract class Language {
     protected Map<PartOfSpeech, ChangeModel> changePatternsMap;
     protected Map<PartOfSpeech, WordFormsHelper> wordFormHelpers;
     protected Map<Number, String> numberNamings;
-    protected Map<Declension, String> declensionMappings;
+    protected Map<Gender, String> genderNamings;
+    protected Map<Person, String> personEncodings;
+    protected Map<LinguisticCategory[], String> conjugationEncodings;
     protected Map<WordFormCategory, String> wordFormNamings;
-    protected Map<Gender, String> gendersNamings;
 
     protected Language(String code, String name) {
         this.code = code;
@@ -94,23 +95,6 @@ public abstract class Language {
 
     protected abstract void loadNumberNamings();
 
-    public String getDeclensionMapping(Declension declension) {
-        return getDeclensionMappings().getOrDefault(declension, "");
-    }
-
-    public List<Declension> getDeclensions() {
-        return getKeyEnumsInOrder(getDeclensionMappings());
-    }
-
-    @NotNull
-    private Map<Declension, String> getDeclensionMappings() {
-        if (declensionMappings == null)
-            loadDeclensionMappings();
-        return declensionMappings;
-    }
-
-    protected abstract void loadDeclensionMappings();
-
     private <E extends Enum<E>> List<E> getKeyEnumsInOrder(Map<E, ?> map) {
         return map.keySet()
                 .stream()
@@ -165,21 +149,43 @@ public abstract class Language {
     protected abstract void loadWordFormNamings();
 
     public List<Gender> getGenders() {
-        return getKeyEnumsInOrder(getGendersNamings());
+        return getKeyEnumsInOrder(getGenderNamings());
     }
 
     public String getGenderName(Gender gender) {
-        return getGendersNamings().getOrDefault(gender, "");
+        return getGenderNamings().getOrDefault(gender, "");
     }
 
     @NotNull
-    public Map<Gender, String> getGendersNamings() {
-        if (gendersNamings == null)
+    public Map<Gender, String> getGenderNamings() {
+        if (genderNamings == null)
             loadGenderNamings();
-        return gendersNamings;
+        return genderNamings;
     }
 
     protected abstract void loadGenderNamings();
+
+    public String getPersonEncoding(Person person) {
+        return getPersonEndodings().getOrDefault(person, "");
+    }
+
+    @NotNull
+    public Map<Person, String> getPersonEndodings() {
+        if (personEncodings == null)
+            loadPersonEncodings();
+        return personEncodings;
+    }
+
+    protected abstract void loadPersonEncodings();
+
+    @NotNull
+    public Map<LinguisticCategory[], String> getConjugationEncodings() {
+        if (conjugationEncodings == null)
+            loadConjugationEncodings();
+        return conjugationEncodings;
+    }
+
+    protected abstract void loadConjugationEncodings();
 
     public ChangeModel getChangeModel(PartOfSpeech pos) {
         return getChangePatternsMap().getOrDefault(pos, ChangeModel.EMPTY);

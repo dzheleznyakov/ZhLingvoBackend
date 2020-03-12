@@ -1,7 +1,7 @@
 package zh.lingvo.rest.entities.forms;
 
 import com.google.common.collect.ImmutableList;
-import zh.lingvo.domain.LinguisticCategory;
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory;
 import zh.lingvo.domain.changepatterns.BasicNounChangeModel;
 import zh.lingvo.domain.changepatterns.ChangeModel;
 import zh.lingvo.rest.entities.JsonEntity;

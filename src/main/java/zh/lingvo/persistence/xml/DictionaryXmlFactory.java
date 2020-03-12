@@ -2,7 +2,7 @@ package zh.lingvo.persistence.xml;
 
 import org.springframework.stereotype.Service;
 import zh.lingvo.domain.Dictionary;
-import zh.lingvo.domain.Gender;
+import zh.lingvo.domain.linguisticcategories.Gender;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;

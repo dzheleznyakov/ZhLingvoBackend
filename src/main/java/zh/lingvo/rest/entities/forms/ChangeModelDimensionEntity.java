@@ -1,6 +1,6 @@
 package zh.lingvo.rest.entities.forms;
 
-import zh.lingvo.domain.LinguisticCategory;
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory;
 import zh.lingvo.rest.entities.JsonEntity;
 import zh.lingvo.util.Pair;
 

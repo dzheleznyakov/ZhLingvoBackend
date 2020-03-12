@@ -3,10 +3,10 @@ package zh.lingvo.persistence.xml
 import org.springframework.stereotype.Service
 import zh.lingvo.caches.LanguagesCache
 import zh.lingvo.domain.Dictionary
-import zh.lingvo.domain.LinguisticCategory
-import zh.lingvo.domain.Number
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory
+import zh.lingvo.domain.linguisticcategories.Number
 import zh.lingvo.domain.PartOfSpeech
-import zh.lingvo.domain.forms.NounWordFormCategory
+import zh.lingvo.domain.linguisticcategories.NounCase
 import zh.lingvo.domain.words.Example
 import zh.lingvo.domain.words.Meaning
 import zh.lingvo.domain.words.Name
@@ -104,7 +104,7 @@ class DictionaryFactoryKotlin(val languagesCache: LanguagesCache) {
 
     private fun getLinguisticCategory(clazz: String, name: String): LinguisticCategory = when(clazz) {
         Number::class.java.simpleName -> Number.valueOf(name)
-        NounWordFormCategory::class.java.simpleName -> NounWordFormCategory.valueOf(name)
+        NounCase::class.java.simpleName -> NounCase.valueOf(name)
         else -> throw IllegalArgumentException("Unknown category class [${clazz}]")
     }
 }

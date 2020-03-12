@@ -2,13 +2,12 @@ package zh.lingvo.domain.languages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import zh.lingvo.domain.Declension;
-import zh.lingvo.domain.Gender;
-import zh.lingvo.domain.Number;
+import zh.lingvo.domain.linguisticcategories.Gender;
+import zh.lingvo.domain.linguisticcategories.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.changepatterns.helpers.es.EsNounFormHelper;
-import zh.lingvo.domain.forms.NounWordFormCategory;
+import zh.lingvo.domain.linguisticcategories.NounCase;
 
 public class Spanish extends Language {
     private static final Spanish INSTANCE = new Spanish();
@@ -34,35 +33,33 @@ public class Spanish extends Language {
     }
 
     @Override
-    protected void loadDeclensionMappings() {
-        declensionMappings = ImmutableMap.<Declension, String>builder()
-                .put(Declension.FIRST_SINGULAR, "yo")
-                .put(Declension.FIRST_PLURAL, "nosotros")
-                .put(Declension.SECOND_SINGULAR, "tú")
-                .put(Declension.SECOND_PLURAL, "vosotros")
-                .put(Declension.THIRD_SINGULAR, "él, ella, Usted")
-                .put(Declension.THIRD_PLURAL, "ellos, ellas, Ustedes")
-                .build();
-    }
-
-    @Override
     protected void loadWordFormsMappings() {
         wordFormsMappings = ImmutableMap.of(
-                PartOfSpeech.NOUN, ImmutableList.of(NounWordFormCategory.NOMINATIVE)
+                PartOfSpeech.NOUN, ImmutableList.of(NounCase.NOMINATIVE)
         );
     }
 
     @Override
     protected void loadWordFormNamings() {
-        wordFormNamings = ImmutableMap.of(NounWordFormCategory.NOMINATIVE, "caso nominativo");
+        wordFormNamings = ImmutableMap.of(NounCase.NOMINATIVE, "caso nominativo");
     }
 
     @Override
     protected void loadGenderNamings() {
-        gendersNamings = ImmutableMap.of(
+        genderNamings = ImmutableMap.of(
                 Gender.FEMININE, "f",
                 Gender.MASCULINE, "m"
         );
+    }
+
+    @Override
+    protected void loadPersonEncodings() {
+        personEncodings = ImmutableMap.of();
+    }
+
+    @Override
+    protected void loadConjugationEncodings() {
+        conjugationEncodings = ImmutableMap.of();
     }
 
     @Override

@@ -6,11 +6,11 @@ import com.google.common.collect.ImmutableSet;
 import org.springframework.stereotype.Service;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
-import zh.lingvo.domain.Gender;
-import zh.lingvo.domain.LinguisticCategory;
-import zh.lingvo.domain.Number;
+import zh.lingvo.domain.linguisticcategories.Gender;
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory;
+import zh.lingvo.domain.linguisticcategories.Number;
 import zh.lingvo.domain.PartOfSpeech;
-import zh.lingvo.domain.forms.NounWordFormCategory;
+import zh.lingvo.domain.linguisticcategories.NounCase;
 import zh.lingvo.domain.languages.Language;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;
@@ -163,8 +163,8 @@ public class DictionaryFactory {
     private LinguisticCategory getLinguisticCategory(String clazz, String name) {
         if (Objects.equals(Number.class.getSimpleName(), clazz))
             return Number.valueOf(name);
-        if (Objects.equals(NounWordFormCategory.class.getSimpleName(), clazz))
-            return NounWordFormCategory.valueOf(name);
+        if (Objects.equals(NounCase.class.getSimpleName(), clazz))
+            return NounCase.valueOf(name);
         throw new IllegalArgumentException(String.format("Unknown category class [%s]", clazz));
     }
 }

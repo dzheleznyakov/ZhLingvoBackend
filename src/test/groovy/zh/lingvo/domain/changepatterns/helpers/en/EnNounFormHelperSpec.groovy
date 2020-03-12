@@ -2,45 +2,51 @@ package zh.lingvo.domain.changepatterns.helpers.en
 
 import spock.lang.Specification
 import spock.lang.Unroll
-import zh.lingvo.domain.LinguisticCategory
-import zh.lingvo.domain.NounLinguisticCategories
+import zh.lingvo.domain.forms.NounDeclensionsCategory
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper
 import zh.lingvo.domain.words.Name
 import zh.lingvo.domain.words.Word
 
+import java.util.stream.Collectors
+
 class EnNounFormHelperSpec extends Specification {
     private WordFormsHelper helper = new EnNounFormHelper()
 
-    private static LinguisticCategory[] snKey = NounLinguisticCategories.SINGULAR_NOMINATIVE
-    private static LinguisticCategory[] pnKey = NounLinguisticCategories.PLURAL_NOMINATIVE
-    private static LinguisticCategory[] spKey = NounLinguisticCategories.SINGULAR_POSSESSIVE
-    private static LinguisticCategory[] ppKey = NounLinguisticCategories.PLURAL_POSSESSIVE
+    private static LinguisticCategory[] snKey = NounDeclensionsCategory.SINGULAR_NOMINATIVE
+    private static LinguisticCategory[] pnKey = NounDeclensionsCategory.PLURAL_NOMINATIVE
+    private static LinguisticCategory[] spKey = NounDeclensionsCategory.SINGULAR_POSSESSIVE
+    private static LinguisticCategory[] ppKey = NounDeclensionsCategory.PLURAL_POSSESSIVE
 
     @Unroll
     def "Test change forms for [#wordName]"() {
         given: 'a word'
         Word word = [UUID.randomUUID(), wordName]
 
-        when: 'the wordName worms are requested'
-        def actualForms = helper.getForms(word, formExceptions)
+        when: 'the wordName forms are requested'
+        def actualForms = helper.getForms(word, formExceptions).allWordForms
+                .stream()
+                .map { it.wordForms }
+                .collect(Collectors.toList())
 
         then: 'the returned forms are correct'
-        actualForms == expectedForms
+        actualForms.size() == 1
+        actualForms[0] == expectedForms
 
         where: 'the parameters are'
         wordName | formExceptions                        || expectedForms
-        'box'    | []                                    || toChangeModel('box', 'boxes', "box's", "boxes'")
-        'book'   | []                                    || toChangeModel('book', 'books', "book's", "books'")
-        'stash'  | []                                    || toChangeModel('stash', 'stashes', "stash's", "stashes'")
-        'pass'   | []                                    || toChangeModel('pass', 'passes', "pass's", "passes'")
-        'boy'    | []                                    || toChangeModel('boy', 'boys', "boy's", "boys'")
-        'fly'    | []                                    || toChangeModel('fly', 'flies', "fly's", "flies'")
-        'cliff'  | []                                    || toChangeModel('cliff', 'cliffs', "cliff's", "cliffs'")
-        'leaf'   | []                                    || toChangeModel('leaf', 'leaves', "leaf's", "leaves'")
-        'wife'   | []                                    || toChangeModel('wife', 'wives', "wife's", "wives'")
-        'man'    | [new Name(value: 'men', form: pnKey)] || toChangeModel('man', 'men', "man's", "men's")
+        'box'    | []                                    || toForms('box', 'boxes', "box's", "boxes'")
+        'book'   | []                                    || toForms('book', 'books', "book's", "books'")
+        'stash'  | []                                    || toForms('stash', 'stashes', "stash's", "stashes'")
+        'pass'   | []                                    || toForms('pass', 'passes', "pass's", "passes'")
+        'boy'    | []                                    || toForms('boy', 'boys', "boy's", "boys'")
+        'fly'    | []                                    || toForms('fly', 'flies', "fly's", "flies'")
+        'cliff'  | []                                    || toForms('cliff', 'cliffs', "cliff's", "cliffs'")
+        'leaf'   | []                                    || toForms('leaf', 'leaves', "leaf's", "leaves'")
+        'wife'   | []                                    || toForms('wife', 'wives', "wife's", "wives'")
+        'man'    | [new Name(value: 'men', form: pnKey)] || toForms('man', 'men', "man's", "men's")
     }
-    private static def toChangeModel(sn, pn, sp, pp) {
+    private static def toForms(sn, pn, sp, pp) {
         [(snKey):sn, (pnKey):pn, (spKey):sp, (ppKey):pp]
     }
 }

@@ -1,9 +1,9 @@
 package zh.lingvo.domain.changepatterns.helpers.es
 
-import zh.lingvo.domain.NounLinguisticCategories.PLURAL_NOMINATIVE
-import zh.lingvo.domain.NounLinguisticCategories.SINGULAR_NOMINATIVE
 import zh.lingvo.domain.changepatterns.BasicNounChangeModel
 import zh.lingvo.domain.changepatterns.helpers.AbstractWordFormsHelper
+import zh.lingvo.domain.forms.NounDeclensionsCategory.PLURAL_NOMINATIVE
+import zh.lingvo.domain.forms.NounDeclensionsCategory.SINGULAR_NOMINATIVE
 import zh.lingvo.domain.forms.WordForms
 import zh.lingvo.domain.languages.Spanish
 import zh.lingvo.domain.words.Name
@@ -19,7 +19,7 @@ private val STRESSED_VOWEL_PATTERN = ".*[éáóíú].*".toRegex().toPattern()
 private val CHANGE_MODEL = BasicNounChangeModel(Spanish.getInstance())
 
 class EsNounFormHelper : AbstractWordFormsHelper() {
-    override fun getForms(word: Word, formExceptions: List<Name>?): WordForms {
+    override fun getForms(word: Word, formExceptions: List<Name>): WordForms {
         val baseForm = word.name.value
         val wordForms = mapOf(
                 SINGULAR_NOMINATIVE to baseForm,

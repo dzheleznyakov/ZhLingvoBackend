@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import zh.lingvo.caches.DictionaryCache;
 import zh.lingvo.caches.LanguagesCache;
 import zh.lingvo.domain.Dictionary;
-import zh.lingvo.domain.Gender;
+import zh.lingvo.domain.linguisticcategories.Gender;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.words.Example;
 import zh.lingvo.domain.words.Meaning;

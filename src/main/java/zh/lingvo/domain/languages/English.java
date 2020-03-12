@@ -2,13 +2,16 @@ package zh.lingvo.domain.languages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import zh.lingvo.domain.Declension;
-import zh.lingvo.domain.Number;
 import zh.lingvo.domain.PartOfSpeech;
 import zh.lingvo.domain.changepatterns.helpers.WordFormsHelper;
 import zh.lingvo.domain.changepatterns.helpers.en.EnNounFormHelper;
-import zh.lingvo.domain.forms.NounWordFormCategory;
+import zh.lingvo.domain.changepatterns.helpers.en.EnVerbFormHelper;
+import zh.lingvo.domain.forms.VerbConjugationCategory;
 import zh.lingvo.domain.forms.WordFormCategory;
+import zh.lingvo.domain.linguisticcategories.LinguisticCategory;
+import zh.lingvo.domain.linguisticcategories.NounCase;
+import zh.lingvo.domain.linguisticcategories.Number;
+import zh.lingvo.domain.linguisticcategories.Person;
 
 public class English extends Language {
     private static final English INSTANCE = new English();
@@ -34,41 +37,50 @@ public class English extends Language {
     }
 
     @Override
-    protected void loadDeclensionMappings() {
-        declensionMappings = ImmutableMap.<Declension, String>builder()
-                .put(Declension.FIRST_SINGULAR, "I")
-                .put(Declension.FIRST_PLURAL, "we")
-                .put(Declension.SECOND, "you")
-                .put(Declension.THIRD_PLURAL, "they")
-                .put(Declension.THIRD_SINGULAR, "he, she, it")
-                .build();
-
-    }
-
-    @Override
     protected void loadWordFormsMappings() {
         wordFormsMappings = ImmutableMap.of(
-                PartOfSpeech.NOUN, ImmutableList.of(NounWordFormCategory.NOMINATIVE, NounWordFormCategory.POSSESSIVE)
+                PartOfSpeech.NOUN, ImmutableList.of(NounCase.NOMINATIVE, NounCase.POSSESSIVE)
         );
     }
 
     @Override
     protected void loadWordFormNamings() {
         wordFormNamings = ImmutableMap.<WordFormCategory, String>builder()
-                .put(NounWordFormCategory.NOMINATIVE, "nominative case")
-                .put(NounWordFormCategory.POSSESSIVE, "possessive case")
+                .put(NounCase.NOMINATIVE, "nominative case")
+                .put(NounCase.POSSESSIVE, "possessive case")
                 .build();
     }
 
     @Override
     protected void loadGenderNamings() {
-        gendersNamings = ImmutableMap.of();
+        genderNamings = ImmutableMap.of();
+    }
+
+    @Override
+    protected void loadPersonEncodings() {
+        personEncodings = ImmutableMap.of(
+                Person.FIRST, "1st person",
+                Person.SECOND, "2nd person",
+                Person.THIRD, "3rd person");
+    }
+
+    @Override
+    protected void loadConjugationEncodings() {
+        conjugationEncodings = ImmutableMap.<LinguisticCategory[], String>builder()
+                .put(VerbConjugationCategory.PRESENT_SIMPLE_SINGULAR_FIRST, "I")
+                .put(VerbConjugationCategory.PRESENT_SIMPLE_PLURAL_FIRST, "we")
+                .put(VerbConjugationCategory.PRESENT_SIMPLE_SINGULAR_SECOND, "you")
+                .put(VerbConjugationCategory.PRESENT_SIMPLE_PLURAL_SECOND, "you")
+                .put(VerbConjugationCategory.PRESENT_SIMPLE_SINGULAR_THIRD, "he, she, it")
+                .put(VerbConjugationCategory.PRESENT_SIMPLE_PLURAL_THIRD, "they")
+                .build();
     }
 
     @Override
     protected void loadWordFormHelpers() {
         wordFormHelpers = ImmutableMap.<PartOfSpeech, WordFormsHelper>builder()
                 .put(PartOfSpeech.NOUN, new EnNounFormHelper())
+                .put(PartOfSpeech.VERB, new EnVerbFormHelper())
                 .build();
     }
 

@@ -40,7 +40,7 @@ public class LanguagesController {
 
         LanguageConstantsEntity languageConstants = new LanguageConstantsEntity();
         languageConstants.setPos(language.getPosNamings());
-        languageConstants.setGenders(language.getGendersNamings());
+        languageConstants.setGenders(language.getGenderNamings());
         return languageConstants;
     }
 }
