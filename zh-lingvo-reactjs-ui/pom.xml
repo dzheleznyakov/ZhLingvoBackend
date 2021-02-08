@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>zh.lingvo</groupId>
-            <artifactId>zh-lingvo-data</artifactId>
+            <artifactId>zh-lingvo-restful-api</artifactId>
         </dependency>
     </dependencies>
 </project>

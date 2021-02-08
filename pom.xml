@@ -10,6 +10,7 @@
 
     <modules>
         <module>zh-lingvo-data</module>
+        <module>zh-lingvo-restful-api</module>
         <module>zh-lingvo-reactjs-ui</module>
     </modules>
 
@@ -165,6 +166,11 @@
             <dependency>
                 <groupId>zh.lingvo</groupId>
                 <artifactId>zh-lingvo-data</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>zh.lingvo</groupId>
+                <artifactId>zh-lingvo-restful-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
