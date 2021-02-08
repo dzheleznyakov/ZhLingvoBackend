@@ -8,6 +8,11 @@
     <artifactId>zh-lingvo-backend</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
+    <modules>
+        <module>zh-lingvo-data</module>
+        <module>zh-lingvo-reactjs-ui</module>
+    </modules>
+
     <packaging>pom</packaging>
 
     <name>ZhLingvo</name>
@@ -155,6 +160,12 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy-all.version}</version>
                 <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>zh.lingvo</groupId>
+                <artifactId>zh-lingvo-data</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
