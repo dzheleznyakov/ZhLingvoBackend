@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS language (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR,
-    twoLetterCode CHAR(2)
+    twoLetterCode CHAR(2),
+    PRIMARY KEY (id)
 );
