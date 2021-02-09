@@ -1,6 +1,43 @@
+CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR NOT NULL UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS language (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR,
-    twoLetterCode CHAR(2),
-    PRIMARY KEY (id)
+    name VARCHAR NOT NULL,
+    code CHAR(2) NOT NULL UNIQUE
+);
+
+CREATE INDEX IF NOT EXISTS lang_code_index ON language (
+    code
+);
+
+CREATE TABLE IF NOT EXISTS part_of_speech (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS word_form_name (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR NOT NULL,
+    note VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS dictionary (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    lang_id INTEGER,
+    name VARCHAR NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (lang_id) REFERENCES language(id)
+);
+
+CREATE TABLE IF NOT EXISTS word (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dic_id INTEGER,
+    main_form VARCHAR NOT NULL,
+    transcription VARCHAR,
+    irreg_type VARCHAR,
+    FOREIGN KEY (dic_id) REFERENCES dictionary(id)
 );

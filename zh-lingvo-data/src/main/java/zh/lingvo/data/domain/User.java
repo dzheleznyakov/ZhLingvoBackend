@@ -19,16 +19,13 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@Entity(name = "language")
-public class Language implements DbEntity {
+@Entity(name = "user")
+public class User implements DbEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "code", length = 2)
-    private String twoLetterCode;
 }

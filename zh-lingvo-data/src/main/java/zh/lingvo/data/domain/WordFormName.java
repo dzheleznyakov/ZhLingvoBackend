@@ -11,16 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@Entity(name = "language")
-public class Language implements DbEntity {
+@Entity(name = "word_form_name")
+public class WordFormName implements DbEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -29,6 +27,6 @@ public class Language implements DbEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "code", length = 2)
-    private String twoLetterCode;
+    @Column(name = "note")
+    private String note;
 }
