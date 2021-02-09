@@ -8,22 +8,32 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "meaning")
 @EqualsAndHashCode
-@Entity(name = "user")
-public class User implements Persistable {
+@Entity(name = "translation")
+public class Translation implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "meaning_id", referencedColumnName = "id")
+    private Meaning meaning;
+
+    @Column(name = "value", nullable = false)
+    private String value;
+
+    @Column(name = "elaboration")
+    private String elaboration;
 }

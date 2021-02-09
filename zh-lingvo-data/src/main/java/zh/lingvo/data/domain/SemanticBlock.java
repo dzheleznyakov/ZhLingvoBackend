@@ -21,27 +21,27 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "words")
+@ToString(exclude = "word")
 @EqualsAndHashCode
-@Entity(name = "dictionary")
-public class Dictionary implements Persistable {
+@Entity(name = "semantic_block")
+public class SemanticBlock implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "word_id", referencedColumnName = "id")
+    private Word word;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "lang_id", referencedColumnName = "id")
-    private Language language;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "pos_id", referencedColumnName = "id")
+    private PartOfSpeech pos;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "gender")
+    private String gender;
 
-    @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY)
-    @OrderBy("main_form")
-    private List<Word> words;
+    @OneToMany(mappedBy = "semBlock", fetch = FetchType.EAGER)
+    @OrderBy("id")
+    private List<Meaning> meanings;
 }

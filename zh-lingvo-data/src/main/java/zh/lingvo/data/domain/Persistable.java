@@ -1,4 +1,4 @@
 package zh.lingvo.data.domain;
 
-public interface DbEntity {
+public interface Persistable {
 }

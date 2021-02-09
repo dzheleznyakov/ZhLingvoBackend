@@ -18,7 +18,7 @@ import javax.persistence.Id;
 @ToString
 @EqualsAndHashCode
 @Entity(name = "word_form_name")
-public class WordFormName implements DbEntity {
+public class WordFormName implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

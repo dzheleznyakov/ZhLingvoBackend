@@ -18,7 +18,7 @@ import javax.persistence.Id;
 @ToString
 @EqualsAndHashCode
 @Entity(name = "part_of_speech")
-public class PartOfSpeech implements DbEntity {
+public class PartOfSpeech implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

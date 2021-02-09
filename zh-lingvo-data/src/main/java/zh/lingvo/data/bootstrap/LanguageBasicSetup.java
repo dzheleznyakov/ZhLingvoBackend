@@ -14,6 +14,7 @@ import zh.lingvo.data.repositories.PartOfSpeechRepository;
 import zh.lingvo.data.repositories.UserRepository;
 import zh.lingvo.data.repositories.WordRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ public class LanguageBasicSetup implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) {
         loadAdminUser();
         loadLanguages();

@@ -9,10 +9,6 @@ CREATE TABLE IF NOT EXISTS language (
     code CHAR(2) NOT NULL UNIQUE
 );
 
-CREATE INDEX IF NOT EXISTS lang_code_index ON language (
-    code
-);
-
 CREATE TABLE IF NOT EXISTS part_of_speech (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR NOT NULL UNIQUE
@@ -41,3 +37,41 @@ CREATE TABLE IF NOT EXISTS word (
     irreg_type VARCHAR,
     FOREIGN KEY (dic_id) REFERENCES dictionary(id)
 );
+CREATE INDEX IF NOT EXISTS word_dic_index ON word (dic_id);
+
+CREATE TABLE IF NOT EXISTS semantic_block (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    word_id INTEGER,
+    pos_id INTEGER,
+    gender VARCHAR(10),
+    FOREIGN KEY (word_id) REFERENCES word(id),
+    FOREIGN KEY (pos_id) REFERENCES part_of_speech(id)
+);
+CREATE INDEX IF NOT EXISTS semantic_block_word_index on semantic_block (word_id);
+
+CREATE TABLE IF NOT EXISTS meaning (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sem_bl_id INTEGER,
+    remark VARCHAR(20),
+    FOREIGN KEY (sem_bl_id) REFERENCES semantic_block(id)
+);
+CREATE INDEX IF NOT EXISTS meaning_sem_block_index ON meaning (sem_bl_id);
+
+CREATE TABLE IF NOT EXISTS 'translation' (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    meaning_id INTEGER,
+    value TEXT NOT NULL,
+    elaboration TEXT,
+    FOREIGN KEY (meaning_id) REFERENCES meaning(id)
+);
+CREATE INDEX IF NOT EXISTS translation_meaning_index ON 'translation' (meaning_id);
+
+CREATE TABLE IF NOT EXISTS example (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    meaning_id INTEGER,
+    remark VARCHAR(20),
+    expression TEXT,
+    explanation TEXT,
+    FOREIGN KEY (meaning_id) REFERENCES meaning(id)
+);
+CREATE INDEX IF NOT EXISTS example_meaning_index ON example (meaning_id);

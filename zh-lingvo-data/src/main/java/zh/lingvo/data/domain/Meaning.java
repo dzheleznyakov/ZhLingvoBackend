@@ -17,31 +17,30 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "words")
+@ToString(exclude = "semBlock")
 @EqualsAndHashCode
-@Entity(name = "dictionary")
-public class Dictionary implements Persistable {
+@Entity(name = "meaning")
+public class Meaning implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "sem_bl_id", referencedColumnName = "id")
+    private SemanticBlock semBlock;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "lang_id", referencedColumnName = "id")
-    private Language language;
+    @Column(name = "remark")
+    private String remark;
 
-    @Column(name = "name")
-    private String name;
+    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER)
+    private Set<Translation> translations;
 
-    @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY)
-    @OrderBy("main_form")
-    private List<Word> words;
+    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER)
+    private Set<Example> examples;
 }
