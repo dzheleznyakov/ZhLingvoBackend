@@ -1,5 +1,7 @@
 package zh.lingvo.data.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString
 @EqualsAndHashCode
 @Entity(name = "user")

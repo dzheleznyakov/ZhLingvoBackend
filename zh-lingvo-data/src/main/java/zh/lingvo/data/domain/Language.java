@@ -1,5 +1,7 @@
 package zh.lingvo.data.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString
 @EqualsAndHashCode
 @Entity(name = "language")
@@ -27,6 +31,6 @@ public class Language implements Persistable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "code", length = 2)
+    @Column(name = "code", length = 2, unique = true)
     private String twoLetterCode;
 }

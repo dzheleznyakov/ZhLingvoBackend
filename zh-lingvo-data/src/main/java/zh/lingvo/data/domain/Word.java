@@ -1,5 +1,7 @@
 package zh.lingvo.data.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString(exclude = "dictionary")
 @EqualsAndHashCode
 @Entity(name = "word")
