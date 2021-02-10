@@ -16,3 +16,8 @@ src/main/resources/public
 *_dictionary.xml
 temp.xml
 local/
+
+**/*.db
+
+**/app/node_modules
+**/app/build
