@@ -65,56 +65,7 @@ public class LanguageBasicSetup implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        loadAdminUser();
-        loadLanguages();
-        loadPartsOfSpeech();
         loadTestDictionary();
-    }
-
-    private void loadAdminUser() {
-        Optional<User> adminOptional = userRepository.findByName("admin");
-        if (adminOptional.isEmpty()) {
-            User user = new User();
-            user.setName("admin");
-            userRepository.save(user);
-        }
-        log.info("Admin user loaded");
-    }
-
-
-    private void loadLanguages() {
-        loadLanguage("English", "En");
-        loadLanguage("Spanish", "Es");
-        loadLanguage("Russian", "Ru");
-        log.info("Languages loaded");
-    }
-
-    private void loadLanguage(String name, String code) {
-        Optional<Language> languageOptional = languageRepository.findByTwoLetterCode(code);
-        if (languageOptional.isEmpty()) {
-            Language language = new Language();
-            language.setName(name);
-            language.setTwoLetterCode(code);
-            log.info("Loading [{}] language", name);
-            languageRepository.save(language);
-        }
-    }
-
-    private void loadPartsOfSpeech() {
-        loadPartOfSpeech("NOUN");
-        loadPartOfSpeech("VERB");
-        loadPartOfSpeech("ADJECTIVE");
-        log.info("Parts of speech loaded");
-    }
-
-    private void loadPartOfSpeech(String name) {
-        Optional<PartOfSpeech> posOptional = posRepository.findByName(name);
-        if (posOptional.isEmpty()) {
-            PartOfSpeech pos = new PartOfSpeech();
-            pos.setName(name);
-            log.info("Loading [{}] part of speech", name);
-            posRepository.save(pos);
-        }
     }
 
     private void loadTestDictionary() {
