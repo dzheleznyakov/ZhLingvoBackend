@@ -1,7 +1,7 @@
 package zh.lingvo.data.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import zh.lingvo.data.domain.Word;
+import zh.lingvo.data.model.Word;
 
 import java.util.List;
 

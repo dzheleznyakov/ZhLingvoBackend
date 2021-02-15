@@ -5,10 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import zh.lingvo.data.domain.Dictionary;
-import zh.lingvo.data.domain.Language;
-import zh.lingvo.data.domain.User;
-import zh.lingvo.data.domain.Word;
+import zh.lingvo.data.model.Dictionary;
+import zh.lingvo.data.model.Language;
+import zh.lingvo.data.model.User;
+import zh.lingvo.data.model.Word;
 
 import java.util.List;
 import java.util.Set;
