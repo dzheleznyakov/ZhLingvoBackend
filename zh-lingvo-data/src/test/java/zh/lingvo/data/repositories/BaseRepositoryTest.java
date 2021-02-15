@@ -14,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @DataJpaTest
 @TestPropertySource(locations = "classpath:/test.properties")
 @EnableJpaRepositories(basePackages = "zh.lingvo.data.repositories")
-@EntityScan("zh.lingvo.data.domain")
+@EntityScan("zh.lingvo.data.model")
 public abstract class BaseRepositoryTest<T extends CrudRepository<?, ?>> {
     @Autowired
     protected TestEntityManager entityManager;

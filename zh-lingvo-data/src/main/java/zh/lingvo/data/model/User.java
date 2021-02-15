@@ -1,4 +1,4 @@
-package zh.lingvo.data.domain;
+package zh.lingvo.data.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,16 +21,13 @@ import javax.persistence.Id;
 @Builder
 @ToString
 @EqualsAndHashCode
-@Entity(name = "language")
-public class Language implements Persistable {
+@Entity(name = "user")
+public class User implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "code", length = 2, unique = true)
-    private String twoLetterCode;
 }

@@ -1,6 +1,6 @@
 package zh.lingvo.data.services;
 
-import zh.lingvo.data.domain.Language;
+import zh.lingvo.data.model.Language;
 
 import java.util.List;
 import java.util.Optional;

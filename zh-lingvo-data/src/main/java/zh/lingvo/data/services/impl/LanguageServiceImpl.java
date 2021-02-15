@@ -1,9 +1,10 @@
-package zh.lingvo.data.services;
+package zh.lingvo.data.services.impl;
 
 import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Service;
-import zh.lingvo.data.domain.Language;
+import zh.lingvo.data.model.Language;
 import zh.lingvo.data.repositories.LanguageRepository;
+import zh.lingvo.data.services.LanguageService;
 
 import java.util.List;
 import java.util.Optional;

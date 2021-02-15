@@ -4,15 +4,15 @@ import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import zh.lingvo.data.domain.Dictionary;
-import zh.lingvo.data.domain.Example;
-import zh.lingvo.data.domain.Language;
-import zh.lingvo.data.domain.Meaning;
-import zh.lingvo.data.domain.PartOfSpeech;
-import zh.lingvo.data.domain.SemanticBlock;
-import zh.lingvo.data.domain.Translation;
-import zh.lingvo.data.domain.User;
-import zh.lingvo.data.domain.Word;
+import zh.lingvo.data.model.Dictionary;
+import zh.lingvo.data.model.Example;
+import zh.lingvo.data.model.Language;
+import zh.lingvo.data.model.Meaning;
+import zh.lingvo.data.model.PartOfSpeech;
+import zh.lingvo.data.model.SemanticBlock;
+import zh.lingvo.data.model.Translation;
+import zh.lingvo.data.model.User;
+import zh.lingvo.data.model.Word;
 import zh.lingvo.data.repositories.DictionaryRepository;
 import zh.lingvo.data.repositories.ExampleRepository;
 import zh.lingvo.data.repositories.LanguageRepository;
@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @Component
 @Slf4j
-public class LanguageBasicSetup implements CommandLineRunner {
+public class DictionaryBootstrap implements CommandLineRunner {
     private final UserRepository userRepository;
     private final LanguageRepository languageRepository;
     private final PartOfSpeechRepository posRepository;
@@ -40,7 +40,7 @@ public class LanguageBasicSetup implements CommandLineRunner {
     private final TranslationRepository translationRepository;
     private final ExampleRepository exampleRepository;
 
-    public LanguageBasicSetup(
+    public DictionaryBootstrap(
             UserRepository userRepository,
             LanguageRepository languageRepository,
             PartOfSpeechRepository posRepository,

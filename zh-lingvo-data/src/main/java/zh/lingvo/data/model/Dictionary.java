@@ -1,12 +1,13 @@
-package zh.lingvo.data.domain;
+package zh.lingvo.data.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,27 +23,29 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "word")
+@AllArgsConstructor
+@Builder
+@ToString(exclude = "words")
 @EqualsAndHashCode
-@Entity(name = "semantic_block")
-public class SemanticBlock implements Persistable {
+@Entity(name = "dictionary")
+public class Dictionary implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "word_id", referencedColumnName = "id")
-    private Word word;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "pos_id", referencedColumnName = "id")
-    private PartOfSpeech pos;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "lang_id", referencedColumnName = "id")
+    private Language language;
 
-    @Column(name = "gender")
-    private String gender;
+    @Column(name = "name")
+    private String name;
 
-    @OneToMany(mappedBy = "semBlock", fetch = FetchType.EAGER)
-    @OrderBy("id")
-    private List<Meaning> meanings;
+    @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY)
+    @OrderBy("main_form")
+    private List<Word> words;
 }

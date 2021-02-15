@@ -1,4 +1,4 @@
-package zh.lingvo.data.domain;
+package zh.lingvo.data.model;
 
 public interface Persistable {
 }

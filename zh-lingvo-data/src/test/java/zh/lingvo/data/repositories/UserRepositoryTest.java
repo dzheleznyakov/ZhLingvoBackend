@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import zh.lingvo.data.domain.User;
+import zh.lingvo.data.model.User;
 
 import java.util.Optional;
 
@@ -49,5 +49,21 @@ class UserRepositoryTest extends BaseRepositoryTest<UserRepository> {
 
         assertThat(userOptional, is(not(empty())));
         assertThat(userOptional, hasPropertySatisfying(User::getName, NAME_2::equals));
+    }
+
+    @Test
+    @DisplayName("Should return false if the user does not exist")
+    void existsByName_NoUser() {
+        boolean userExists = repository.existsByName("No name");
+
+        assertThat(userExists, is(false));
+    }
+
+    @Test
+    @DisplayName("Should return true if the user does exist")
+    void existsByName_UserExists() {
+        boolean userExists = repository.existsByName(NAME_1);
+
+        assertThat(userExists, is(true));
     }
 }

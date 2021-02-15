@@ -1,4 +1,4 @@
-package zh.lingvo.data.services;
+package zh.lingvo.data.services.impl;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import zh.lingvo.data.domain.Language;
+import zh.lingvo.data.model.Language;
 import zh.lingvo.data.repositories.LanguageRepository;
 
 import java.util.ArrayList;

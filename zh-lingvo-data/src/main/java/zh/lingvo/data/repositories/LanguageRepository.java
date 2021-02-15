@@ -1,7 +1,7 @@
 package zh.lingvo.data.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import zh.lingvo.data.domain.Language;
+import zh.lingvo.data.model.Language;
 
 import java.util.Optional;
 
