@@ -1,16 +1,16 @@
-package zh.lingvo.controllers;
+package zh.lingvo.rest.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import zh.lingvo.annotations.ApiController;
+import zh.lingvo.rest.annotations.ApiController;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.services.LanguageService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static zh.lingvo.controllers.ControllersConstants.CONTENT_TYPE;
+import static zh.lingvo.rest.controllers.ControllersConstants.CONTENT_TYPE;
 
 @ApiController
 @RequestMapping(path = "/api/languages", produces = CONTENT_TYPE)

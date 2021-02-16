@@ -1,4 +1,4 @@
-package zh.lingvo.annotations;
+package zh.lingvo.rest.annotations;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ResponseBody;

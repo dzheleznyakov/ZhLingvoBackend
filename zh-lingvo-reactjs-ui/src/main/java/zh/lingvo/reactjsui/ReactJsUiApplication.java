@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @ComponentScan("zh.lingvo")
 @EnableJpaRepositories("zh.lingvo.data")
-@EntityScan("zh.lingvo.data.domain")
+@EntityScan("zh.lingvo.data.model")
 public class ReactJsUiApplication {
     public static void main(String[] args) {
         SpringApplication.run(ReactJsUiApplication.class, args);
