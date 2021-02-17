@@ -1,0 +1,25 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import classes from './Layout.module.scss';
+
+const Layout = props => {
+    const { children } = props;
+
+    return (
+        <div className={classes.Layout}>
+            <div className={classes.Toolbar}>Toolbar</div>
+            <div className={classes.Breadcrumb}>Breadcrumb</div>
+            <div className={classes.Content}>
+                {children}
+            </div>
+            <div className={classes.Footer}>Footer</div>
+        </div>
+    );
+};
+
+Layout.propTypes = {};
+
+Layout.defaultProps = {};
+
+export default Layout;
