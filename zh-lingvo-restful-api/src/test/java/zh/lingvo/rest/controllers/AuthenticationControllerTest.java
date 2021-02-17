@@ -13,6 +13,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.services.UserService;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
@@ -21,6 +24,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +41,7 @@ class AuthenticationControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
-                .setControllerAdvice(new GeneralExceptionControllerAdvice())
+                .setControllerAdvice(new ExceptionsAdvice())
                 .build();
     }
 
@@ -52,11 +56,11 @@ class AuthenticationControllerTest {
         void userExists() throws Exception {
             when(userService.existsByName(USERNAME)).thenReturn(true);
 
-            mockMvc.perform(post(URL)
-                    .content(USERNAME)
-            )
+            String expectedMessage = "User [" + USERNAME + "] already exists";
+            mockMvc.perform(post(URL).content(USERNAME))
                     .andExpect(status().isConflict())
-                    .andExpect(content().string("User [" + USERNAME + "] already exists"));
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", is(equalTo(expectedMessage))));
 
             verify(userService, only()).existsByName(USERNAME);
         }
@@ -71,7 +75,7 @@ class AuthenticationControllerTest {
                     .content(USERNAME)
             )
                     .andExpect(status().isOk())
-                    .andExpect(content().string("1-" + USERNAME));
+                    .andExpect(content().string(USERNAME));
 
             verify(userService, times(1)).existsByName(USERNAME);
             verify(userService, times(1)).save(any(User.class));
@@ -79,14 +83,49 @@ class AuthenticationControllerTest {
         }
 
         @Test
-        @DisplayName("Should return SERVICE UNAVAILABLE 503 is there is an unexpected error")
+        @DisplayName("Should return SERVICE UNAVAILABLE 503 if there is an unexpected error")
         void errorWithUserService() throws Exception {
             when(userService.existsByName(USERNAME)).thenThrow(new RuntimeException("Something went terribly wrong"));
 
             mockMvc.perform(post(URL)
                     .content(USERNAME)
             )
-                    .andExpect(status().isServiceUnavailable());
+                    .andExpect(status().isServiceUnavailable())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", is(notNullValue())));
+
+            verify(userService, only()).existsByName(USERNAME);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test /signin")
+    class SignIn {
+        private static final String URL = "/signin";
+        private static final String USERNAME = "test";
+
+        @Test
+        @DisplayName("Should return NOT FOUND 404 if user is not found")
+        void userNotFound() throws Exception {
+            when(userService.existsByName(USERNAME)).thenReturn(false);
+
+            String expectedMessage = "User [" + USERNAME + "] is not found";
+            mockMvc.perform(post(URL).content(USERNAME))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", is(equalTo(expectedMessage))));
+
+            verify(userService, only()).existsByName(USERNAME);
+        }
+
+        @Test
+        @DisplayName("Should return OK 200 if user is found")
+        void userIsFound() throws Exception {
+            when(userService.existsByName(USERNAME)).thenReturn(true);
+
+            mockMvc.perform(post(URL).content(USERNAME))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(USERNAME));
 
             verify(userService, only()).existsByName(USERNAME);
         }
