@@ -71,9 +71,7 @@ class AuthenticationControllerTest {
             when(userService.existsByName(USERNAME)).thenReturn(false);
             when(userService.save(any(User.class))).thenReturn(User.builder().id(1L).name(USERNAME).build());
 
-            mockMvc.perform(post(URL)
-                    .content(USERNAME)
-            )
+            mockMvc.perform(post(URL).content(USERNAME))
                     .andExpect(status().isOk())
                     .andExpect(content().string(USERNAME));
 
@@ -87,9 +85,7 @@ class AuthenticationControllerTest {
         void errorWithUserService() throws Exception {
             when(userService.existsByName(USERNAME)).thenThrow(new RuntimeException("Something went terribly wrong"));
 
-            mockMvc.perform(post(URL)
-                    .content(USERNAME)
-            )
+            mockMvc.perform(post(URL).content(USERNAME))
                     .andExpect(status().isServiceUnavailable())
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$.message", is(notNullValue())));
