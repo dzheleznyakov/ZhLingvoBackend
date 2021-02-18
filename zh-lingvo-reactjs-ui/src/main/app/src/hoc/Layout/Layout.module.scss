@@ -1,0 +1,39 @@
+@import '../../static/styles/sizes';
+
+.Toolbar {
+    position: fixed;
+    height: $toolbar-height;
+    width: 100vw;
+
+    background-color: aquamarine;
+}
+
+.Footer {
+    position: fixed;
+    bottom: 0;
+    height: $footnote-height;
+    width: 100vw;
+
+    background-color: beige;
+    border: 1px solid black;
+}
+
+.Breadcrumb {
+    position: fixed;
+    top: $toolbar-height;
+    width: 100vw;
+    height: $breadcrumb-height;
+
+    background-color: burlywood;
+    border: 1px solid black;
+}
+
+$content-top-margin: calc(#{$toolbar-height} + #{$breadcrumb-height});
+.Content {
+    position: fixed;
+    top: $content-top-margin;
+    width: 100vw;
+    height: calc(100vh - #{$content-top-margin} - #{$footnote-height});
+
+    border: 1px solid red;
+}
