@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import classes from './Layout.module.scss';
 
-import Toolbar from '../../components/Toolbar/Toolbar';
+import Toolbar from '../../components/Control/Toolbar/Toolbar';
 
 const Layout = props => {
     const { children } = props;

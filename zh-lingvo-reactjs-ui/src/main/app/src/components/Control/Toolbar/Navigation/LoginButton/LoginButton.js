@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import classes from './LoginButton.module.scss';
 
-import * as actions from '../../../store/actions';
+import * as actions from '../../../../../store/actions';
 
 const LoginButton = () => {
     const dispatch = useDispatch();

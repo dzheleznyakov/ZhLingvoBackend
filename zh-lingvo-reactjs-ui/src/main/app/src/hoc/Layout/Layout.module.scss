@@ -1,9 +1,32 @@
 @import '../../static/styles/sizes';
 
 .Toolbar {
+    display: none;
+}
+
+@media (min-width: $mobile-max-width) {
+    .Toolbar {
+        display: block;
+        position: fixed;
+        height: $toolbar-height;
+        width: 100vw;
+    }
+}
+
+.Breadcrumb {
     position: fixed;
-    height: $toolbar-height;
+    top: 0;
     width: 100vw;
+    height: $breadcrumb-height;
+
+    background-color: burlywood;
+    border: 1px solid black;
+}
+
+@media (min-width: $mobile-max-width) {
+    .Breadcrumb {
+        top: $toolbar-height;
+    }
 }
 
 .Footer {
@@ -16,22 +39,22 @@
     border: 1px solid black;
 }
 
-.Breadcrumb {
-    position: fixed;
-    top: $toolbar-height;
-    width: 100vw;
-    height: $breadcrumb-height;
-
-    background-color: burlywood;
-    border: 1px solid black;
-}
-
-$content-top-margin: calc(#{$toolbar-height} + #{$breadcrumb-height});
+$content-top-margin: $breadcrumb-height;
 .Content {
     position: fixed;
     top: $content-top-margin;
     width: 100vw;
     height: calc(100vh - #{$content-top-margin} - #{$footnote-height});
+    padding: 8px 16px;
 
     border: 1px solid red;
+}
+
+@media (min-width: $mobile-max-width) {
+    $content-top-margin: calc(#{$toolbar-height} + #{$breadcrumb-height});
+    .Content {
+        top: $content-top-margin;
+        height: calc(100vh - #{$content-top-margin} - #{$footnote-height});
+        padding: 8px 16px;
+    }
 }
