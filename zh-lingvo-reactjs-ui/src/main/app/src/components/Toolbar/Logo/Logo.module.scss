@@ -1,0 +1,10 @@
+@import "../../../static/styles/sizes";
+
+$size: calc(0.8 * #{$toolbar-height});
+$vert-margin: calc(0.1 * #{$toolbar-height});
+.Logo {
+    height: $size;
+    width: $size;
+    background-image: url('../../../media/images/alphabet-book-svgrepo-com.svg');
+    margin: $vert-margin 10px;
+}

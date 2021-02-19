@@ -1,0 +1,8 @@
+@import "../../../static/styles/colours";
+
+.VerticalRule {
+    position: relative;
+    width: 0;
+    height: 70%;
+    border: 1px solid map-get($palette, light);
+}
