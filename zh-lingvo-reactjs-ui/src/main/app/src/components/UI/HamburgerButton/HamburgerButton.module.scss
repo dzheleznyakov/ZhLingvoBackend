@@ -1,0 +1,43 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+.HamburgerButton {
+    background-color: map-get($palette, light);
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: $button-border-radius;
+}
+
+$filling-colour: map-get($palette, dark-primary);
+@mixin one-rule {
+    height: 4px;
+    background-color: $filling-colour;
+    border: 1px solid $filling-colour;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+.Hamburger {
+    position: relative;
+    @include one-rule;
+
+    &::before {
+        content: "";
+        @include one-rule;
+        width: 100%;
+        height: 2px;
+        position: absolute;
+        top: -10px;
+        left: -1px;
+    }
+
+    &::after {
+        content: "";
+        @include one-rule;
+        width: 100%;
+        height: 2px;
+        position: absolute;
+        bottom: -10px;
+        left: -1px;
+    }
+}

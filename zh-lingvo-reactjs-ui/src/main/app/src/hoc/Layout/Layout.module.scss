@@ -40,12 +40,14 @@
 }
 
 $content-top-margin: $breadcrumb-height;
+$content-height: calc(100vh - #{$content-top-margin} - #{$footnote-height});
 .Content {
     position: fixed;
     top: $content-top-margin;
     width: 100vw;
-    height: calc(100vh - #{$content-top-margin} - #{$footnote-height});
+    height: $content-height;
     padding: 8px 16px;
+    padding-left: 130px;
 
     border: 1px solid red;
 }
@@ -54,7 +56,19 @@ $content-top-margin: $breadcrumb-height;
     $content-top-margin: calc(#{$toolbar-height} + #{$breadcrumb-height});
     .Content {
         top: $content-top-margin;
-        height: calc(100vh - #{$content-top-margin} - #{$footnote-height});
-        padding: 8px 16px;
+    }
+}
+
+.Sidebar {
+    position: fixed;
+    top: $content-top-margin;
+    width: 80vw;
+    height: $content-height;
+    background-color: transparent;
+}
+
+@media (min-width: $mobile-max-width) {
+    .Sidebar {
+        display: none;
     }
 }

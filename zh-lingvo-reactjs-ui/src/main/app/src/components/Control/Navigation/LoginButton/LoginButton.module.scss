@@ -1,5 +1,5 @@
-@import "../../../../../static/styles/sizes";
-@import "../../../../../static/styles/colours";
+@import "../../../../static/styles/sizes";
+@import "../../../../static/styles/colours";
 
 .LoginButton button {
     width: 70px;
@@ -7,5 +7,4 @@
     border: 1px solid black;
     border-radius: $button-border-radius;
     background-color: map-get($palette, light);
-    outline: none;
 }

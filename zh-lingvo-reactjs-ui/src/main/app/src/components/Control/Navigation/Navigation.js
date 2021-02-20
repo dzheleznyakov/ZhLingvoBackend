@@ -3,7 +3,7 @@ import React from 'react';
 import Logo from './Logo/Logo';
 import AppChooser from './AppChooser/AppChooser';
 import LoginButton from './LoginButton/LoginButton';
-import VerticalRule from '../../../UI/VerticalRule/VerticalRule';
+import VerticalRule from '../../UI/VerticalRule/VerticalRule';
 
 const Navigation = () => (
     <ul>

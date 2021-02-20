@@ -1,0 +1,46 @@
+.Sidebar {
+    width: 100%;
+    height: 100%;
+
+    ul {
+        background-color: sandybrown;
+        margin: 0;
+        padding: 8px 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        li {
+            list-style: none;
+            height: fit-content;
+            margin: 8px 0 8px 8px;
+
+            &[data-nav-type="vertical-rule"] {
+                display: none;
+            }
+
+            &:last-child {
+                margin-top: auto;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.HamburgerButton {
+    position: absolute;
+    margin-top: calc(0.25 * 1rem);
+    margin-left: calc(0.1 * 1rem);
+    z-index: 50;
+    top: 0;
+    left: 0;
+}
+
+.hidden {
+    transform: translateX(-105%);
+}
+
+.shown {
+    transform: translateX(0);
+    height: 100%;
+}

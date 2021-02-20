@@ -1,0 +1,9 @@
+@import "../../../../static/styles/sizes";
+@import "../../../../static/styles/colours";
+
+.AppChooser {
+    margin: auto 0;
+    padding: 2px;
+    border-radius: $button-border-radius;
+    background-color: map-get($palette, light);
+}
