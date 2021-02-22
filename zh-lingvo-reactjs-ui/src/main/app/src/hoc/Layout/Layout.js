@@ -13,9 +13,9 @@ const Layout = props => {
         <div className={classes.Layout}>
             <div className={classes.Toolbar}><Toolbar /></div>
             <div className={classes.Breadcrumb}>Breadcrumb</div>
-            <div className={classes.Content}>{children}</div>
             <div className={classes.Sidebar}><Sidebar /></div>
             <div className={classes.Footer}>Footer</div>
+            <div className={classes.Content}>{children}</div>
         </div>
     );
 };

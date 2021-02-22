@@ -1,9 +1,13 @@
+@import "../../../static/styles/colours";
+
 .Sidebar {
     width: 100%;
     height: 100%;
 
     ul {
-        background-color: sandybrown;
+        background-color: map-get($palette, lighter-primary);
+        border-top-right-radius: 8px;;
+        border-bottom-right-radius: 8px;;
         margin: 0;
         padding: 8px 0;
         height: 100%;
