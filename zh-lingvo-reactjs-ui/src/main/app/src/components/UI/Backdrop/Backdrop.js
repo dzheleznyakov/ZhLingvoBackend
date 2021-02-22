@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Transition from 'react-transition-group/Transition';
+import Transition, { ENTERING, EXITING } from 'react-transition-group/Transition';
 
 import classes from './Backdrop.module.scss';
 
@@ -9,8 +9,8 @@ const Backdrop = props => {
 
     const getAnimationClass = transitionState => {
         switch (transitionState) {
-            case 'entering': return classes['Backdrop--showing'];
-            case 'exiting': return classes['Backdrop--hiding'];
+            case ENTERING: return classes['Backdrop--showing'];
+            case EXITING: return classes['Backdrop--hiding'];
             default: return '';
         }
     };

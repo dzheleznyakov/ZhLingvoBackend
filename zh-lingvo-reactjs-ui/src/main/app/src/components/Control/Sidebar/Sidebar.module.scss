@@ -40,14 +40,16 @@
     left: 0;
 }
 
-.hidden {
-    transform: translateX(-105%);
+@mixin hidden-and-shown-base($translation) {
+    transform: translateX($translation);
     height: 100%;
     transition: transform 0.5s ease-out;
 }
 
+.hidden {
+    @include hidden-and-shown-base(-105%);
+}
+
 .shown {
-    transform: translateX(0);
-    height: 100%;
-    transition: transform 0.5s ease-out;
+    @include hidden-and-shown-base(0);
 }

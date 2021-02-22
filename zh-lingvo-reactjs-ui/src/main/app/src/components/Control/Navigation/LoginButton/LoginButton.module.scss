@@ -4,7 +4,7 @@
 .LoginButton button {
     width: 70px;
     height: 25px;
-    border: 1px solid black;
+    border: 1px solid map-get($palette, dark-primary);
     border-radius: $button-border-radius;
     background-color: map-get($palette, light);
 }

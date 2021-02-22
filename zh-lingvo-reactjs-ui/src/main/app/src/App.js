@@ -1,10 +1,9 @@
 import React from 'react';
 import { Switch, Redirect, Route, withRouter } from 'react-router-dom';
 
-import './App.css';
+import './App.scss';
 
 import Layout from './hoc/Layout/Layout';
-// import asyncComponent from './hoc/asyncComponent/asyncComponent';
 
 const App = () => {
   return (

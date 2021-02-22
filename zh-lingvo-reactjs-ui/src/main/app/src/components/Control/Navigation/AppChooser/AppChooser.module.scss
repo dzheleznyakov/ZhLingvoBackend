@@ -6,4 +6,5 @@
     padding: 2px;
     border-radius: $button-border-radius;
     background-color: map-get($palette, light);
+    border-color: map-get($palette, dark-primary);
 }

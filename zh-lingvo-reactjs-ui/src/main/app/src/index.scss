@@ -1,5 +1,8 @@
+@import "./static/styles/colours";
+
 * {
   box-sizing: border-box;
+  color: map-get($palette, dark-primary);
   font-family: 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif, -apple-system, BlinkMacSystemFont;
