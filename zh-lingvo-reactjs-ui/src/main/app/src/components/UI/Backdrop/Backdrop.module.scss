@@ -4,5 +4,22 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.Backdrop--showing {
+    animation: backdrop-in 0.3s ease-out;
+}
+
+.Backdrop--hiding {
+    animation: backdrop-in 0.3s ease-out reverse;
+}
+
+.Backdrop--hidden {
+    opacity: 0;
+}
+
+@keyframes backdrop-in {
+    from { opacity: 0 ;}
+    to { opacity: 1; }
 }

@@ -20,7 +20,6 @@ const Sidebar = () => {
             <Backdrop 
                 show={showSidebar}
                 clicked={onBackdropClicked}
-                zIndex={25}
             />    
             <div className={[classes.HamburgerButton, buttonClass].join(' ')}>
                 <HamburgerButton clicked={onButtonClicked} />

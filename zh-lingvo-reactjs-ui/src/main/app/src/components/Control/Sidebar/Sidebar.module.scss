@@ -42,9 +42,12 @@
 
 .hidden {
     transform: translateX(-105%);
+    height: 100%;
+    transition: transform 0.5s ease-out;
 }
 
 .shown {
     transform: translateX(0);
     height: 100%;
+    transition: transform 0.5s ease-out;
 }
