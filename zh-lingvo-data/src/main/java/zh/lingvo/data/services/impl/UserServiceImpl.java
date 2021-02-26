@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByAuthToken(String token) {
+        return userRepository.findByToken(token);
+    }
+
+    @Override
     public User save(User user) {
         try {
             return userRepository.save(user);

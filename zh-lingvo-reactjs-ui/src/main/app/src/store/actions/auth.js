@@ -10,6 +10,10 @@ export const signUp = username => ({
     username,
 });
 
+export const autoSignIn = () => ({
+    type: actionTypes.AUTO_SIGN_IN,
+});
+
 export const setUsername = username => ({
     type: actionTypes.SET_USERNAME,
     username,

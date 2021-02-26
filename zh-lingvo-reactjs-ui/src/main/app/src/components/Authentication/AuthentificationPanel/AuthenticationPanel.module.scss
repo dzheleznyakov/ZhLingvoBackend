@@ -1,0 +1,34 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+.Input {
+    border: 1px solid map-get($palette, dark-primary);
+    border-radius: $button-border-radius;
+    height: 1.5rem;
+    outline: none;
+}
+
+.LoginButton {
+    width: 4.5rem;
+    height: 1.5rem;
+    margin: 8px 0;
+    background-color: map-get($palette, light);
+    border: 1px solid map-get($palette, dark-primary);
+    border-radius: $button-border-radius;
+    cursor: pointer;
+}
+
+.Details {
+    font-size: 0.8rem;
+
+    button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: map-get($palette, url);
+    }
+}
+
+.Error {
+    margin-top: 0.5rem;
+}
