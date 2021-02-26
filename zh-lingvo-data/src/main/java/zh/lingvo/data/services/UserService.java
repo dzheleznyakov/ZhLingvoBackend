@@ -9,6 +9,8 @@ public interface UserService {
 
     boolean existsByName(String name);
 
+    Optional<User> findByAuthToken(String token);
+
     User save(User user);
 
     class FailedToPersist extends RuntimeException {

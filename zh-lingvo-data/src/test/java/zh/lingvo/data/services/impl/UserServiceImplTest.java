@@ -16,16 +16,20 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static zh.hamcrest.ZhMatchers.empty;
+import static zh.hamcrest.ZhMatchers.hasPropertySatisfying;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Test UserServiceImpl")
 class UserServiceImplTest {
     private static final String NAME = "username";
+    private static final String TOKEN = "token";
 
     @Mock
     private UserRepository userRepository;
@@ -38,7 +42,7 @@ class UserServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Test UserService.finByName(name)")
+    @DisplayName("Test UserService.findByName(name)")
     class FindByName {
         @Test
         @DisplayName("Should return empty optional when user is not found")
@@ -87,6 +91,34 @@ class UserServiceImplTest {
 
             assertThat(userExists, is(true));
             verify(userRepository, only()).existsByName(NAME);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test UserService.findByAuthToken(token)")
+    class ExistsByAuthToken {
+        @Test
+        @DisplayName("Should return nothing if there is no user for the token")
+        void doesNotExist() {
+            when(userRepository.findByToken(TOKEN)).thenReturn(Optional.empty());
+
+            Optional<User> userOptional = service.findByAuthToken(TOKEN);
+
+            assertThat(userOptional, is(empty()));
+            verify(userRepository, only()).findByToken(TOKEN);
+        }
+
+        @Test
+        @DisplayName("Should return the user if the user for the token exists")
+        void userExists() {
+            User existingUser = User.builder().id(1L).name(NAME).build();
+            when(userRepository.findByToken(TOKEN)).thenReturn(Optional.of(existingUser));
+
+            Optional<User> userOptional = service.findByAuthToken(TOKEN);
+
+            assertThat(userOptional, is(not(empty())));
+            assertThat(userOptional, hasPropertySatisfying(User::getName, NAME::equals));
+            verify(userRepository, only()).findByToken(TOKEN);
         }
     }
 
