@@ -14,7 +14,7 @@ import zh.lingvo.rest.exceptions.ResourceNotFound;
 public class ExceptionsAdvice {
     @ExceptionHandler(Throwable.class)
     public <EX extends Throwable> ResponseEntity<ErrorCommand> handleConflict(EX exception) {
-        log.error("Error", exception);
+        log.error("Error: [{}]", exception.getMessage(), exception);
         ErrorCommand error = ErrorCommand.builder()
                 .message("Service is currently unavailable. Please try again later")
                 .build();
@@ -25,7 +25,7 @@ public class ExceptionsAdvice {
 
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<ErrorCommand> handleNotFound(ResourceNotFound exception) {
-        log.warn("Error while fetching resource", exception);
+        log.warn("Error while fetching resource: [{}]", exception.getMessage(), exception);
         ErrorCommand error = ErrorCommand.builder()
                 .message(exception.getMessage())
                 .build();
@@ -36,7 +36,7 @@ public class ExceptionsAdvice {
 
     @ExceptionHandler(ResourceAlreadyExists.class)
     public ResponseEntity<ErrorCommand> handleExistingUserException(ResourceAlreadyExists exception) {
-        log.warn("Error while creating a resource", exception);
+        log.warn("Error while creating a resource: [{}]", exception.getMessage(), exception);
         ErrorCommand error = ErrorCommand.builder()
                 .message(exception.getMessage())
                 .build();

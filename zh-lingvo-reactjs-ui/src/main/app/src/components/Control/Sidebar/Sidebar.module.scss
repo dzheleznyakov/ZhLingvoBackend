@@ -32,7 +32,7 @@
 }
 
 .HamburgerButton {
-    position: absolute;
+    position: fixed;
     margin-top: calc(0.25 * 1rem);
     margin-left: calc(0.1 * 1rem);
     z-index: 50;

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import zh.lingvo.data.model.User;
@@ -23,7 +24,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -73,7 +73,9 @@ class AuthenticationControllerTest {
 
             mockMvc.perform(post(URL).content(USERNAME))
                     .andExpect(status().isOk())
-                    .andExpect(content().string(USERNAME));
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.username", is(USERNAME)))
+                    .andExpect(jsonPath("$.token", is(USERNAME)));
 
             verify(userService, times(1)).existsByName(USERNAME);
             verify(userService, times(1)).save(any(User.class));
@@ -106,7 +108,10 @@ class AuthenticationControllerTest {
             when(userService.existsByName(USERNAME)).thenReturn(false);
 
             String expectedMessage = "User [" + USERNAME + "] is not found";
-            mockMvc.perform(post(URL).content(USERNAME))
+            mockMvc.perform(post(URL)
+                    .content("{\"username\":\"" + USERNAME + "\"}")
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$.message", is(equalTo(expectedMessage))));
@@ -119,9 +124,14 @@ class AuthenticationControllerTest {
         void userIsFound() throws Exception {
             when(userService.existsByName(USERNAME)).thenReturn(true);
 
-            mockMvc.perform(post(URL).content(USERNAME))
+            mockMvc.perform(post(URL)
+                    .content("{\"username\":\"" + USERNAME + "\"}")
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
                     .andExpect(status().isOk())
-                    .andExpect(content().string(USERNAME));
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.username", is(USERNAME)))
+                    .andExpect(jsonPath("$.token", is(USERNAME)));
 
             verify(userService, only()).existsByName(USERNAME);
         }

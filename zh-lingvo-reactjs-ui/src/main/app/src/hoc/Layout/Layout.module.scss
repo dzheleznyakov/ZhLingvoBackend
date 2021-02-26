@@ -49,7 +49,6 @@ $content-bottom-margin: $footnote-height;
     width: 100%;
     height: 100%;
     padding: 8px 16px;
-    padding-left: 130px;
 }
 
 @media (min-width: $mobile-max-width) {
@@ -63,9 +62,17 @@ $sidebar-height: calc(85vh - #{$footnote-height});
 .Sidebar {
     position: fixed;
     top: $breadcrumb-height;
+    left: 0;
     bottom: $footnote-height;
     width: 50vw;
     background-color: transparent;
+    transition: left 0s;
+    transition-delay: 0s;
+
+    &--hidden {
+        left: -100vw;
+        transition-delay: 0.5s;
+    }
 }
 
 @media (min-width: $mobile-max-width) {

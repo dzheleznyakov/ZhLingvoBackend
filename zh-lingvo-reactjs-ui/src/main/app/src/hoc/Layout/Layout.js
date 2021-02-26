@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import classes from './Layout.module.scss';
 
@@ -8,20 +8,21 @@ import Sidebar from '../../components/Control/Sidebar/Sidebar';
 
 const Layout = props => {
     const { children } = props;
+    const showSidebar = useSelector(store => store.app.showSidebar);
+
+    const sidebarClasses = [classes.Sidebar];
+    if (!showSidebar)
+        sidebarClasses.push(classes['Sidebar--hidden']);
 
     return (
         <div className={classes.Layout}>
             <div className={classes.Toolbar}><Toolbar /></div>
             <div className={classes.Breadcrumb}>Breadcrumb</div>
-            <div className={classes.Sidebar}><Sidebar /></div>
+            <div className={sidebarClasses.join(' ')}><Sidebar /></div>
             <div className={classes.Footer}>Footer</div>
             <div className={classes.Content}>{children}</div>
         </div>
     );
 };
-
-Layout.propTypes = {};
-
-Layout.defaultProps = {};
 
 export default Layout;
