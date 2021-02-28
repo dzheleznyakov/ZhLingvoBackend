@@ -1,15 +1,25 @@
 import axios from 'axios';
 
-export const headers = {
+const basicHeaders = () => ({
   'Access-Control-Allow-Origin': '*',
+  'Cookies': document.cookie,
+});
+
+const prepareConfig = (customConfig = {}) => {
+  const { headers: customHeaders } = customConfig;
+  const headers = { ...basicHeaders(), ...customHeaders };
+  return { ...customConfig, headers };
 };
 
 export const baseURL = 'http://192.168.1.116:8080';
 
 const instance = axios.create({
     baseURL: `${baseURL}/api`,
-    headers,
-})
+});
   
-export default instance;
+export default {
+  ...instance,
+  get: (url, config) => instance.get(url, prepareConfig(config) ),
+  login: (url, data, config) => instance.post(baseURL + url, data, prepareConfig(config) ),
+};
   

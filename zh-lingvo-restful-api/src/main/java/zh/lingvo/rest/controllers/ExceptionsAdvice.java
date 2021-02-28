@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import zh.lingvo.rest.commands.ErrorCommand;
+import zh.lingvo.rest.exceptions.RequestNotAuthorised;
 import zh.lingvo.rest.exceptions.ResourceAlreadyExists;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 
@@ -14,34 +15,44 @@ import zh.lingvo.rest.exceptions.ResourceNotFound;
 public class ExceptionsAdvice {
     @ExceptionHandler(Throwable.class)
     public <EX extends Throwable> ResponseEntity<ErrorCommand> handleConflict(EX exception) {
-        log.error("Error: [{}]", exception.getMessage(), exception);
-        ErrorCommand error = ErrorCommand.builder()
-                .message("Service is currently unavailable. Please try again later")
-                .build();
-        return ResponseEntity
-                .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(error);
+        return handleException(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "Service is currently unavailable. Please try again later",
+                "Error: [{}]",
+                exception);
     }
 
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<ErrorCommand> handleNotFound(ResourceNotFound exception) {
-        log.warn("Error while fetching resource: [{}]", exception.getMessage(), exception);
-        ErrorCommand error = ErrorCommand.builder()
-                .message(exception.getMessage())
-                .build();
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(error);
+        return handleException(HttpStatus.NOT_FOUND, "Error while fetching resource: [{}]", exception);
     }
 
     @ExceptionHandler(ResourceAlreadyExists.class)
     public ResponseEntity<ErrorCommand> handleExistingUserException(ResourceAlreadyExists exception) {
-        log.warn("Error while creating a resource: [{}]", exception.getMessage(), exception);
+        return handleException(HttpStatus.CONFLICT, "Error while creating a resource: [{}]", exception);
+    }
+
+    @ExceptionHandler(RequestNotAuthorised.class)
+    public ResponseEntity<ErrorCommand> handleRequestNotAuthorised(RequestNotAuthorised exception) {
+        return handleException(HttpStatus.UNAUTHORIZED, "Not authorised request: [{}]", exception);
+    }
+
+    private <E extends Throwable> ResponseEntity<ErrorCommand> handleException(HttpStatus httpStatus, String messageTemplate, E exception) {
+        return handleException(httpStatus, exception.getMessage(), messageTemplate, exception);
+    }
+
+    private <E extends Throwable> ResponseEntity<ErrorCommand> handleException(
+            HttpStatus httpStatus,
+            String errorCommandMessage,
+            String messageTemplate,
+            E exception
+    ) {
+        log.warn(messageTemplate, exception.getMessage(), exception);
         ErrorCommand error = ErrorCommand.builder()
-                .message(exception.getMessage())
+                .message(errorCommandMessage)
                 .build();
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(httpStatus)
                 .body(error);
     }
 }

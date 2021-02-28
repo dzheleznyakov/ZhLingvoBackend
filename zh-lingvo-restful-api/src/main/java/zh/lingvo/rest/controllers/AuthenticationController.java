@@ -14,7 +14,6 @@ import zh.lingvo.rest.exceptions.ResourceNotFound;
 
 import java.util.Map;
 
-
 @Slf4j
 @ApiController
 @RequestMapping(produces = ControllersConstants.CONTENT_TYPE)

@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-import axios from 'axios';
+import axios from '../../axios-api';
 
 import { baseURL, headers } from '../../axios-api';
 import * as actions from '../actions';
@@ -11,7 +11,7 @@ export function* logInSaga(path, action) {
     const { username } = action;
 
     try {
-        const response = yield call(axios.post, `${baseURL}${path}`, { username }, { headers });
+        const response = yield call(axios.login, path, { username });
         yield put(actions.setUsername(username));
         
         const { token } = response.data;
@@ -27,7 +27,7 @@ export function* autoSignInSaga() {
         return;
 
     try {
-        const response = yield call(axios.post, `${baseURL}/resign`, { token }, headers);
+        const response = yield call(axios.login, '/resign', { token });
 
         const { username, token: authToken } = response.data;
         yield put(actions.setUsername(username));

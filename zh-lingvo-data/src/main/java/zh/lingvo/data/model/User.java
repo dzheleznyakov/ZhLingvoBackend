@@ -23,6 +23,18 @@ import javax.persistence.Id;
 @EqualsAndHashCode
 @Entity(name = "user")
 public class User implements Persistable {
+    public static final User NULL = new User() {
+        @Override
+        public Long getId() {
+            return -1L;
+        }
+
+        @Override
+        public String getName() {
+            return null;
+        }
+    };
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
