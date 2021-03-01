@@ -1,15 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import classes from './Authentication.module.scss';
 
 import * as actions from '../../store/actions';
-import ErrorContainer from '../UI/Error/ErrorContainer';
 import AuthenticationPanel from './AuthentificationPanel/AuthenticationPanel';
+
+const BREADCRUMBS = ['Log in']
 
 const Authentication = () => {
     const loggedIn = useSelector(store => store.auth.username !== null);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(actions.setBreadcrumbs(BREADCRUMBS));
+    }, [dispatch]);
+
     return loggedIn
         ? <Redirect to="/" />
         : (

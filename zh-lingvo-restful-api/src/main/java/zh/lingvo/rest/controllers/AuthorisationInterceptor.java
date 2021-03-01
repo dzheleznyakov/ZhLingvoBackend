@@ -27,11 +27,19 @@ public class AuthorisationInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
+
         String cookies = request.getHeader("Cookies");
         String authToken = getAuthToken(cookies);
         User user = userService.findByAuthToken(authToken)
-                .orElseThrow(() -> new RequestNotAuthorised(String.format("Auth token [%s] is invalid", authToken)));
+                .orElseThrow(() -> new RequestNotAuthorised("Auth token is invalid"));
         requestContext.setUser(user);
+
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         return true;
     }
 
