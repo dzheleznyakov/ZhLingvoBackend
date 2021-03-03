@@ -56,7 +56,7 @@ public class DictionaryController {
     @GetMapping("/{id}")
     public DictionaryCommand getDictionary(@PathVariable("id") long id) {
         return dictionaryService.findById(id)
-                .filter(dictionary -> Objects.equals(requestContext.getUser(), dictionary.getUser()))
+                .filter(dictionary -> Objects.equals(getUser(), dictionary.getUser()))
                 .map(dictionaryConverter::convert)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Dictionary id=[%d] not found", id)));
     }
@@ -74,7 +74,7 @@ public class DictionaryController {
     public DictionaryCommand updateDictionary(@RequestBody DictionaryCommand command) {
         Optional<Dictionary> byId = dictionaryService.findById(command.getId());
         Dictionary toSave = byId
-                .filter(dictionary -> Objects.equals(requestContext.getUser(), dictionary.getUser()))
+                .filter(dictionary -> Objects.equals(getUser(), dictionary.getUser()))
                 .orElseThrow(() -> new ResourceNotFound(String.format("Dictionary id=[%d] not found", command.getId())));
         Dictionary saved = dictionaryService.save(toSave);
         return dictionaryConverter.convert(saved);

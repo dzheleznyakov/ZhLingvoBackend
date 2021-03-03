@@ -29,7 +29,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
 
     private final User user = User.builder().name("test").build();
     private final Language language = Language.builder().name("Lang").twoLetterCode("Ln").build();
-    private final Dictionary dictionary = Dictionary.builder().language(language).user(user).build();
+    private final Dictionary dictionary = Dictionary.builder().name("Dictionary").language(language).user(user).build();
 
     @BeforeEach
     void setUpDb() {
