@@ -20,7 +20,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @Entity(name = "user")
 public class User implements Persistable {
     public static final User NULL = new User() {

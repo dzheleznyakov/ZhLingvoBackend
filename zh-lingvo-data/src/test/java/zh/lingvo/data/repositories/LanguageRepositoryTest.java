@@ -3,7 +3,6 @@ package zh.lingvo.data.repositories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.test.context.ContextConfiguration;
 import zh.lingvo.data.model.Language;
 

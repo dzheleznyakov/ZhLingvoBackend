@@ -7,5 +7,5 @@ import zh.lingvo.data.model.User;
 import java.util.List;
 
 public interface DictionaryRepository extends CrudRepository<Dictionary, Long> {
-    List<Dictionary> findByUser(User user);
+    List<Dictionary> findAllByUser(User user);
 }

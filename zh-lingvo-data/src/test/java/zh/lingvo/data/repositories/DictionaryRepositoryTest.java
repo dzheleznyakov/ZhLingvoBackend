@@ -43,7 +43,7 @@ class DictionaryRepositoryTest extends BaseRepositoryTest<DictionaryRepository> 
     @Test
     @DisplayName("findByUser() should return an empty list when there are no dictionaries")
     void findByUser_NoDictionaries() {
-        List<Dictionary> dictionaries = repository.findByUser(USER_3);
+        List<Dictionary> dictionaries = repository.findAllByUser(USER_3);
 
         assertThat(dictionaries, is(empty()));
     }
@@ -51,7 +51,7 @@ class DictionaryRepositoryTest extends BaseRepositoryTest<DictionaryRepository> 
     @Test
     @DisplayName("findByUser() should return the list of user's dictionaries")
     void findByUser_ThereAreDictionaries() {
-        List<Dictionary> dictionaries = repository.findByUser(USER_1);
+        List<Dictionary> dictionaries = repository.findAllByUser(USER_1);
 
         ImmutableSet<String> actualDictionaryNames = dictionaries.stream()
                 .map(Dictionary::getName)

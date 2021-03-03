@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import zh.lingvo.rest.commands.ErrorCommand;
+import zh.lingvo.rest.exceptions.RequestMalformed;
 import zh.lingvo.rest.exceptions.RequestNotAuthorised;
 import zh.lingvo.rest.exceptions.ResourceAlreadyExists;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
@@ -35,6 +36,11 @@ public class ExceptionsAdvice {
     @ExceptionHandler(RequestNotAuthorised.class)
     public ResponseEntity<ErrorCommand> handleRequestNotAuthorised(RequestNotAuthorised exception) {
         return handleException(HttpStatus.UNAUTHORIZED, "Not authorised request: [{}]", exception);
+    }
+
+    @ExceptionHandler(RequestMalformed.class)
+    public ResponseEntity<ErrorCommand> handleRequestMalformed(RequestMalformed exception) {
+        return handleException(HttpStatus.BAD_REQUEST, "Malformed request: [{}]", exception);
     }
 
     private <E extends Throwable> ResponseEntity<ErrorCommand> handleException(HttpStatus httpStatus, String messageTemplate, E exception) {
