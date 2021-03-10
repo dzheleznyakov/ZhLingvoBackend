@@ -1,0 +1,12 @@
+@import "../../static/styles/sizes";
+
+.DictionaryListWrapper {
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+@media (min-width: $mobile-max-width) {
+    .DictionaryListWrapper {
+        max-width: 80%;
+    }
+}

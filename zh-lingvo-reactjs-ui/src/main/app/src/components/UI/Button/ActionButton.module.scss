@@ -1,0 +1,16 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+@mixin button($background-color) {
+    background-color: $background-color;
+    border-radius: $button-border-radius;
+    font-weight: bold;
+}
+
+.Confirm {
+    @include button(map-get($palette, lighter-primary));
+}
+
+.Cancel {
+    @include button(map-get($palette, lighter-secondary));
+}

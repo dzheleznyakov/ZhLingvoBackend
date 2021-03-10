@@ -58,6 +58,7 @@ $content-bottom-margin: $footnote-height;
 $sidebar-height: calc(85vh - #{$footnote-height});
 .Sidebar {
     position: fixed;
+    z-index: 100;
     top: $breadcrumb-height;
     left: 0;
     bottom: $footnote-height;

@@ -1,35 +1,49 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Switch, Redirect, Route, withRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
+import Spinner from './components/UI/Spinner/Spinner';
 import * as actions from './store/actions';
-import asyncComponent from './hoc/asyncComponent/asyncComponent';
+import { loggedInSelector } from './store/selectors';
+import * as paths from './static/constants/paths';
 
-const asyncAuthentication = asyncComponent(() => {
+const Authentication = React.lazy(() => {
   return import('./components/Authentication/Authentication');
 });
 
-const asyncHome = asyncComponent(() => import('./components/Home/Home'));
+const Home = lazy(() => {
+  return import('./components/Home/Home');
+});
+
+const Dictionaries = lazy(() => {
+  return import('./components/DictionaryMain/DictionaryMain');
+});
 
 const App = () => {
   const dispath = useDispatch();
+  const loggedIn = useSelector(loggedInSelector);
 
   useEffect(() => {
     dispath(actions.autoSignIn());
   }, [dispath]);
 
-  const routes = (
+  const routes = loggedIn ? (
     <Switch>
-      <Route exact path="/auth" component={asyncAuthentication} />
-      <Route exact path="/" component={asyncHome} />
-      <Redirect to="/" />
+      <Route exact path={paths.DICTIONARIES_ROOT} render={() => <Dictionaries />} />
+      <Redirect to={paths.DICTIONARIES_ROOT} />
+    </Switch>
+  ) : (
+    <Switch>
+      <Route exact path={paths.AUTH} render={() => <Authentication />} />
+      <Route exact path={paths.ROOT} render={() => <Home />} />
+      <Redirect to={paths.ROOT} />
     </Switch>
   );
 
   return (
     <Layout>
-      {routes}
+      <Suspense fallback={<Spinner />}>{routes}</Suspense>
     </Layout>
   );
 };

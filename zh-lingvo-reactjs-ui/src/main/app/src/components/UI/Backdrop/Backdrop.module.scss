@@ -5,18 +5,23 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-}
-
-.Backdrop--showing {
-    animation: backdrop-in 0.3s ease-out;
-}
-
-.Backdrop--hiding {
-    animation: backdrop-in 0.3s ease-out reverse;
-}
-
-.Backdrop--hidden {
     opacity: 0;
+
+    &--showing {
+        animation: backdrop-in 0.3s ease-out;
+    }
+
+    &--hiding {
+        animation: backdrop-in 0.3s ease-out reverse;
+    }
+
+    &--hidden {
+        opacity: 0;
+    }
+
+    &--shown {
+        opacity: 1;
+    }
 }
 
 @keyframes backdrop-in {

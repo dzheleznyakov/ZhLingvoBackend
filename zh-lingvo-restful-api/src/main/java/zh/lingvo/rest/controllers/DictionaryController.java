@@ -66,6 +66,7 @@ public class DictionaryController {
         checkNull(command::getId,
                 () -> new RequestMalformed(String.format("Dictionary create request should not contain id; found [%d]", command.getId())));
         Dictionary toSave = dictionaryCommandConverter.convert(command);
+        toSave.setUser(getUser());
         Dictionary saved = dictionaryService.save(toSave);
         return dictionaryConverter.convert(saved);
     }

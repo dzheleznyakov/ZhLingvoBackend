@@ -1,0 +1,24 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+.Dialog {
+    background-color: map-get($palette, light);
+    margin: 0 auto;
+    padding: 16px;
+    border: 1px solid map-get($palette, dark-primary);
+    border-radius: $button-border-radius;
+}
+
+.ButtonBox {
+    display: flex;
+    align-items: flex-start;
+    margin: 8px 0;
+
+    button {
+        margin: 0 8px;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+    }
+}

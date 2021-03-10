@@ -1,7 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import axios from '../../axios-api';
 
-import { baseURL, headers } from '../../axios-api';
 import * as actions from '../actions';
 import { setCookie, getCookie, deleteCookie } from '../../utils/cookies';
 

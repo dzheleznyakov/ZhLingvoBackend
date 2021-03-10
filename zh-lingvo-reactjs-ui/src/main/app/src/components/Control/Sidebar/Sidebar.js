@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import classes from './Sidebar.module.scss';
 
 import Navigation from '../Navigation/Navigation';
-import HamburgerButton from '../../UI/HamburgerButton/HamburgerButton';
+import { IconButton, iconButtonTypes, buttonSizes } from '../../UI';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 import * as actions from '../../../store/actions';
 
@@ -26,7 +26,7 @@ const Sidebar = () => {
                 clicked={hideSidebar}
             />    
             <div className={[classes.HamburgerButton, buttonClass].join(' ')}>
-                <HamburgerButton clicked={onButtonClicked} />
+                <IconButton type={iconButtonTypes.OPTIONS} size={buttonSizes.LARGE} clicked={onButtonClicked} />
             </div>
             <div className={navigationClass}>
                 <Navigation

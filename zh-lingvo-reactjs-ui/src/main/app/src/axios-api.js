@@ -20,6 +20,8 @@ const instance = axios.create({
 export default {
   ...instance,
   get: (url, config) => instance.get(url, prepareConfig(config) ),
-  login: (url, data, config) => instance.post(baseURL + url, data, prepareConfig(config) ),
+  post: (url, data, config) => instance.post(url, data, prepareConfig(config)),
+  put: (url, data, config) => instance.put(url, data, prepareConfig(config)),
+  login: (url, data, config) => instance.post(baseURL + url, data, prepareConfig(config)),
 };
   

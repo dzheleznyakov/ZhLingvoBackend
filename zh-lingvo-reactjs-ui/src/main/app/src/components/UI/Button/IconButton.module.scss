@@ -1,0 +1,69 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+$button-background-color: map-get($palette, light);
+.Button {
+    padding: 4px;
+    position: relative;
+    background-color: $button-background-color;
+    border: 1px solid map-get($palette, dark-primary);
+    border-radius: $button-border-radius;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.98);
+        box-shadow: inset 2px 1px 1px 0px rgba(0, 0, 0, 0.24);
+        background-color: darken($button-background-color, 0.5);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+}
+
+.Disabled {
+    .IconCover {
+        background-color: rgba(map-get($palette, light), $alpha: 0.7);
+    }
+}
+
+.Large {
+    width: 40px;
+    height: 40px;
+}
+
+.Medium {
+    width: 30px;
+    height: 30px;
+}
+
+@mixin icon($path) {
+    width: 100%;
+    height: 100%;
+    background: url($path);
+    background-repeat: no-repeat;
+}
+
+.Options {
+    @include icon("../../../media/images/options-lines-svgrepo-com.svg");
+}
+
+.New {
+    @include icon("../../../media/images/add-svgrepo-com.svg");
+}
+
+.Edit {
+    @include icon("../../../media/images/edit-svgrepo-com.svg");
+}
+
+.Delete {
+    @include icon("../../../media/images/garbage-svgrepo-com.svg");
+}
+
+.IconCover {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}

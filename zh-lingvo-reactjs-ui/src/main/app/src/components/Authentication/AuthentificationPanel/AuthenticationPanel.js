@@ -5,6 +5,7 @@ import classes from './AuthenticationPanel.module.scss';
 
 import * as actions from '../../../store/actions';
 import ErrorContainer from '../../UI/Error/ErrorContainer';
+import { useAutofocus } from '../../../hooks';
 
 const AuthentificationPanel = () => {
     const [loginAsExistingUser, setLoginAsExistingUser] = useState(true);
@@ -12,10 +13,7 @@ const AuthentificationPanel = () => {
     const usernameInputRef = useRef();
     const error = useSelector(store => store.auth.error);
 
-    useEffect(() => {
-        if (usernameInputRef)
-            usernameInputRef.current.focus();
-    }, [usernameInputRef]);
+    useAutofocus(usernameInputRef);
 
     const loginButtonText = loginAsExistingUser ? 'Sign In' : 'Sign Up';
     const loginButtonHandler = loginAsExistingUser

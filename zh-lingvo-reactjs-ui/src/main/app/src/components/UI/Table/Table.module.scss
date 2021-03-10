@@ -1,0 +1,32 @@
+@import "../../../static/styles/colours";
+
+.Table {
+    border: 1px solid darken(map-get($palette, light), 5%);
+    border-radius: 4px;
+    padding: 0;
+    border-spacing: 0;
+
+    thead {
+        tr {
+            background-color: map-get($palette, light);
+        }
+
+        th {
+            padding: 8px;
+        }
+    }
+
+    tbody {
+        tr {
+            height: 2rem;
+
+            &:nth-child(even) {
+                background-color: map-get($palette, light);
+            }
+        }
+
+        td {
+            padding: 4px 8px;
+        }
+    }
+}

@@ -6,13 +6,14 @@ import { useHistory } from 'react-router-dom';
 import classes from './LoginButton.module.scss';
 
 import * as actions from '../../../../store/actions';
+import { loggedInSelector } from '../../../../store/selectors';
 
 const LoginButton = props => {
     const { postClicked } = props;
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const loggedIn = useSelector(state => state.auth.username !== null);
+    const loggedIn = useSelector(loggedInSelector);
     const buttonText = loggedIn ? 'Log out' : 'Log in';
 
     const loginAction = loggedIn
