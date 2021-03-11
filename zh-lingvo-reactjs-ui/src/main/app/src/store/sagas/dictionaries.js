@@ -24,6 +24,15 @@ export function* createDictionarySaga(action) {
     const { name, language } = action;
     const newDictionary = { name, language}
 
-    const { data: savedDictionary } = yield call(axios.post, '/dictionaries', newDictionary);
-    yield put(actions.createDictionarySuccess(savedDictionary));
+    yield call(axios.post, '/dictionaries', newDictionary);
+    yield put(actions.fetchAllDictionaries());
+}
+
+export function* deleteDictionarySaga(action) {
+    const { id } = action;
+    if (id < 0)
+        return;
+
+    const { data: deletedId } = yield call(axios.delete, `/dictionaries/${id}`);
+    yield put(actions.fetchAllDictionaries());
 }

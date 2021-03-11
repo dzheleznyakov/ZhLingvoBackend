@@ -22,6 +22,7 @@ export default {
   get: (url, config) => instance.get(url, prepareConfig(config) ),
   post: (url, data, config) => instance.post(url, data, prepareConfig(config)),
   put: (url, data, config) => instance.put(url, data, prepareConfig(config)),
+  delete: (url, config) => instance.delete(url, prepareConfig(config) ),
   login: (url, data, config) => instance.post(baseURL + url, data, prepareConfig(config)),
 };
   

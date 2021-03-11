@@ -1,5 +1,6 @@
 package zh.lingvo.data.services.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.User;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryRepository dictionaryRepository;
 
@@ -35,5 +37,16 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public boolean existsById(Long id) {
         return id != null && dictionaryRepository.existsById(id);
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        try {
+            dictionaryRepository.deleteById(id);
+            return true;
+        } catch (Throwable t) {
+            log.error("Error while deleting dictionary [{}]", id, t);
+            return false;
+        }
     }
 }

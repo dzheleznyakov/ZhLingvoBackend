@@ -24,6 +24,16 @@ export const createDictionarySuccess = dictionary => ({
     dictionary,
 });
 
+export const deleteDictionary = id => ({
+    type: actionTypes.DELETE_DICTIONARY,
+    id,
+});
+
+export const deleteDictionarySuccess = id => ({
+    type: actionTypes.DELETE_DICTIONARY_SUCCESS,
+    id,
+});
+
 export const selectDictionary = selectedDictionaryIndex => ({
     type: actionTypes.SELECT_DICTIONARY,
     selectedDictionaryIndex,

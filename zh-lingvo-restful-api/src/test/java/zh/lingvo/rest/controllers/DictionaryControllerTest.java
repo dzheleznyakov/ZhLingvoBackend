@@ -37,6 +37,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -49,7 +50,7 @@ class DictionaryControllerTest {
     private static final Gson GSON = new Gson();
 
     private static final String URL = "/api/dictionaries";
-    private static final String URL_GET_TEMPLATE = URL + "/{id}";
+    private static final String URL_DICTIONARY_TEMPLATE = URL + "/{id}";
 
     private static final User USER = User.builder().id(1L).name("Test").build();
     private static final User OTHER_USER = User.builder().id(2L).name("Other user").build();
@@ -137,7 +138,7 @@ class DictionaryControllerTest {
             long dicId = 1L;
             when(dictionaryService.findById(dicId)).thenReturn(Optional.empty());
 
-            mockMvc.perform(get(URL_GET_TEMPLATE, dicId))
+            mockMvc.perform(get(URL_DICTIONARY_TEMPLATE, dicId))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$.message", matchesRegex(".*not found.*")));
@@ -152,7 +153,7 @@ class DictionaryControllerTest {
             Dictionary foundDictionary = Dictionary.builder().id(dicId).user(OTHER_USER).build();
             when(dictionaryService.findById(dicId)).thenReturn(Optional.of(foundDictionary));
 
-            mockMvc.perform(get(URL_GET_TEMPLATE, dicId))
+            mockMvc.perform(get(URL_DICTIONARY_TEMPLATE, dicId))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$.message", matchesRegex(".*not found.*")));
@@ -167,7 +168,7 @@ class DictionaryControllerTest {
             Dictionary foundDictionary = Dictionary.builder().id(dicId).user(USER).build();
             when(dictionaryService.findById(dicId)).thenReturn(Optional.of(foundDictionary));
 
-            mockMvc.perform(get(URL_GET_TEMPLATE, dicId))
+            mockMvc.perform(get(URL_DICTIONARY_TEMPLATE, dicId))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$.id", is((int) dicId)));
@@ -282,6 +283,60 @@ class DictionaryControllerTest {
 
             verify(dictionaryService, times(1)).findById(dicId);
             verify(dictionaryService, times(1)).save(any(Dictionary.class));
+            verifyNoMoreInteractions(dictionaryService);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test DELETE /api/dictionaries/{id}")
+    class DeleteDictionary {
+        @Test
+        @DisplayName("Should return SERVICE UNAVAILABLE 503 if deletion fails")
+        void deletionFails() throws Exception {
+            long dicId = DICTIONARY_1.getId();
+            DICTIONARY_1.setUser(USER);
+            when(dictionaryService.findById(dicId)).thenReturn(Optional.of(DICTIONARY_1));
+            when(dictionaryService.deleteById(dicId)).thenReturn(false);
+
+            mockMvc.perform(delete(URL_DICTIONARY_TEMPLATE, dicId))
+                    .andExpect(status().isServiceUnavailable())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", matchesRegex(".*unavailable.*")));
+
+            verify(dictionaryService, times(1)).findById(dicId);
+            verify(dictionaryService, times(1)).deleteById(dicId);
+            verifyNoMoreInteractions(dictionaryService);
+        }
+
+        @Test
+        @DisplayName("Should return OK 200 without actual deletion if the dictionary exists, but belongs to different user")
+        void unauthorisedUser_Failure() throws Exception {
+            long id = DICTIONARY_1.getId();
+            DICTIONARY_1.setUser(OTHER_USER);
+
+            when(dictionaryService.findById(id)).thenReturn(Optional.of(DICTIONARY_1));
+
+            mockMvc.perform(delete(URL_DICTIONARY_TEMPLATE, id))
+                    .andExpect(status().isOk());
+
+            verify(dictionaryService, only()).findById(id);
+        }
+
+        @Test
+        @DisplayName("Should return OK 200 and delete the dictionary if it exists and belongs to the right user")
+        void deleteDictionary_Success() throws Exception {
+            long id = DICTIONARY_1.getId();
+            DICTIONARY_1.setUser(USER);
+
+            when(dictionaryService.findById(id)).thenReturn(Optional.of(DICTIONARY_1));
+            when(dictionaryService.deleteById(id)).thenReturn(true);
+
+            mockMvc.perform(delete(URL_DICTIONARY_TEMPLATE, id))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is((int) id)));
+
+            verify(dictionaryService, times(1)).findById(id);
+            verify(dictionaryService, times(1)).deleteById(id);
             verifyNoMoreInteractions(dictionaryService);
         }
     }

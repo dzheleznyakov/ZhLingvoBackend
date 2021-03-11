@@ -19,6 +19,7 @@ const getAnimationClass = transitionState => {
 const Modal = props => {
     const { show, close, animationClass, children, nodeRef } = props;
     const className = [classes.Content, animationClass].join(' ');
+
     return (
         <div
             className={classes.ModalWrapper}
@@ -40,7 +41,7 @@ Modal.propTypes = {
 
 const mapPropsToTransitionProps = props => ({
     in: props.show,
-    timeout: 300,
+    timeout: 400,
     mountOnEnter: true,
     unmountOnExit: true,
 });

@@ -15,4 +15,5 @@ export function* dictionariesWatcher() {
     yield takeEvery(actionTypes.FETCH_ALL_DICTIONARIES, dictionariesSagas.fetchAllDictionariesSaga);
     yield takeEvery(actionTypes.FETCH_ALL_LANGUAGES, dictionariesSagas.fetchAllLanguagesSaga);
     yield takeEvery(actionTypes.CREATE_DICTIONARY, dictionariesSagas.createDictionarySaga);
+    yield takeEvery(actionTypes.DELETE_DICTIONARY, dictionariesSagas.deleteDictionarySaga);
 }

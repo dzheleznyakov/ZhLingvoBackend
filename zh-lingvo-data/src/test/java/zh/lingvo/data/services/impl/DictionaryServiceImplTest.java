@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -152,6 +153,33 @@ class DictionaryServiceImplTest {
 
             assertThat(exists, is(true));
             verify(dictionaryRepository, only()).existsById(ID);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test DictionaryServiceImpl.deleteById(id)")
+    class DeleteById {
+        @Test
+        @DisplayName("Should return true if the deletion is successful")
+        void deletionSuccessful() {
+            boolean deleted = service.deleteById(ID);
+
+            assertThat(deleted, is(true));
+
+            verify(dictionaryRepository, only()).deleteById(ID);
+        }
+
+        @Test
+        @DisplayName("Should return false if there is an error with the deletion")
+        void deletionFails() {
+            doThrow(new RuntimeException("Something went terribly wrong"))
+                    .when(dictionaryRepository).deleteById(ID);
+
+            boolean deleted = service.deleteById(ID);
+
+            assertThat(deleted, is(false));
+
+            verify(dictionaryRepository, only()) .deleteById(ID);
         }
     }
 }

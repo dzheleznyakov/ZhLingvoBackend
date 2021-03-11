@@ -1,6 +1,7 @@
 package zh.lingvo.rest.controllers;
 
 import com.google.common.collect.ImmutableList;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import zh.lingvo.rest.annotations.ApiController;
 import zh.lingvo.rest.commands.DictionaryCommand;
 import zh.lingvo.rest.converters.DictionaryCommandToDictionary;
 import zh.lingvo.rest.converters.DictionaryToDictionaryCommand;
+import zh.lingvo.rest.exceptions.InternalError;
 import zh.lingvo.rest.exceptions.RequestMalformed;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
@@ -79,6 +81,20 @@ public class DictionaryController {
                 .orElseThrow(() -> new ResourceNotFound(String.format("Dictionary id=[%d] not found", command.getId())));
         Dictionary saved = dictionaryService.save(toSave);
         return dictionaryConverter.convert(saved);
+    }
+
+    @DeleteMapping("/{id}")
+    public Long deleteDictionary(@PathVariable("id") long id) {
+        boolean successful = dictionaryService.findById(id)
+                .filter(dic -> Objects.equals(getUser(), dic.getUser()))
+                .map(Dictionary::getId)
+                .map(dictionaryService::deleteById)
+                .orElse(true);
+
+        if (!successful)
+            throw new InternalError(String.format("Failed to delete dictionary [%d]", id));
+
+        return id;
     }
 
     private User getUser() {

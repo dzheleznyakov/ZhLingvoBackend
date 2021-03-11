@@ -16,9 +16,8 @@ const DictionariesTable = () => {
     const loading = useSelector(selectors.loadingDictionariesSelector);
     const data = useSelector(selectors.dictionariesTableDataSelector);
 
-    const cellOnClickCb = (v, i) => console.log('(%d):', i, v);
     const COLUMNS_DEF = [
-        { name: 'Name', label: 'name', cellOnClickCb },
+        { name: 'Name', label: 'name' },
         { name: 'Language', label: 'language' },
     ];
 

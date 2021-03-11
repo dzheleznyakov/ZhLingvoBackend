@@ -14,4 +14,6 @@ public interface DictionaryService {
     Dictionary save(Dictionary dictionary);
 
     boolean existsById(Long id);
+
+    boolean deleteById(Long id);
 }

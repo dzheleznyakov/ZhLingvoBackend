@@ -62,8 +62,13 @@ const DictionaryForm = props => {
     );
 };
 
-DictionaryForm.propTypes = {};
+DictionaryForm.propTypes = {
+    title: PropTypes.string,
+    close: PropTypes.func.isRequired,
+};
 
-DictionaryForm.defaultProps = {};
+DictionaryForm.defaultProps = {
+    title: '',
+};
 
 export default DictionaryForm;

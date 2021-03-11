@@ -15,6 +15,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorisationInterceptor)
-                .addPathPatterns("/api/*");
+                .addPathPatterns("/api/*", "/api/dictionaries/{id}");
     }
 }
