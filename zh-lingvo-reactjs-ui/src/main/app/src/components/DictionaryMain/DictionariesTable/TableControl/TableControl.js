@@ -5,6 +5,7 @@ import classes from './TableControl.module.scss';
 
 import { Modal, IconButton, iconButtonTypes } from '../../../UI';
 import NewDictionaryDialog from '../../NewDictionaryDialog/NewDictionaryDialog';
+import EditDictionaryDialog from '../../EditDictionaryDialog/EditDictionaryDialog';
 import DeleteDictionaryDialog from '../../DeleteDictionaryDialog/DeleteDictionaryDialog';
 import { dictionarySelectedSelector, currentDictionarySelector } from '../../../../store/selectors';
 
@@ -31,6 +32,10 @@ const TableControl = () => {
         setModalType(MODAL_TYPES.NEW);
     };
 
+    const onEdit = () => {
+        setModalType(MODAL_TYPES.EDIT);
+    };
+
     const onDelete = () => {
         setModalType(MODAL_TYPES.DELETE);
     };
@@ -45,6 +50,12 @@ const TableControl = () => {
             />
         ); 
         break;
+        case MODAL_TYPES.EDIT: panel = (
+            <EditDictionaryDialog
+                close={closeModal}
+            />
+        );
+        break;
         case MODAL_TYPES.DELETE: panel = (
             <DeleteDictionaryDialog 
                 close={closeModal}  
@@ -57,7 +68,7 @@ const TableControl = () => {
     return (
         <div className={classes.ButtonBox}>
             <IconButton type={iconButtonTypes.NEW} clicked={onNew} />
-            <IconButton type={iconButtonTypes.EDIT} disabled={!dictionaryIsSelected} clicked={() => {}} />
+            <IconButton type={iconButtonTypes.EDIT} disabled={!dictionaryIsSelected} clicked={onEdit} />
             <IconButton type={iconButtonTypes.DELETE} disabled={!dictionaryIsSelected} clicked={onDelete} />
             <Modal show={showModal} close={closeModal}>{panel}</Modal>
         </div>

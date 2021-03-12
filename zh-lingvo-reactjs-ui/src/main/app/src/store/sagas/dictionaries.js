@@ -2,7 +2,7 @@ import { call, put, select } from 'redux-saga/effects';
 
 import axios from '../../axios-api';
 import * as actions from '../actions';
-import { languagesSelector } from '../selectors';
+import * as selectors from '../selectors';
 
 export function* fetchAllDictionariesSaga() {
     yield put(actions.fetchAllDictionariesStart());
@@ -12,7 +12,7 @@ export function* fetchAllDictionariesSaga() {
 }
 
 export function* fetchAllLanguagesSaga() {
-    const languages = yield select(languagesSelector);
+    const languages = yield select(selectors.languagesSelector);
     if (languages.length)
         return;
 
@@ -25,6 +25,14 @@ export function* createDictionarySaga(action) {
     const newDictionary = { name, language}
 
     yield call(axios.post, '/dictionaries', newDictionary);
+    yield put(actions.fetchAllDictionaries());
+}
+
+export function* updateDictionarySaga(action) {
+    const { name } = action;
+    const currentDictionary = yield select(selectors.currentDictionarySelector);
+    const updatedDictionary = { ...currentDictionary, name };
+    yield call(axios.put, '/dictionaries', updatedDictionary);
     yield put(actions.fetchAllDictionaries());
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
-import { Modal } from '../../UI';
 import DictionaryForm from '../DictionaryForm/DictionaryForm';
 import * as actions from '../../../store/actions';
 import { useActionOnMount } from '../../../hooks';
@@ -9,8 +9,11 @@ import { useActionOnMount } from '../../../hooks';
 const NewDictionaryDialog = props => {
     const { close } = props;
     useActionOnMount(actions.fetchAllLanguages());
+    const dispatch = useDispatch();
+    
+    const confirmed = (name, language) => dispatch(actions.createDictionary(name, language));
 
-    return <DictionaryForm title="New Dictionary" close={close} />;
+    return <DictionaryForm title="New Dictionary" close={close} confirmed={confirmed} />;
 };
 
 NewDictionaryDialog.propTypes = {

@@ -22,7 +22,6 @@ import zh.lingvo.rest.util.RequestContext;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static zh.lingvo.util.Preconditions.checkNull;
 
@@ -75,10 +74,10 @@ public class DictionaryController {
 
     @PutMapping
     public DictionaryCommand updateDictionary(@RequestBody DictionaryCommand command) {
-        Optional<Dictionary> byId = dictionaryService.findById(command.getId());
-        Dictionary toSave = byId
+        Dictionary toSave = dictionaryService.findById(command.getId())
                 .filter(dictionary -> Objects.equals(getUser(), dictionary.getUser()))
                 .orElseThrow(() -> new ResourceNotFound(String.format("Dictionary id=[%d] not found", command.getId())));
+        toSave.setName(command.getName());
         Dictionary saved = dictionaryService.save(toSave);
         return dictionaryConverter.convert(saved);
     }

@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import classes from './DictionaryForm.module.scss';
 
 import { Dialog, Error } from '../../UI';
 import * as actions from '../../../store/actions';
+import { dictionaryType } from '../propTypes';
 import { languagesSelector } from '../../../store/selectors';
 import { useActionOnMount, useAutofocus } from '../../../hooks';
 
 const DictionaryForm = props => {
-    const { close, title } = props;
+    const { close, confirmed, title, dictionary, disabledInputs } = props;
     const [errorMessages, setErrorMessages] = useState({});
-    const dispatch = useDispatch();
     const languages = useSelector(languagesSelector);
     const nameInputRef = useRef();
     const languageSelectRef = useRef();
@@ -35,24 +35,37 @@ const DictionaryForm = props => {
 
     useAutofocus(nameInputRef);
 
-    const confirmed = () => {
+    const onConfirm = () => {
         const name = nameInputRef.current.value;
         const language = languages.find(lang => lang.name === languageSelectRef.current.value);
-        dispatch(actions.createDictionary(name, language))
+        confirmed(name, language)
     };
+
+    const defaultName = dictionary.name;
+    const defaultLanguage = dictionary.language.name;
 
     const errors = Object.keys(errorMessages)
         .map(key => <Error key={`err-${key}`} message={errorMessages[key]} />)
 
     return (
-        <Dialog close={close} confirmed={confirmed}>
+        <Dialog close={close} confirmed={onConfirm}>
             <fieldset className={classes.DictionaryForm}>
                 <legend>{title}</legend>
                 <div className={classes.FieldsWrapper}>
                     <label>Dictionary name:</label>
-                    <input type="text" ref={nameInputRef} onKeyUp={verify} />
+                    <input 
+                        type="text" 
+                        ref={nameInputRef} 
+                        onKeyUp={verify} 
+                        defaultValue={defaultName}
+                        disabled={disabledInputs.name}
+                    />
                     <label>Language:</label>
-                    <select ref={languageSelectRef}>
+                    <select 
+                        ref={languageSelectRef} 
+                        defaultValue={defaultLanguage}
+                        disabled={disabledInputs.language}
+                    >
                         {languages.map(lang => <option key={lang.code}>{lang.name}</option>)}
                     </select>
                 </div>
@@ -65,10 +78,15 @@ const DictionaryForm = props => {
 DictionaryForm.propTypes = {
     title: PropTypes.string,
     close: PropTypes.func.isRequired,
+    confirmed: PropTypes.func.isRequired,
+    dictionary: dictionaryType,
+    disabledInputs: PropTypes.objectOf(PropTypes.bool),
 };
 
 DictionaryForm.defaultProps = {
     title: '',
+    dictionary: { language: {} },
+    disabledInputs: {},
 };
 
 export default DictionaryForm;

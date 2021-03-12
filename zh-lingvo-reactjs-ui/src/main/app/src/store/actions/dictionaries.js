@@ -19,18 +19,13 @@ export const createDictionary = (name, language) => ({
     language,
 });
 
-export const createDictionarySuccess = dictionary => ({
-    type: actionTypes.CREATE_DICTIONARY_SUCCESS,
-    dictionary,
+export const updateDictionary = (name) => ({
+    type: actionTypes.UPDATE_DICTIONARY,
+    name,
 });
 
 export const deleteDictionary = id => ({
     type: actionTypes.DELETE_DICTIONARY,
-    id,
-});
-
-export const deleteDictionarySuccess = id => ({
-    type: actionTypes.DELETE_DICTIONARY_SUCCESS,
     id,
 });
 

@@ -23,25 +23,6 @@ const fetchAllDictionariesSuccess = (state, action) => ({
     dictionaries: action.dictionaries,
 });
 
-const createDictionarySuccess = (state, action) => ({
-    ...state,
-    dictionaries: state.dictionaries.concat(action.dictionary),
-});
-
-const deleteDictionarySuccess = (state, action) => {
-    const updatedDictionaries = [].concat(state.dictionaries);
-    const index = updatedDictionaries.findIndex(dic => dic.id === action.id);
-    if (index < 0)
-        return state;
-
-    updatedDictionaries.splice(index, 1);
-
-    return {
-        ...state,
-        dictionaries: updatedDictionaries,
-    }
-};
-
 const selectDictionary = (state, action) => ({
     ...state,
     selectedDictionaryIndex: action.selectedDictionaryIndex,
@@ -54,20 +35,15 @@ const unselectDictionary = (state, action) => {
     return { ...state, selectedDictionaryIndex: updatedSelectedDictionaryIndex };
 };
 
-const fetchAllLanguages = (state, action) => {
-    console.log(state);
-    console.log(action);
-    return {
-        ...state,
-        languages: action.languages || [],
-}};
+const fetchAllLanguages = (state, action) => ({
+    ...state,
+    languages: action.languages || [],
+});
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_ALL_DICTIONARIES_START: return fetchAllDictionariesStart(state, action);
         case actionTypes.FETCH_ALL_DICTIONARIES_SUCCESS: return fetchAllDictionariesSuccess(state, action);
-        case actionTypes.CREATE_DICTIONARY_SUCCESS: return createDictionarySuccess(state, action);
-        case actionTypes.DELETE_DICTIONARY_SUCCESS: return deleteDictionarySuccess(state, action);
         case actionTypes.SELECT_DICTIONARY: return selectDictionary(state, action);
         case actionTypes.UNSELECT_DICTIONARY: return unselectDictionary(state, action);
         case actionTypes.FETCH_ALL_LANGUAGES_SUCCESS: return fetchAllLanguages(state, action);
