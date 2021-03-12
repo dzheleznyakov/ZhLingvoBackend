@@ -11,7 +11,6 @@ const DeleteDictionaryDialog = props => {
     const { close, dictionary } = props;
     const dispatch = useDispatch();
 
-    console.log(actions.deleteDictionary(dictionary && dictionary.id || -1));
     const onConfirm = () => dispatch(actions.deleteDictionary(dictionary && dictionary.id || -1));
     const text = dictionary && dictionary.language
         ? `Are you sure you want to delete ${dictionary.language.name} dicitonary "${dictionary.name}"`

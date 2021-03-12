@@ -1,13 +1,24 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
 .DictionaryForm {
     width: fit-content;
+    border: 2px solid map-get($palette, dark-primary);
+    border-radius: $panel-border-radius;
 
     label {
-        font-weight: bold;
+        font-weight: 550;
     }
 
     input, select {
         min-width: 150px;
         height: 1.5rem;
+    }
+
+    legend {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: bold;
     }
 }
 

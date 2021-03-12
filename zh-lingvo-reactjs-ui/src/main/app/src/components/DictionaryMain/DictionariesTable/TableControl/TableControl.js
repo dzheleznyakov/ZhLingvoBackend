@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import classes from './TableControl.module.scss';
@@ -66,12 +66,14 @@ const TableControl = () => {
     }
 
     return (
-        <div className={classes.ButtonBox}>
-            <IconButton type={iconButtonTypes.NEW} clicked={onNew} />
-            <IconButton type={iconButtonTypes.EDIT} disabled={!dictionaryIsSelected} clicked={onEdit} />
-            <IconButton type={iconButtonTypes.DELETE} disabled={!dictionaryIsSelected} clicked={onDelete} />
+        <Fragment>
+            <div className={classes.ButtonBox}>
+                <IconButton type={iconButtonTypes.NEW} clicked={onNew} />
+                <IconButton type={iconButtonTypes.EDIT} disabled={!dictionaryIsSelected} clicked={onEdit} />
+                <IconButton type={iconButtonTypes.DELETE} disabled={!dictionaryIsSelected} clicked={onDelete} />
+            </div>
             <Modal show={showModal} close={closeModal}>{panel}</Modal>
-        </div>
+        </Fragment>
     );
 };
 
