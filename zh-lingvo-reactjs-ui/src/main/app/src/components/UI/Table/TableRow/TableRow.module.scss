@@ -1,0 +1,5 @@
+@import "../../../../static/styles/colours";
+
+tr.Focused {
+    outline: 1px auto map-get($palette, url);
+}

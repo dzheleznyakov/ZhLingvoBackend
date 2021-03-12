@@ -4,6 +4,8 @@ export const loadingDictionariesSelector = state => state.dictionaries.loading;
 
 export const dictionariesSelector = state => state.dictionaries.dictionaries;
 
+export const selectedDictionaryIndexSelector = state => state.dictionaries.selectedDictionaryIndex;
+
 export const dictionarySelectedSelector = state => state.dictionaries.selectedDictionaryIndex >= 0;
 
 export const currentDictionarySelector = state => {

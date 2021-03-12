@@ -1,18 +1,36 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import classes from './TableRow.module.scss';
+
 import * as types from '../types';
+import { selectedDictionaryIndexSelector } from '../../../../store/selectors';
+import { useSelector } from 'react-redux';
 
 const TableRow = ({ rowData, rowIndex, rowOnClickCb, children, selectable }) => {
+    const [cssClasses, setCssClasses] = useState([]);
+    const selectedIndex = useSelector(selectedDictionaryIndexSelector);
     const ref = useRef();
     const trRef = selectable ? ref : null;
+
+    useEffect(() => {
+        if (selectable && selectedIndex === rowIndex)
+            setCssClasses(cssClasses.concat([classes.Focused]))
+        else {
+            const updatedCssClasses = [].concat(cssClasses);
+            const index = updatedCssClasses.indexOf(classes.Focused);
+            updatedCssClasses.splice(index, 1);
+            setCssClasses(updatedCssClasses);
+        }
+    }, [selectedIndex, trRef]);
+
     const onClick = () => {
-        trRef && trRef.current.focus();
         rowOnClickCb && rowOnClickCb(rowData, rowIndex);
     };
+
     return (
         <tr 
-            tabIndex={rowIndex}
+            className={cssClasses.join(' ')}
             onClick={onClick}
             ref={trRef}
         >
