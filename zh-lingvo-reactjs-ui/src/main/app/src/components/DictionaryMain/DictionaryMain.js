@@ -10,8 +10,10 @@ const DictionaryList = () => {
 
     return (
         <div className={classes.DictionaryListWrapper}>
-            <h1>Welcome, {username}!</h1>
-            <h2>Your dictionaries:</h2>
+            <div className={classes.Titles}>
+                <h1>Welcome, {username}!</h1>
+                <h2>Your dictionaries:</h2>
+            </div>
             <DictionariesTable />
         </div>
     );
