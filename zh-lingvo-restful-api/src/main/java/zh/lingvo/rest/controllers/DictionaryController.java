@@ -21,7 +21,6 @@ import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
 
 import java.util.List;
-import java.util.Objects;
 
 import static zh.lingvo.util.Preconditions.checkNull;
 
@@ -48,7 +47,7 @@ public class DictionaryController {
     @GetMapping
     public List<DictionaryCommand> getAllDictionaries() {
         return dictionaryService
-                .findAllByUser(getUser())
+                .findAll(getUser())
                 .stream()
                 .map(dictionaryConverter::convert)
                 .collect(ImmutableList.toImmutableList());
@@ -56,8 +55,7 @@ public class DictionaryController {
 
     @GetMapping("/{id}")
     public DictionaryCommand getDictionary(@PathVariable("id") long id) {
-        return dictionaryService.findById(id)
-                .filter(dictionary -> Objects.equals(getUser(), dictionary.getUser()))
+        return dictionaryService.findById(id, getUser())
                 .map(dictionaryConverter::convert)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Dictionary id=[%d] not found", id)));
     }
@@ -67,25 +65,26 @@ public class DictionaryController {
         checkNull(command::getId,
                 () -> new RequestMalformed(String.format("Dictionary create request should not contain id; found [%d]", command.getId())));
         Dictionary toSave = dictionaryCommandConverter.convert(command);
+        //noinspection ConstantConditions
         toSave.setUser(getUser());
-        Dictionary saved = dictionaryService.save(toSave);
-        return dictionaryConverter.convert(saved);
+        return dictionaryService.save(toSave, getUser())
+                .map(dictionaryConverter::convert)
+                .orElse(new DictionaryCommand());
     }
 
     @PutMapping
     public DictionaryCommand updateDictionary(@RequestBody DictionaryCommand command) {
-        Dictionary toSave = dictionaryService.findById(command.getId())
-                .filter(dictionary -> Objects.equals(getUser(), dictionary.getUser()))
+        Dictionary toSave = dictionaryService.findById(command.getId(), getUser())
                 .orElseThrow(() -> new ResourceNotFound(String.format("Dictionary id=[%d] not found", command.getId())));
         toSave.setName(command.getName());
-        Dictionary saved = dictionaryService.save(toSave);
-        return dictionaryConverter.convert(saved);
+        return dictionaryService.save(toSave, getUser())
+                .map(dictionaryConverter::convert)
+                .orElse(new DictionaryCommand());
     }
 
     @DeleteMapping("/{id}")
     public Long deleteDictionary(@PathVariable("id") long id) {
-        boolean successful = dictionaryService.findById(id)
-                .filter(dic -> Objects.equals(getUser(), dic.getUser()))
+        boolean successful = dictionaryService.findById(id, getUser())
                 .map(Dictionary::getId)
                 .map(dictionaryService::deleteById)
                 .orElse(true);

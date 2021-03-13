@@ -21,11 +21,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static zh.hamcrest.ZhMatchers.empty;
 import static zh.hamcrest.ZhMatchers.hasPropertySatisfying;
@@ -47,34 +48,36 @@ class DictionaryServiceImplTest {
     @Nested
     @DisplayName("Test DictionaryServiceImpl.findById(id)")
     class FindById {
-        @Test
-        @DisplayName("Should return nothing if no dictionary is found by the id")
-        void foundNothing_ReturnNothing() {
-            when(dictionaryRepository.findById(ID)).thenReturn(Optional.empty());
+        private User user = User.builder().id(1L).build();
 
-            Optional<Dictionary> dictionaryOptional = service.findById(ID);
+        @Test
+        @DisplayName("Should return nothing if no dictionary is found by the id for the user")
+        void foundNothing_ReturnNothing() {
+            when(dictionaryRepository.findByIdAndUser(ID, user)).thenReturn(Optional.empty());
+
+            Optional<Dictionary> dictionaryOptional = service.findById(ID, user);
 
             assertThat(dictionaryOptional, is(empty()));
-            verify(dictionaryRepository, only()).findById(ID);
+            verify(dictionaryRepository, only()).findByIdAndUser(ID, user);
         }
 
         @Test
         @DisplayName("Should return a dictionary if it exists")
         void returnFoundDictionary() {
             Dictionary dictionary = Dictionary.builder().id(ID).build();
-            when(dictionaryRepository.findById(ID)).thenReturn(Optional.of(dictionary));
+            when(dictionaryRepository.findByIdAndUser(ID, user)).thenReturn(Optional.of(dictionary));
 
-            Optional<Dictionary> dictionaryOptional = service.findById(ID);
+            Optional<Dictionary> dictionaryOptional = service.findById(ID, user);
 
             assertThat(dictionaryOptional, is(not(empty())));
             assertThat(dictionaryOptional, hasPropertySatisfying(Dictionary::getId, ID::equals));
-            verify(dictionaryRepository, only()).findById(ID);
+            verify(dictionaryRepository, only()).findByIdAndUser(ID, user);
         }
     }
 
     @Nested
-    @DisplayName("Test DictionaryServiceImpl.findAllByUser(user)")
-    class FindAllByUser {
+    @DisplayName("Test DictionaryServiceImpl.findAll(user)")
+    class FindAll {
         private final User user = User.builder().id(1L).build();
 
         @Test
@@ -82,7 +85,7 @@ class DictionaryServiceImplTest {
         void userHasNoDictionaries_ReturnEmptyList() {
             when(dictionaryRepository.findAllByUser(user)).thenReturn(ImmutableList.of());
 
-            List<Dictionary> dictionaries = service.findAllByUser(user);
+            List<Dictionary> dictionaries = service.findAll(user);
 
             assertThat(dictionaries, is(Matchers.empty()));
             verify(dictionaryRepository, only()).findAllByUser(user);
@@ -95,7 +98,7 @@ class DictionaryServiceImplTest {
             Dictionary dictionary2 = Dictionary.builder().id(2L).build();
             when(dictionaryRepository.findAllByUser(user)).thenReturn(ImmutableList.of(dictionary1, dictionary2));
 
-            List<Dictionary> dictionaries = service.findAllByUser(user);
+            List<Dictionary> dictionaries = service.findAll(user);
 
             assertThat(dictionaries, is(equalTo(ImmutableList.of(dictionary1, dictionary2))));
             verify(dictionaryRepository, only()).findAllByUser(user);
@@ -105,18 +108,59 @@ class DictionaryServiceImplTest {
     @Nested
     @DisplayName("Test DictionaryServiceImpl.save(dictionary)")
     class Save {
-        @Test
-        @DisplayName("Should save given dictionary")
-        void save() {
-            Dictionary dicToSave = new Dictionary();
+        private final User user = User.builder().id(1L).build();
 
-            Dictionary persistedDic = Dictionary.builder().id(ID).build();
+        @Test
+        @DisplayName("Existing dictionary: should save given dictionary if it belongs to the user")
+        void save_Success() {
+            String name = "test";
+            Dictionary dicToSave = Dictionary.builder().id(ID).name(name).build();
+
+            Dictionary persistedDic = Dictionary.builder().id(ID).name(name).build();
+            when(dictionaryRepository.existsByIdAndUser(ID, user)).thenReturn(true);
             when(dictionaryRepository.save(dicToSave)).thenReturn(persistedDic);
 
-            Dictionary savedDic = service.save(dicToSave);
+            Optional<Dictionary> savedDicOptional = service.save(dicToSave, user);
 
-            assertThat(savedDic, is(notNullValue()));
+            assertThat(savedDicOptional, is(not(empty())));
+            Dictionary savedDic = savedDicOptional.get();
             assertThat(savedDic.getId(), is(ID));
+            assertThat(savedDic.getName(), is(name));
+            verify(dictionaryRepository, times(1)).existsByIdAndUser(ID, user);
+            verify(dictionaryRepository, times(1)).save(dicToSave);
+            verifyNoMoreInteractions(dictionaryRepository);
+        }
+
+        @Test
+        @DisplayName("Existing dictionary: should not save if it belongs to a different user")
+        void save_DifferentUser() {
+            String name = "test";
+            Dictionary dicToSave = Dictionary.builder().id(ID).name(name).build();
+
+            when(dictionaryRepository.existsByIdAndUser(ID, user)).thenReturn(false);
+
+            Optional<Dictionary> savedDicOptional = service.save(dicToSave, user);
+
+            assertThat(savedDicOptional, is(empty()));
+            verify(dictionaryRepository, only()).existsByIdAndUser(ID, user);
+        }
+
+        @Test
+        @DisplayName("New dictionary: should save it under this user")
+        void save_NewDictionary() {
+            String name = "test";
+            Dictionary dicToSave = Dictionary.builder().name(name).build();
+
+            Dictionary persistedDic = Dictionary.builder().id(ID).name(name).user(user).build();
+            when(dictionaryRepository.save(dicToSave)).thenAnswer(invocation -> {
+                Dictionary passedDic = invocation.getArgument(0);
+                assertThat(passedDic.getUser(), is(user));
+                return persistedDic;
+            });
+
+            Optional<Dictionary> savedDicOptional = service.save(dicToSave, user);
+
+            assertThat(savedDicOptional, is(not(empty())));
             verify(dictionaryRepository, only()).save(dicToSave);
         }
     }

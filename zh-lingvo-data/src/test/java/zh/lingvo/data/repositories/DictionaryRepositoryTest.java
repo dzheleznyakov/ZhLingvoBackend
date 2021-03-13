@@ -6,16 +6,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+import zh.hamcrest.ZhMatchers;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 @ContextConfiguration(classes = DictionaryRepository.class)
 class DictionaryRepositoryTest extends BaseRepositoryTest<DictionaryRepository> {
@@ -41,16 +44,16 @@ class DictionaryRepositoryTest extends BaseRepositoryTest<DictionaryRepository> 
     }
 
     @Test
-    @DisplayName("findByUser() should return an empty list when there are no dictionaries")
-    void findByUser_NoDictionaries() {
+    @DisplayName("findAllByUser() should return an empty list when there are no dictionaries")
+    void findAllByUser_NoDictionaries() {
         List<Dictionary> dictionaries = repository.findAllByUser(USER_3);
 
         assertThat(dictionaries, is(empty()));
     }
 
     @Test
-    @DisplayName("findByUser() should return the list of user's dictionaries")
-    void findByUser_ThereAreDictionaries() {
+    @DisplayName("findAllByUser() should return the list of user's dictionaries")
+    void findAllByUser_ThereAreDictionaries() {
         List<Dictionary> dictionaries = repository.findAllByUser(USER_1);
 
         ImmutableSet<String> actualDictionaryNames = dictionaries.stream()
@@ -60,5 +63,54 @@ class DictionaryRepositoryTest extends BaseRepositoryTest<DictionaryRepository> 
                 .map(Dictionary::getName)
                 .collect(ImmutableSet.toImmutableSet());
         assertThat(actualDictionaryNames, is(equalTo(expectedDictionaryNames)));
+    }
+
+    @Test
+    @DisplayName("findByIdAndUser() should return the dictionary if it exists and belongs to the user")
+    void findByIdAndUser_DictionaryExists_BelongsToUser() {
+        Optional<Dictionary> dictionaryOptional = repository.findByIdAndUser(DICTIONARY_1_1.getId(), USER_1);
+
+        assertThat(dictionaryOptional, is(not(ZhMatchers.empty())));
+        assertThat(dictionaryOptional.get(), is(equalTo(DICTIONARY_1_1)));
+    }
+
+    @Test
+    @DisplayName("findByIdAndUser() should return nothing if the dictionary exists, but belongs to a different user")
+    void findByIdAndUser_DictionaryExists_BelongsToDifferentUser() {
+        Optional<Dictionary> dictionaryOptional = repository.findByIdAndUser(DICTIONARY_1_1.getId(), USER_2);
+
+        assertThat(dictionaryOptional, is(ZhMatchers.empty()));
+    }
+
+    @Test
+    @DisplayName("findByIdAndUser() should return nothing if the dictionary does not exist")
+    void findByIdAndUser_DictionaryDoesNotExists() {
+        Optional<Dictionary> dictionaryOptional = repository.findByIdAndUser(Long.MAX_VALUE, USER_1);
+
+        assertThat(dictionaryOptional, is(ZhMatchers.empty()));
+    }
+
+    @Test
+    @DisplayName("existsByIdAndUser() should return true if the dictionary exists and belongs to the user")
+    void existsByIdAndUser_DictionaryExists_BelongsToUser() {
+        boolean exists = repository.existsByIdAndUser(DICTIONARY_1_1.getId(), USER_1);
+
+        assertThat(exists, is(true));
+    }
+
+    @Test
+    @DisplayName("existsByIdAndUser() should return false if the dictionary exists, but belongs to a different user")
+    void existsByIdAndUser_DictionaryExists_BelongsToDifferentUser() {
+        boolean exists = repository.existsByIdAndUser(DICTIONARY_1_1.getId(), USER_2);
+
+        assertThat(exists, is(false));
+    }
+
+    @Test
+    @DisplayName("existsByIdAndUser() should return false if the dictionary does not exist")
+    void existsByIdAndUser_DictionaryDoesNotExists() {
+        boolean exists = repository.existsByIdAndUser(Long.MAX_VALUE, USER_1);
+
+        assertThat(exists, is(false));
     }
 }

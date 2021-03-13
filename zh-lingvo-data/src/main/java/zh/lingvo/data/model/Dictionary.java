@@ -25,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "words")
+@ToString(of = "id")
 @EqualsAndHashCode
 @Entity(name = "dictionary")
 public class Dictionary implements Persistable {

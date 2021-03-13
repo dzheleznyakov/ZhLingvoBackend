@@ -20,18 +20,33 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public Optional<Dictionary> findById(Long id) {
-        return dictionaryRepository.findById(id);
+    public Optional<Dictionary> findById(Long id, User user) {
+        return dictionaryRepository.findByIdAndUser(id, user);
     }
 
     @Override
-    public List<Dictionary> findAllByUser(User user) {
+    public List<Dictionary> findAll(User user) {
         return dictionaryRepository.findAllByUser(user);
     }
 
     @Override
-    public Dictionary save(Dictionary dictionary) {
-        return dictionaryRepository.save(dictionary);
+    public Optional<Dictionary> save(Dictionary dictionary, User user) {
+        return isNew(dictionary) ? saveNew(dictionary, user) : saveExisting(dictionary, user);
+    }
+
+    private boolean isNew(Dictionary dictionary) {
+        return dictionary.getId() == null;
+    }
+
+    private Optional<Dictionary> saveNew(Dictionary dictionary, User user) {
+        dictionary.setUser(user);
+        return Optional.of(dictionaryRepository.save(dictionary));
+    }
+
+    private Optional<Dictionary> saveExisting(Dictionary dictionary, User user) {
+        return dictionaryRepository.existsByIdAndUser(dictionary.getId(), user)
+                ? Optional.of(dictionaryRepository.save(dictionary))
+                : Optional.empty();
     }
 
     @Override

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DictionaryService {
-    Optional<Dictionary> findById(Long id);
+    Optional<Dictionary> findById(Long id, User user);
 
-    List<Dictionary> findAllByUser(User user);
+    List<Dictionary> findAll(User user);
 
-    Dictionary save(Dictionary dictionary);
+    Optional<Dictionary> save(Dictionary dictionary, User user);
 
     boolean existsById(Long id);
 
