@@ -23,6 +23,11 @@ const fetchAllDictionariesSuccess = (state, action) => ({
     dictionaries: action.dictionaries,
 });
 
+const fetchAllDictionariesFailure = (state) => ({
+    ...state,
+    loading: false
+});
+
 const selectDictionary = (state, action) => ({
     ...state,
     selectedDictionaryIndex: action.selectedDictionaryIndex,
@@ -44,6 +49,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_ALL_DICTIONARIES_START: return fetchAllDictionariesStart(state, action);
         case actionTypes.FETCH_ALL_DICTIONARIES_SUCCESS: return fetchAllDictionariesSuccess(state, action);
+        case actionTypes.FETCH_ALL_DICTIONARIES_FAILURE: return fetchAllDictionariesFailure(state, action);
         case actionTypes.SELECT_DICTIONARY: return selectDictionary(state, action);
         case actionTypes.UNSELECT_DICTIONARY: return unselectDictionary(state, action);
         case actionTypes.FETCH_ALL_LANGUAGES_SUCCESS: return fetchAllLanguages(state, action);

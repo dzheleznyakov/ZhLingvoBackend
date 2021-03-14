@@ -6,6 +6,7 @@ import classes from './Layout.module.scss';
 import Toolbar from '../../components/Control/Toolbar/Toolbar';
 import Sidebar from '../../components/Control/Sidebar/Sidebar';
 import Breadcrumbs from '../../components/Control/Breadcrumbs/Breadcrumbs';
+import NotificationsContainer from '../../components/NotificationsContainer/NotificationsContainer';
 
 const Layout = props => {
     const { children } = props;
@@ -22,6 +23,7 @@ const Layout = props => {
             <div className={sidebarClasses.join(' ')}><Sidebar /></div>
             <div className={classes.Footer}>Footer</div>
             <div className={classes.Content}>{children}</div>
+            <NotificationsContainer />
         </div>
     );
 };
