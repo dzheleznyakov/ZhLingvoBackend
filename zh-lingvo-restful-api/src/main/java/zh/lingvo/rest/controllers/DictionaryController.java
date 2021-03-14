@@ -1,5 +1,6 @@
 package zh.lingvo.rest.controllers;
 
+import com.google.common.collect.ImmutableList;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import zh.lingvo.rest.converters.DictionaryCommandToDictionary;
 import zh.lingvo.rest.converters.DictionaryToDictionaryCommand;
 import zh.lingvo.rest.exceptions.InternalError;
 import zh.lingvo.rest.exceptions.RequestMalformed;
-import zh.lingvo.rest.exceptions.RequestNotAuthorised;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
 
@@ -46,12 +46,11 @@ public class DictionaryController {
 
     @GetMapping
     public List<DictionaryCommand> getAllDictionaries() {
-        throw new RequestNotAuthorised("Auth token is invalid");
-//        return dictionaryService
-//                .findAll(getUser())
-//                .stream()
-//                .map(dictionaryConverter::convert)
-//                .collect(ImmutableList.toImmutableList());
+        return dictionaryService
+                .findAll(getUser())
+                .stream()
+                .map(dictionaryConverter::convert)
+                .collect(ImmutableList.toImmutableList());
     }
 
     @GetMapping("/{id}")
