@@ -3,3 +3,7 @@
 tr.Focused {
     outline: 1px auto map-get($palette, url);
 }
+
+tr.Empty td {
+    text-align: center;
+}
