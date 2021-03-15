@@ -19,8 +19,8 @@ export const setUsername = username => ({
     username,
 })
 
-export const clearUsername = () => ({
-    type: actionTypes.CLEAR_USERNAME,
+export const signOut = () => ({
+    type: actionTypes.SIGN_OUT,
 });
 
 export const setLoginError = error => ({

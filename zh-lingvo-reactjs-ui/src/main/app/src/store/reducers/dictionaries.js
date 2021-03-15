@@ -1,8 +1,8 @@
 import * as actionTypes from '../actionTypes/dictionaries';
+import { SIGN_OUT } from '../actionTypes/auth';
 
 const initialState = {
     loading: false,
-    error: null,
     languages: [],
     dictionaries: [],
     selectedDictionaryIndex: -1,
@@ -11,7 +11,6 @@ const initialState = {
 const fetchAllDictionariesStart = state => ({
     ...state,
     loading: true,
-    error: null,
     dictionaries: [],
     selectedDictionaryIndex: -1,
 });
@@ -19,7 +18,6 @@ const fetchAllDictionariesStart = state => ({
 const fetchAllDictionariesSuccess = (state, action) => ({
     ...state,
     loading: false,
-    error: null,
     dictionaries: action.dictionaries,
 });
 
@@ -45,6 +43,12 @@ const fetchAllLanguages = (state, action) => ({
     languages: action.languages || [],
 });
 
+const signOut = state => ({
+    ...state,
+    dictionaries: [],
+    selectedDictionaryIndex: -1,
+});
+
 export default (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_ALL_DICTIONARIES_START: return fetchAllDictionariesStart(state, action);
@@ -53,6 +57,7 @@ export default (state = initialState, action) => {
         case actionTypes.SELECT_DICTIONARY: return selectDictionary(state, action);
         case actionTypes.UNSELECT_DICTIONARY: return unselectDictionary(state, action);
         case actionTypes.FETCH_ALL_LANGUAGES_SUCCESS: return fetchAllLanguages(state, action);
+        case SIGN_OUT: return signOut(state);
         default: return state;
     }
 };

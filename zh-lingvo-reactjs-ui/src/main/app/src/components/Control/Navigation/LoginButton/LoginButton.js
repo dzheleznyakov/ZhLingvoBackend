@@ -17,7 +17,7 @@ const LoginButton = props => {
     const buttonText = loggedIn ? 'Log out' : 'Log in';
 
     const loginAction = loggedIn
-        ? () => dispatch(actions.clearUsername())
+        ? () => dispatch(actions.signOut())
         : () => history.push('/auth');
 
     const onButtonClicked = () => {

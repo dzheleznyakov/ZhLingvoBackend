@@ -32,11 +32,11 @@ export function* autoSignInSaga() {
         yield put(actions.setUsername(username));
         yield call(setCookie, AUTH_TOKEN_COOKIE_FIELD, authToken);
     } catch(err) {
-        yield* clearUsernameSaga();
+        yield* signOutSaga();
     }
 }
 
-export function* clearUsernameSaga() {
+export function* signOutSaga() {
     yield put(actions.setUsername(null));
     yield call(deleteCookie, AUTH_TOKEN_COOKIE_FIELD);
 }
