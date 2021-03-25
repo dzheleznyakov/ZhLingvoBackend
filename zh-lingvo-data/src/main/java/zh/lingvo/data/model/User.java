@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import zh.lingvo.data.fixtures.Persistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,6 +41,6 @@ public class User implements Persistable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 }

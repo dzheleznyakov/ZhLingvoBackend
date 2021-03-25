@@ -1,10 +1,14 @@
 package zh.lingvo.data.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import zh.lingvo.data.fixtures.Persistable;
+import zh.lingvo.data.fixtures.SubWordPart;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,11 +21,13 @@ import javax.persistence.ManyToOne;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @ToString(exclude = "meaning")
 @EqualsAndHashCode
 @Entity(name = "translation")
-public class Translation implements Persistable {
+public class Translation implements Persistable, SubWordPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

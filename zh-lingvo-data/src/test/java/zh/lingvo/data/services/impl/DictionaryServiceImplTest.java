@@ -25,7 +25,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static zh.hamcrest.ZhMatchers.empty;
@@ -40,6 +39,8 @@ class DictionaryServiceImplTest {
     private DictionaryService service;
     private static final Long ID = 42L;
 
+    private final User user = User.builder().id(1L).build();
+
     @BeforeEach
     void setUp() {
         service = new DictionaryServiceImpl(dictionaryRepository);
@@ -48,8 +49,6 @@ class DictionaryServiceImplTest {
     @Nested
     @DisplayName("Test DictionaryServiceImpl.findById(id)")
     class FindById {
-        private User user = User.builder().id(1L).build();
-
         @Test
         @DisplayName("Should return nothing if no dictionary is found by the id for the user")
         void foundNothing_ReturnNothing() {
@@ -78,8 +77,6 @@ class DictionaryServiceImplTest {
     @Nested
     @DisplayName("Test DictionaryServiceImpl.findAll(user)")
     class FindAll {
-        private final User user = User.builder().id(1L).build();
-
         @Test
         @DisplayName("Should return empty list if the user does not have dictionaries")
         void userHasNoDictionaries_ReturnEmptyList() {
@@ -108,8 +105,6 @@ class DictionaryServiceImplTest {
     @Nested
     @DisplayName("Test DictionaryServiceImpl.save(dictionary)")
     class Save {
-        private final User user = User.builder().id(1L).build();
-
         @Test
         @DisplayName("Existing dictionary: should save given dictionary if it belongs to the user")
         void save_Success() {
@@ -166,64 +161,52 @@ class DictionaryServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Test DictionaryServiceImpl.existsById(id)")
-    class ExistsById {
-        @Test
-        @DisplayName("Should return false if null is passed in")
-        void returnFalseOnNull() {
-            boolean exists = service.existsById(null);
-
-            assertThat(exists, is(false));
-            verifyNoInteractions(dictionaryRepository);
-        }
-
-        @Test
-        @DisplayName("Should return false if the dictionary does not exists")
-        void dictionaryExists() {
-            when(dictionaryRepository.existsById(ID)).thenReturn(false);
-
-            boolean exists = service.existsById(ID);
-
-            assertThat(exists, is(false));
-            verify(dictionaryRepository, only()).existsById(ID);
-        }
-
-        @Test
-        @DisplayName("Should return true if the dictionary exists")
-        void dictionaryDoesNotExist() {
-            when(dictionaryRepository.existsById(ID)).thenReturn(true);
-
-            boolean exists = service.existsById(ID);
-
-            assertThat(exists, is(true));
-            verify(dictionaryRepository, only()).existsById(ID);
-        }
-    }
-
-    @Nested
-    @DisplayName("Test DictionaryServiceImpl.deleteById(id)")
+    @DisplayName("Test DictionaryServiceImpl.deleteById(id, user)")
     class DeleteById {
+        private final Dictionary dictionary = Dictionary.builder()
+                .id(ID)
+                .user(user)
+                .name("Test: delete by id")
+                .build();
+
         @Test
         @DisplayName("Should return true if the deletion is successful")
         void deletionSuccessful() {
-            boolean deleted = service.deleteById(ID);
+            when(dictionaryRepository.findByIdAndUser(ID, user)).thenReturn(Optional.of(dictionary));
+
+            boolean deleted = service.deleteById(ID, user);
 
             assertThat(deleted, is(true));
-
-            verify(dictionaryRepository, only()).deleteById(ID);
+            verify(dictionaryRepository, times(1)).findByIdAndUser(ID, user);
+            verify(dictionaryRepository, times(1)).delete(dictionary);
+            verifyNoMoreInteractions(dictionaryRepository);
         }
 
         @Test
         @DisplayName("Should return false if there is an error with the deletion")
         void deletionFails() {
+            when(dictionaryRepository.findByIdAndUser(ID, user)).thenReturn(Optional.of(dictionary));
             doThrow(new RuntimeException("Something went terribly wrong"))
-                    .when(dictionaryRepository).deleteById(ID);
+                    .when(dictionaryRepository).delete(dictionary);
 
-            boolean deleted = service.deleteById(ID);
+            boolean deleted = service.deleteById(ID, user);
 
             assertThat(deleted, is(false));
+            verify(dictionaryRepository, times(1)).findByIdAndUser(ID, user);
+            verify(dictionaryRepository, times(1)).delete(dictionary);
+            verifyNoMoreInteractions(dictionaryRepository);
+        }
 
-            verify(dictionaryRepository, only()) .deleteById(ID);
+        @Test
+        @DisplayName("Should return true if there the dictionary is not found (it does not exist at all or belongs to a different user)")
+        void dictionaryNotFound() {
+            when(dictionaryRepository.findByIdAndUser(ID, user)).thenReturn(Optional.empty());
+
+            boolean deleted = service.deleteById(ID, user);
+
+            assertThat(deleted, is(true));
+            verify(dictionaryRepository, only()).findByIdAndUser(ID, user);
+            verifyNoMoreInteractions(dictionaryRepository);
         }
     }
 }

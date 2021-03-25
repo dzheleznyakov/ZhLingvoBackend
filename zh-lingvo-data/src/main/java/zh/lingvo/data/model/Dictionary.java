@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import zh.lingvo.data.fixtures.Persistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +26,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(of = "id")
-@EqualsAndHashCode
+@ToString(exclude = "words")
+@EqualsAndHashCode(of = "id")
 @Entity(name = "dictionary")
 public class Dictionary implements Persistable {
     @Id

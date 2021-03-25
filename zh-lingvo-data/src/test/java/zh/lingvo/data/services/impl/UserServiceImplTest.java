@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import zh.lingvo.data.exceptions.FailedToPersist;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.repositories.UserRepository;
-import zh.lingvo.data.services.UserService;
 
 import javax.persistence.PersistenceException;
 import java.util.Optional;
@@ -130,7 +130,7 @@ class UserServiceImplTest {
         void failedToSave() {
             when(userRepository.save(any(User.class))).thenThrow(new PersistenceException("Something went terribly wrong"));
 
-            assertThrows(UserService.FailedToPersist.class, () -> service.save(User.builder().name(NAME).build()));
+            assertThrows(FailedToPersist.class, () -> service.save(User.builder().name(NAME).build()));
         }
 
         @Test

@@ -50,14 +50,11 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return id != null && dictionaryRepository.existsById(id);
-    }
-
-    @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteById(Long id, User user) {
         try {
-            dictionaryRepository.deleteById(id);
+            dictionaryRepository
+                    .findByIdAndUser(id, user)
+                    .ifPresent(dictionaryRepository::delete);
             return true;
         } catch (Throwable t) {
             log.error("Error while deleting dictionary [{}]", id, t);

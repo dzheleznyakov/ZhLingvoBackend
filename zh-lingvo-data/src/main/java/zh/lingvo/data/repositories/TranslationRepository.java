@@ -1,7 +1,11 @@
 package zh.lingvo.data.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import zh.lingvo.data.fixtures.SubWordRepository;
 import zh.lingvo.data.model.Translation;
 
-public interface TranslationRepository extends CrudRepository<Translation, Long> {
+public interface TranslationRepository extends SubWordRepository<Translation, Long> {
+    @Override
+    default Class<Translation> getSubWordClass() {
+        return Translation.class;
+    }
 }

@@ -1,6 +1,7 @@
 package zh.lingvo.data.services.impl;
 
 import org.springframework.stereotype.Service;
+import zh.lingvo.data.exceptions.FailedToPersist;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.repositories.UserRepository;
 import zh.lingvo.data.services.UserService;

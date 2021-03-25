@@ -84,10 +84,7 @@ public class DictionaryController {
 
     @DeleteMapping("/{id}")
     public Long deleteDictionary(@PathVariable("id") long id) {
-        boolean successful = dictionaryService.findById(id, getUser())
-                .map(Dictionary::getId)
-                .map(dictionaryService::deleteById)
-                .orElse(true);
+        boolean successful = dictionaryService.deleteById(id, getUser());
 
         if (!successful)
             throw new InternalError(String.format("Failed to delete dictionary [%d]", id));

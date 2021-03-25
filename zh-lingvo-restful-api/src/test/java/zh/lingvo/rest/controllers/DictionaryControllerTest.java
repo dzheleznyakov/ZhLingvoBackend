@@ -261,17 +261,14 @@ class DictionaryControllerTest {
         void deletionFails() throws Exception {
             long dicId = DICTIONARY_1.getId();
             DICTIONARY_1.setUser(USER);
-            when(dictionaryService.findById(dicId, USER)).thenReturn(Optional.of(DICTIONARY_1));
-            when(dictionaryService.deleteById(dicId)).thenReturn(false);
+            when(dictionaryService.deleteById(dicId, USER)).thenReturn(false);
 
             mockMvc.perform(delete(URL_DICTIONARY_TEMPLATE, dicId))
                     .andExpect(status().isServiceUnavailable())
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$.message", matchesRegex(".*unavailable.*")));
 
-            verify(dictionaryService, times(1)).findById(dicId, USER);
-            verify(dictionaryService, times(1)).deleteById(dicId);
-            verifyNoMoreInteractions(dictionaryService);
+            verify(dictionaryService, only()).deleteById(dicId, USER);
         }
 
         @Test
@@ -280,16 +277,13 @@ class DictionaryControllerTest {
             long id = DICTIONARY_1.getId();
             DICTIONARY_1.setUser(USER);
 
-            when(dictionaryService.findById(id, USER)).thenReturn(Optional.of(DICTIONARY_1));
-            when(dictionaryService.deleteById(id)).thenReturn(true);
+            when(dictionaryService.deleteById(id, USER)).thenReturn(true);
 
             mockMvc.perform(delete(URL_DICTIONARY_TEMPLATE, id))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", is((int) id)));
 
-            verify(dictionaryService, times(1)).findById(id, USER);
-            verify(dictionaryService, times(1)).deleteById(id);
-            verifyNoMoreInteractions(dictionaryService);
+            verify(dictionaryService, only()).deleteById(id, USER);
         }
     }
 }

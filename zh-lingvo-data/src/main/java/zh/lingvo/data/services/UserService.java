@@ -12,10 +12,4 @@ public interface UserService {
     Optional<User> findByAuthToken(String token);
 
     User save(User user);
-
-    class FailedToPersist extends RuntimeException {
-        public FailedToPersist(Throwable cause, String pattern, Object... params) {
-            super(String.format(pattern, params), cause);
-        }
-    }
 }

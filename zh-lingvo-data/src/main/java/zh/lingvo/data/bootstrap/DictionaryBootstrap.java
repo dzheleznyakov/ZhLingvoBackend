@@ -3,6 +3,7 @@ package zh.lingvo.data.bootstrap;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Example;
@@ -27,7 +28,10 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static zh.lingvo.data.constants.Profiles.DEV;
+
 @Component
+@Profile(DEV)
 @Slf4j
 public class DictionaryBootstrap implements CommandLineRunner {
     private final UserRepository userRepository;

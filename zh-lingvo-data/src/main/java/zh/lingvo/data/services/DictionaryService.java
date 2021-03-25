@@ -13,7 +13,5 @@ public interface DictionaryService {
 
     Optional<Dictionary> save(Dictionary dictionary, User user);
 
-    boolean existsById(Long id);
-
-    boolean deleteById(Long id);
+    boolean deleteById(Long id, User user);
 }

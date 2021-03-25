@@ -1,7 +1,11 @@
 package zh.lingvo.data.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import zh.lingvo.data.fixtures.SubWordRepository;
 import zh.lingvo.data.model.SemanticBlock;
 
-public interface SemanticBlockRepository extends CrudRepository<SemanticBlock, Long> {
+public interface SemanticBlockRepository extends SubWordRepository<SemanticBlock, Long> {
+    @Override
+    default Class<SemanticBlock> getSubWordClass() {
+        return SemanticBlock.class;
+    }
 }

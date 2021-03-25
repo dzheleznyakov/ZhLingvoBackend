@@ -1,4 +1,4 @@
-package zh.lingvo.data.model;
+package zh.lingvo.data.fixtures;
 
 public interface Persistable {
 }

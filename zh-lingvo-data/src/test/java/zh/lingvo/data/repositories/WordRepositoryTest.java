@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Language;
+import zh.lingvo.data.model.PartOfSpeech;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 
@@ -20,6 +21,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 @ContextConfiguration(classes = WordRepository.class)
+@DisplayName("Test JPA WordRepository")
 class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     private static final String MAIN_FORM_1 = "word";
     private static final String MAIN_FORM_3 = "draw";
@@ -30,6 +32,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     private final User user = User.builder().name("test").build();
     private final Language language = Language.builder().name("Lang").twoLetterCode("Ln").build();
     private final Dictionary dictionary = Dictionary.builder().name("Dictionary").language(language).user(user).build();
+    private final PartOfSpeech pos = PartOfSpeech.builder().name("VERB").build();
 
     @BeforeEach
     void setUpDb() {
@@ -39,6 +42,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_1));
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_2));
         entityManager.persist(getWord(MAIN_FORM_3, TRANSCRIPTION_3));
+        entityManager.persist(pos);
         entityManager.flush();
     }
 
@@ -68,6 +72,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     }
 
     @Test
+    @DisplayName("Should return all words matching the main form")
     void findAllByMainForm_TwoWords() {
         List<Word> words = repository.findAllByMainForm(MAIN_FORM_1);
 
