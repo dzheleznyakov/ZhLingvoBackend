@@ -15,6 +15,7 @@ import zh.lingvo.data.services.WordService;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.LongFunction;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -32,7 +33,16 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public Optional<Word> findById(@Nonnull Long id, @Nonnull User user) {
-        return wordRepository.findById(id)
+        return findWord(id, user, wordRepository::findById);
+    }
+
+    @Override
+    public Optional<Word> findWithSubWordPartsById(@Nonnull Long wordId, @Nonnull User user) {
+        return findWord(wordId, user, wordRepository::findByIdWithSubWordParts);
+    }
+
+    private Optional<Word> findWord(Long wordId, User user, LongFunction<Optional<Word>> wordGetter) {
+        return wordGetter.apply(wordId)
                 .filter(word -> Objects.equals(user, word.getDictionary().getUser()));
     }
 

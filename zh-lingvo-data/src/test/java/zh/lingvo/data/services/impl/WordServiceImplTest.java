@@ -104,7 +104,39 @@ class WordServiceImplTest {
     @Nested
     @DisplayName("Test WordServiceImpl.findWithSubWordPartsById")
     class FindWithSubWordPartsById {
-        // TODO
+        @Test
+        @DisplayName("Should return nothing if the word does not exist")
+        void wordDoesNotExist() {
+            when(wordRepository.findByIdWithSubWordParts(WORD_ID)).thenReturn(Optional.empty());
+
+            Optional<Word> foundWord = service.findWithSubWordPartsById(WORD_ID, user);
+
+            assertThat(foundWord, is(empty()));
+            verify(wordRepository, only()).findByIdWithSubWordParts(WORD_ID);
+        }
+
+        @Test
+        @DisplayName("Should return nothing if the word is in the dictionary of another user")
+        void differentUser() {
+            dictionary.setUser(anotherUser);
+            when(wordRepository.findByIdWithSubWordParts(WORD_ID)).thenReturn(Optional.of(word));
+
+            Optional<Word> foundWord = service.findWithSubWordPartsById(WORD_ID, user);
+
+            assertThat(foundWord, is(empty()));
+            verify(wordRepository, only()).findByIdWithSubWordParts(WORD_ID);
+        }
+
+        @Test
+        @DisplayName("Should return the word if it is in the dictionary of this user")
+        void thisUser() {
+            when(wordRepository.findByIdWithSubWordParts(WORD_ID)).thenReturn(Optional.of(word));
+
+            Optional<Word> foundWord = service.findWithSubWordPartsById(WORD_ID, user);
+
+            assertThat(foundWord, is(not(empty())));
+            verify(wordRepository, only()).findByIdWithSubWordParts(WORD_ID);
+        }
     }
 
     @Nested
