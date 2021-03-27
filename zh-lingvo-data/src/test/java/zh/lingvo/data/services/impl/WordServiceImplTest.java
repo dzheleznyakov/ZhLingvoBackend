@@ -64,7 +64,7 @@ class WordServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Test WordServiceImpl.getById(id)")
+    @DisplayName("Test WordServiceImpl.findById(id)")
     class FindById {
         @Test
         @DisplayName("Should return nothing if the word is in the dictionary of another user")
@@ -99,6 +99,12 @@ class WordServiceImplTest {
             assertThat(foundWord, is(not(empty())));
             verify(wordRepository, only()).findById(WORD_ID);
         }
+    }
+
+    @Nested
+    @DisplayName("Test WordServiceImpl.findWithSubWordPartsById")
+    class FindWithSubWordPartsById {
+        // TODO
     }
 
     @Nested

@@ -1,7 +1,6 @@
 package zh.lingvo.data.integrationtests;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +27,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestPropertySource(locations = "classpath:/test.properties")
 @Sql("/data-integration-tests.sql")
 @SpringBootTest
-@Disabled
 public class WordServiceIT extends BaseDataIntegrationTest {
     private User user;
     private Dictionary dictionary;

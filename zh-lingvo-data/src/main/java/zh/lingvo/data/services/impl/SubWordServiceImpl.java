@@ -2,9 +2,7 @@ package zh.lingvo.data.services.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.springframework.stereotype.Service;
-import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.fixtures.SubWordPart;
 import zh.lingvo.data.fixtures.SubWordRepository;
 import zh.lingvo.data.model.Example;
@@ -13,12 +11,15 @@ import zh.lingvo.data.model.SemanticBlock;
 import zh.lingvo.data.model.Translation;
 import zh.lingvo.data.services.SubWordService;
 
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -33,9 +34,33 @@ public class SubWordServiceImpl implements SubWordService {
 
     @Override
     public <E extends SubWordPart> Optional<E> save(E entity) {
+        Map<Class<? extends SubWordPart>, LinkedList<SubWordPart>> subWordPartsByClass = getSubWordPartsByClass(entity);
         E savedEntity = getRepository(entity.getClass()).save(entity);
-        saveChildSubWordParts(entity);
+        ImmutableList.of(SemanticBlock.class, Meaning.class, Translation.class, Example.class).forEach(cl -> {
+            SubWordRepository<SubWordPart, ?> repository = getRepository(cl);
+            LinkedList<SubWordPart> subWordParts = subWordPartsByClass.getOrDefault(cl, new LinkedList<>());
+            if (!subWordParts.isEmpty())
+                repository.saveAll(subWordParts);
+        });
         return Optional.of(savedEntity);
+    }
+
+    private <E extends SubWordPart> Map<Class<? extends SubWordPart>, LinkedList<SubWordPart>> getSubWordPartsByClass(E entity) {
+        Map<Class<? extends SubWordPart>, LinkedList<SubWordPart>> map = new HashMap<>();
+        LinkedList<SubWordPart> stack = new LinkedList<>();
+        stack.addFirst(entity);
+        while (!stack.isEmpty())
+            processStackTop(stack, map);
+        return map;
+    }
+
+    private void processStackTop(LinkedList<SubWordPart> stack, Map<Class<? extends SubWordPart>, LinkedList<SubWordPart>> map) {
+        SubWordPart swp = stack.removeLast();
+        getSubWordParts(swp).forEach(part -> {
+            map.putIfAbsent(part.getClass(), new LinkedList<>());
+            map.get(part.getClass()).addFirst(part);
+            stack.add(part);
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -43,26 +68,7 @@ public class SubWordServiceImpl implements SubWordService {
         return (SubWordRepository<E, ?>) subWordRepositories.get(entityClass);
     }
 
-    private <E extends Persistable & SubWordPart> void saveChildSubWordParts(E parent) {
-        LinkedList<SubWordPart> stack = getSubWordParts(parent);
-        Set<SubWordPart> withExtractedParts = new HashSet<>();
-        while (!stack.isEmpty())
-            processStackTop(stack, withExtractedParts);
-    }
-
-    private void processStackTop(LinkedList<SubWordPart> stack, Set<SubWordPart> withExtractedParts) {
-        SubWordPart swp = stack.removeLast();
-        LinkedList<SubWordPart> moreParts = getSubWordParts(swp);
-        if (moreParts.isEmpty() || withExtractedParts.contains(swp))
-            getRepository(swp.getClass()).save(swp);
-        else {
-            stack.addAll(moreParts);
-            stack.addLast(swp);
-            withExtractedParts.add(swp);
-        }
-    }
-
-    private <E extends Persistable & SubWordPart> LinkedList<SubWordPart> getSubWordParts(E parent) {
+    private <E extends SubWordPart> LinkedList<SubWordPart> getSubWordParts(E parent) {
         if (parent instanceof Meaning)
             return getMeaningSubWordParts((Meaning) parent);
         if (parent instanceof SemanticBlock)
@@ -71,23 +77,21 @@ public class SubWordServiceImpl implements SubWordService {
     }
 
     private LinkedList<SubWordPart> getMeaningSubWordParts(Meaning meaning) {
-        LinkedList<SubWordPart> parts = new LinkedList<>();
-        firstNonNull(meaning.getExamples(), ImmutableSet.<Example>of())
-                .stream()
-                .peek(example -> example.setMeaning(meaning))
-                .forEach(parts::addFirst);
-        firstNonNull(meaning.getTranslations(), ImmutableSet.<Translation>of())
-                .stream()
-                .peek(translation -> translation.setMeaning(meaning))
-                .forEach(parts::addFirst);
-        return parts;
+        LinkedList<SubWordPart> examples = getSubWordParts(meaning::getExamples, e -> e.setMeaning(meaning));
+        LinkedList<SubWordPart> translations = getSubWordParts(meaning::getTranslations, t -> t.setMeaning(meaning));
+        examples.addAll(translations);
+        return examples;
     }
 
     private LinkedList<SubWordPart> getSemanticBlockSubWordParts(SemanticBlock block) {
+        return getSubWordParts(block::getMeanings, m -> m.setSemBlock(block));
+    }
+
+    private <CH extends SubWordPart, C extends Collection<CH>> LinkedList<SubWordPart> getSubWordParts(Supplier<C> colSupplier, Consumer<CH> setter) {
         LinkedList<SubWordPart> parts = new LinkedList<>();
-        firstNonNull(block.getMeanings(), ImmutableList.<Meaning>of())
+        firstNonNull(colSupplier.get(), ImmutableList.<CH>of())
                 .stream()
-                .peek(meaning -> meaning.setSemBlock(block))
+                .peek(setter)
                 .forEach(parts::addFirst);
         return parts;
     }

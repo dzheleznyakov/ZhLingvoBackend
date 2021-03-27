@@ -29,7 +29,7 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -116,8 +116,8 @@ class SubWordServiceImplTest {
             Meaning meaningToSave = getMeaning(null, ImmutableSet.of(exampleToSave), ImmutableSet.of(translationToSave));
             Meaning savedMeaning = getMeaning(1L, ImmutableSet.of(savedExample), ImmutableSet.of(savedTranslation));
 
-            when(exampleRepository.save(exampleToSave)).thenReturn(savedExample);
-            when(translationRepository.save(translationToSave)).thenReturn(savedTranslation);
+            when(exampleRepository.saveAll(anyList())).thenReturn(ImmutableList.of(savedExample));
+            when(translationRepository.saveAll(anyList())).thenReturn(ImmutableList.of(savedTranslation));
             when(meaningRepository.save(meaningToSave)).thenReturn(savedMeaning);
 
             Optional<Meaning> meaningOptional = service.save(meaningToSave);
@@ -125,8 +125,8 @@ class SubWordServiceImplTest {
             assertThat(meaningOptional, is(not(empty())));
             assertThat(meaningOptional, hasPropertySatisfying(Function.identity(), savedMeaning::equals));
             verify(meaningRepository, times(1)).save(meaningToSave);
-            verify(exampleRepository, times(1)).save(exampleToSave);
-            verify(translationRepository, times(1)).save(translationToSave);
+            verify(exampleRepository, times(1)).saveAll(anyList());
+            verify(translationRepository, times(1)).saveAll(anyList());
         }
 
         @Test
@@ -140,8 +140,7 @@ class SubWordServiceImplTest {
             Meaning meaningToSave = getMeaning(null, ImmutableSet.of(exampleToSave1, exampleToSave2), null);
             Meaning savedMeaning = getMeaning(null, ImmutableSet.of(savedExample1, savedExample2), null);
 
-            when(exampleRepository.save(exampleToSave1)).thenReturn(savedExample1);
-            when(exampleRepository.save(exampleToSave2)).thenReturn(savedExample2);
+            when(exampleRepository.saveAll(anyList())).thenReturn(ImmutableList.of(savedExample1, savedExample2));
             when(meaningRepository.save(meaningToSave)).thenReturn(savedMeaning);
 
             Optional<Meaning> meaningOptional = service.save(meaningToSave);
@@ -149,8 +148,8 @@ class SubWordServiceImplTest {
             assertThat(meaningOptional, is(not(empty())));
             assertThat(meaningOptional, hasPropertySatisfying(Function.identity(), savedMeaning::equals));
             verify(meaningRepository, times(1)).save(meaningToSave);
-            verify(exampleRepository, times(2)).save(any(Example.class));
-            verify(translationRepository, never()).save(any(Translation.class));
+            verify(exampleRepository, times(1)).saveAll(anyList());
+            verify(translationRepository, never()).saveAll(anyList());
         }
 
         @Test
@@ -165,8 +164,8 @@ class SubWordServiceImplTest {
             SemanticBlock blockToSave = getSemanticBlock(null, ImmutableList.of(meaningToSave1, meaningToSave2));
             SemanticBlock savedBlock = getSemanticBlock(1L, ImmutableList.of(savedMeaning1, savedMeaning2));
 
-            when(meaningRepository.save(meaningToSave1)).thenReturn(savedMeaning1);
-            when(meaningRepository.save(meaningToSave2)).thenReturn(savedMeaning2);
+            when(meaningRepository.saveAll(anyList())).thenReturn(ImmutableList.of(savedMeaning1, savedMeaning2));
+            when(exampleRepository.saveAll(anyList())).thenReturn(ImmutableList.of(savedExample));
             when(semBlockRepository.save(blockToSave)).thenReturn(savedBlock);
 
             Optional<SemanticBlock> blockOptional = service.save(blockToSave);
@@ -174,8 +173,8 @@ class SubWordServiceImplTest {
             assertThat(blockOptional, is(not(empty())));
             assertThat(blockOptional, hasPropertySatisfying(Function.identity(), savedBlock::equals));
             verify(semBlockRepository, times(1)).save(blockToSave);
-            verify(exampleRepository, times(1)).save(exampleToSave);
-            verify(meaningRepository, times(2)).save(any(Meaning.class));
+            verify(exampleRepository, times(1)).saveAll(anyList());
+            verify(meaningRepository, times(1)).saveAll(anyList());
         }
     }
 
