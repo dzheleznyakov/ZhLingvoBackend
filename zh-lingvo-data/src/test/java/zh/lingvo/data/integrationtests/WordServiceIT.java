@@ -17,12 +17,18 @@ import zh.lingvo.data.model.Translation;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static zh.hamcrest.ZhMatchers.empty;
+import static zh.hamcrest.ZhMatchers.hasPropertySatisfying;
 
 @TestPropertySource(locations = "classpath:/test.properties")
 @Sql("/data-integration-tests.sql")
@@ -115,5 +121,42 @@ public class WordServiceIT extends BaseDataIntegrationTest {
 
         assertThat(translation2.getId(), is(notNullValue()));
         assertThat(translation2.getMeaning(), is(equalTo(meaning)));
+    }
+
+    @Test
+    @DisplayName("Should get the word with sub-word parts")
+    void getWordWithSubWordParts() {
+        WordHelper.add(word, sBlock);
+        wordService.create(word, dictionary.getId(), user);
+
+        Optional<Word> foundWord = wordService.findWithSubWordPartsById(word.getId(), user);
+
+        assertThat(foundWord, is(not(empty())));
+        assertThat(foundWord, hasPropertySatisfying(Word::getSemanticBlocks, Objects::nonNull));
+        assertThat(foundWord, hasPropertySatisfying(Word::getSemanticBlocks, hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("Should delete the word with sub-word-parts")
+    void deleteWord() {
+        WordHelper.add(meaning, translation1);
+        WordHelper.add(meaning, example);
+        WordHelper.add(sBlock, meaning);
+        WordHelper.add(word, sBlock);
+        wordService.create(word, dictionary.getId(), user);
+
+        wordService.delete(word, user);
+
+        Word foundWord = findEntity(Word.class, word.getId());
+        SemanticBlock foundSemB = findEntity(SemanticBlock.class, sBlock.getId());
+        Meaning foundMeaning = findEntity(Meaning.class, meaning.getId());
+        Translation foundTranslation = findEntity(Translation.class, translation1.getId());
+        Example foundExample = findEntity(Example.class, example.getId());
+
+        assertThat(foundWord, is(nullValue()));
+        assertThat(foundSemB, is(nullValue()));
+        assertThat(foundMeaning, is(nullValue()));
+        assertThat(foundTranslation, is(nullValue()));
+        assertThat(foundExample, is(nullValue()));
     }
 }

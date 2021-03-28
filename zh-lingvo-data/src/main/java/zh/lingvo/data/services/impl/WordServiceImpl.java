@@ -1,6 +1,10 @@
 package zh.lingvo.data.services.impl;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import zh.lingvo.data.exceptions.FailedToPersist;
 import zh.lingvo.data.model.Dictionary;
@@ -15,15 +19,23 @@ import zh.lingvo.data.services.WordService;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
+@Slf4j
 @Service
 public class WordServiceImpl implements WordService {
     private final WordRepository wordRepository;
     private final DictionaryService dictionaryService;
     private final SubWordService subWordService;
+
+    private final LoadingCache<Long, Long> wordIdsToUserIds = CacheBuilder.newBuilder()
+            .maximumSize(100L)
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .build(new WordToUserIdCacheLoader());
 
     public WordServiceImpl(WordRepository wordRepository, DictionaryService dictionaryService, SubWordService subWordService) {
         this.wordRepository = wordRepository;
@@ -43,7 +55,17 @@ public class WordServiceImpl implements WordService {
 
     private Optional<Word> findWord(Long wordId, User user, LongFunction<Optional<Word>> wordGetter) {
         return wordGetter.apply(wordId)
-                .filter(word -> Objects.equals(user, word.getDictionary().getUser()));
+                .filter(word -> userIsAuthorised(word, user));
+    }
+
+    private boolean userIsAuthorised(Word word, User user) {
+        try {
+            Long userIdForWord = wordIdsToUserIds.get(word.getId());
+            return Objects.equals(userIdForWord, user.getId());
+        } catch (ExecutionException e) {
+            log.error("Error when verifying user [{}] for word [{}]", user, word, e);
+            return false;
+        }
     }
 
     @Override
@@ -64,8 +86,7 @@ public class WordServiceImpl implements WordService {
 
     private boolean shouldNotUpdate(Word word, User user) {
         return word.getId() == null
-                || word.getDictionary() == null
-                || !Objects.equals(word.getDictionary().getUser(), user);
+                || !userIsAuthorised(word, user);
     }
 
     private Optional<Word> save(Word word, Dictionary dictionary) {
@@ -76,5 +97,22 @@ public class WordServiceImpl implements WordService {
                 .peek(sb -> sb.setWord(word))
                 .forEach(subWordService::save);
         return Optional.of(savedWord);
+    }
+
+    @Override
+    public void delete(Word word, User user) {
+        if (userIsAuthorised(word, user))
+            wordRepository.delete(word);
+    }
+
+    private class WordToUserIdCacheLoader extends CacheLoader<Long, Long> {
+        @Override
+        public Long load(@Nonnull Long wordId) {
+            return wordRepository.findByIdWithDictionary(wordId)
+                    .map(Word::getDictionary)
+                    .map(Dictionary::getUser)
+                    .map(User::getId)
+                    .orElse(-1L);
+        }
     }
 }

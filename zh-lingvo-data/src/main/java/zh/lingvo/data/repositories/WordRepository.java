@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface WordRepository extends CrudRepository<Word, Long> {
     List<Word> findAllByMainForm(String mainForm);
 
+    @Query("SELECT w from word w JOIN FETCH w.dictionary WHERE w.id = (:id)")
+    Optional<Word> findByIdWithDictionary(@Param("id") Long id);
+
     @Query("SELECT w from word w JOIN FETCH w.semanticBlocks WHERE w.id = (:id)")
     Optional<Word> findByIdWithSubWordParts(@Param("id") Long id);
 }

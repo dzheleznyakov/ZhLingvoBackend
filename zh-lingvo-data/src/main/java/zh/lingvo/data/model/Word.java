@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import zh.lingvo.data.fixtures.Persistable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,7 +49,7 @@ public class Word implements Persistable {
     @Column(name = "irreg_type")
     private String typeOfIrregularity;
 
-    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("id")
     private List<SemanticBlock> semanticBlocks;
 }

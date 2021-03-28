@@ -10,6 +10,7 @@ import lombok.ToString;
 import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.fixtures.SubWordPart;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,7 +48,7 @@ public class SemanticBlock implements Persistable, SubWordPart {
     @Column(name = "gender")
     private String gender;
 
-    @OneToMany(mappedBy = "semBlock", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "semBlock", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id")
     private List<Meaning> meanings;
 }

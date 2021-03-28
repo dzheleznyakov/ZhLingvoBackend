@@ -1,6 +1,7 @@
 package zh.hamcrest;
 
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Optional;
@@ -15,6 +16,11 @@ class OptionalHasPropertySatisfying<T, V> extends TypeSafeMatcher<Optional<T>> {
     public OptionalHasPropertySatisfying(Function<T, V> propertyExtractor, Predicate<V> propertyEvaluator) {
         this.propertyExtractor = propertyExtractor;
         this.propertyEvaluator = propertyEvaluator;
+    }
+
+    public OptionalHasPropertySatisfying(Function<T, V> propertyExtractor, Matcher<V> propertyMatcher) {
+        this.propertyExtractor = propertyExtractor;
+        this.propertyEvaluator = propertyMatcher::matches;
     }
 
     @Override

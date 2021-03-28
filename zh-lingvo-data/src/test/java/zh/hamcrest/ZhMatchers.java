@@ -14,4 +14,8 @@ public class ZhMatchers {
     public static <T, V> Matcher<Optional<T>> hasPropertySatisfying(Function<T, V> propertyExtractor, Predicate<V> propertyEvaluator) {
         return new OptionalHasPropertySatisfying<>(propertyExtractor, propertyEvaluator);
     }
+
+    public static <T, V> Matcher<Optional<T>> hasPropertySatisfying(Function<T, V> propertyExtractor, Matcher<V> propertyMatcher) {
+        return new OptionalHasPropertySatisfying<>(propertyExtractor, propertyMatcher);
+    }
 }

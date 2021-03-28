@@ -10,6 +10,7 @@ import lombok.ToString;
 import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.fixtures.SubWordPart;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,9 +43,9 @@ public class Meaning implements Persistable, SubWordPart {
     @Column(name = "remark")
     private String remark;
 
-    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Translation> translations;
 
-    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Example> examples;
 }

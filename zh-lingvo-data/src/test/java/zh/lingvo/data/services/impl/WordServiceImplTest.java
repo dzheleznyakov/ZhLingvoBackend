@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -70,12 +71,14 @@ class WordServiceImplTest {
         @DisplayName("Should return nothing if the word is in the dictionary of another user")
         void differentUser() {
             dictionary.setUser(anotherUser);
+            when(wordRepository.findByIdWithDictionary(WORD_ID)).thenReturn(Optional.of(word));
             when(wordRepository.findById(WORD_ID)).thenReturn(Optional.of(word));
 
             Optional<Word> foundWord = service.findById(WORD_ID, user);
 
             assertThat(foundWord, is(empty()));
-            verify(wordRepository, only()).findById(WORD_ID);
+            verify(wordRepository, times(1)).findByIdWithDictionary(WORD_ID);
+            verify(wordRepository, times(1)).findById(WORD_ID);
         }
 
         @Test
@@ -92,12 +95,14 @@ class WordServiceImplTest {
         @Test
         @DisplayName("Should return the word if it is in the dictionary of this user")
         void thisUser() {
+            when(wordRepository.findByIdWithDictionary(WORD_ID)).thenReturn(Optional.of(word));
             when(wordRepository.findById(WORD_ID)).thenReturn(Optional.of(word));
 
             Optional<Word> foundWord = service.findById(WORD_ID, user);
 
             assertThat(foundWord, is(not(empty())));
-            verify(wordRepository, only()).findById(WORD_ID);
+            verify(wordRepository, times(1)).findById(WORD_ID);
+            verify(wordRepository, times(1)).findByIdWithDictionary(WORD_ID);
         }
     }
 
@@ -119,23 +124,27 @@ class WordServiceImplTest {
         @DisplayName("Should return nothing if the word is in the dictionary of another user")
         void differentUser() {
             dictionary.setUser(anotherUser);
+            when(wordRepository.findByIdWithDictionary(WORD_ID)).thenReturn(Optional.of(word));
             when(wordRepository.findByIdWithSubWordParts(WORD_ID)).thenReturn(Optional.of(word));
 
             Optional<Word> foundWord = service.findWithSubWordPartsById(WORD_ID, user);
 
             assertThat(foundWord, is(empty()));
-            verify(wordRepository, only()).findByIdWithSubWordParts(WORD_ID);
+            verify(wordRepository, times(1)).findByIdWithDictionary(WORD_ID);
+            verify(wordRepository, times(1)).findByIdWithSubWordParts(WORD_ID);
         }
 
         @Test
         @DisplayName("Should return the word if it is in the dictionary of this user")
         void thisUser() {
+            when(wordRepository.findByIdWithDictionary(WORD_ID)).thenReturn(Optional.of(word));
             when(wordRepository.findByIdWithSubWordParts(WORD_ID)).thenReturn(Optional.of(word));
 
             Optional<Word> foundWord = service.findWithSubWordPartsById(WORD_ID, user);
 
             assertThat(foundWord, is(not(empty())));
-            verify(wordRepository, only()).findByIdWithSubWordParts(WORD_ID);
+            verify(wordRepository, times(1)).findByIdWithDictionary(WORD_ID);
+            verify(wordRepository, times(1)).findByIdWithSubWordParts(WORD_ID);
         }
     }
 
@@ -216,11 +225,65 @@ class WordServiceImplTest {
         @Test
         @DisplayName("Should update the word")
         void updateWordMainForm() {
+            when(wordRepository.findByIdWithDictionary(word.getId())).thenReturn(Optional.of(word));
             when(wordRepository.save(word)).thenReturn(word);
 
             service.update(word, user);
 
-            verify(wordRepository, only()).save(word);
+            verify(wordRepository, times(1)).save(word);
+            verify(wordRepository, times(1)).findByIdWithDictionary(word.getId());
+        }
+    }
+
+    @Nested
+    @DisplayName("Test WordServiceImpl.delete(word, user)")
+    class Delete {
+        @Test
+        @DisplayName("Should not try to delete the word if it does not exist")
+        void wordNotFound() {
+            when(wordRepository.findByIdWithDictionary(word.getId())).thenReturn(Optional.empty());
+
+            service.delete(word, user);
+
+            verify(wordRepository, only()).findByIdWithDictionary(word.getId());
+        }
+
+        @Test
+        @DisplayName("Should not try to delete the word if the word's dictionary belongs to a different user")
+        void differentUser() {
+            when(wordRepository.findByIdWithDictionary(word.getId())).thenReturn(Optional.of(word));
+
+            service.delete(word, anotherUser);
+
+            verify(wordRepository, only()).findByIdWithDictionary(word.getId());
+        }
+
+        @Test
+        @DisplayName("Should delete the word if it is of the right user")
+        void happyPath() {
+            when(wordRepository.findByIdWithDictionary(word.getId())).thenReturn(Optional.of(word));
+
+            service.delete(word, user);
+
+            verify(wordRepository, times(1)).findByIdWithDictionary(word.getId());
+            verify(wordRepository, times(1)).delete(word);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test WordServiceImpl.wordIdsToUserIds cache")
+    class WortToUserIdCache {
+        @Test
+        @DisplayName("Should not go to the DB the second time as user id is cached")
+        void userIdIsCached() {
+            when(wordRepository.findByIdWithDictionary(WORD_ID)).thenReturn(Optional.of(word));
+            when(wordRepository.findById(WORD_ID)).thenReturn(Optional.of(word));
+
+            service.findById(WORD_ID, user);
+            service.findById(WORD_ID, user);
+            service.findById(WORD_ID, user);
+
+            verify(wordRepository, times(1)).findByIdWithDictionary(WORD_ID);
         }
     }
 }
