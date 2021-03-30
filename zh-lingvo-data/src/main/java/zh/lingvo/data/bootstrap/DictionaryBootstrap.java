@@ -9,7 +9,6 @@ import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Example;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Meaning;
-import zh.lingvo.data.model.PartOfSpeech;
 import zh.lingvo.data.model.SemanticBlock;
 import zh.lingvo.data.model.Translation;
 import zh.lingvo.data.model.User;
@@ -18,7 +17,6 @@ import zh.lingvo.data.repositories.DictionaryRepository;
 import zh.lingvo.data.repositories.ExampleRepository;
 import zh.lingvo.data.repositories.LanguageRepository;
 import zh.lingvo.data.repositories.MeaningRepository;
-import zh.lingvo.data.repositories.PartOfSpeechRepository;
 import zh.lingvo.data.repositories.SemanticBlockRepository;
 import zh.lingvo.data.repositories.TranslationRepository;
 import zh.lingvo.data.repositories.UserRepository;
@@ -29,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static zh.lingvo.data.constants.Profiles.DEV;
+import static zh.lingvo.data.model.PartOfSpeech.NOUN;
+import static zh.lingvo.data.model.PartOfSpeech.VERB;
 
 @Component
 @Profile(DEV)
@@ -36,7 +36,6 @@ import static zh.lingvo.data.constants.Profiles.DEV;
 public class DictionaryBootstrap implements CommandLineRunner {
     private final UserRepository userRepository;
     private final LanguageRepository languageRepository;
-    private final PartOfSpeechRepository posRepository;
     private final DictionaryRepository dictionaryRepository;
     private final WordRepository wordRepository;
     private final SemanticBlockRepository semanticBlockRepository;
@@ -47,7 +46,6 @@ public class DictionaryBootstrap implements CommandLineRunner {
     public DictionaryBootstrap(
             UserRepository userRepository,
             LanguageRepository languageRepository,
-            PartOfSpeechRepository posRepository,
             DictionaryRepository dictionaryRepository,
             WordRepository wordRepository,
             SemanticBlockRepository semanticBlockRepository,
@@ -57,7 +55,6 @@ public class DictionaryBootstrap implements CommandLineRunner {
     ) {
         this.userRepository = userRepository;
         this.languageRepository = languageRepository;
-        this.posRepository = posRepository;
         this.dictionaryRepository = dictionaryRepository;
         this.wordRepository = wordRepository;
         this.semanticBlockRepository = semanticBlockRepository;
@@ -105,10 +102,9 @@ public class DictionaryBootstrap implements CommandLineRunner {
             word.setTranscription("wəːd");
             wordRepository.save(word);
 
-            PartOfSpeech noun = posRepository.findByName("NOUN").get();
             SemanticBlock block = new SemanticBlock();
             block.setWord(word);
-            block.setPos(noun);
+            block.setPos(NOUN);
             semanticBlockRepository.save(block);
 
             Meaning meaning = new Meaning();
@@ -131,10 +127,9 @@ public class DictionaryBootstrap implements CommandLineRunner {
             word1.setTranscription(transcription);
             wordRepository.save(word1);
 
-            PartOfSpeech noun = posRepository.findByName("NOUN").get();
             SemanticBlock blockNoun = new SemanticBlock();
             blockNoun.setWord(word1);
-            blockNoun.setPos(noun);
+            blockNoun.setPos(NOUN);
             semanticBlockRepository.save(blockNoun);
 
             Meaning meaning1 = new Meaning();
@@ -175,10 +170,9 @@ public class DictionaryBootstrap implements CommandLineRunner {
             Translation translation4_1 = getTranslation(meaning4, "сейф");
             translationRepository.save(translation4_1);
 
-            PartOfSpeech verb = posRepository.findByName("VERB").get();
             SemanticBlock blockVerb = new SemanticBlock();
             blockVerb.setWord(word1);
-            blockVerb.setPos(verb);
+            blockVerb.setPos(VERB);
             semanticBlockRepository.save(blockVerb);
 
             Meaning meaning5 = new Meaning();
@@ -203,7 +197,7 @@ public class DictionaryBootstrap implements CommandLineRunner {
             wordRepository.save(word2);
 
             SemanticBlock blockNoun2 = new SemanticBlock();
-            blockNoun2.setPos(noun);
+            blockNoun2.setPos(NOUN);
             blockNoun2.setWord(word2);
             semanticBlockRepository.save(blockNoun2);
 

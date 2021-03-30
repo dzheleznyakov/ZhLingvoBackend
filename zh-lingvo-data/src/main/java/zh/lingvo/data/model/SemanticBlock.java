@@ -9,9 +9,11 @@ import lombok.Setter;
 import lombok.ToString;
 import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.fixtures.SubWordPart;
+import zh.lingvo.data.model.converters.PartOfSpeechAttributeConverter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,8 +43,8 @@ public class SemanticBlock implements Persistable, SubWordPart {
     @JoinColumn(name = "word_id", referencedColumnName = "id")
     private Word word;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "pos_id", referencedColumnName = "id")
+    @Column(name = "pos", nullable = false)
+    @Convert(converter = PartOfSpeechAttributeConverter.class)
     private PartOfSpeech pos;
 
     @Column(name = "gender")

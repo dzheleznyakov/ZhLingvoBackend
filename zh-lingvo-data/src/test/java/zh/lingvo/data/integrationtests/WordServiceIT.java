@@ -48,7 +48,7 @@ public class WordServiceIT extends BaseDataIntegrationTest {
     void setUp() {
         user = userRepository.findById(1L).get();
         Language language = languageRepository.findById(1).get();
-        pos = posRepository.findById(1).get();
+        pos = PartOfSpeech.NOUN;
         dictionary = getPersistedDictionary("WordServiceIT test", user, language);
 
         word = Word.builder()

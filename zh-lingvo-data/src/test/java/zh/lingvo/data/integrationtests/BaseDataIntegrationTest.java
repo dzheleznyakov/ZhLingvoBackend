@@ -13,7 +13,6 @@ import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 import zh.lingvo.data.repositories.DictionaryRepository;
 import zh.lingvo.data.repositories.LanguageRepository;
-import zh.lingvo.data.repositories.PartOfSpeechRepository;
 import zh.lingvo.data.repositories.UserRepository;
 import zh.lingvo.data.repositories.WordRepository;
 import zh.lingvo.data.services.DictionaryService;
@@ -34,8 +33,6 @@ public abstract class BaseDataIntegrationTest {
     @Autowired
     private EntityManager entityManager;
 
-    @Autowired
-    protected PartOfSpeechRepository posRepository;
     @Autowired
     protected LanguageRepository languageRepository;
     @Autowired

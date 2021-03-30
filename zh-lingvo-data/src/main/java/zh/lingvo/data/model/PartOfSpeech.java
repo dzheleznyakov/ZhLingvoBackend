@@ -1,34 +1,30 @@
 package zh.lingvo.data.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import zh.lingvo.data.fixtures.Persistable;
+import com.google.common.collect.ImmutableMap;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@ToString
-@EqualsAndHashCode
-@Entity(name = "part_of_speech")
-public class PartOfSpeech implements Persistable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+public enum PartOfSpeech {
+    NOUN("n"),
+    VERB("v"),
+    ADJECTIVE("adj");
 
-    @Column(name = "name")
-    private String name;
+    private final String code;
+
+    PartOfSpeech(String code) {
+        this.code = code;
+    }
+
+    private static final Map<String, PartOfSpeech> POS_BY_CODE = Arrays.stream(PartOfSpeech.values())
+            .collect(ImmutableMap.toImmutableMap(PartOfSpeech::getCode, Function.identity()));
+
+    public String getCode() {
+        return code;
+    }
+
+    public static PartOfSpeech fromCode(String code) {
+        return POS_BY_CODE.get(code);
+    }
 }

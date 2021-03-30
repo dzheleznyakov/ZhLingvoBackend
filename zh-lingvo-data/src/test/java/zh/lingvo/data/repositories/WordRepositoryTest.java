@@ -32,7 +32,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     private final User user = User.builder().name("test").build();
     private final Language language = Language.builder().name("Lang").twoLetterCode("Ln").build();
     private final Dictionary dictionary = Dictionary.builder().name("Dictionary").language(language).user(user).build();
-    private final PartOfSpeech pos = PartOfSpeech.builder().name("VERB").build();
+    private final PartOfSpeech pos = PartOfSpeech.VERB;
 
     @BeforeEach
     void setUpDb() {
@@ -42,7 +42,6 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_1));
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_2));
         entityManager.persist(getWord(MAIN_FORM_3, TRANSCRIPTION_3));
-        entityManager.persist(pos);
         entityManager.flush();
     }
 

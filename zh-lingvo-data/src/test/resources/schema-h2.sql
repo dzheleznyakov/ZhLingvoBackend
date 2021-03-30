@@ -9,11 +9,6 @@ CREATE TABLE IF NOT EXISTS language (
     code CHAR(2) NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS part_of_speech (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR NOT NULL UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS word_form_name (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR NOT NULL,
@@ -42,10 +37,9 @@ CREATE INDEX IF NOT EXISTS word_dic_index ON word (dic_id);
 CREATE TABLE IF NOT EXISTS semantic_block (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     word_id INTEGER,
-    pos_id INTEGER,
+    pos VARCHAR(6) NOT NULL,
     gender VARCHAR(10),
-    FOREIGN KEY (word_id) REFERENCES word(id),
-    FOREIGN KEY (pos_id) REFERENCES part_of_speech(id)
+    FOREIGN KEY (word_id) REFERENCES word(id)
 );
 CREATE INDEX IF NOT EXISTS semantic_block_word_index on semantic_block (word_id);
 
