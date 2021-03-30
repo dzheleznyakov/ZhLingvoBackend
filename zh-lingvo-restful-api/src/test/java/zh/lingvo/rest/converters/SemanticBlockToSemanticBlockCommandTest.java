@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import zh.lingvo.data.model.Meaning;
-import zh.lingvo.data.model.PartOfSpeech;
 import zh.lingvo.data.model.SemanticBlock;
 import zh.lingvo.rest.commands.MeaningCommand;
 import zh.lingvo.rest.commands.SemanticBlockCommand;
@@ -23,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static zh.lingvo.data.model.PartOfSpeech.NOUN;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Test SemanticBlock to SemanticBlockCommand converter")
@@ -50,9 +50,7 @@ class SemanticBlockToSemanticBlockCommandTest {
     void convertSemanticBlock() {
         Long meaningId1 = 101L;
         Long meaningId2 = 102L;
-        String posName = "NOUN";
 
-        PartOfSpeech pos = PartOfSpeech.builder().id(1).name(posName).build();
         Meaning meaning1 = Meaning.builder().id(meaningId1).build();
         Meaning meaning2 = Meaning.builder().id(meaningId2).build();
 
@@ -63,7 +61,7 @@ class SemanticBlockToSemanticBlockCommandTest {
 
         SemanticBlock sBlock = SemanticBlock.builder()
                 .id(42L)
-                .pos(pos)
+                .pos(NOUN)
                 .gender("f")
                 .meanings(ImmutableList.of(meaning1, meaning2))
                 .build();
@@ -72,7 +70,7 @@ class SemanticBlockToSemanticBlockCommandTest {
 
         assertThat(command, is(notNullValue()));
         assertThat(command.getId(), is(sBlock.getId()));
-        assertThat(command.getPos(), is(equalTo(posName)));
+        assertThat(command.getPos(), is(equalTo(NOUN.getCode())));
         assertThat(command.getGender(), is(equalTo(sBlock.getGender())));
 
         assertThat(command.getMeanings(), is(notNullValue()));

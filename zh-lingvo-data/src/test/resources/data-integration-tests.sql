@@ -17,15 +17,3 @@ WHERE NOT EXISTS (SELECT 1 FROM language WHERE code='Es');
 INSERT INTO language (name, code)
 SELECT 'Russian', 'Ru'
 WHERE NOT EXISTS (SELECT 1 FROM language WHERE code='Ru');
-
-INSERT INTO part_of_speech (name)
-SELECT 'NOUN'
-WHERE NOT EXISTS (SELECT 1 FROM part_of_speech WHERE name='NOUN');
-
-INSERT INTO part_of_speech (name)
-SELECT 'VERB'
-WHERE NOT EXISTS (SELECT 1 FROM part_of_speech WHERE name='VERB');
-
-INSERT INTO part_of_speech (name)
-SELECT 'ADJECTIVE'
-WHERE NOT EXISTS (SELECT 1 FROM part_of_speech WHERE name='ADJECTIVE');
