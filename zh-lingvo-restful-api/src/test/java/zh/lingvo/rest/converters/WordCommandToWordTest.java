@@ -18,6 +18,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,5 +78,7 @@ class WordCommandToWordTest {
         assertThat(word.getSemanticBlocks(), hasSize(2));
         assertThat(word.getSemanticBlocks().get(0).getId(), is(sbId1));
         assertThat(word.getSemanticBlocks().get(1).getId(), is(sbId2));
+
+        verify(sbConverter, times(2)).convert(any(SemanticBlockCommand.class));
     }
 }

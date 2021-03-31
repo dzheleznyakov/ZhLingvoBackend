@@ -1,5 +1,7 @@
 package zh.lingvo.data.services.impl;
 
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,10 +18,13 @@ import zh.lingvo.data.repositories.WordRepository;
 import zh.lingvo.data.services.DictionaryService;
 import zh.lingvo.data.services.WordService;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -65,7 +70,36 @@ class WordServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Test WordServiceImpl.findById(id)")
+    @DisplayName("Test WordServiceImpl.findAll(dictionaryId, user)")
+    class FindAll {
+        @Test
+        @DisplayName("Should return empty list if no dictionary is found")
+        void noDictionaryFound() {
+            when(dictionaryService.findById(DICTIONARY_ID, user)).thenReturn(Optional.empty());
+
+            List<Word> words = service.findAll(DICTIONARY_ID, user);
+
+            assertThat(words, hasSize(0));
+            verify(dictionaryService, times(1)).findById(DICTIONARY_ID, user);
+            verifyNoInteractions(wordRepository);
+        }
+
+        @Test
+        @DisplayName("Should return the list of words when the dictionary is found for the user")
+        void dictionaryFound() {
+            when(dictionaryService.findById(DICTIONARY_ID, user)).thenReturn(Optional.of(dictionary));
+            when(wordRepository.findAllByDictionary(dictionary)).thenReturn(ImmutableList.of(word));
+
+            List<Word> words = service.findAll(DICTIONARY_ID, user);
+
+            assertThat(words, is(equalTo(ImmutableList.of(word))));
+            verify(dictionaryService, only()).findById(DICTIONARY_ID, user);
+            verify(wordRepository, only()).findAllByDictionary(dictionary);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test WordServiceImpl.findById(id, user)")
     class FindById {
         @Test
         @DisplayName("Should return nothing if the word is in the dictionary of another user")
@@ -107,7 +141,7 @@ class WordServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Test WordServiceImpl.findWithSubWordPartsById")
+    @DisplayName("Test WordServiceImpl.findWithSubWordPartsById(id, user)")
     class FindWithSubWordPartsById {
         @Test
         @DisplayName("Should return nothing if the word does not exist")
@@ -149,7 +183,7 @@ class WordServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Test WordServiceImpl.create(word, dictionary, user)")
+    @DisplayName("Test WordServiceImpl.create(word, dictionaryId, user)")
     class Create {
         private Word newWord;
 
@@ -272,7 +306,7 @@ class WordServiceImplTest {
 
     @Nested
     @DisplayName("Test WordServiceImpl.wordIdsToUserIds cache")
-    class WortToUserIdCache {
+    class WordToUserIdCache {
         @Test
         @DisplayName("Should not go to the DB the second time as user id is cached")
         void userIdIsCached() {
@@ -284,6 +318,23 @@ class WordServiceImplTest {
             service.findById(WORD_ID, user);
 
             verify(wordRepository, times(1)).findByIdWithDictionary(WORD_ID);
+        }
+
+        @Test
+        @DisplayName("Should invalidate the cache entry for the word when the latter is deleted")
+        void deletingWordInvalidatesCacheEntry() {
+            LoadingCache<Long, Long> cache = ((WordServiceImpl) service).getWordIdsToUserIds();
+
+            when(wordRepository.findByIdWithDictionary(WORD_ID)).thenReturn(Optional.of(word));
+            when(wordRepository.findById(WORD_ID)).thenReturn(Optional.of(word));
+
+            service.findById(WORD_ID, user);
+
+            assertThat(cache.asMap().containsKey(WORD_ID), is(true));
+
+            service.delete(word, user);
+
+            assertThat(cache.asMap().containsKey(WORD_ID), is(false));
         }
     }
 }

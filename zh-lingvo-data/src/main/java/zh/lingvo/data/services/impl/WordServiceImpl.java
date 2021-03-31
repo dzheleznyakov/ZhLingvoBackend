@@ -1,5 +1,6 @@
 package zh.lingvo.data.services.impl;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -17,9 +18,9 @@ import zh.lingvo.data.services.SubWordService;
 import zh.lingvo.data.services.WordService;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
@@ -44,6 +45,13 @@ public class WordServiceImpl implements WordService {
     }
 
     @Override
+    public List<Word> findAll(Long dictionaryId, User user) {
+        return dictionaryService.findById(dictionaryId, user)
+                .map(wordRepository::findAllByDictionary)
+                .orElseGet(ImmutableList::of);
+    }
+
+    @Override
     public Optional<Word> findById(@Nonnull Long id, @Nonnull User user) {
         return findWord(id, user, wordRepository::findById);
     }
@@ -62,10 +70,10 @@ public class WordServiceImpl implements WordService {
         try {
             Long userIdForWord = wordIdsToUserIds.get(word.getId());
             return Objects.equals(userIdForWord, user.getId());
-        } catch (ExecutionException e) {
+        } catch (Exception   e) {
             log.error("Error when verifying user [{}] for word [{}]", user, word, e);
-            return false;
         }
+        return false;
     }
 
     @Override
@@ -102,7 +110,12 @@ public class WordServiceImpl implements WordService {
     @Override
     public void delete(Word word, User user) {
         if (userIsAuthorised(word, user))
-            wordRepository.delete(word);
+            delete(word);
+    }
+
+    private void delete(Word word) {
+        wordRepository.delete(word);
+        wordIdsToUserIds.invalidate(word.getId());
     }
 
     private class WordToUserIdCacheLoader extends CacheLoader<Long, Long> {
@@ -114,5 +127,10 @@ public class WordServiceImpl implements WordService {
                     .map(User::getId)
                     .orElse(-1L);
         }
+    }
+
+    @VisibleForTesting
+    LoadingCache<Long, Long> getWordIdsToUserIds() {
+        return wordIdsToUserIds;
     }
 }

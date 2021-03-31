@@ -25,13 +25,16 @@ import static org.hamcrest.Matchers.is;
 class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     private static final String MAIN_FORM_1 = "word";
     private static final String MAIN_FORM_3 = "draw";
+    private static final String MAIN_FORM_4 = "cook";
     private static final String TRANSCRIPTION_1 = "t1";
     private static final String TRANSCRIPTION_2 = "t2";
     private static final String TRANSCRIPTION_3 = "t3";
+    private static final String TRANSCRIPTION_4 = "t4";
 
     private final User user = User.builder().name("test").build();
     private final Language language = Language.builder().name("Lang").twoLetterCode("Ln").build();
     private final Dictionary dictionary = Dictionary.builder().name("Dictionary").language(language).user(user).build();
+    private final Dictionary dictionary2 = Dictionary.builder().name("Dictionary 2").language(language).user(user).build();
     private final PartOfSpeech pos = PartOfSpeech.VERB;
 
     @BeforeEach
@@ -39,13 +42,19 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
         entityManager.persist(user);
         entityManager.persist(language);
         entityManager.persist(dictionary);
+        entityManager.persist(dictionary2);
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_1));
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_2));
         entityManager.persist(getWord(MAIN_FORM_3, TRANSCRIPTION_3));
+        entityManager.persist(getWord(MAIN_FORM_4, TRANSCRIPTION_4, dictionary2));
         entityManager.flush();
     }
 
     private Word getWord(String mainForm, String transcription) {
+        return getWord(mainForm, transcription, dictionary);
+    }
+
+    private Word getWord(String mainForm, String transcription, Dictionary dictionary) {
         return Word.builder()
                 .mainForm(mainForm)
                 .transcription(transcription)
@@ -79,6 +88,26 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
                 .map(Word::getTranscription)
                 .collect(ImmutableSet.toImmutableSet());
         Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2);
+        assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
+    }
+
+    @Test
+    @DisplayName("Should return all words from the given dictionary")
+    void findAllByDictionary() {
+        List<Word> words = repository.findAllByDictionary(dictionary);
+
+        Set<String> actualTranscriptions = words.stream()
+                .map(Word::getTranscription)
+                .collect(ImmutableSet.toImmutableSet());
+        Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2, TRANSCRIPTION_3);
+        assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
+
+        words = repository.findAllByDictionary(dictionary2);
+
+        actualTranscriptions = words.stream()
+                .map(Word::getTranscription)
+                .collect(ImmutableSet.toImmutableSet());
+        expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_4);
         assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
     }
 }
