@@ -23,9 +23,7 @@ import zh.lingvo.data.services.WordService;
 import zh.lingvo.rest.commands.SemanticBlockCommand;
 import zh.lingvo.rest.commands.WordCommand;
 import zh.lingvo.rest.commands.WordOverviewCommand;
-import zh.lingvo.rest.converters.WordCommandToWord;
-import zh.lingvo.rest.converters.WordToWordCommand;
-import zh.lingvo.rest.converters.WordToWordOverviewCommand;
+import zh.lingvo.rest.converters.WordConverter;
 import zh.lingvo.rest.util.RequestContext;
 
 import java.util.List;
@@ -41,6 +39,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -70,13 +69,7 @@ class WordControllerTest {
     private WordService wordService;
 
     @Mock
-    private WordToWordOverviewCommand wordOverviewConverter;
-
-    @Mock
-    private WordToWordCommand wordConverter;
-
-    @Mock
-    private WordCommandToWord wordCommandConverter;
+    private WordConverter wordConverter;
 
     private MockMvc mockMvc;
 
@@ -86,20 +79,20 @@ class WordControllerTest {
         context.setUser(USER);
 
         WordController wordController = new WordController(
-                wordService, wordOverviewConverter, wordConverter, wordCommandConverter, context);
+                wordService, wordConverter, context);
 
         mockMvc = MockMvcBuilders.standaloneSetup(wordController)
                 .setControllerAdvice(new ExceptionsAdvice())
                 .build();
 
-        lenient().when(wordOverviewConverter.convert(any(Word.class))).thenAnswer(invocation -> {
+        lenient().when(wordConverter.toWordOverviewCommand(any(Word.class))).thenAnswer(invocation -> {
             Word word = invocation.getArgument(0, Word.class);
             return WordOverviewCommand.builder()
                     .id(word.getId())
                     .mainForm(word.getMainForm())
                     .build();
         });
-        lenient().when(wordConverter.convert(any(Word.class))).thenAnswer(invocation -> {
+        lenient().when(wordConverter.toWordCommand(any(Word.class))).thenAnswer(invocation -> {
             Word word = invocation.getArgument(0, Word.class);
             List<SemanticBlockCommand> sbCommands = null;
             if (word.getSemanticBlocks() != null)
@@ -228,7 +221,7 @@ class WordControllerTest {
             Word convertedWord = new Word();
             long wordId = 42L;
             Word savedWord = Word.builder().id(wordId).build();
-            when(wordCommandConverter.convert(any(WordCommand.class)))
+            when(wordConverter.toWord(any(WordCommand.class)))
                     .thenReturn(convertedWord);
             when(wordService.create(convertedWord, DICTIONARY_ID, USER))
                     .thenReturn(Optional.of(savedWord));
@@ -250,7 +243,7 @@ class WordControllerTest {
         @DisplayName("Should return an empty word if creating a new word fails")
         void creationFails() throws Exception {
             Word convertedWord = new Word();
-            when(wordCommandConverter.convert(any(WordCommand.class)))
+            when(wordConverter.toWord(any(WordCommand.class)))
                     .thenReturn(convertedWord);
             when(wordService.create(convertedWord, DICTIONARY_ID, USER))
                     .thenReturn(Optional.empty());
@@ -279,7 +272,7 @@ class WordControllerTest {
         void wordDoesNotExist() throws Exception {
             long wordId = 42L;
 
-            when(wordCommandConverter.convert(any(WordCommand.class)))
+            when(wordConverter.toWord(any(WordCommand.class)))
                     .thenReturn(Word.builder().id(wordId).build());
             when(wordService.update(any(Word.class), eq(USER)))
                     .thenThrow(new FailedToPersist("Something went terrible wrong"));
@@ -301,7 +294,7 @@ class WordControllerTest {
             long wordId = 42L;
             String mainForm = "updated";
 
-            when(wordCommandConverter.convert(any(WordCommand.class)))
+            when(wordConverter.toWord(any(WordCommand.class)))
                     .thenReturn(Word.builder().id(wordId).mainForm(mainForm).build());
             when(wordService.update(any(Word.class), eq(USER)))
                     .thenReturn(Word.builder().id(wordId).mainForm(mainForm).build());
@@ -329,7 +322,7 @@ class WordControllerTest {
                     .content(toPayload(command)));
 
             ArgumentCaptor<WordCommand> commandCaptor = ArgumentCaptor.forClass(WordCommand.class);
-            verify(wordCommandConverter, only()).convert(commandCaptor.capture());
+            verify(wordConverter, times(1)).toWord(commandCaptor.capture());
             WordCommand capturedCommand = commandCaptor.getValue();
             assertThat(capturedCommand.getId(), is(wordId));
         }

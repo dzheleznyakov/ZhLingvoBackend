@@ -16,9 +16,7 @@ import zh.lingvo.data.services.WordService;
 import zh.lingvo.rest.annotations.ApiController;
 import zh.lingvo.rest.commands.WordCommand;
 import zh.lingvo.rest.commands.WordOverviewCommand;
-import zh.lingvo.rest.converters.WordCommandToWord;
-import zh.lingvo.rest.converters.WordToWordCommand;
-import zh.lingvo.rest.converters.WordToWordOverviewCommand;
+import zh.lingvo.rest.converters.WordConverter;
 import zh.lingvo.rest.exceptions.ResourceAlreadyExists;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
@@ -30,22 +28,16 @@ import java.util.List;
 @RequestMapping("/api/words")
 public class WordController {
     private final WordService wordService;
-    private final WordToWordOverviewCommand wordOverviewConverter;
-    private final WordToWordCommand wordConverter;
-    private final WordCommandToWord wordCommandConverter;
+    private final WordConverter wordConverter;
     private final RequestContext context;
 
     public WordController(
             WordService wordService,
-            WordToWordOverviewCommand wordOverviewConverter,
-            WordToWordCommand wordConverter,
-            WordCommandToWord wordCommandConverter,
+            WordConverter wordConverter,
             RequestContext context
     ) {
         this.wordService = wordService;
-        this.wordOverviewConverter = wordOverviewConverter;
         this.wordConverter = wordConverter;
-        this.wordCommandConverter = wordCommandConverter;
         this.context = context;
     }
 
@@ -53,14 +45,14 @@ public class WordController {
     public List<WordOverviewCommand> getAllWords(@PathVariable("dictionaryId") long dictionaryId) {
         return wordService.findAll(dictionaryId, getUser())
                 .stream()
-                .map(wordOverviewConverter::convert)
+                .map(wordConverter::toWordOverviewCommand)
                 .collect(ImmutableList.toImmutableList());
     }
 
     @GetMapping("/{wordId}")
     public WordCommand getWord(@PathVariable("wordId") long wordId) {
         return wordService.findWithSubWordPartsById(wordId, getUser())
-                .map(wordConverter::convert)
+                .map(wordConverter::toWordCommand)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Word [%d] not found", wordId)));
     }
 
@@ -72,9 +64,9 @@ public class WordController {
         if (newWord.getId() != null)
             throw new ResourceAlreadyExists(String.format("Word with id [%d] already exists", newWord.getId()));
 
-        Word word = wordCommandConverter.convert(newWord);
+        Word word = wordConverter.toWord(newWord);
         return wordService.create(word, dictionaryId, getUser())
-                .map(wordConverter::convert)
+                .map(wordConverter::toWordCommand)
                 .orElseGet(WordCommand::new);
     }
 
@@ -84,10 +76,10 @@ public class WordController {
             @RequestBody WordCommand updatedWord
     ) {
         updatedWord.setId(wordId);
-        Word word = wordCommandConverter.convert(updatedWord);
+        Word word = wordConverter.toWord(updatedWord);
         try {
             Word savedWord = wordService.update(word, getUser());
-            return wordConverter.convert(savedWord);
+            return wordConverter.toWordCommand(savedWord);
         } catch (FailedToPersist e) {
             log.error("Error while updating word [{}]", wordId);
             throw new ResourceNotFound(e, String.format("Word [%d] not found", wordId));

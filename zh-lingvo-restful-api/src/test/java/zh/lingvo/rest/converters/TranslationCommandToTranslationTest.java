@@ -30,7 +30,7 @@ class TranslationCommandToTranslationTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Should convert TranslationCommand into Translation")
     void convertTranslationCommand() {
         TranslationCommand command = TranslationCommand.builder()
                 .id(42L)
