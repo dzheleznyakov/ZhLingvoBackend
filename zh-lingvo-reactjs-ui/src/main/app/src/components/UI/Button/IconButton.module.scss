@@ -42,6 +42,7 @@ $button-background-color: map-get($palette, light);
 @mixin icon($path) {
     width: 100%;
     height: 100%;
+    // background-size: 100% 100%;
     background: url($path);
     background-repeat: no-repeat;
 }
@@ -60,6 +61,10 @@ $button-background-color: map-get($palette, light);
 
 .Delete {
     @include icon("../../../media/images/garbage-svgrepo-com.svg");
+}
+
+.Forward {
+    @include icon("../../../media/images/navigation-forward-arrow-svgrepo-com.svg");
 }
 
 .IconCover {

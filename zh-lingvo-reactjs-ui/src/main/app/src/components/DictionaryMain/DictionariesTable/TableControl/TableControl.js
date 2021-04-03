@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import classes from './TableControl.module.scss';
 
@@ -8,6 +9,7 @@ import NewDictionaryDialog from '../../NewDictionaryDialog/NewDictionaryDialog';
 import EditDictionaryDialog from '../../EditDictionaryDialog/EditDictionaryDialog';
 import DeleteDictionaryDialog from '../../DeleteDictionaryDialog/DeleteDictionaryDialog';
 import { dictionarySelectedSelector, currentDictionarySelector } from '../../../../store/selectors';
+import { DICTIONARY as dictionaryUrlPattern } from '../../../../static/constants/paths';
 
 const MODAL_TYPES = {
     NEW: 'NEW',
@@ -27,6 +29,7 @@ const TableControl = () => {
     const selectedDictionary = useSelector(currentDictionarySelector);
     const [modalType, setModalType] = useState(MODAL_TYPES.NONE);
     const showModal = modalType !== null;
+    const history = useHistory();
 
     const onNew = () => {
         setModalType(MODAL_TYPES.NEW);
@@ -38,6 +41,12 @@ const TableControl = () => {
 
     const onDelete = () => {
         setModalType(MODAL_TYPES.DELETE);
+    };
+
+    const onForward = () => {
+        const selectedDictionaryId = selectedDictionary.id;
+        const path = dictionaryUrlPattern.replace(':id', selectedDictionaryId);
+        history.push(path);
     };
 
     const closeModal = () => setModalType(MODAL_TYPES.NONE);
@@ -71,6 +80,7 @@ const TableControl = () => {
                 <IconButton type={iconButtonTypes.NEW} clicked={onNew} />
                 <IconButton type={iconButtonTypes.EDIT} disabled={!dictionaryIsSelected} clicked={onEdit} />
                 <IconButton type={iconButtonTypes.DELETE} disabled={!dictionaryIsSelected} clicked={onDelete} />
+                <IconButton type={iconButtonTypes.FORWARD} disabled={!dictionaryIsSelected} clicked={onForward} />
             </div>
             <Modal show={showModal} close={closeModal}>{panel}</Modal>
         </Fragment>
