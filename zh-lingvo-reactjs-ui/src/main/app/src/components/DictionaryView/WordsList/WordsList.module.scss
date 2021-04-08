@@ -1,0 +1,32 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+.WordsListWrapper {
+    padding: 0;
+    margin: 8px auto 0;
+    width: fit-content;
+    min-width: 160px;
+    max-width: 50%;
+    min-height: 60vh;
+    overflow-y: scroll;
+
+    border: 1px solid darken(map-get($palette, light), 5%);
+    border-radius: $button-border-radius;
+
+    display: flex;
+    flex-direction: column;
+
+    li {
+        list-style: none;
+        padding: 4px 8px;
+        border: 1px solid transparent;
+
+        &:nth-child(even) {
+            background-color: map-get($palette, light);
+        }
+
+        &.SelectedWord {
+            outline: 1px auto map-get($palette, url);
+        }
+    }
+}
