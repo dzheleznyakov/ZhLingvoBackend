@@ -9,7 +9,7 @@ import EmptyTableRow from './TableRow/EmptyTableRow';
 import TableCell from './TableCell/TableCell';
 
 const Table = props => {
-    const { columnsDef, data, rowOnClickCb } = props;
+    const { columnsDef, data, rowOnClickCb, rowOnDbClickCb } = props;
 
     const headers = columnsDef.map(({ name, label }) => <th key={label}>{name}</th>);
     let body = data.map((d, i) => {
@@ -28,6 +28,7 @@ const Table = props => {
                 rowData={rowData} 
                 rowIndex={i} 
                 rowOnClickCb={rowOnClickCb}
+                rowOnDbClickCb={rowOnDbClickCb}
                 selectable
             >{rows}</TableRow>
         );
@@ -48,6 +49,7 @@ Table.propTypes = {
     columnsDef: PropTypes.arrayOf(types.columnDef).isRequired,
     data: PropTypes.arrayOf(types.dataRowDef),
     rowOnClickCb: PropTypes.func,
+    rowOnDbClickCb: PropTypes.func,
     selectable: PropTypes.bool,
 };
 
