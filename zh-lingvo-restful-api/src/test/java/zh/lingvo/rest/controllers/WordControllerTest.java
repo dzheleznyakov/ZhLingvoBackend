@@ -22,7 +22,6 @@ import zh.lingvo.data.model.Word;
 import zh.lingvo.data.services.WordService;
 import zh.lingvo.rest.commands.SemanticBlockCommand;
 import zh.lingvo.rest.commands.WordCommand;
-import zh.lingvo.rest.commands.WordOverviewCommand;
 import zh.lingvo.rest.converters.WordConverter;
 import zh.lingvo.rest.util.RequestContext;
 
@@ -85,13 +84,6 @@ class WordControllerTest {
                 .setControllerAdvice(new ExceptionsAdvice())
                 .build();
 
-        lenient().when(wordConverter.toWordOverviewCommand(any(Word.class))).thenAnswer(invocation -> {
-            Word word = invocation.getArgument(0, Word.class);
-            return WordOverviewCommand.builder()
-                    .id(word.getId())
-                    .mainForm(word.getMainForm())
-                    .build();
-        });
         lenient().when(wordConverter.toWordCommand(any(Word.class))).thenAnswer(invocation -> {
             Word word = invocation.getArgument(0, Word.class);
             List<SemanticBlockCommand> sbCommands = null;

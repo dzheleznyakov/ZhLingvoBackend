@@ -24,7 +24,6 @@ public class DictionaryServiceImpl implements DictionaryService {
     public Optional<Dictionary> findById(Long id, User user) {
         return dictionaryRepository.findById(id)
                 .filter(dictionary -> Objects.equals(dictionary.getUser().getId(), user.getId()));
-//        return dictionaryRepository.findByIdAndUser(id, user);
     }
 
     @Override
