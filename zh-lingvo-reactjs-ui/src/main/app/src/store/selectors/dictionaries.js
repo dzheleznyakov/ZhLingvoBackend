@@ -8,7 +8,9 @@ export const selectedDictionaryIndexSelector = state => state.dictionaries.selec
 
 export const dictionarySelectedSelector = state => state.dictionaries.selectedDictionaryIndex >= 0;
 
-export const currentDictionarySelector = state => {
+export const loadedDictionarySelector = state => state.dictionaries.loadedDictionary;
+
+export const selectedDictionarySelector = state => {
     const { selectedDictionaryIndex, dictionaries } = state.dictionaries;
     return selectedDictionaryIndex < 0
         ? { language: {} }

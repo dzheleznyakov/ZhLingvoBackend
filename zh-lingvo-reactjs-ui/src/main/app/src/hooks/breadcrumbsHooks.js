@@ -9,3 +9,11 @@ export const useBreadcrumbs = (...breadcrumbs) => {
         dispatch(setBreadcrumbs(breadcrumbs));
     }, [dispatch]);
 };
+
+export const useDynamicBreadcrumbs = (deps, ...breadcrumbs) => {
+    const dispatch = useDispatch();
+    const dependencies = [dispatch].concat(deps);
+    useEffect(() => {
+        dispatch(setBreadcrumbs(breadcrumbs));
+    }, dependencies);
+}

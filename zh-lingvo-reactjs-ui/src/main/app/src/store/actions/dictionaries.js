@@ -17,6 +17,24 @@ export const fetchAllDictionariesFailure = () => ({
     type: actionTypes.FETCH_ALL_DICTIONARIES_FAILURE,
 });
 
+export const fetchDictionary = id => ({
+    type: actionTypes.FETCH_DICTIONARY,
+    id,
+});
+
+export const fetchDictionaryStart = () => ({
+    type: actionTypes.FETCH_DICTIONARY_START,
+});
+
+export const fetchDictionarySuccess = dictionary => ({
+    type: actionTypes.FETCH_DICTIONARY_SUCCESS,
+    dictionary,
+});
+
+export const fetchDictionaryFailure = () => ({
+    type: actionTypes.FETCH_DICTIONARY_FAILURE,
+});
+
 export const createDictionary = (name, language) => ({
     type: actionTypes.CREATE_DICTIONARY,
     name,

@@ -1,6 +1,5 @@
 package zh.lingvo.rest.controllers;
 
-import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +14,13 @@ import zh.lingvo.data.model.Word;
 import zh.lingvo.data.services.WordService;
 import zh.lingvo.rest.annotations.ApiController;
 import zh.lingvo.rest.commands.WordCommand;
-import zh.lingvo.rest.commands.WordOverviewCommand;
 import zh.lingvo.rest.converters.WordConverter;
 import zh.lingvo.rest.exceptions.ResourceAlreadyExists;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
+import zh.lingvo.util.CollectionsHelper;
 
-import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @ApiController
@@ -42,11 +41,12 @@ public class WordController {
     }
 
     @GetMapping("/dictionary/{dictionaryId}")
-    public List<WordOverviewCommand> getAllWords(@PathVariable("dictionaryId") long dictionaryId) {
+    public Set<String> getAllWords(@PathVariable("dictionaryId") long dictionaryId) {
         return wordService.findAll(dictionaryId, getUser())
                 .stream()
-                .map(wordConverter::toWordOverviewCommand)
-                .collect(ImmutableList.toImmutableList());
+                .map(Word::getMainForm)
+                .sorted()
+                .collect(CollectionsHelper.toLinkedHashSet());
     }
 
     @GetMapping("/{wordId}")

@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import DictionaryForm from '../DictionaryForm/DictionaryForm';
 import * as actions from '../../../store/actions';
-import { currentDictionarySelector } from '../../../store/selectors';
+import { selectedDictionarySelector } from '../../../store/selectors';
 
 const EditDictionaryDialog = props => {
     const { close } = props;
     const dispatch = useDispatch();
-    const dictionary = useSelector(currentDictionarySelector);
+    const dictionary = useSelector(selectedDictionarySelector);
 
     const confirmed = (name, language) => dispatch(actions.updateDictionary(name, language));
 

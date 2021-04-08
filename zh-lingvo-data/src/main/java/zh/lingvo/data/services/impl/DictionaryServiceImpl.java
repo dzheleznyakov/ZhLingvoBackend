@@ -8,6 +8,7 @@ import zh.lingvo.data.repositories.DictionaryRepository;
 import zh.lingvo.data.services.DictionaryService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,7 +22,9 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     public Optional<Dictionary> findById(Long id, User user) {
-        return dictionaryRepository.findByIdAndUser(id, user);
+        return dictionaryRepository.findById(id)
+                .filter(dictionary -> Objects.equals(dictionary.getUser().getId(), user.getId()));
+//        return dictionaryRepository.findByIdAndUser(id, user);
     }
 
     @Override

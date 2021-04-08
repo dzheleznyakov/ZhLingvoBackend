@@ -136,10 +136,8 @@ class WordControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$", hasSize(2)))
-                    .andExpect(jsonPath("$[0].id", is(1)))
-                    .andExpect(jsonPath("$[0].mainForm", is("word1")))
-                    .andExpect(jsonPath("$[1].id", is(2)))
-                    .andExpect(jsonPath("$[1].mainForm", is("word2")));
+                    .andExpect(jsonPath("$[0]", is("word1")))
+                    .andExpect(jsonPath("$[1]", is("word2")));
 
             verify(wordService, only()).findAll(DICTIONARY_ID, USER);
         }

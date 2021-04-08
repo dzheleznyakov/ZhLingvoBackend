@@ -16,6 +16,24 @@ export function* fetchAllDictionariesSaga() {
     }
 }
 
+export function* fetchDictionarySaga(action) {
+    yield put(actions.fetchDictionaryStart());
+    const { id } = action;
+    const selectedDictionary = yield select(selectors.selectedDictionarySelector);
+    if (selectedDictionary.id === id) {
+        yield put(actions.fetchDictionarySuccess(selectedDictionary));
+        return;
+    }
+
+    try {
+        const { data } = yield call(axios.get, `/dictionaries/${id}`);
+        yield put(actions.fetchDictionarySuccess(data));
+    } catch (error) {
+        yield put(actions.addError(error.response.data, `Error while fetching dictionary [${id}]`));
+        yield put(actions.fetchDictionaryFailure());
+    }
+}
+
 export function* fetchAllLanguagesSaga() {
     const languages = yield select(selectors.languagesSelector);
     if (languages.length)
@@ -43,7 +61,7 @@ export function* createDictionarySaga(action) {
 
 export function* updateDictionarySaga(action) {
     const { name } = action;
-    const currentDictionary = yield select(selectors.currentDictionarySelector);
+    const currentDictionary = yield select(selectors.selectedDictionarySelector);
     const updatedDictionary = { ...currentDictionary, name };
 
     try {

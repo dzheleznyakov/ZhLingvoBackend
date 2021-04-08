@@ -52,25 +52,25 @@ class DictionaryServiceImplTest {
         @Test
         @DisplayName("Should return nothing if no dictionary is found by the id for the user")
         void foundNothing_ReturnNothing() {
-            when(dictionaryRepository.findByIdAndUser(ID, user)).thenReturn(Optional.empty());
+            when(dictionaryRepository.findById(ID)).thenReturn(Optional.empty());
 
             Optional<Dictionary> dictionaryOptional = service.findById(ID, user);
 
             assertThat(dictionaryOptional, is(empty()));
-            verify(dictionaryRepository, only()).findByIdAndUser(ID, user);
+            verify(dictionaryRepository, only()).findById(ID);
         }
 
         @Test
         @DisplayName("Should return a dictionary if it exists")
         void returnFoundDictionary() {
-            Dictionary dictionary = Dictionary.builder().id(ID).build();
-            when(dictionaryRepository.findByIdAndUser(ID, user)).thenReturn(Optional.of(dictionary));
+            Dictionary dictionary = Dictionary.builder().id(ID).user(user).build();
+            when(dictionaryRepository.findById(ID)).thenReturn(Optional.of(dictionary));
 
             Optional<Dictionary> dictionaryOptional = service.findById(ID, user);
 
             assertThat(dictionaryOptional, is(not(empty())));
             assertThat(dictionaryOptional, hasPropertySatisfying(Dictionary::getId, ID::equals));
-            verify(dictionaryRepository, only()).findByIdAndUser(ID, user);
+            verify(dictionaryRepository, only()).findById(ID);
         }
     }
 

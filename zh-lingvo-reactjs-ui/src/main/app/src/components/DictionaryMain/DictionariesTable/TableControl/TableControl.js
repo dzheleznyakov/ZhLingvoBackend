@@ -8,7 +8,7 @@ import { Modal, IconButton, iconButtonTypes } from '../../../UI';
 import NewDictionaryDialog from '../../NewDictionaryDialog/NewDictionaryDialog';
 import EditDictionaryDialog from '../../EditDictionaryDialog/EditDictionaryDialog';
 import DeleteDictionaryDialog from '../../DeleteDictionaryDialog/DeleteDictionaryDialog';
-import { dictionarySelectedSelector, currentDictionarySelector } from '../../../../store/selectors';
+import { dictionarySelectedSelector, selectedDictionarySelector } from '../../../../store/selectors';
 import { DICTIONARY as dictionaryUrlPattern } from '../../../../static/constants/paths';
 
 const MODAL_TYPES = {
@@ -26,7 +26,7 @@ document.documentElement.addEventListener('DOMAttrModified', function(e){
 
 const TableControl = () => {
     const dictionaryIsSelected = useSelector(dictionarySelectedSelector);
-    const selectedDictionary = useSelector(currentDictionarySelector);
+    const selectedDictionary = useSelector(selectedDictionarySelector);
     const [modalType, setModalType] = useState(MODAL_TYPES.NONE);
     const showModal = modalType !== null;
     const history = useHistory();
