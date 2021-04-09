@@ -45,7 +45,12 @@ const TableControl = () => {
 
     const onForward = () => {
         const selectedDictionaryId = selectedDictionary.id;
-        const path = dictionaryUrlPattern.replace(':id', selectedDictionaryId);
+        const path = dictionaryUrlPattern.replace(/:(\w)+/g, (param) => {
+            switch (param) {
+                case ':id': return selectedDictionaryId;
+                default: return '';
+            }
+        });
         history.push(path);
     };
 

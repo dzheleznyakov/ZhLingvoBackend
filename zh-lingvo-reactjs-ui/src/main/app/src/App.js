@@ -34,7 +34,7 @@ const App = () => {
 
   const routes = loggedIn ? (
     <Switch>
-      <Route path={paths.DICTIONARY} render={() => <DictionaryView />} />
+      <Route exact path={paths.DICTIONARY} render={() => <DictionaryView />} />
       <Route exact path={paths.DICTIONARIES_ROOT} render={() => <Dictionaries />} />
       <Redirect to={paths.DICTIONARIES_ROOT} />
     </Switch>

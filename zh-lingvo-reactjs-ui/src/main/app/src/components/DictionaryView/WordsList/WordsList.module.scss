@@ -1,11 +1,14 @@
 @import "../../../static/styles/colours";
 @import "../../../static/styles/sizes";
 
+
+$wrapper-min-width: 160px;
+$wrapper-margin-left: calc((100vw - #{$wrapper-min-width}) / 2);
 .WordsListWrapper {
     padding: 0;
-    margin: 8px auto 0;
+    margin: 8px auto 0 $wrapper-margin-left;
     width: fit-content;
-    min-width: 160px;
+    min-width: $wrapper-min-width;
     max-width: 50%;
     min-height: 60vh;
     overflow-y: scroll;
@@ -15,6 +18,8 @@
 
     display: flex;
     flex-direction: column;
+
+    transition: margin-left 1s ease;
 
     li {
         list-style: none;
@@ -28,5 +33,17 @@
         &.SelectedWord {
             outline: 1px auto map-get($palette, url);
         }
+    }
+}
+
+.Active {
+    margin-left: -100%;
+    margin-right: calc(100% - #{$wrapper-min-width});
+}
+
+@media (min-width: $mobile-max-width) {
+    .Active {
+        margin-left: 0;
+        margin-right: 10%;
     }
 }
