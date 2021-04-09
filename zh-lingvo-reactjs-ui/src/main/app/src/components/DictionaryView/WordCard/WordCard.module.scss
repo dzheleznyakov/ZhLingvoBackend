@@ -1,0 +1,24 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+$min-wrapper-width: 300px;
+.WordCardWrapper {
+    padding: 4px 8px;
+    margin-top: 8px;
+    width: fit-content;
+    min-width: $min-wrapper-width;
+    max-width: 50%;
+    min-height: 60vh;
+    overflow-y: scroll;
+
+    border: 1px solid darken(map-get($palette, light), 5%);
+    border-radius: $button-border-radius;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.WordMainForm {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
