@@ -10,6 +10,25 @@ export const fetchWordsListSuccess = wordsList => ({
     wordsList,
 });
 
+export const fetchWord = (dictionaryId, wordMainForm) => ({
+    type: actionTypes.FETCH_WORD,
+    dictionaryId,
+    wordMainForm,
+});
+
+export const fetchWordStart = () => ({
+    type: actionTypes.FETCH_WORD_START,
+});
+
+export const fetchWordSuccess = word => ({
+    type: actionTypes.FETCH_WORD_SUCCESS,
+    word,
+});
+
+export const fetchWordFailure = () => ({
+    type: actionTypes.FETCH_WORD_FAILURE,
+});
+
 export const selectWord = index => ({
     type: actionTypes.SELECT_WORD,
     index,

@@ -99,6 +99,40 @@ class WordServiceImplTest {
     }
 
     @Nested
+    @DisplayName("Test WordServiceImpl.findAllByMainForm(mainForm, dictionaryId, user)")
+    class FindAllByMainForm {
+        private static final String MAIN_FORM = "form";
+        private final Word WORD_1 = Word.builder().mainForm(MAIN_FORM).dictionary(dictionary).build();
+        private final Word WORD_2 = Word.builder().mainForm(MAIN_FORM).dictionary(dictionary).build();
+
+        @Test
+        @DisplayName("Should return empty list if no dictionary is found")
+        void noDictionaryFound() {
+            when(dictionaryService.findById(DICTIONARY_ID, user)).thenReturn(Optional.empty());
+
+            List<Word> words = service.findAllByMainForm(MAIN_FORM, DICTIONARY_ID, user);
+
+            assertThat(words, hasSize(0));
+            verify(dictionaryService, times(1)).findById(DICTIONARY_ID, user);
+            verifyNoInteractions(wordRepository);
+        }
+
+        @Test
+        @DisplayName("Should return all found words when dictionary does exist")
+        void happyPath() {
+            when(dictionaryService.findById(DICTIONARY_ID, user)).thenReturn(Optional.of(dictionary));
+            when(wordRepository.findAllByMainFormAndDictionary(MAIN_FORM, dictionary))
+                    .thenReturn(ImmutableList.of(WORD_1, WORD_2));
+
+            List<Word> words = service.findAllByMainForm(MAIN_FORM, DICTIONARY_ID, user);
+
+            assertThat(words, hasSize(2));
+            verify(dictionaryService, times(1)).findById(DICTIONARY_ID, user);
+            verify(wordRepository, times(1)).findAllByMainFormAndDictionary(MAIN_FORM, dictionary);
+        }
+    }
+
+    @Nested
     @DisplayName("Test WordServiceImpl.findById(id, user)")
     class FindById {
         @Test

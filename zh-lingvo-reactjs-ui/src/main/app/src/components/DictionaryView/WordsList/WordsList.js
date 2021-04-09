@@ -12,19 +12,21 @@ import * as selectors from '../../../store/selectors';
 const WordsList = props => {
     const { dictionaryId, parentBreadcrumbs } = props;
     useActionOnMount(actions.fetchWordsList(dictionaryId));
-    const [wrapperClasses, setWrapperClasses] = useState([classes.WordsListWrapper]);
     const [breadcrumbs, setBreadcrumbs] = useState(parentBreadcrumbs);
 
     useDynamicBreadcrumbs([breadcrumbs], ...breadcrumbs);
 
     const wordsList = useSelector(selectors.wordsListSelector);
     const selectedWordIndex = useSelector(selectors.selectedWordIndexSelector);
+    const wrapperClasses = [classes.WordsListWrapper];
+    if (selectedWordIndex >= 0)
+        wrapperClasses.push(classes.Active);
+
     const dispatch = useDispatch();
     const history = useHistory();
 
     const onWordClick = index => () => {
         dispatch(actions.selectWord(index));
-        setWrapperClasses(wrapperClasses.concat([classes.Active]));
         const wordMainForm = wordsList[index];
         history.replace(`/dictionaries/${dictionaryId}/${wordMainForm}`);
         setBreadcrumbs(parentBreadcrumbs.concat([wordMainForm]));

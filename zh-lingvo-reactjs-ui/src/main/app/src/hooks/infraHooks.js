@@ -9,6 +9,15 @@ export const useActionOnMount = action => {
     }, [dispatch]);
 };
 
+export const useConditionalActionOnMount = (action, condition, ...deps) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (condition)
+            dispatch(action);
+    }, [dispatch].concat(deps));
+}
+
 export const useAutofocus = ref => {
     useEffect(() => {
         if (ref)

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.function.LongFunction;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
@@ -46,8 +47,17 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public List<Word> findAll(Long dictionaryId, User user) {
+        return findAll(dictionaryId, user, wordRepository::findAllByDictionary);
+    }
+
+    @Override
+    public List<Word> findAllByMainForm(String mainForm, Long dictionaryId, User user) {
+        return findAll(dictionaryId, user, dictionary -> wordRepository.findAllByMainFormAndDictionary(mainForm, dictionary));
+    }
+
+    private List<Word> findAll(Long dictionaryId, User user, Function<Dictionary, List<Word>> wordsGetter) {
         return dictionaryService.findById(dictionaryId, user)
-                .map(wordRepository::findAllByDictionary)
+                .map(wordsGetter)
                 .orElseGet(ImmutableList::of);
     }
 

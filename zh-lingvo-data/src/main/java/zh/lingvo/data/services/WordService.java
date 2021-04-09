@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface WordService {
     List<Word> findAll(Long dictionaryId, User user);
 
+    List<Word> findAllByMainForm(String mainForm, Long dictionaryId, User user);
+
     Optional<Word> findById(Long wordId, User user);
 
     Optional<Word> findWithSubWordPartsById(Long wordId, User user);

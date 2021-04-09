@@ -29,7 +29,7 @@ const DictionaryView = () => {
             {dictionaryLoading && <Spinner />}
             <div className={classes.ContentWrapper}>
                 <WordList dictionaryId={id} parentBreadcrumbs={breadcrumbs} />
-                <WordCard wordMainForm={wordMainForm} />
+                <WordCard dictionaryId={id} wordMainForm={wordMainForm} />
             </div>
         </div>
     );

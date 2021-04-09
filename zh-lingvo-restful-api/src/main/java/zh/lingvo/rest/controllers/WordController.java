@@ -1,5 +1,6 @@
 package zh.lingvo.rest.controllers;
 
+import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
 import zh.lingvo.util.CollectionsHelper;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -41,12 +44,24 @@ public class WordController {
     }
 
     @GetMapping("/dictionary/{dictionaryId}")
-    public Set<String> getAllWords(@PathVariable("dictionaryId") long dictionaryId) {
+    public Set<String> getAllWords(@PathVariable("dictionaryId") Long dictionaryId) {
         return wordService.findAll(dictionaryId, getUser())
                 .stream()
                 .map(Word::getMainForm)
                 .sorted()
                 .collect(CollectionsHelper.toLinkedHashSet());
+    }
+
+    @GetMapping("/dictionary/{dictionaryId}/mainForm/{mainForm}")
+    public List<WordCommand> getWordsByMainForm(
+            @PathVariable("dictionaryId") Long dictionaryId,
+            @PathVariable("mainForm") String mainForm
+    ) {
+        return wordService.findAllByMainForm(mainForm, dictionaryId, getUser())
+                .stream()
+                .map(wordConverter::toWordCommand)
+                .sorted(Comparator.comparingLong(WordCommand::getId))
+                .collect(ImmutableList.toImmutableList());
     }
 
     @GetMapping("/{wordId}")

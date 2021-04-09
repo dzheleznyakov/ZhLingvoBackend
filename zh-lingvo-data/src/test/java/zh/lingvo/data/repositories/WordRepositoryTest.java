@@ -30,6 +30,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     private static final String TRANSCRIPTION_2 = "t2";
     private static final String TRANSCRIPTION_3 = "t3";
     private static final String TRANSCRIPTION_4 = "t4";
+    private static final String TRANSCRIPTION_5 = "t5";
 
     private final User user = User.builder().name("test").build();
     private final Language language = Language.builder().name("Lang").twoLetterCode("Ln").build();
@@ -47,6 +48,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_2));
         entityManager.persist(getWord(MAIN_FORM_3, TRANSCRIPTION_3));
         entityManager.persist(getWord(MAIN_FORM_4, TRANSCRIPTION_4, dictionary2));
+        entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_5, dictionary2));
         entityManager.flush();
     }
 
@@ -81,13 +83,13 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
 
     @Test
     @DisplayName("Should return all words matching the main form")
-    void findAllByMainForm_TwoWords() {
+    void findAllByMainForm_ThreeWords() {
         List<Word> words = repository.findAllByMainForm(MAIN_FORM_1);
 
         Set<String> actualTranscriptions = words.stream()
                 .map(Word::getTranscription)
                 .collect(ImmutableSet.toImmutableSet());
-        Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2);
+        Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2, TRANSCRIPTION_5);
         assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
     }
 
@@ -107,7 +109,19 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
         actualTranscriptions = words.stream()
                 .map(Word::getTranscription)
                 .collect(ImmutableSet.toImmutableSet());
-        expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_4);
+        expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_4, TRANSCRIPTION_5);
+        assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
+    }
+
+    @Test
+    @DisplayName("Should return all words from the dictionary matching the main form")
+    void findAllByMainFormAndDictionary() {
+        List<Word> words = repository.findAllByMainFormAndDictionary(MAIN_FORM_1, dictionary);
+
+        Set<String> actualTranscriptions = words.stream()
+                .map(Word::getTranscription)
+                .collect(ImmutableSet.toImmutableSet());
+        Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2);
         assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
     }
 }

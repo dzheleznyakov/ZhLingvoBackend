@@ -16,6 +16,13 @@ $min-wrapper-width: 300px;
 
     display: flex;
     flex-direction: column;
+
+    animation: word-card-wrapper-in 0.5s ease-out;
+}
+
+@keyframes word-card-wrapper-in {
+    from { opacity: 0 ;}
+    to { opacity: 1; }
 }
 
 .WordMainForm {

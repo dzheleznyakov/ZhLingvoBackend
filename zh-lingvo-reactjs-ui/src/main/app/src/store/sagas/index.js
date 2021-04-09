@@ -24,4 +24,5 @@ export function* dictionariesWatcher() {
 
 export function* wordsWatcher() {
     yield takeEvery(actionTypes.FETCH_WORDS_LIST, wordsSagas.fetchWordsListSaga);
+    yield takeEvery(actionTypes.FETCH_WORD, wordsSagas.fetchWordSaga);
 }

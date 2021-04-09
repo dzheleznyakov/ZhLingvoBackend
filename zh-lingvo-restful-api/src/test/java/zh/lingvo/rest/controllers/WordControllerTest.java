@@ -136,6 +136,28 @@ class WordControllerTest {
     }
 
     @Nested
+    @DisplayName("Test GET /api/words/dictionary/{dictionaryId}/mainForm/{mainForm}")
+    class GetAllWordsByMainForm {
+        private static final String URL_TEMPLATE = "/api/words/dictionary/{dictionaryId}/mainForm/{mainForm}";
+        private static final String MAIN_FORM = "form";
+
+        @Test
+        @DisplayName("Should return 200 OK and all the found words")
+        void returnAllFoundWords() throws Exception {
+            when(wordService.findAllByMainForm(MAIN_FORM, DICTIONARY_ID, USER))
+                    .thenReturn(ImmutableList.of(WORD_1, WORD_2));
+
+            mockMvc.perform(get(URL_TEMPLATE, DICTIONARY_ID, MAIN_FORM))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", hasSize(2)))
+                    .andExpect(jsonPath("$[0].id", is(WORD_1.getId().intValue())))
+                    .andExpect(jsonPath("$[1].id", is(WORD_2.getId().intValue())));
+
+            verify(wordService, only()).findAllByMainForm(MAIN_FORM, DICTIONARY_ID, USER);
+        }
+    }
+
+    @Nested
     @DisplayName("Test GET /api/words/{wordId}")
     class GetWord {
         private static final String URL_PATTERN = "/api/words/{wordId}";
