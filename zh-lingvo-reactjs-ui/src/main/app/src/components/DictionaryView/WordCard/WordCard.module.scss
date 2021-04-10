@@ -9,7 +9,9 @@ $min-wrapper-width: 300px;
     min-width: $min-wrapper-width;
     max-width: 50%;
     min-height: 60vh;
+    max-height: 60vh;
     overflow-y: scroll;
+    word-wrap: break-word;
 
     border: 1px solid darken(map-get($palette, light), 5%);
     border-radius: $button-border-radius;

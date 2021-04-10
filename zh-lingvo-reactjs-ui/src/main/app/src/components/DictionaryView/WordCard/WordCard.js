@@ -30,11 +30,9 @@ const WordCard = props => {
     useEffect(() => {
         if (wordIsInList)
             dispatch(actions.selectWord(wordIndex));
-    }, [wordIndex]);
+    }, [dispatch, wordIndex]);
 
-    const wordViews = loadedWord.map(w => (
-        <WordView key={w.id} word={w} />
-    ));
+    const wordViews = loadedWord.map((w, i) => <WordView key={w.id} word={w} index={i} />);
 
     switch (true) {
         case wordIsLoading: return <Spinner />;

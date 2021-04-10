@@ -1,0 +1,8 @@
+.Remark {
+    font-style: italic;
+    color: green;
+
+    &:after {
+        content: " ";
+    }
+}

@@ -1,0 +1,11 @@
+li.Meaning {
+    counter-increment: meaning;
+    margin-bottom: 1rem;
+
+    &:before {
+        content: counter(meaning) ")";
+        display: inline-block; 
+        width: 1.5em;
+        margin-left: -1.5em;
+    }
+}

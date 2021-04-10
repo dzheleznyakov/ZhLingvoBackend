@@ -1,0 +1,13 @@
+.Translation {
+    &:after {
+        content: "; ";
+    }
+
+    &:last-of-type::after {
+        content: " ";
+    }
+}
+
+.Elaboration {
+    font-style: italic;
+}
