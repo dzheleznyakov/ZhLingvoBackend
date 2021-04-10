@@ -18,31 +18,17 @@ const MODAL_TYPES = {
     NONE: null,
 };
 
-document.documentElement.addEventListener('DOMAttrModified', function(e){
-    if (e.attrName === 'style') {
-      console.log('prevValue: ' + e.prevValue, 'newValue: ' + e.newValue);
-    }
-  }, false);
-
 const TableControl = () => {
     const dictionaryIsSelected = useSelector(dictionarySelectedSelector);
     const selectedDictionary = useSelector(selectedDictionarySelector);
     const [modalType, setModalType] = useState(MODAL_TYPES.NONE);
-    const showModal = modalType !== null;
+    const showModal = modalType !== MODAL_TYPES.NONE;
     const history = useHistory();
 
-    const onNew = () => {
-        setModalType(MODAL_TYPES.NEW);
-    };
-
-    const onEdit = () => {
-        setModalType(MODAL_TYPES.EDIT);
-    };
-
-    const onDelete = () => {
-        setModalType(MODAL_TYPES.DELETE);
-    };
-
+    const closeModal = () => setModalType(MODAL_TYPES.NONE);
+    const onNew = () => setModalType(MODAL_TYPES.NEW);
+    const onEdit = () => setModalType(MODAL_TYPES.EDIT);
+    const onDelete = () => setModalType(MODAL_TYPES.DELETE);
     const onForward = () => {
         const selectedDictionaryId = selectedDictionary.id;
         const path = dictionaryUrlPattern.replace(/:(\w)+/g, (param) => {
@@ -53,8 +39,6 @@ const TableControl = () => {
         });
         history.push(path);
     };
-
-    const closeModal = () => setModalType(MODAL_TYPES.NONE);
 
     let panel;
     switch (modalType) {

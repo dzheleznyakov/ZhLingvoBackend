@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import classes from './WordsList.module.scss';
 
+import WordListControl from './WordListControl/WordListControl';
 import { useActionOnMount, useDynamicBreadcrumbs } from '../../../hooks';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
@@ -34,17 +35,20 @@ const WordsList = props => {
     const getItemClassName = index => (index === selectedWordIndex ? classes.SelectedWord : null);
 
     return (
-        <ul className={wrapperClasses.join(' ')}>
-            {wordsList.map((word, i) => (
-                <li 
-                    key={word}
-                    className={getItemClassName(i)}
-                    onClick={onWordClick(i)}
-                >
-                    {word}
-                </li>
-            ))}
-        </ul>
+        <div className={wrapperClasses.join(' ')}>
+            <ul>
+                {wordsList.map((word, i) => (
+                    <li 
+                        key={word}
+                        className={getItemClassName(i)}
+                        onClick={onWordClick(i)}
+                    >
+                        {word}
+                    </li>
+                ))}
+            </ul>
+            <WordListControl />
+        </div>
     );
 };
 

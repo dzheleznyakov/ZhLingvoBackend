@@ -1,4 +1,4 @@
-import { takeEvery } from 'redux-saga/effects';
+import { take, takeEvery } from 'redux-saga/effects';
 
 import * as actionTypes from '../actionTypes';
 import * as authSagas from './auth';
@@ -25,4 +25,5 @@ export function* dictionariesWatcher() {
 export function* wordsWatcher() {
     yield takeEvery(actionTypes.FETCH_WORDS_LIST, wordsSagas.fetchWordsListSaga);
     yield takeEvery(actionTypes.FETCH_WORD, wordsSagas.fetchWordSaga);
+    yield takeEvery(actionTypes.CREATE_WORD, wordsSagas.createWordSaga);
 }

@@ -33,3 +33,14 @@ export const selectWord = index => ({
     type: actionTypes.SELECT_WORD,
     index,
 });
+
+export const createWord = (dictionaryId, mainForm) => ({
+    type: actionTypes.CREATE_WORD,
+    dictionaryId,
+    mainForm,
+});
+
+export const createWordSuccess = word => ({
+    type: actionTypes.CREATE_WORD_SUCCESS,
+    word,
+});

@@ -28,3 +28,16 @@ export function* fetchWordSaga(action) {
             `Error while fetching words [${wordMainForm}] for dictionary [${dictionaryId}]`));
     }
 }
+
+export function* createWordSaga(action) {
+    const { dictionaryId, mainForm } = action;
+    try {
+        const word = { mainForm }
+        const { data } = yield call(axios.post, `/words/dictionary/${dictionaryId}`, word);
+        yield put(actions.createWordSuccess(data));
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while createing word [${mainForm}] for dictionary [${dictionaryId}]`));
+    }
+}

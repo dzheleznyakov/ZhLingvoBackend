@@ -36,6 +36,18 @@ const selectWord = (state, action) => ({
     selectedWordIndex: action.index,
 });
 
+const createWordSuccess = (state, action) => {
+    const updatedWordsList = [action.word.mainForm].concat(state.wordsList);
+    updatedWordsList.sort();
+    const selectedWordIndex = updatedWordsList.indexOf(action.word.mainForm);
+    return { 
+        ...state, 
+        wordsList: updatedWordsList, 
+        selectedWordIndex,
+        loadedWord: [action.word],
+    };
+};
+
 const signOut = state => ({
     ...state,
     wordsList: [],
@@ -51,6 +63,7 @@ export default (state = initialState, action) => {
         case actionTypes.FETCH_WORD_SUCCESS: return fetchWordSuccess(state, action);
         case actionTypes.FETCH_WORD_FAILURE: return fetchWordFailure(state, action);
         case actionTypes.SELECT_WORD: return selectWord(state, action);
+        case actionTypes.CREATE_WORD_SUCCESS: return createWordSuccess(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

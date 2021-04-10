@@ -9,13 +9,19 @@ import toRoman from '../../../../utils/toRomanNumbers';
 
 const WordView = props => {
     const { index, word } = props;
-    const semBlocks = (word.semBlocks || [])
+
+    const counter = <div className={classes.WordEnum}>{toRoman(index + 1)}</div>;
+
+    const transcription = word.transcription 
+        && <div className={classes.Transcription}>[{word.transcription}]</div>;
+
+    const semBlocks = word.semBlocks && word.semBlocks
         .map((sb, i) => <SemanticBlock key={sb.id} semBlock={sb} index={i} />);
 
     return (
         <div>
-            <div className={classes.WordEnum}>{toRoman(index + 1)}</div>
-            <div className={classes.Transcription}>[{word.transcription}]</div>
+            {counter}
+            {transcription}
             <div>
                 {semBlocks}
             </div>
