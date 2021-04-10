@@ -39,12 +39,9 @@ const selectWord = (state, action) => ({
 const createWordSuccess = (state, action) => {
     const updatedWordsList = [action.word.mainForm].concat(state.wordsList);
     updatedWordsList.sort();
-    const selectedWordIndex = updatedWordsList.indexOf(action.word.mainForm);
     return { 
         ...state, 
-        wordsList: updatedWordsList, 
-        selectedWordIndex,
-        loadedWord: [action.word],
+        wordsList: updatedWordsList,
     };
 };
 

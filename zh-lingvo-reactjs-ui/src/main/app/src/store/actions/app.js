@@ -10,3 +10,8 @@ export const addError = (error, descr) => ({
     error,
     descr,
 });
+
+export const navigateTo = url => ({
+    type: actionTypes.NAVIGATE_TO,
+    url,
+});

@@ -1,8 +1,10 @@
 import * as actionTypes from '../actionTypes/app';
+import { SIGN_OUT } from '../actionTypes';
 
 const initialState = {
     showSidebar: false,
     errors: [],
+    navigationDestination: null,
 };
 
 const gen = (function* idGen() {
@@ -31,10 +33,24 @@ const addError = (state, action) => {
     }
 };
 
+const navigateTo = (state, action) => ({
+    ...state,
+    navigationDestination: action.url,
+});
+
+const signOut = (state) => ({
+    ...state,
+    showSidebar: false,
+    errors: [],
+    navigationDestination: null,
+});
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SHOW_SIDEBAR: return showSidebar(state, action);
         case actionTypes.ADD_ERROR: return addError(state, action);
+        case actionTypes.NAVIGATE_TO: return navigateTo(state, action);
+        case SIGN_OUT: return signOut(state, action);
         default: return state;
     }
 };

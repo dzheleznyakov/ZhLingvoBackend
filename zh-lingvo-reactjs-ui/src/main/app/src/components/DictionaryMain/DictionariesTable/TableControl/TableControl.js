@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 
 import classes from './TableControl.module.scss';
 
@@ -10,6 +9,7 @@ import EditDictionaryDialog from '../../EditDictionaryDialog/EditDictionaryDialo
 import DeleteDictionaryDialog from '../../DeleteDictionaryDialog/DeleteDictionaryDialog';
 import { dictionarySelectedSelector, selectedDictionarySelector } from '../../../../store/selectors';
 import { DICTIONARY as dictionaryUrlPattern } from '../../../../static/constants/paths';
+import * as actions from '../../../../store/actions';
 
 const MODAL_TYPES = {
     NEW: 'NEW',
@@ -23,7 +23,7 @@ const TableControl = () => {
     const selectedDictionary = useSelector(selectedDictionarySelector);
     const [modalType, setModalType] = useState(MODAL_TYPES.NONE);
     const showModal = modalType !== MODAL_TYPES.NONE;
-    const history = useHistory();
+    const dispath = useDispatch();
 
     const closeModal = () => setModalType(MODAL_TYPES.NONE);
     const onNew = () => setModalType(MODAL_TYPES.NEW);
@@ -37,7 +37,7 @@ const TableControl = () => {
                 default: return '';
             }
         });
-        history.push(path);
+        dispath(actions.navigateTo(path));
     };
 
     let panel;

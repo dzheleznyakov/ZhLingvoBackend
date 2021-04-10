@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import PropTypes from 'prop-types';
 
 import classes from './WordsList.module.scss';
@@ -14,6 +14,12 @@ const WordsList = props => {
     const { dictionaryId, parentBreadcrumbs } = props;
     useActionOnMount(actions.fetchWordsList(dictionaryId));
     const [breadcrumbs, setBreadcrumbs] = useState(parentBreadcrumbs);
+    
+    const { wordMainForm } =  useParams();
+    useEffect(() => {
+        if (wordMainForm)
+            setBreadcrumbs(parentBreadcrumbs.concat([wordMainForm]));
+    }, [wordMainForm, parentBreadcrumbs, setBreadcrumbs]);
 
     useDynamicBreadcrumbs([breadcrumbs], ...breadcrumbs);
 
@@ -24,13 +30,11 @@ const WordsList = props => {
         wrapperClasses.push(classes.Active);
 
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const onWordClick = index => () => {
         dispatch(actions.selectWord(index));
         const wordMainForm = wordsList[index];
-        history.replace(`/dictionaries/${dictionaryId}/${wordMainForm}`);
-        setBreadcrumbs(parentBreadcrumbs.concat([wordMainForm]));
+        dispatch(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordMainForm}`));
     };
     const getItemClassName = index => (index === selectedWordIndex ? classes.SelectedWord : null);
 

@@ -1,7 +1,8 @@
-import { put, call } from 'redux-saga/effects';
+import { put, call, select } from 'redux-saga/effects';
 
 import axios from '../../axios-api';
 import * as actions from '../actions';
+import * as selectors from '../selectors';
 
 export function* fetchWordsListSaga(action) {
     const { dictionaryId } = action;
@@ -35,6 +36,13 @@ export function* createWordSaga(action) {
         const word = { mainForm }
         const { data } = yield call(axios.post, `/words/dictionary/${dictionaryId}`, word);
         yield put(actions.createWordSuccess(data));
+        yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${mainForm}`));
+        const currentBreadcrumbs = yield select(state => state.control.breadcrumbs);
+        yield put(actions.setBreadcrumbs([
+            currentBreadcrumbs[0],
+            currentBreadcrumbs[1],
+            mainForm,
+        ]));
     } catch (error) {
         yield put(actions.addError(
             error.response.data,

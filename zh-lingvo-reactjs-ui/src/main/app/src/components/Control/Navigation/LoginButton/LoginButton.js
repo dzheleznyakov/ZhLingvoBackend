@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import classes from './LoginButton.module.scss';
 
@@ -11,14 +10,13 @@ import { loggedInSelector } from '../../../../store/selectors';
 const LoginButton = props => {
     const { postClicked } = props;
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const loggedIn = useSelector(loggedInSelector);
     const buttonText = loggedIn ? 'Log out' : 'Log in';
 
     const loginAction = loggedIn
         ? () => dispatch(actions.signOut())
-        : () => history.push('/auth');
+        : () => dispatch(actions.navigateTo('/auth'));
 
     const onButtonClicked = () => {
         loginAction();

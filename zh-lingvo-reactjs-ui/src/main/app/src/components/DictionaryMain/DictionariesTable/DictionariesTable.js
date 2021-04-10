@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 
 import classes from './DictionariesTable.module.scss';
 
@@ -14,7 +13,6 @@ const DictionariesTable = () => {
     useBreadcrumbs('Dictionaries');
     useActionOnMount(actions.fetchAllDictionaries());
     const dispatch = useDispatch();
-    const history = useHistory();
     const loading = useSelector(selectors.loadingDictionariesSelector);
     const data = useSelector(selectors.dictionariesTableDataSelector);
 
@@ -28,7 +26,7 @@ const DictionariesTable = () => {
     };
 
     const rowOnDbClickCb = (rowData, i) => {
-        history.push(`/dictionaries/${rowData[0].id}`);
+        dispatch(actions.navigateTo(`/dictionaries/${rowData[0].id}`))
     };
 
     const table = loading ? <Spinner /> : (
