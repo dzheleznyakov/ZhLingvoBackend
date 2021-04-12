@@ -35,20 +35,28 @@ export function* createWordSaga(action) {
     const { dictionaryId, mainForm } = action;
     try {
         const word = { mainForm }
-        const { data } = yield call(axios.post, `/words/dictionary/${dictionaryId}`, word);
-        yield put(actions.createWordSuccess(data));
-        yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${mainForm}`));
-        const currentBreadcrumbs = yield select(state => state.control.breadcrumbs);
-        yield put(actions.setBreadcrumbs([
-            currentBreadcrumbs[0],
-            currentBreadcrumbs[1],
-            mainForm,
-        ]));
+        yield call(axios.post, `/words/dictionary/${dictionaryId}`, word);
     } catch (error) {
         yield put(actions.addError(
             error.response.data,
             `Error while createing word [${mainForm}] for dictionary [${dictionaryId}]`));
+        return;
     }
+
+    yield put(actions.fetchWordsList(dictionaryId));
+    const { wordsList } = yield take(actionTypes.FETCH_WORDS_LIST_SUCCESS);
+    const selectedWordIndex = wordsList.indexOf(mainForm);
+    const currentBreadcrumbs = yield select(state => state.control.breadcrumbs);
+    yield all([
+        yield put(actions.selectWord(selectedWordIndex)),
+        yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${mainForm}`)),
+        yield put(actions.setBreadcrumbs([
+                currentBreadcrumbs[0],
+                currentBreadcrumbs[1],
+                mainForm,
+        ])),
+        yield put(actions.fetchWord(dictionaryId, mainForm)),
+    ]);
 }
 
 export function* deleteSelectedWordSaga(action) {
