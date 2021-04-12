@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import zh.lingvo.data.fixtures.Persistable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class Dictionary implements Persistable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("main_form")
     private List<Word> words;
 }

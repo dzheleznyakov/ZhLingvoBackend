@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import classes from './WordListControl.module.scss';
 
 import { Modal, IconButton, iconButtonTypes } from '../../../UI';
 import NewWordDialog from '../NewWordDialog/NewWordDialog';
+import DeleteWordDialog from '../DeleteWordDialog/DeleteWordDialog';
 import * as selectors from '../../../../store/selectors';
 
 const MODAL_TYPES = {
@@ -26,6 +26,7 @@ const WordListControl = () => {
     let panel;
     switch (modalType) {
         case MODAL_TYPES.NEW: panel = <NewWordDialog close={closeModal} />; break;
+        case MODAL_TYPES.DELETE: panel = <DeleteWordDialog close={closeModal} />; break;
         default: panel = null;
     }
 
@@ -39,9 +40,5 @@ const WordListControl = () => {
         </Fragment>
     );
 };
-
-WordListControl.propTypes = {};
-
-WordListControl.defaultProps = {};
 
 export default WordListControl;

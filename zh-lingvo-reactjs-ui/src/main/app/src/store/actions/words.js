@@ -44,3 +44,8 @@ export const createWordSuccess = word => ({
     type: actionTypes.CREATE_WORD_SUCCESS,
     word,
 });
+
+export const deleteSelectedWord = dictionaryId => ({
+    type: actionTypes.DELETE_SELECTED_WORD,
+    dictionaryId,
+});
