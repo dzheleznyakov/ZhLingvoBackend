@@ -17,7 +17,7 @@ public interface WordService {
 
     Optional<Word> create(Word word, Long dictionaryId, User user);
 
-    Word update(Word word, User user);
+    Word update(Word word, Long dictionaryId, User user);
 
     void delete(Word word, User user);
 }

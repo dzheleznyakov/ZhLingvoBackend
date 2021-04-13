@@ -85,15 +85,16 @@ public class WordController {
                 .orElseGet(WordCommand::new);
     }
 
-    @PutMapping("/{wordId}")
+    @PutMapping("/dictionary/{dictionaryId}/{wordId}")
     public WordCommand updateWord(
+            @PathVariable("dictionaryId") Long dictionaryId,
             @PathVariable("wordId") Long wordId,
             @RequestBody WordCommand updatedWord
     ) {
         updatedWord.setId(wordId);
         Word word = wordConverter.toWord(updatedWord);
         try {
-            Word savedWord = wordService.update(word, getUser());
+            Word savedWord = wordService.update(word, dictionaryId, getUser());
             return wordConverter.toWordCommand(savedWord);
         } catch (FailedToPersist e) {
             log.error("Error while updating word [{}]", wordId);

@@ -14,3 +14,7 @@
 .Cancel {
     @include button(map-get($palette, lighter-secondary));
 }
+
+.Medium {
+    height: 30px;
+}

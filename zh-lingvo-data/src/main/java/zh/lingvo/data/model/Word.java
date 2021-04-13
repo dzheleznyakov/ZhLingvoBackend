@@ -49,7 +49,7 @@ public class Word implements Persistable {
     @Column(name = "irreg_type")
     private String typeOfIrregularity;
 
-    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OrderBy("id")
     private List<SemanticBlock> semanticBlocks;
 }

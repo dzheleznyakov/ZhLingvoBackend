@@ -40,12 +40,22 @@ export const createWord = (dictionaryId, mainForm) => ({
     mainForm,
 });
 
-export const createWordSuccess = word => ({
-    type: actionTypes.CREATE_WORD_SUCCESS,
-    word,
-});
-
 export const deleteSelectedWord = dictionaryId => ({
     type: actionTypes.DELETE_SELECTED_WORD,
+    dictionaryId,
+});
+
+export const setWordEditing = isEditing => ({
+    type: actionTypes.SET_WORD_EDITING,
+    isEditing,
+});
+
+export const updateWordMainForm = updatedMainForm => ({
+    type: actionTypes.UPDATE_WORD_MAIN_FORM,
+    updatedMainForm,
+});
+
+export const updateWord = dictionaryId => ({
+    type: actionTypes.UPDATE_WORD,
     dictionaryId,
 });

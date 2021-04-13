@@ -50,7 +50,7 @@ class SemanticBlockCommandToSemanticBlockTest {
     void convertSemanticBlockCommand() {
         long meaningId1 = 101L;
         long meaningId2 = 102L;
-        String posName = "NOUN";
+        String posName = "n";
 
         MeaningCommand mCommand1 = MeaningCommand.builder().id(meaningId1).build();
         MeaningCommand mCommand2 = MeaningCommand.builder().id(meaningId2).build();

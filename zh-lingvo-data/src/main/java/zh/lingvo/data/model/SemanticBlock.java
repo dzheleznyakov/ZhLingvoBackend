@@ -50,7 +50,7 @@ public class SemanticBlock implements Persistable, SubWordPart {
     @Column(name = "gender")
     private String gender;
 
-    @OneToMany(mappedBy = "semBlock", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "semBlock", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OrderBy("id")
     private List<Meaning> meanings;
 }

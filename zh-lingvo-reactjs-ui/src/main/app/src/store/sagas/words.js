@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { put, call, select, take, all } from 'redux-saga/effects';
 
 import axios from '../../axios-api';
@@ -91,4 +92,32 @@ export function* deleteSelectedWordSaga(action) {
             yield put(actions.selectWord(wLength - 1)),
             yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordsList[wLength - 1]}`)),
         ]);
+}
+
+export function* updateWordSaga(action) {
+    const word = _.cloneDeep(yield select(selectors.updatedWordSelector));
+    if (!word) {
+        yield put(actions.setWordEditing(false));
+        return;
+    }
+
+    const { dictionaryId } = action;
+    try {
+        for (let i = 0, l = word.length; i < l; ++i)
+            yield call(axios.put, `/words/dictionary/${dictionaryId}/${word[i].id}`, word[i]);
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while updating word [${word[0].mainForm}]`));
+        return;
+    }
+
+    yield put(actions.setWordEditing(false));
+    yield put(actions.fetchWordsList(dictionaryId));
+    const { wordsList } = yield take(actionTypes.FETCH_WORDS_LIST_SUCCESS);
+    const selectedWordIndex = wordsList.indexOf(word[0].mainForm);
+    all([
+        yield put(actions.selectWord(selectedWordIndex)),
+        yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordsList[selectedWordIndex]}`)),
+    ]);
 }

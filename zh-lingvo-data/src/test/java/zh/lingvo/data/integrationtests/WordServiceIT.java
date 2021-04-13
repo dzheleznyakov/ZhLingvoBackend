@@ -117,7 +117,7 @@ public class WordServiceIT extends BaseDataIntegrationTest {
 
         meaning.getTranslations().add(translation2);
 
-        wordService.update(word, user);
+        wordService.update(word, dictionary.getId(), user);
 
         assertThat(translation2.getId(), is(notNullValue()));
         assertThat(translation2.getMeaning(), is(equalTo(meaning)));

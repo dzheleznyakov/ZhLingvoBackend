@@ -32,7 +32,7 @@ public class SemanticBlockCommandToSemanticBlock implements Converter<SemanticBl
     }
 
     private PartOfSpeech convertPos(SemanticBlockCommand command) {
-        return PartOfSpeech.valueOf(command.getPos());
+        return PartOfSpeech.fromCode(command.getPos());
     }
 
     private List<Meaning> convertMeanings(SemanticBlockCommand command) {

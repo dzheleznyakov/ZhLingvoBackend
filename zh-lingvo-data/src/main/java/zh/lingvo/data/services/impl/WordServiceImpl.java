@@ -5,11 +5,15 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import zh.lingvo.data.exceptions.FailedToPersist;
 import zh.lingvo.data.model.Dictionary;
+import zh.lingvo.data.model.Example;
+import zh.lingvo.data.model.Meaning;
 import zh.lingvo.data.model.SemanticBlock;
+import zh.lingvo.data.model.Translation;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 import zh.lingvo.data.repositories.WordRepository;
@@ -95,10 +99,11 @@ public class WordServiceImpl implements WordService {
     }
 
     @Override
-    public Word update(Word word, User user) {
+    public Word update(Word word, Long dictionaryId, User user) {
         if (shouldNotUpdate(word, user))
             throw new FailedToPersist("Word [%s] does not exist", word);
-        return save(word, word.getDictionary())
+        return dictionaryService.findById(dictionaryId, user)
+                .flatMap(dictionary -> save(word, dictionary))
                 .orElse(word);
     }
 
@@ -109,12 +114,36 @@ public class WordServiceImpl implements WordService {
 
     private Optional<Word> save(Word word, Dictionary dictionary) {
         word.setDictionary(dictionary);
+        setAsParent(word);
         Word savedWord = wordRepository.save(word);
         firstNonNull(word.getSemanticBlocks(), ImmutableList.<SemanticBlock>of())
                 .stream()
                 .peek(sb -> sb.setWord(word))
                 .forEach(subWordService::save);
         return Optional.of(savedWord);
+    }
+
+    private void setAsParent(Word word) {
+        firstNonNull(word.getSemanticBlocks(), ImmutableList.<SemanticBlock>of())
+                .forEach(sb -> {
+                    sb.setWord(word);
+                    setAsParent(sb);
+                });
+    }
+
+    private void setAsParent(SemanticBlock semBlock) {
+        firstNonNull(semBlock.getMeanings(), ImmutableList.<Meaning>of())
+                .forEach(m -> {
+                    m.setSemBlock(semBlock);
+                    setAsParent(m);
+                });
+    }
+
+    private void setAsParent(Meaning meaning) {
+        firstNonNull(meaning.getTranslations(), ImmutableSet.<Translation>of())
+                .forEach(tr -> tr.setMeaning(meaning));
+        firstNonNull(meaning.getExamples(), ImmutableSet.<Example>of())
+                .forEach(ex -> ex.setMeaning(meaning));
     }
 
     @Override

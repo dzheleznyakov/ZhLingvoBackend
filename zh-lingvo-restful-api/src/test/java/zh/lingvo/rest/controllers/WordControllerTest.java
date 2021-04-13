@@ -277,7 +277,7 @@ class WordControllerTest {
     @Nested
     @DisplayName("Test PUT /api/words/{wordId}")
     class UpdateWord {
-        private final static String URL_PATTERN = "/api/words/{wordId}";
+        private final static String URL_PATTERN = "/api/words/dictionary/{dictionaryId}/{wordId}";
 
         @Test
         @DisplayName("Should return 404 NOT FOUND if the word does not exist")
@@ -286,12 +286,12 @@ class WordControllerTest {
 
             when(wordConverter.toWord(any(WordCommand.class)))
                     .thenReturn(Word.builder().id(wordId).build());
-            when(wordService.update(any(Word.class), eq(USER)))
+            when(wordService.update(any(Word.class), eq(DICTIONARY_ID), eq(USER)))
                     .thenThrow(new FailedToPersist("Something went terrible wrong"));
 
             WordCommand command = WordCommand.builder().id(wordId).build();
 
-            mockMvc.perform(put(URL_PATTERN, wordId)
+            mockMvc.perform(put(URL_PATTERN, DICTIONARY_ID, wordId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toPayload(command))
             )
@@ -308,12 +308,12 @@ class WordControllerTest {
 
             when(wordConverter.toWord(any(WordCommand.class)))
                     .thenReturn(Word.builder().id(wordId).mainForm(mainForm).build());
-            when(wordService.update(any(Word.class), eq(USER)))
+            when(wordService.update(any(Word.class), eq(DICTIONARY_ID), eq(USER)))
                     .thenReturn(Word.builder().id(wordId).mainForm(mainForm).build());
 
             WordCommand command = WordCommand.builder().id(wordId).mainForm(mainForm).build();
 
-            mockMvc.perform(put(URL_PATTERN, wordId)
+            mockMvc.perform(put(URL_PATTERN, DICTIONARY_ID, wordId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toPayload(command))
             )
@@ -329,7 +329,7 @@ class WordControllerTest {
             long wordId = 42L;
             WordCommand command = WordCommand.builder().id(wordId + 10).build();
 
-            mockMvc.perform(put(URL_PATTERN, wordId)
+            mockMvc.perform(put(URL_PATTERN, DICTIONARY_ID, wordId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toPayload(command)));
 

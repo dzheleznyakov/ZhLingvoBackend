@@ -272,34 +272,36 @@ class WordServiceImplTest {
         @Test
         @DisplayName("Should throw FailedToPersist exception if the word does not exist")
         void wordDoesNotExist() {
-            Word newWord = Word.builder().mainForm("blah").dictionary(dictionary).build();
+            Word newWord = Word.builder().mainForm("blah").build();
 
-            assertThrows(FailedToPersist.class, () -> service.update(newWord, user));
+            assertThrows(FailedToPersist.class, () -> service.update(newWord, DICTIONARY_ID, user));
         }
 
         @Test
         @DisplayName("Should throw FailedToPersist exception if the word exists, but from another user's dictionary")
         void anotherUser() {
-            assertThrows(FailedToPersist.class, () -> service.update(word, anotherUser));
+            assertThrows(FailedToPersist.class, () -> service.update(word, DICTIONARY_ID, anotherUser));
         }
 
         @Test
         @DisplayName("Should throw FailedToPersist exception if the word is missing dictionary")
         void missingDictionary() {
             word.setDictionary(null);
-            assertThrows(FailedToPersist.class, () -> service.update(word, user));
+            assertThrows(FailedToPersist.class, () -> service.update(word, DICTIONARY_ID, user));
         }
 
         @Test
         @DisplayName("Should update the word")
         void updateWordMainForm() {
             when(wordRepository.findByIdWithDictionary(word.getId())).thenReturn(Optional.of(word));
+            when(dictionaryService.findById(DICTIONARY_ID, user)).thenReturn(Optional.ofNullable(dictionary));
             when(wordRepository.save(word)).thenReturn(word);
 
-            service.update(word, user);
+            service.update(word, DICTIONARY_ID, user);
 
             verify(wordRepository, times(1)).save(word);
             verify(wordRepository, times(1)).findByIdWithDictionary(word.getId());
+            verify(dictionaryService, only()).findById(DICTIONARY_ID, user);
         }
     }
 

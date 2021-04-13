@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import classes from './WordCard.module.scss';
 
 import { Spinner } from '../../UI';
+import WordMainFormRegular from './WordView/SubWordParts/WordMainForm';
 import WordView from './WordView/WordView';
+import WordViewControl from './WordViewControl/WordViewControl';
 import { useConditionalActionOnMount } from '../../../hooks';
 import * as selectors from '../../../store/selectors';
 import * as actions from '../../../store/actions';
@@ -38,8 +40,11 @@ const WordCard = props => {
         case wordIsLoading: return <Spinner />;
         case wordMainForm && wordIsInList: return (
             <div className={classes.WordCardWrapper}>
-                <div className={classes.WordMainForm}>{wordMainForm}</div>
-                {wordViews}
+                <div className={classes.WordViewWrapper}>
+                    <WordMainFormRegular>{wordMainForm}</WordMainFormRegular>
+                    {wordViews}
+                </div>
+                <WordViewControl />
             </div>
         );
         default: return null;
