@@ -102,20 +102,22 @@ export function* updateWordSaga(action) {
     }
 
     const { dictionaryId } = action;
+    const mainForm = word[0].mainForm;
     try {
         for (let i = 0, l = word.length; i < l; ++i)
             yield call(axios.put, `/words/dictionary/${dictionaryId}/${word[i].id}`, word[i]);
     } catch (error) {
         yield put(actions.addError(
             error.response.data,
-            `Error while updating word [${word[0].mainForm}]`));
+            `Error while updating word [${mainForm}]`));
         return;
     }
 
     yield put(actions.setWordEditing(false));
     yield put(actions.fetchWordsList(dictionaryId));
+    yield put(actions.fetchWord(dictionaryId, mainForm));
     const { wordsList } = yield take(actionTypes.FETCH_WORDS_LIST_SUCCESS);
-    const selectedWordIndex = wordsList.indexOf(word[0].mainForm);
+    const selectedWordIndex = wordsList.indexOf(mainForm);
     all([
         yield put(actions.selectWord(selectedWordIndex)),
         yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordsList[selectedWordIndex]}`)),
