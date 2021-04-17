@@ -49,16 +49,21 @@ const setWordEditing = (state, action) => ({
     updatedWord: action.isEditing ? state.updatedWord : null,
 });
 
-const updateWordMainForm = (state, action) => {
-    const { updatedMainForm } = action;
+const updateWord = (state, aciton, decorator) => {
     if (!state.loadedWord)
         return state;
     const newUpdatedWord = state.updatedWord
         ? _.cloneDeep(state.updatedWord)
         : _.cloneDeep(state.loadedWord);
-    newUpdatedWord.forEach(uw => uw.mainForm = updatedMainForm);
+    decorator(newUpdatedWord, aciton);
     return { ...state, updatedWord: newUpdatedWord };
 };
+
+const updateWordMainForm = (state, action) => updateWord(state, action,
+    (nuw, action) => nuw.forEach(uw => uw.mainForm = action.updatedMainForm));
+
+const updateWordElement = (state, action) => updateWord(state, action,
+    (nuw, action) => _.set(nuw, action.path, action.value));
 
 const signOut = state => ({
     ...state,
@@ -79,6 +84,7 @@ export default (state = initialState, action) => {
         case actionTypes.SELECT_WORD: return selectWord(state, action);
         case actionTypes.SET_WORD_EDITING: return setWordEditing(state, action);
         case actionTypes.UPDATE_WORD_MAIN_FORM: return updateWordMainForm(state, action);
+        case actionTypes.UPDATE_WORD_ELEMENT: return updateWordElement(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

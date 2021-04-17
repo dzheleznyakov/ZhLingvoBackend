@@ -55,6 +55,12 @@ export const updateWordMainForm = updatedMainForm => ({
     updatedMainForm,
 });
 
+export const updateWordElement = (path, value) => ({
+    type: actionTypes.UPDATE_WORD_ELEMENT,
+    path,
+    value,
+});
+
 export const updateWord = dictionaryId => ({
     type: actionTypes.UPDATE_WORD,
     dictionaryId,

@@ -4,6 +4,8 @@
 $min-wrapper-width: 300px;
 .WordCardWrapper {
     margin-top: 8px;
+    min-width: $min-wrapper-width;
+    max-width: 50%;
     animation: word-card-wrapper-in 0.5s ease-out;
 }
 
@@ -14,9 +16,7 @@ $min-wrapper-width: 300px;
 
 .WordViewWrapper {
     padding: 4px 8px;
-    width: fit-content;
-    min-width: $min-wrapper-width;
-    max-width: 50%;
+    width: 100%;
     min-height: 60vh;
     max-height: 60vh;
     overflow-y: scroll;
