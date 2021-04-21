@@ -8,7 +8,20 @@
 }
 
 .Button:disabled {
+    position: relative;
     cursor: not-allowed;
+    
+    $overlay: -2px;
+    &::after {
+        content: '';
+        position: absolute;
+        top: $overlay;
+        left: $overlay;
+        bottom: $overlay;
+        right: $overlay;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: $button-border-radius;
+    }
 }
 
 .Confirm {

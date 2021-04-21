@@ -14,7 +14,7 @@ const DictionaryForm = props => {
 
     useActionOnMount(actions.fetchAllLanguages());
 
-    const defaultName = dictionary.name;
+    const defaultName = dictionary.name || '';
     const defaultLanguage = dictionary.language.name;
 
     const dictionaryGroup = {
@@ -27,7 +27,7 @@ const DictionaryForm = props => {
         key: 'name',
         label: 'Dictionary name',
         type: formInputTypes.TEXT,
-        defaultValue: defaultName || '',
+        defaultValue: defaultName,
         groupKey: dictionaryGroup.key,
         forwardRef: nameRef,
         disabled: disabledInputs.name,
