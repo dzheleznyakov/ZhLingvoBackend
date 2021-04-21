@@ -23,12 +23,13 @@ const sizeToClass = size => {
 };
 
 const ActionButton = props => {
-    const { children, type, size, clicked } = props;
+    const { children, type, size, clicked, disabled } = props;
     const classNames = [classes.Button, typeToClass(type), sizeToClass(size)].join(' ');
     return (
         <button
             className={classNames}
             onClick={clicked}
+            disabled={disabled}
         >
             {children}
         </button>
@@ -43,11 +44,15 @@ ActionButton.propTypes = {
     type: PropTypes.oneOf(typesArray),
     size: PropTypes.oneOf(sizesArray),
     clicked: PropTypes.func,
+    disabled: PropTypes.bool,
 };
 
 ActionButton.defaultProps = {
+    children: null,
     type: types.CONFIRM,
     size: sizes.MEDIUM,
+    clicked: () => {},
+    disabled: false,
 };
 
 export default ActionButton;
