@@ -7,6 +7,10 @@
     font-weight: bold;
 }
 
+.Button:disabled {
+    cursor: not-allowed;
+}
+
 .Confirm {
     @include button(map-get($palette, lighter-primary));
 }

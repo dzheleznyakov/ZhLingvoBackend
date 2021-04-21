@@ -1,6 +1,7 @@
 import BackdropComponent from './Backdrop/Backdrop';
 import DialogComponent from './Dialog/Dialog';
 import ErrorComponent from './Error/ErrorContainer';
+import FormComponent from './Form/Form';
 import ModalComponent from './Modal/Modal';
 import IconButtonComponent from './Button/IconButton';
 import ActionButtonComponent from './Button/ActionButton';
@@ -11,6 +12,9 @@ import VerticalRuleComponent from './VerticalRule/VerticalRule';
 export const Backdrop = BackdropComponent;
 export const Dialog = DialogComponent;
 export const Error = ErrorComponent;
+export const Form = FormComponent;
+export * as formInputTypes from './Form/inputTypes';
+export * as validators from './Form/validators';
 export const Modal = ModalComponent;
 export const IconButton = IconButtonComponent;
 export * as iconButtonTypes from './Button/iconTypes';

@@ -6,7 +6,7 @@ import classes from './Dialog.module.scss';
 import { ActionButton, actionButtonTypes } from '../';
 
 const Dialog = props => {
-    const { children, close, confirmed, cancelled } = props;
+    const { children, close, confirmed, cancelled, disabled } = props;
 
     const onConfirm = event => {
         confirmed && confirmed(event);
@@ -24,7 +24,7 @@ const Dialog = props => {
         <div className={classes.Dialog}>
             {children}
             <div className={classes.ButtonBox}>
-                <ActionButton type={CONFIRM} clicked={onConfirm}>OK</ActionButton>
+                <ActionButton type={CONFIRM} clicked={onConfirm} disabled={disabled}>OK</ActionButton>
                 <ActionButton type={CANCEL} clicked={onCancel}>Cancel</ActionButton>
             </div>
         </div>
@@ -35,9 +35,15 @@ Dialog.propTypes = {
     close: PropTypes.func.isRequired,
     confirmed: PropTypes.func,
     cancelled: PropTypes.func,
+    disabled: PropTypes.bool,
     children: PropTypes.node,
 };
 
-Dialog.defaultProps = {};
+Dialog.defaultProps = {
+    confirmed: () => {},
+    cancelled: () => {},
+    disabled: false,
+    children: null,
+};
 
 export default Dialog;
