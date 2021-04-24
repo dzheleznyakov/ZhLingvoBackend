@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import * as actionTypes from '../actionTypes/words';
 import { SIGN_OUT } from '../actionTypes/auth';
+import { NONE } from '../../static/constants/wordEditModalTypes';
 
 const initialState = {
     wordsList: [],
@@ -10,6 +11,9 @@ const initialState = {
     loadedWord: null,
     isEditing: false,
     updatedWord: null,
+    showWordEditModal: false,
+    wordEditModalType: NONE,
+    wordEditPath: [],
 };
 
 const fetchWordsListSuccess = (state, action) => ({
@@ -23,14 +27,23 @@ const fetchWordsListSuccess = (state, action) => ({
 const fetchWordStart = (state) => ({
     ...state,
     loading: true,
-    updatedWord: null,
 });
 
-const fetchWordSuccess = (state, action) => ({
-    ...state,
-    loading: false,
-    loadedWord: action.word,
-});
+
+
+const fetchWordSuccess = (state, action) => {
+    const { updatedWord } = state;
+    const { word } = action;
+    const newUpdatedWord = updatedWord
+        ? _.cloneDeep(word)
+        : null;
+    return {
+        ...state,
+        loading: false,
+        loadedWord: word,
+        updatedWord: newUpdatedWord,
+    };
+};
 
 const fetchWordFailure = (state) => ({
     ...state,
@@ -40,14 +53,21 @@ const fetchWordFailure = (state) => ({
 const selectWord = (state, action) => ({
     ...state,
     selectedWordIndex: action.index,
-    updatedWord: null,
 });
 
-const setWordEditing = (state, action) => ({
-    ...state,
-    isEditing: action.isEditing,
-    updatedWord: action.isEditing ? state.updatedWord : null,
-});
+const setWordEditing = (state, action) => {
+    const { loadedWord } = state;
+    const { isEditing } = action;
+    const newUpdatedWord = isEditing ? _.cloneDeep(loadedWord) : null;
+    return {
+        ...state,
+        isEditing,
+        updatedWord: newUpdatedWord,
+        shouldShowWordEditModal: false,
+        wordEditModalType: NONE,
+        wordEditPath: [],
+    };
+};
 
 const updateWord = (state, aciton, decorator) => {
     if (!state.loadedWord)
@@ -65,14 +85,19 @@ const updateWordMainForm = (state, action) => updateWord(state, action,
 const updateWordElement = (state, action) => updateWord(state, action,
     (nuw, action) => _.set(nuw, action.path, action.value));
 
-const signOut = state => ({
+const shouldShowWordEditModal = (state, action) => ({
     ...state,
-    wordsList: [],
-    selectedWordIndex: -1,
-    loading: false,
-    loadedWord: null,
-    isEditing: false,
-    updatedWord: null,
+    shouldShowWordEditModal: action.show,
+});
+
+const setWordEditModalType = (state, action) => ({
+    ...state,
+    wordEditModalType: action.modalType,
+    wordEditPath: action.path,
+});
+
+const signOut = () => ({
+    ...initialState
 });
 
 export default (state = initialState, action) => {
@@ -85,6 +110,8 @@ export default (state = initialState, action) => {
         case actionTypes.SET_WORD_EDITING: return setWordEditing(state, action);
         case actionTypes.UPDATE_WORD_MAIN_FORM: return updateWordMainForm(state, action);
         case actionTypes.UPDATE_WORD_ELEMENT: return updateWordElement(state, action);
+        case actionTypes.SHOULD_SHOW_WORD_EDIT_MODAL: return shouldShowWordEditModal(state, action);
+        case actionTypes.SET_WORD_EDIT_MODAL_TYPE: return setWordEditModalType(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

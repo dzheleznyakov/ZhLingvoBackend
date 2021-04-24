@@ -21,6 +21,7 @@ const sizeToClass = size => {
     switch (size) {
         case buttonSizes.LARGE: return classes.Large;
         case buttonSizes.MEDIUM: return classes.Medium;
+        case buttonSizes.SMALL: return classes.Small;
         default: return '';
     }
 };
@@ -55,13 +56,14 @@ const buttonSizesArray = Object.keys(buttonSizes)
     .map(key => buttonSizes[key]);
 
 IconButton.propTypes = {
-    clicked: PropTypes.func.isRequired,
+    clicked: PropTypes.func,
     type: PropTypes.oneOf(buttonTypesArray),
     size: PropTypes.oneOf(buttonSizesArray),
     disabled: PropTypes.bool,
 };
 
 IconButton.defaultProps = {
+    clicked: () => {},
     type: buttonTypes.NEW,
     size: buttonSizes.MEDIUM,
     disabled: false,

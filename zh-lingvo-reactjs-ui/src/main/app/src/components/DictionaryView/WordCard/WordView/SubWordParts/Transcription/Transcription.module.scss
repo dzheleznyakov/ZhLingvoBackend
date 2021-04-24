@@ -1,3 +1,35 @@
+@import "../../../../../../static/styles/sizes";
+
 .Transcription {
     margin-bottom: 0.5rem;
+    width: fit-content;
+}
+
+.Editing {
+    position: relative;
+
+    $fringe: -2px;
+    &::before {
+        content: '';
+        position: absolute;
+        top: $fringe;
+        bottom: $fringe;
+        left: $fringe;
+        right: $fringe;
+        border-radius: $panel-border-radius;
+        z-index: -1;
+        transition: background-color linear 0.3s;
+    }
+
+    &:hover::before {
+        background-color: rgba(223, 221, 221, 0.728);
+    }
+}
+
+.ButtonBox {
+    position: fixed;
+    
+    button {
+        margin: 0 4px;
+    }
 }

@@ -65,3 +65,14 @@ export const updateWord = dictionaryId => ({
     type: actionTypes.UPDATE_WORD,
     dictionaryId,
 });
+
+export const shouldShowWordEditModal = show => ({
+    type: actionTypes.SHOULD_SHOW_WORD_EDIT_MODAL,
+    show,
+});
+
+export const setWordEditModalType = (modalType, path) => ({
+    type: actionTypes.SET_WORD_EDIT_MODAL_TYPE,
+    modalType,
+    path,
+});
