@@ -1,9 +1,19 @@
-.Label {
-    font-weight: 550;
-    margin-right: 8px;
+@import "../../../../../static/styles/sizes";
+
+.Editing {
+    position: relative;
+    transition: background-color linear 0.3s;
+    width: fit-content;
+
+    &:hover {
+        background-color: rgba(223, 221, 221, 0.728);
+    }
 }
 
-.Input {
-    min-width: 150px;
-    height: 1.5rem;
+.ButtonBox {
+    position: fixed;
+    
+    button {
+        margin: 0 4px;
+    }
 }
