@@ -65,9 +65,11 @@ const Editing = props => {
         </div>
     );
 
+    const className = isEditing ? classes.Editing : null;
+
     return (
         <div
-            className={classes.Editing}
+            className={className}
             onMouseEnter={onHovered}
             onMouseLeave={onUnhovered}
         >

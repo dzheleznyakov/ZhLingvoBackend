@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classes from './Example.module.scss';
 
 import { exampleType } from '../wordTypes';
-import Remark from './Remark';
+import { Remark } from '.';
 
 const Example = props => {
     const { entry } = props;

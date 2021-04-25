@@ -10,7 +10,7 @@ import * as selectors from '../../../../store/selectors';
 const TranscriptionEditDialog = props => {
     const { editting } = props;
     const wordEditPath = useSelector(selectors.wordEditPathSelector);
-    const transcription = useSelector(selectors.transcriptionToUpdateSelectorFactory(wordEditPath));
+    const transcription = useSelector(selectors.stringPropertyToUpdateSelectorFactory(wordEditPath));
     const dispatch = useDispatch();
 
     const transcriptionGroup = {

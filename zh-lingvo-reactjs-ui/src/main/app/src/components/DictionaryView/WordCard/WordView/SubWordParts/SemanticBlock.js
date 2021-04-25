@@ -7,11 +7,11 @@ import Meaning from './Meaning';
 import { semBlockType } from '../wordTypes';
 
 const SemanticBlock = props => {
-    const { semBlock, index } = props;
+    const { semBlock, index, path } = props;
     const { pos } = semBlock;
 
     const meanings = (semBlock.meanings || [])
-        .map(m => <Meaning key={m.id} meaning={m} />)
+        .map((m, i) => <Meaning path={[...path, 'meanings', `${i}`]} key={m.id} meaning={m} />)
 
     return (
         <div>
@@ -31,6 +31,7 @@ const SemanticBlock = props => {
 SemanticBlock.propTypes = {
     index: PropTypes.number.isRequired,
     semBlock: semBlockType.isRequired,
+    path: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default SemanticBlock;

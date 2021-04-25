@@ -11,5 +11,5 @@ export const wordEditModalTypeSelector = state => state.words.wordEditModalType;
 export const wordEditPathSelector = state => state.words.wordEditPath;
 
 export const mainFormToUpdateSelector = state => _.get(state, 'words.updatedWord[0].mainForm', '');
-export const transcriptionToUpdateSelectorFactory = path =>
+export const stringPropertyToUpdateSelectorFactory = path =>
     state => _.get(updatedWordSelector(state), path, '');
