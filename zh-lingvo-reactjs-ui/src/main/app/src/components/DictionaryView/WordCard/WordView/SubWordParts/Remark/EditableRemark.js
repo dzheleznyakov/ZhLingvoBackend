@@ -1,33 +1,26 @@
 import React, { Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { IconButton, iconButtonTypes, buttonSizes } from '../../../../../UI';
 import { REMARK_NEW, REMARK_EDIT, REMARK_DELETE } from '../../../../../../static/constants/wordEditModalTypes';
 import Editing from '../Editing';
+import NewPartButton from '../NewPartButton';
 import Remark from './Remark';
 import * as selectors from '../../../../../../store/selectors';
-import * as actions from '../../../../../../store/actions';
 
 const EditableRemark = props => {
     const { value: remark, path } = props;
     const isEditing = useSelector(selectors.isEditingSelector);
-    const dispatch = useDispatch();
 
-    if (isEditing && !remark) {
-        const onNew = () => {
-            dispatch(actions.shouldShowWordEditModal(true));
-            dispatch(actions.setWordEditModalType(REMARK_NEW, path));
-        };
-        return <Fragment>
-            <IconButton
-                type={iconButtonTypes.NEW}
-                size={buttonSizes.SMALL}
-                clicked={onNew}
+    if (isEditing && !remark)
+        return (<Fragment>
+            <NewPartButton
+                label="remark"
+                modalType={REMARK_NEW}
+                path={path}
             />
             {' '}
-        </Fragment>
-    }
+        </Fragment>)
 
     return (
         <Editing
