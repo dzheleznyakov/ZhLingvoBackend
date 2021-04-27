@@ -4,22 +4,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import classes from './DialogsCommonStyles.module.scss';
 
 import { Dialog } from '../../../UI';
-import { Translation } from '../WordView/SubWordParts';
+import { Example } from '../WordView/SubWordParts';
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
-const TranslationDeleteDialog = () => {
+const ExampleDeleteDialog = () => {
     const wordEditPath = useSelector(selectors.wordEditPathSelector);
-    const translation = useSelector(selectors.objectPropertyToUpdateSelectorFactory(wordEditPath));
+    const example = useSelector(selectors.objectPropertyToUpdateSelectorFactory(wordEditPath));
     const wordEditParentPath = wordEditPath.slice(0, wordEditPath.length - 1);
-    const translations = useSelector(selectors.arrayPropertyToUpdateSelectorFactory(wordEditParentPath));
+    const examples = useSelector(selectors.arrayPropertyToUpdateSelectorFactory(wordEditParentPath));
     const index = wordEditPath[wordEditPath.length - 1];
     const dispatch = useDispatch();
 
     const onConfirm = () => {
-        const updatedTranslations = [...translations];
-        updatedTranslations.splice(index, 1);
-        dispatch(actions.updateWordElement(wordEditParentPath, updatedTranslations));
+        const updatedExamples = [...examples];
+        updatedExamples.splice(index, 1);
+        dispatch(actions.updateWordElement(wordEditParentPath, updatedExamples));
     };
 
     return (
@@ -29,10 +29,10 @@ const TranslationDeleteDialog = () => {
         >
             Are you sure you want to delete this translation?
             <blockquote className={classes.Excerpt}>
-                <Translation entry={translation} />
+                <Example entry={example} />
             </blockquote>
         </Dialog>
     );
 };
 
-export default TranslationDeleteDialog;
+export default ExampleDeleteDialog;

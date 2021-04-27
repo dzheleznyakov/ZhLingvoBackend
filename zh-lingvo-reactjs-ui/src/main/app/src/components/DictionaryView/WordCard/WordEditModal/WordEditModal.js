@@ -24,6 +24,9 @@ const WordEditModal = () => {
         case modalTypes.TRANSLATION_NEW: panel = <dialogs.TranslationEditDialog />; break;
         case modalTypes.TRANSLATION_EDIT: panel = <dialogs.TranslationEditDialog editting />; break;
         case modalTypes.TRANSLATION_DELETE: panel = <dialogs.TranslationDeleteDialog />; break;
+        case modalTypes.EXAMPLE_NEW: panel = <dialogs.ExampleEditDialog />; break;
+        case modalTypes.EXAMPLE_EDIT: panel = <dialogs.ExampleEditDialog editting />; break;
+        case modalTypes.EXAMPLE_DELETE: panel = <dialogs.ExampleDeleteDialog />; break;
         default: panel = null;
     }
 

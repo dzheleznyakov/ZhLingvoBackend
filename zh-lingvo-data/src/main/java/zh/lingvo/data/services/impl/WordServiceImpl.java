@@ -18,7 +18,6 @@ import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 import zh.lingvo.data.repositories.WordRepository;
 import zh.lingvo.data.services.DictionaryService;
-import zh.lingvo.data.services.SubWordService;
 import zh.lingvo.data.services.WordService;
 
 import javax.annotation.Nonnull;
@@ -36,17 +35,15 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 public class WordServiceImpl implements WordService {
     private final WordRepository wordRepository;
     private final DictionaryService dictionaryService;
-    private final SubWordService subWordService;
 
     private final LoadingCache<Long, Long> wordIdsToUserIds = CacheBuilder.newBuilder()
             .maximumSize(100L)
             .expireAfterAccess(10, TimeUnit.MINUTES)
             .build(new WordToUserIdCacheLoader());
 
-    public WordServiceImpl(WordRepository wordRepository, DictionaryService dictionaryService, SubWordService subWordService) {
+    public WordServiceImpl(WordRepository wordRepository, DictionaryService dictionaryService) {
         this.wordRepository = wordRepository;
         this.dictionaryService = dictionaryService;
-        this.subWordService = subWordService;
     }
 
     @Override
@@ -115,12 +112,7 @@ public class WordServiceImpl implements WordService {
     private Optional<Word> save(Word word, Dictionary dictionary) {
         word.setDictionary(dictionary);
         setAsParent(word);
-        Word savedWord = wordRepository.save(word);
-//        firstNonNull(word.getSemanticBlocks(), ImmutableList.<SemanticBlock>of())
-//                .stream()
-//                .peek(sb -> sb.setWord(word))
-//                .forEach(subWordService::save);
-        return Optional.of(savedWord);
+        return Optional.of(wordRepository.save(word));
     }
 
     private void setAsParent(Word word) {

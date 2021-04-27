@@ -117,10 +117,19 @@ public class WordServiceIT extends BaseDataIntegrationTest {
 
         meaning.getTranslations().add(translation2);
 
-        wordService.update(word, dictionary.getId(), user);
+        Word updatedWord = wordService.update(word, dictionary.getId(), user);
+        Optional<Translation> translation2Optional = updatedWord.getSemanticBlocks()
+                .get(0)
+                .getMeanings()
+                .get(0)
+                .getTranslations()
+                .stream()
+                .filter(translation -> Objects.equals(translation.getValue(), translation2.getValue()))
+                .findAny();
 
-        assertThat(translation2.getId(), is(notNullValue()));
-        assertThat(translation2.getMeaning(), is(equalTo(meaning)));
+        assertThat(translation2Optional, is(not(empty())));
+        assertThat(translation2Optional, hasPropertySatisfying(Translation::getId, Objects::nonNull));
+        assertThat(translation2Optional, hasPropertySatisfying(Translation::getMeaning, meaning::equals));
     }
 
     @Test

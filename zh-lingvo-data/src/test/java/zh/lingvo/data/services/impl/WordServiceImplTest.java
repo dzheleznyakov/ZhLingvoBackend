@@ -2,7 +2,6 @@ package zh.lingvo.data.services.impl;
 
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -58,7 +57,7 @@ class WordServiceImplTest {
 
     @BeforeEach
     void setUpService() {
-        service = new WordServiceImpl(wordRepository, dictionaryService, new SubWordServiceImpl(ImmutableSet.of()));
+        service = new WordServiceImpl(wordRepository, dictionaryService);
     }
 
     @BeforeEach

@@ -9,6 +9,9 @@ import RemarkDeleteDialogComponent from './RemarkDeleteDialog';
 import TranslationEditDialogComponent from './TranslationEditDialog';
 import TranslationDeleteDialogComponent from './TranslationDeleteDialog';
 
+import ExampleEditDialogComponent from './ExampleEditDialog';
+import ExampleDeleteDialogComponent from './ExampleDeleteDialog';
+
 
 export const MainFormDialog = MainFormDialogComponent;
 
@@ -20,3 +23,6 @@ export const RemarkDeleteDialog = RemarkDeleteDialogComponent;
 
 export const TranslationEditDialog = TranslationEditDialogComponent;
 export const TranslationDeleteDialog = TranslationDeleteDialogComponent;
+
+export const ExampleEditDialog = ExampleEditDialogComponent;
+export const ExampleDeleteDialog = ExampleDeleteDialogComponent;
