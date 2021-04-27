@@ -9,7 +9,14 @@ import * as selectors from '../../../../../store/selectors';
 import * as actions from '../../../../../store/actions';
 
 const Editing = props => {
-    const { children, editModalType, deleteModalType, path, block } = props;
+    const { 
+        children, 
+        editModalType, 
+        deleteModalType,
+        newModalType,
+        path, 
+        block, 
+    } = props;
     const isEditing = useSelector(selectors.isEditingSelector);
     const [hovered, setHovered] = useState(false);
     const [buttonsCoordinates, setButtonsCoordinates] = useState({ x: 0, y: 0});
@@ -25,18 +32,24 @@ const Editing = props => {
         setHovered(false);
     } : null;
 
-    const onEdit = isEditing && editModalType ? () => {
-        dispatch(actions.shouldShowWordEditModal(true));
-        dispatch(actions.setWordEditModalType(editModalType, path));
-        setHovered(false);
-    } : null;
+    const getOnAction = modalType => 
+        isEditing && modalType ? () => {
+            dispatch(actions.shouldShowWordEditModal(true));
+            dispatch(actions.setWordEditModalType(modalType, path));
+            setHovered(false);
+        } : null;
 
-    const onDelete = isEditing && deleteModalType ? () => {
-        dispatch(actions.shouldShowWordEditModal(true));
-        dispatch(actions.setWordEditModalType(deleteModalType, path));
-        setHovered(false);
-    } : null;
+    const onNew = getOnAction(newModalType);
+    const onEdit = getOnAction(editModalType);
+    const onDelete = getOnAction(deleteModalType);
 
+    const newButton = hovered && newModalType && (
+        <IconButton
+            type={iconButtonTypes.NEW}
+            size={buttonSizes.SMALL}
+            clicked={onNew}
+        />
+    );
     const editButton = hovered && editModalType && (
         <IconButton 
             type={iconButtonTypes.EDIT} 
@@ -44,7 +57,6 @@ const Editing = props => {
             clicked={onEdit}
         />
     );
-
     const deleteButton = hovered && deleteModalType && (
         <IconButton 
             type={iconButtonTypes.DELETE} 
@@ -60,6 +72,7 @@ const Editing = props => {
 
     const buttons = hovered && (
         <div className={classes.ButtonBox} style={buttonPostioning}>
+            {newButton}
             {editButton}
             {deleteButton}
         </div>
@@ -84,6 +97,7 @@ Editing.propTypes = {
     children: PropTypes.node.isRequired,
     editModalType: PropTypes.string,
     deleteModalType: PropTypes.string,
+    newModalType: PropTypes.string,
     path: PropTypes.arrayOf(PropTypes.string),
     block: PropTypes.bool,
 };

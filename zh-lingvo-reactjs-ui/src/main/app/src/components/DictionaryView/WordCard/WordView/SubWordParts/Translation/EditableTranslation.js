@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Editing from '../Editing';
+import NewPartButton from '../NewPartButton';
 import Translation from './Translation';
 import { TRANSLATION_EDIT, TRANSLATION_DELETE, TRANSLATION_NEW } from '../../../../../../static/constants/wordEditModalTypes';
 import { translationType } from '../../wordTypes';
@@ -16,16 +17,11 @@ const EditableTranslation = props => {
     const dispatch = useDispatch();
 
     if (translation === NULL_TRANSLATION)
-        return (
-            <IconButton
-                type={iconButtonTypes.NEW}
-                size={buttonSizes.SMALL}
-                clicked={() => {
-                    dispatch(actions.shouldShowWordEditModal(true));
-                    dispatch(actions.setWordEditModalType(TRANSLATION_NEW, path));
-                }}
-            />
-        );
+        return <NewPartButton
+            label="translation"
+            modalType={TRANSLATION_NEW}
+            path={path}
+        />;
 
     return (
         <Editing
