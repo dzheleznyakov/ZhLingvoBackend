@@ -9,7 +9,7 @@ import * as selectors from '../../../../../store/selectors';
 import * as actions from '../../../../../store/actions';
 
 const Editing = props => {
-    const { children, editModalType, deleteModalType, path } = props;
+    const { children, editModalType, deleteModalType, path, block } = props;
     const isEditing = useSelector(selectors.isEditingSelector);
     const [hovered, setHovered] = useState(false);
     const [buttonsCoordinates, setButtonsCoordinates] = useState({ x: 0, y: 0});
@@ -67,15 +67,16 @@ const Editing = props => {
 
     const className = isEditing ? classes.Editing : null;
 
+    const Tag = block ? 'div' : 'span'
     return (
-        <div
+        <Tag
             className={className}
             onMouseEnter={onHovered}
             onMouseLeave={onUnhovered}
         >
             {children}
             {buttons}
-        </div>
+        </Tag>
     );
 };
 
@@ -84,6 +85,7 @@ Editing.propTypes = {
     editModalType: PropTypes.string,
     deleteModalType: PropTypes.string,
     path: PropTypes.arrayOf(PropTypes.string),
+    block: PropTypes.bool,
 };
 
 Editing.defaultProps = {

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import classes from './DialogsCommonStyles.module.scss';
+
 import { Dialog } from '../../../UI';
 import { Transcription } from '../WordView/SubWordParts';
 import * as actions from '../../../../store/actions';
@@ -17,7 +19,7 @@ const TranscriptionDeleteDialog = () => {
             confirmed={() => dispatch(actions.updateWordElement(wordEditPath, null))}
         >
             Are you sure you want to delete this transcription?
-            <blockquote>
+            <blockquote className={classes.Excerpt}>
                 <Transcription>{transcription}</Transcription>
             </blockquote>
         </Dialog>

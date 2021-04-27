@@ -116,10 +116,10 @@ public class WordServiceImpl implements WordService {
         word.setDictionary(dictionary);
         setAsParent(word);
         Word savedWord = wordRepository.save(word);
-        firstNonNull(word.getSemanticBlocks(), ImmutableList.<SemanticBlock>of())
-                .stream()
-                .peek(sb -> sb.setWord(word))
-                .forEach(subWordService::save);
+//        firstNonNull(word.getSemanticBlocks(), ImmutableList.<SemanticBlock>of())
+//                .stream()
+//                .peek(sb -> sb.setWord(word))
+//                .forEach(subWordService::save);
         return Optional.of(savedWord);
     }
 

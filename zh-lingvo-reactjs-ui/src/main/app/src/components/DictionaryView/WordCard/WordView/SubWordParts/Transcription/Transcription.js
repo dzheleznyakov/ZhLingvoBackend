@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import classes from './Transcription.module.scss';
 
-
 const EditableTranscription = props => {
     const { children: transcription } = props;
 

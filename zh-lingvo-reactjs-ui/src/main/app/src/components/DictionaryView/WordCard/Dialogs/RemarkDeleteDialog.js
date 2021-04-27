@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import classes from './DialogsCommonStyles.module.scss';
+
 import { Dialog } from '../../../UI';
 import { Remark } from '../WordView/SubWordParts';
 import * as actions from '../../../../store/actions';
@@ -17,7 +19,7 @@ const RemarkDeleteDialog = () => {
             confirmed={() => dispatch(actions.updateWordElement(wordEditPath, null))}
         >
             Are you sure you want to delete this remark?
-            <blockquote>
+            <blockquote className={classes.Excerpt}>
                 <Remark value={remark} />
             </blockquote>
         </Dialog>

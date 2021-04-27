@@ -13,3 +13,7 @@ export const wordEditPathSelector = state => state.words.wordEditPath;
 export const mainFormToUpdateSelector = state => _.get(state, 'words.updatedWord[0].mainForm', '');
 export const stringPropertyToUpdateSelectorFactory = path =>
     state => _.get(updatedWordSelector(state), path, '');
+export const objectPropertyToUpdateSelectorFactory = path =>
+    state => _.get(updatedWordSelector(state), path, {});
+export const arrayPropertyToUpdateSelectorFactory = path =>
+    state => _.get(updatedWordSelector(state), path, []);

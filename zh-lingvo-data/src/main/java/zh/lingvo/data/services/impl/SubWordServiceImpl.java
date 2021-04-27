@@ -5,10 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import org.springframework.stereotype.Service;
 import zh.lingvo.data.fixtures.SubWordPart;
 import zh.lingvo.data.fixtures.SubWordRepository;
-import zh.lingvo.data.model.Example;
 import zh.lingvo.data.model.Meaning;
 import zh.lingvo.data.model.SemanticBlock;
-import zh.lingvo.data.model.Translation;
 import zh.lingvo.data.services.SubWordService;
 
 import java.util.Collection;
@@ -34,14 +32,14 @@ public class SubWordServiceImpl implements SubWordService {
 
     @Override
     public <E extends SubWordPart> Optional<E> save(E entity) {
-        Map<Class<? extends SubWordPart>, LinkedList<SubWordPart>> subWordPartsByClass = getSubWordPartsByClass(entity);
+//        Map<Class<? extends SubWordPart>, LinkedList<SubWordPart>> subWordPartsByClass = getSubWordPartsByClass(entity);
         E savedEntity = getRepository(entity.getClass()).save(entity);
-        ImmutableList.of(SemanticBlock.class, Meaning.class, Translation.class, Example.class).forEach(cl -> {
-            SubWordRepository<SubWordPart, ?> repository = getRepository(cl);
-            LinkedList<SubWordPart> subWordParts = subWordPartsByClass.getOrDefault(cl, new LinkedList<>());
-            if (!subWordParts.isEmpty())
-                repository.saveAll(subWordParts);
-        });
+//        ImmutableList.of(SemanticBlock.class, Meaning.class, Translation.class, Example.class).forEach(cl -> {
+//            SubWordRepository<SubWordPart, ?> repository = getRepository(cl);
+//            LinkedList<SubWordPart> subWordParts = subWordPartsByClass.getOrDefault(cl, new LinkedList<>());
+//            if (!subWordParts.isEmpty())
+//                repository.saveAll(subWordParts);
+//        });
         return Optional.of(savedEntity);
     }
 

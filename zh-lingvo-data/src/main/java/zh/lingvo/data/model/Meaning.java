@@ -43,9 +43,9 @@ public class Meaning implements Persistable, SubWordPart {
     @Column(name = "remark")
     private String remark;
 
-    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Translation> translations;
 
-    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Example> examples;
 }

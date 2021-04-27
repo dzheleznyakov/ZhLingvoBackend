@@ -12,6 +12,7 @@
 
 .ButtonBox {
     position: fixed;
+    z-index: 10;
     
     button {
         margin: 0 4px;
