@@ -11,3 +11,17 @@
     padding-left: 32px;
     list-style-type: none;
 }
+
+li.MeaningItem {
+    counter-increment: meaning;
+    margin-bottom: 1rem;
+    position: relative;
+
+    &:before {
+        position: absolute;
+        content: counter(meaning) ")";
+        display: inline-block; 
+        width: 1.5em;
+        margin-left: -1.5em;
+    }
+}

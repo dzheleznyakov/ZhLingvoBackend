@@ -1,20 +1,16 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Editing from '../Editing';
+import OnHoverEditable from '../Editable/OnHoverEditable';
 import NewPartButton from '../NewPartButton';
 import Translation from './Translation';
 import { TRANSLATION_EDIT, TRANSLATION_DELETE, TRANSLATION_NEW } from '../../../../../../static/constants/wordEditModalTypes';
 import { translationType } from '../../wordTypes';
-import { IconButton, iconButtonTypes, buttonSizes } from '../../../../../UI';
-import * as actions from '../../../../../../store/actions';
 
 export const NULL_TRANSLATION = { id: -1, value: '' };
 
 const EditableTranslation = props => {
     const { entry: translation, path, postfix } = props;
-    const dispatch = useDispatch();
 
     if (translation === NULL_TRANSLATION)
         return <NewPartButton
@@ -24,13 +20,13 @@ const EditableTranslation = props => {
         />;
 
     return (
-        <Editing
+        <OnHoverEditable
             editModalType={TRANSLATION_EDIT}
             deleteModalType={TRANSLATION_DELETE}
             path={path}
         >
             <Translation entry={translation} postfix={postfix} />
-        </Editing>
+        </OnHoverEditable>
     );
 };
 

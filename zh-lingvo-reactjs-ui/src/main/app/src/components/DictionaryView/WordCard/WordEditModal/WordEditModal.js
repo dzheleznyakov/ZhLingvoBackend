@@ -27,6 +27,8 @@ const WordEditModal = () => {
         case modalTypes.EXAMPLE_NEW: panel = <dialogs.ExampleEditDialog />; break;
         case modalTypes.EXAMPLE_EDIT: panel = <dialogs.ExampleEditDialog editting />; break;
         case modalTypes.EXAMPLE_DELETE: panel = <dialogs.ExampleDeleteDialog />; break;
+        case modalTypes.MEANING_NEW: panel = <dialogs.MeaningEditDialog />; break;
+        case modalTypes.MEANING_DELETE: panel = <dialogs.MeaningDeleteDialog />; break;
         default: panel = null;
     }
 

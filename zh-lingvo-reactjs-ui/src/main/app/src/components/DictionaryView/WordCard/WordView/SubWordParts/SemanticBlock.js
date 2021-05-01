@@ -1,17 +1,29 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import classes from './SemanticBlock.module.scss';
 
-import Meaning from './Meaning';
+import { EditableMeaning, NULL_MEANING } from '.';
 import { semBlockType } from '../wordTypes';
+import * as selectors from '../../../../../store/selectors';
 
 const SemanticBlock = props => {
     const { semBlock, index, path } = props;
     const { pos } = semBlock;
+    const isEditing = useSelector(selectors.isEditingSelector);
 
-    const meanings = (semBlock.meanings || [])
-        .map((m, i) => <Meaning path={[...path, 'meanings', `${i}`]} key={m.id} meaning={m} />)
+    const nullMeaning = isEditing ? [NULL_MEANING] : []
+    const meanings = (semBlock.meanings || []).concat(nullMeaning)
+        .map((m, i) => (
+            <li className={classes.MeaningItem} key={m.id}>
+                <EditableMeaning 
+                    path={[...path, 'meanings', `${i}`]} 
+                    meaning={m} 
+                />
+            </li>
+        ));
+
 
     return (
         <div>

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import classes from './NewPartButton.module.scss';
 
 import { IconButton, iconButtonTypes, buttonSizes } from '../../../../UI';
-import Editing from './Editing';
+import OnHoverEditable from './Editable/OnHoverEditable';
 import * as actions from '../../../../../store/actions';
 import * as allModalTypes from '../../../../../static/constants/wordEditModalTypes';
 
@@ -14,7 +14,7 @@ const NewPartButton = props => {
     const dispatch = useDispatch();
 
     return (
-        <Editing
+        <OnHoverEditable
             newModalType={modalType}
             path={path}
             block={block}
@@ -22,7 +22,7 @@ const NewPartButton = props => {
             <span className={classes.Label}>
                 {`<${label}>`}
             </span>
-        </Editing>
+        </OnHoverEditable>
     );
 };
 

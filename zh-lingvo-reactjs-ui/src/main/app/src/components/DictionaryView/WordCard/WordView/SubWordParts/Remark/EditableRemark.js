@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { REMARK_NEW, REMARK_EDIT, REMARK_DELETE } from '../../../../../../static/constants/wordEditModalTypes';
-import Editing from '../Editing';
+import OnHoverEditable from '../Editable/OnHoverEditable';
 import NewPartButton from '../NewPartButton';
 import Remark from './Remark';
 import * as selectors from '../../../../../../store/selectors';
@@ -23,13 +23,13 @@ const EditableRemark = props => {
         </Fragment>)
 
     return (
-        <Editing
+        <OnHoverEditable
             path={path}
             editModalType={REMARK_EDIT}
             deleteModalType={REMARK_DELETE}
         >
             <Remark value={remark} />
-        </Editing>
+        </OnHoverEditable>
     );
 };
 

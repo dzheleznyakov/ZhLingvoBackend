@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import * as selectors from '../../../../../../store/selectors';
-import Editing from '../Editing';
+import OnHoverEditable from '../Editable/OnHoverEditable';
 import NewPartButton from '../NewPartButton';
 import Transcription from './Transcription';
 import { TRANSCRIPTION_DELETE, TRANSCRIPTION_EDIT, TRANSCRIPTION_NEW } from '../../../../../../static/constants/wordEditModalTypes';
@@ -20,13 +20,13 @@ const EditableTranscription = props => {
         />
 
     return transcription && (
-        <Editing
+        <OnHoverEditable
             editModalType={TRANSCRIPTION_EDIT}
             deleteModalType={TRANSCRIPTION_DELETE}
             path={path}
         >
             <Transcription>{transcription}</Transcription>
-        </Editing>
+        </OnHoverEditable>
     );
 };
 

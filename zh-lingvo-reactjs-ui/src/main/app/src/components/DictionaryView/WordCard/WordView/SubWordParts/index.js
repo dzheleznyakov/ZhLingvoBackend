@@ -12,6 +12,9 @@ import EditableTranslationComponent, { NULL_TRANSLATION as NULL_TRANSLATION_OBJE
 import ExampleComponent from './Example/Example';
 import EditableExampleComponent, { NULL_EXAMPLE as NULL_EXAMPLE_OBJECT } from './Example/EditableExample';
 
+import MeaningComponent from './Meaning/Meaning';
+import EditableMeaningComponent, { NULL_MEANING as NULL_MEANING_OBJECT } from './Meaning/EditableMeaning';
+
 
 export const WordMainForm = WordMainFormComponent;
 
@@ -28,3 +31,7 @@ export const NULL_TRANSLATION = NULL_TRANSLATION_OBJECT;
 export const Example = ExampleComponent;
 export const EditableExample = EditableExampleComponent;
 export const NULL_EXAMPLE = NULL_EXAMPLE_OBJECT;
+
+export const Meaning = MeaningComponent;
+export const EditableMeaning = EditableMeaningComponent;
+export const NULL_MEANING = NULL_MEANING_OBJECT;

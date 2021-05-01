@@ -4,33 +4,36 @@ import PropTypes from 'prop-types';
 
 import classes from './Meaning.module.scss';
 
-import { EditableRemark } from '.';
-import { EditableTranslation, NULL_TRANSLATION } from '.';
-import { EditableExample, NULL_EXAMPLE } from '.';
-import { meaningType } from '../wordTypes';
-import * as selectors from '../../../../../store/selectors';
+import { EditableRemark, Remark } from '..';
+import { EditableTranslation, Translation, NULL_TRANSLATION } from '..';
+import { EditableExample, Example, NULL_EXAMPLE } from '..';
+import { meaningType } from '../../wordTypes';
+import * as selectors from '../../../../../../store/selectors';
 
 const TRANSLATIONS_PATH_SEGMENT = 'translations';
 const EXAMPLES_PATH_SEGMENT = 'examples';
 
-const getTranslations = (meaning, path, isEditing) => {
+const sortById = (a, b) => {
+    if (a === null)
+        return 1;
+    if (b === null)
+        return -1;
+    return a.id < b.id ? -1 : 1;
+};
+
+const getTranslations = (meaning, path, isEditing, editable) => {
+    const TranslationComp = editable ? EditableTranslation : Translation;
     const translations = (meaning.translations || [])
-        .sort((a, b) => {
-            if (a === null)
-                return 1;
-            if (b === null)
-                return -1;
-            return a.id < b.id ? -1 : 1;
-        })
+        .sort(sortById)
         .map((tr, i) => (tr === null ? null :
-            <EditableTranslation 
+            <TranslationComp 
                 key={tr.id} 
                 path={[...path, TRANSLATIONS_PATH_SEGMENT, `${i}`]} 
                 entry={tr}
                 postfix={i < meaning.translations.length - 1 ? '; ': ' '}
             />
         ));
-    if (isEditing)
+    if (editable && isEditing)
         translations.push(<EditableTranslation
             key="translation-new"
             path={[...path, TRANSLATIONS_PATH_SEGMENT, `${meaning.translations.length}`]}
@@ -39,23 +42,18 @@ const getTranslations = (meaning, path, isEditing) => {
     return translations;
 };
 
-const getExamples = (meaning, path, isEditing) => {
+const getExamples = (meaning, path, isEditing, editable) => {
+    const ExampleComp = editable ? EditableExample : Example;
     const examples = (meaning.examples || [])
-        .sort((a, b) => {
-            if (a === null)
-                return 1;
-            if (b === null)
-                return -1;
-            return a.id < b.id ? -1 : 1;
-        })
+        .sort(sortById)
         .map((ex, i) => (ex === null ? null :
-            <EditableExample 
+            <ExampleComp 
                 key={ex.id} 
                 path={[...path, EXAMPLES_PATH_SEGMENT, `${i}`]} 
                 entry={ex}
             />
         ));
-    if (isEditing)
+    if (editable && isEditing)
         examples.push(<EditableExample
             key="example-new"
             path={[...path, EXAMPLES_PATH_SEGMENT, `${meaning.translations.length}`]}
@@ -65,26 +63,32 @@ const getExamples = (meaning, path, isEditing) => {
 };
 
 const Meaning = props => {
-    const { meaning, path } = props;
+    const { meaning, path, editable } = props;
     const isEditing = useSelector(selectors.isEditingSelector);
 
     const remarkPath = [...path, 'remark'];
-    const remark = <EditableRemark value={meaning.remark} path={remarkPath} />;
-    const translations = getTranslations(meaning, path, isEditing);
-    const examples = getExamples(meaning, path, isEditing);
+    const RemarkComp = editable ? EditableRemark : Remark;
+    const remark = <RemarkComp value={meaning.remark} path={remarkPath} />;
+    const translations = getTranslations(meaning, path, isEditing, editable);
+    const examples = getExamples(meaning, path, isEditing, editable);
 
     return (
-        <li className={classes.Meaning}>
+        <div className={classes.Meaning}>
             {remark}
             {translations}
             {examples}
-        </li>
+        </div>
     );
 };
 
 Meaning.propTypes = {
     meaning: meaningType.isRequired,
     path: PropTypes.arrayOf(PropTypes.string).isRequired,
+    editable: PropTypes.bool,
 };
+
+Meaning.defaultProps = {
+    editable: true,
+}
 
 export default Meaning;

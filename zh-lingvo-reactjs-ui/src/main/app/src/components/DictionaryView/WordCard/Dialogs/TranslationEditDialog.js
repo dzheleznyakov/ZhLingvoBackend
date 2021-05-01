@@ -47,7 +47,7 @@ const TranslationEditDialog = props => {
 
     useAutofocus(translationRef);
 
-    const onConfirmed = () => {
+    const onConfirm = () => {
         const updatedValue = translationRef.current.value.trim();
         const updatedElaboration = elaborationRef.current.value.trim() || null;
         const updatedTranslation = {
@@ -65,7 +65,7 @@ const TranslationEditDialog = props => {
         fields={[translationField, elaborationField]}
         groups={[translationGroup]}
         canceled={() => dispatch(actions.shouldShowWordEditModal(false))}
-        confirmed={onConfirmed}
+        confirmed={onConfirm}
     />;
 };
 
