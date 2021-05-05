@@ -8,7 +8,7 @@ import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
 const ExampleEditDialog = props => {
-    const { editting } = props;
+    const { editing } = props;
     const wordEditPath = useSelector(selectors.wordEditPathSelector);
     const example = useSelector(selectors.objectPropertyToUpdateSelectorFactory(wordEditPath));
     const wordEditParentPath = wordEditPath.slice(0, wordEditPath.length - 1);
@@ -18,7 +18,7 @@ const ExampleEditDialog = props => {
 
     const exampleGroup = {
         key: 'exampleGroup',
-        label: editting ? 'Update Example' : 'New Example',
+        label: editing ? 'Update Example' : 'New Example',
     };
 
     const remarkRef = useRef();
@@ -71,7 +71,7 @@ const ExampleEditDialog = props => {
             expression: updatedExpression,
             explanation: updatedExplanation,
         };
-        if (editting)
+        if (editing)
             dispatch(actions.updateWordElement(wordEditPath, updatedExample))
         else 
             dispatch(actions.updateWordElement(wordEditParentPath, [...examples, updatedExample]));
@@ -86,7 +86,7 @@ const ExampleEditDialog = props => {
 };
 
 ExampleEditDialog.propTypes = {
-    editting: PropTypes.bool,
+    editing: PropTypes.bool,
 };
 
 export default ExampleEditDialog;

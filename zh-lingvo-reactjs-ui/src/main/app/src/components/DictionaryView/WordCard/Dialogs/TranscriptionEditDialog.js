@@ -8,14 +8,14 @@ import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
 const TranscriptionEditDialog = props => {
-    const { editting } = props;
+    const { editing } = props;
     const wordEditPath = useSelector(selectors.wordEditPathSelector);
     const transcription = useSelector(selectors.stringPropertyToUpdateSelectorFactory(wordEditPath));
     const dispatch = useDispatch();
 
     const transcriptionGroup = {
         key: 'transcriptionGroup',
-        label: editting ? 'Update Transcription' : 'New Transcription',
+        label: editing ? 'Update Transcription' : 'New Transcription',
     };
 
     const transcriptionRef = useRef();
@@ -43,7 +43,7 @@ const TranscriptionEditDialog = props => {
 };
 
 TranscriptionEditDialog.propTypes = {
-    editting: PropTypes.bool,
+    editing: PropTypes.bool,
 };
 
 export default TranscriptionEditDialog;

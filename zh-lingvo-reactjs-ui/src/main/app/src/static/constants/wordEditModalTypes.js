@@ -19,3 +19,7 @@ export const EXAMPLE_DELETE = 'EXAMPLE_DELETE';
 
 export const MEANING_NEW = 'MEANING_NEW';
 export const MEANING_DELETE = 'MEANING_DELETE';
+
+export const SEM_BLOCK_NEW = 'SEM_BLOCK_NEW';
+export const SEM_BLOCK_EDIT = 'SEM_BLOCK_EDIT';
+export const SEM_BLOCK_DELETE = 'SEM_BLOCK_DELETE';

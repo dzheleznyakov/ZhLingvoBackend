@@ -19,7 +19,7 @@ const EditableTranscription = props => {
             path={path}
         />
 
-    return transcription && (
+    return (
         <OnHoverEditable
             editModalType={TRANSCRIPTION_EDIT}
             deleteModalType={TRANSCRIPTION_DELETE}

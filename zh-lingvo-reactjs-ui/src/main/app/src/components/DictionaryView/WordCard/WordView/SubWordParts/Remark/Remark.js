@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classes from './Remark.module.scss';
 
 const Remark = props => {
-    const { value } = props;
+    const { value = null } = props;
     return value && <span className={classes.Remark}>{value}</span>;
 };
 

@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 import classes from './WordView.module.scss';
 
 import { wordType } from './wordTypes';
-import { EditableTranscription } from './SubWordParts';
-import SemanticBlock from './SubWordParts/SemanticBlock';
+import { EditableTranscription, EditableSemanticBlock, NULL_SEMANTIC_BLOCK } from './SubWordParts';
 import toRoman from '../../../../utils/toRomanNumbers';
 import { isEditingSelector } from '../../../../store/selectors';
+
+const SEM_BLOCKS_PATH_SEGMENT = 'semBlocks';
+const TRANSCRIPTION_PATH_SEGMENT = 'transcription';
 
 const WordView = props => {
     const { index, word } = props;
@@ -16,8 +18,16 @@ const WordView = props => {
 
     const path = [`${index}`];
 
-    const semBlocks = word.semBlocks && word.semBlocks
-        .map((sb, i) => <SemanticBlock path={[...path, 'semBlocks', `${i}`]} key={sb.id} semBlock={sb} index={i} />);
+    const nullSemBlock = isEditing ? [NULL_SEMANTIC_BLOCK] : [];
+    const semBlocks = word.semBlocks && (word.semBlocks.concat(nullSemBlock))
+        .map((sb, i) => (
+            <EditableSemanticBlock 
+                path={[...path, SEM_BLOCKS_PATH_SEGMENT, `${i}`]} 
+                key={sb.id} 
+                semBlock={sb} 
+                index={i}
+            />
+        ));
 
     const wrapperClasses = [];
     if (isEditing)
@@ -26,7 +36,7 @@ const WordView = props => {
     return (
         <div className={wrapperClasses.join(' ')}>
             <div className={classes.WordEnum}>{toRoman(index + 1)}</div>
-            <EditableTranscription path={[...path, 'transcription']}>
+            <EditableTranscription path={[...path, TRANSCRIPTION_PATH_SEGMENT]}>
                 {word.transcription}
             </EditableTranscription>
             <div>

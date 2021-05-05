@@ -8,7 +8,7 @@ import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
 const TranslationEditDialog = props => {
-    const { editting } = props;
+    const { editing } = props;
     const wordEditPath = useSelector(selectors.wordEditPathSelector);
     const translation = useSelector(selectors.objectPropertyToUpdateSelectorFactory(wordEditPath));
     const wordEditParentPath = wordEditPath.slice(0, wordEditPath.length - 1);
@@ -18,7 +18,7 @@ const TranslationEditDialog = props => {
 
     const translationGroup = {
         key: 'translationGroup',
-        label: editting ? 'Update Translation' : 'New Translation',
+        label: editing ? 'Update Translation' : 'New Translation',
     };
 
     const translationRef = useRef();
@@ -55,7 +55,7 @@ const TranslationEditDialog = props => {
             value: updatedValue,
             elaboration: updatedElaboration,
         };
-        if (editting)
+        if (editing)
             dispatch(actions.updateWordElement(wordEditPath, updatedTranslation))
         else 
             dispatch(actions.updateWordElement(wordEditParentPath, [...translations, updatedTranslation]));
@@ -70,7 +70,7 @@ const TranslationEditDialog = props => {
 };
 
 TranslationEditDialog.propTypes = {
-    editting: PropTypes.bool,
+    editing: PropTypes.bool,
 };
 
 export default TranslationEditDialog;

@@ -8,14 +8,14 @@ import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
 const RemarkEditDialog = props => {
-    const { editting } = props;
+    const { editing } = props;
     const wordEditPath = useSelector(selectors.wordEditPathSelector);
     const remark = useSelector(selectors.stringPropertyToUpdateSelectorFactory(wordEditPath));
     const dispatch = useDispatch();
 
     const remarkGroup = {
         key: 'remarkGroup',
-        label: editting ? 'Update Remark' : 'New Remark',
+        label: editing ? 'Update Remark' : 'New Remark',
     };
 
     const remarkRef = useRef();
@@ -43,7 +43,7 @@ const RemarkEditDialog = props => {
 };
 
 RemarkEditDialog.propTypes = {
-    editting: PropTypes.bool,
+    editing: PropTypes.bool,
 };
 
 export default RemarkEditDialog;

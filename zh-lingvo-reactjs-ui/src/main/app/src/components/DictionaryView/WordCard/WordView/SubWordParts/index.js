@@ -15,6 +15,9 @@ import EditableExampleComponent, { NULL_EXAMPLE as NULL_EXAMPLE_OBJECT } from '.
 import MeaningComponent from './Meaning/Meaning';
 import EditableMeaningComponent, { NULL_MEANING as NULL_MEANING_OBJECT } from './Meaning/EditableMeaning';
 
+import SemanticBlockComponent from './SemanticBlock/SemanticBlock';
+import EditableSemanticBlockComponent, { NULL_SEMANTIC_BLOCK as NULL_SEMANTIC_BLOCK_OBJECT} from './SemanticBlock/EditableSemanticBlock';
+
 
 export const WordMainForm = WordMainFormComponent;
 
@@ -35,3 +38,7 @@ export const NULL_EXAMPLE = NULL_EXAMPLE_OBJECT;
 export const Meaning = MeaningComponent;
 export const EditableMeaning = EditableMeaningComponent;
 export const NULL_MEANING = NULL_MEANING_OBJECT;
+
+export const SemanticBlock = SemanticBlockComponent;
+export const EditableSemanticBlock = EditableSemanticBlockComponent;
+export const NULL_SEMANTIC_BLOCK = NULL_SEMANTIC_BLOCK_OBJECT;

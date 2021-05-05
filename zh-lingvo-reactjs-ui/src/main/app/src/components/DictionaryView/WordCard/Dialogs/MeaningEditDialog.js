@@ -15,6 +15,7 @@ const MeaningEditDialog = props => {
 
     const onConfirm = () => {
         dispatch(actions.updateWordElement(wordEditParentPath, [...meanings, {
+            id: -1,
             translations: [],
         }]));
     };
