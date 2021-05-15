@@ -6,6 +6,7 @@
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
+    z-index: 11;
 
     &--showing {
         animation: backdrop-in 0.3s ease-out;
