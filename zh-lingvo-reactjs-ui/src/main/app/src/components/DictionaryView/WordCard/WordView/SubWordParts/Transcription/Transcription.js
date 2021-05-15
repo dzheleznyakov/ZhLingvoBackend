@@ -7,9 +7,9 @@ const EditableTranscription = props => {
     const { children: transcription } = props;
 
 return transcription && (
-        <div className={classes.Transcription}>
+        <span className={classes.Transcription}>
             [{transcription}]
-        </div>
+        </span>
     );
 };
 

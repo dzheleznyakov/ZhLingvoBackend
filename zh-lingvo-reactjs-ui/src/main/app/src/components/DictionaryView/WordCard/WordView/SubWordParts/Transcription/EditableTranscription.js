@@ -24,6 +24,7 @@ const EditableTranscription = props => {
             editModalType={TRANSCRIPTION_EDIT}
             deleteModalType={TRANSCRIPTION_DELETE}
             path={path}
+            block={true}
         >
             <Transcription>{transcription}</Transcription>
         </OnHoverEditable>
