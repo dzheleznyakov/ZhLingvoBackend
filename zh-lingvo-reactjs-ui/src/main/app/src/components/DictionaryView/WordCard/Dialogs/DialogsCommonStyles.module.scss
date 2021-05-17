@@ -1,6 +1,0 @@
-@import "../../../../static/styles/colours";
-
-blockquote.Excerpt {
-    padding: 8px;
-    background-color: darken(map-get($palette, light), 7%);
-}

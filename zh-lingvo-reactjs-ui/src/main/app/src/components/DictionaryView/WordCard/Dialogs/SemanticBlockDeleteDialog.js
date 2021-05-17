@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import classes from './DialogsCommonStyles.module.scss';
-
 import { Dialog } from '../../../UI';
 import { SemanticBlock } from '../WordView/SubWordParts';
+import Excerpt from './Excerpt';
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
@@ -23,9 +22,9 @@ const SemanticBlockDeleteDialog = () => {
     };
 
     const excerpt = semBlock && (
-        <blockquote className={classes.Excerpt}>
+        <Excerpt>
             <SemanticBlock path={wordEditPath} index={+index} semBlock={semBlock} editable={false} />
-        </blockquote>
+        </Excerpt>
     );
 
     return (

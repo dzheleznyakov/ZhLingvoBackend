@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import classes from './DialogsCommonStyles.module.scss';
-
 import { Dialog } from '../../../UI';
 import { Meaning } from '../WordView/SubWordParts';
+import Excerpt from './Excerpt';
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
@@ -23,9 +22,9 @@ const MeaningDeleteDialog = () => {
     };
 
     const excerpt = meaning && (
-        <blockquote className={classes.Excerpt}>
+        <Excerpt>
             <Meaning meaning={meaning} path={wordEditPath} editable={false} />
-        </blockquote>
+        </Excerpt>
     );
 
     return (

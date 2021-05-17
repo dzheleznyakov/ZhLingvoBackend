@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import classes from './DialogsCommonStyles.module.scss';
-
 import { Dialog } from '../../../UI';
-import { Example } from '../WordView/SubWordParts';
+import { Example } from '../WordView/SubWordParts' ;
+import Excerpt from './Excerpt';
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
@@ -28,9 +27,9 @@ const ExampleDeleteDialog = () => {
             confirmed={onConfirm}
         >
             Are you sure you want to delete this translation?
-            <blockquote className={classes.Excerpt}>
+            <Excerpt>
                 <Example entry={example} />
-            </blockquote>
+            </Excerpt>
         </Dialog>
     );
 };
