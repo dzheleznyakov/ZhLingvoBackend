@@ -9,7 +9,14 @@ import java.util.function.Function;
 public enum PartOfSpeech {
     NOUN("n"),
     VERB("v"),
-    ADJECTIVE("adj");
+    ADJECTIVE("adj"),
+    ADVERB("adv"),
+    PRONOUN("pronoun"),
+    NUMERAL("num"),
+    PREPOSITION("prep"),
+    CONJUNCTION("conj"),
+    INTERJECTION("interj"),
+    ARTICLE("art");
 
     private final String code;
 
