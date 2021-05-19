@@ -16,7 +16,7 @@ public enum PartOfSpeech {
     PREPOSITION("prep"),
     CONJUNCTION("conj"),
     INTERJECTION("interj"),
-    ARTICLE("art");
+    DETERMINER("det");
 
     private final String code;
 
