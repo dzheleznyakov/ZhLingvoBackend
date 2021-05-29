@@ -1,6 +1,6 @@
 package zh.lingvo.data.model.converters;
 
-import zh.lingvo.data.model.PartOfSpeech;
+import zh.lingvo.core.PartOfSpeech;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

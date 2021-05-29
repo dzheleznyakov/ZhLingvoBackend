@@ -5,9 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+import zh.lingvo.core.PartOfSpeech;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Language;
-import zh.lingvo.data.model.PartOfSpeech;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 

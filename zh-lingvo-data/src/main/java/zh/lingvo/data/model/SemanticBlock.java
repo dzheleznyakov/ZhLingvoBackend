@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import zh.lingvo.core.PartOfSpeech;
 import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.fixtures.SubWordPart;
 import zh.lingvo.data.model.converters.PartOfSpeechAttributeConverter;

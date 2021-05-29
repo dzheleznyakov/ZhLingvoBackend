@@ -35,6 +35,10 @@
             <groupId>zh.lingvo</groupId>
             <artifactId>zh-lingvo-util</artifactId>
         </dependency>
+        <dependency>
+            <groupId>zh.lingvo</groupId>
+            <artifactId>zh-lingvo-core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

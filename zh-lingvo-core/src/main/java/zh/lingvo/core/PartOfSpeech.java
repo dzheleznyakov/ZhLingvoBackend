@@ -1,4 +1,4 @@
-package zh.lingvo.data.model;
+package zh.lingvo.core;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -11,7 +11,7 @@ public enum PartOfSpeech {
     VERB("v"),
     ADJECTIVE("adj"),
     ADVERB("adv"),
-    PRONOUN("pronoun"),
+    PRONOUN("pron"),
     NUMERAL("num"),
     PREPOSITION("prep"),
     CONJUNCTION("conj"),
