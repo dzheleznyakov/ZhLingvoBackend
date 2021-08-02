@@ -1,4 +1,4 @@
-package zh.config.parser;
+package zh.config.parser.lexer;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -245,6 +245,12 @@ class LexerTest implements TokenCollector {
         @DisplayName("Should parse a string with escaped tab within")
         void parseString_multipleEscapedCharacters() {
             assertLexed("\"a\\\"b\\nc\\td\\\\e f\"", "#a\"b\nc\td\\e f#");
+        }
+
+        @Test
+        @DisplayName("Should parse multiple strings with escaped characters")
+        void parseString_MultipleStringsWithEscapedCharacters() {
+            assertLexed("\"a\\nb\" \"c\\nd\"", "#a\nb# #c\nd#");
         }
 
         @Test
