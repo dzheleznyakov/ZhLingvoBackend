@@ -1,6 +1,6 @@
 package zh.lingvo.data.services;
 
-import zh.lingvo.core.PartOfSpeech;
+import zh.lingvo.core.domain.PartOfSpeech;
 
 import java.util.Set;
 

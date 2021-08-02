@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import zh.lingvo.core.PartOfSpeech;
+import zh.lingvo.core.domain.PartOfSpeech;
 import zh.lingvo.data.services.PosService;
 
 import java.util.Set;

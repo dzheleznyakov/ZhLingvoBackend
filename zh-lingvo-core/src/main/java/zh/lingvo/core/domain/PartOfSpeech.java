@@ -1,4 +1,4 @@
-package zh.lingvo.core;
+package zh.lingvo.core.domain;
 
 import com.google.common.collect.ImmutableMap;
 

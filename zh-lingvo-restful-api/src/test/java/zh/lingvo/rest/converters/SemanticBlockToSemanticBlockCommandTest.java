@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static zh.lingvo.core.PartOfSpeech.NOUN;
+import static zh.lingvo.core.domain.PartOfSpeech.NOUN;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Test SemanticBlock to SemanticBlockCommand converter")

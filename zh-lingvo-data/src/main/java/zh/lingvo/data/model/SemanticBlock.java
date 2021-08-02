@@ -1,13 +1,13 @@
 package zh.lingvo.data.model;
 
+import com.google.common.base.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import zh.lingvo.core.PartOfSpeech;
+import zh.lingvo.core.domain.PartOfSpeech;
 import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.fixtures.SubWordPart;
 import zh.lingvo.data.model.converters.PartOfSpeechAttributeConverter;
@@ -32,7 +32,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString(exclude = "word")
-@EqualsAndHashCode(of = "id")
 @Entity(name = "semantic_block")
 public class SemanticBlock implements Persistable, SubWordPart {
     @Id
@@ -54,4 +53,17 @@ public class SemanticBlock implements Persistable, SubWordPart {
     @OneToMany(mappedBy = "semBlock", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id")
     private List<Meaning> meanings;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SemanticBlock)) return false;
+        SemanticBlock that = (SemanticBlock) o;
+        return Objects.equal(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

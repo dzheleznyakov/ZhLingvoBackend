@@ -26,8 +26,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static zh.lingvo.core.PartOfSpeech.NOUN;
-import static zh.lingvo.core.PartOfSpeech.VERB;
+import static zh.lingvo.core.domain.PartOfSpeech.NOUN;
+import static zh.lingvo.core.domain.PartOfSpeech.VERB;
 import static zh.lingvo.data.constants.Profiles.DEV;
 
 @Component

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import zh.lingvo.core.PartOfSpeech;
+import zh.lingvo.core.domain.PartOfSpeech;
 import zh.lingvo.data.fixtures.WordHelper;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Example;

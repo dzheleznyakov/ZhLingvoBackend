@@ -3,7 +3,7 @@ package zh.lingvo.rest.converters;
 import com.google.common.collect.ImmutableList;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import zh.lingvo.core.PartOfSpeech;
+import zh.lingvo.core.domain.PartOfSpeech;
 import zh.lingvo.data.model.Meaning;
 import zh.lingvo.data.model.SemanticBlock;
 import zh.lingvo.rest.commands.SemanticBlockCommand;
