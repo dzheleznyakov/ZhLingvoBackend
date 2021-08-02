@@ -45,6 +45,7 @@ public class WordServiceIT extends BaseDataIntegrationTest {
     private Example example;
 
     @BeforeEach
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     void setUp() {
         user = userRepository.findById(1L).get();
         Language language = languageRepository.findById(1).get();
