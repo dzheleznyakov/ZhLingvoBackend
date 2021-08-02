@@ -69,6 +69,7 @@ public class DictionaryBootstrap implements CommandLineRunner {
         loadTestDictionary();
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private void loadTestDictionary() {
         Optional<Dictionary> dictionaryOptional = dictionaryRepository.findById(1L);
         Dictionary dictionary;
