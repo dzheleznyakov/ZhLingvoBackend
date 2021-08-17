@@ -16,6 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static zh.config.parser.SyntaxError.Type.MAP_NAME_MISSING;
 import static zh.config.parser.SyntaxError.Type.MISMATCHING_BRACE;
 import static zh.config.parser.SyntaxError.Type.MISMATCHING_BRACKET;
 import static zh.config.parser.SyntaxError.Type.SYNTAX;
@@ -334,10 +335,24 @@ class ConfigParserTest implements Builder<String> {
         }
 
         @Test
-        @DisplayName("Should make a syntax error if a string is not closed")
+        @DisplayName("Should make a syntax error if a string is not closed in a list")
         void unclosedString() {
             assertErrors("key [\"abc]",
                     new SyntaxError(SYNTAX, "", 1, 10));
+        }
+
+        @Test
+        @DisplayName("Should make a syntax error if a string is not closed in a map")
+        void unclosedString2() {
+            assertErrors("key \"abc",
+                    new SyntaxError(SYNTAX, "", 1, 8));
+        }
+
+        @Test
+        @DisplayName("Should make a syntax error if a string comes as a map key instead of a name   ")
+        void stringInsteadOfName() {
+            assertErrors("\"abc\"",
+                    new SyntaxError(MAP_NAME_MISSING, "", 1, 5));
         }
     }
 }
