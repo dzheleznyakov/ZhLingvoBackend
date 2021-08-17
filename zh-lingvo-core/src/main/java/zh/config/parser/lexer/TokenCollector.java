@@ -1,4 +1,4 @@
-package zh.config.parser;
+package zh.config.parser.lexer;
 
 public interface TokenCollector {
     void openBrace(int line, int pos);
@@ -8,4 +8,6 @@ public interface TokenCollector {
     void name(String name, int line, int pos);
     void string(String str, int line, int pos);
     void error(int line, int pos);
+
+    default void done(int line, int pos) {}
 }

@@ -188,6 +188,12 @@ class LexerTest implements TokenCollector {
         }
 
         @Test
+        @DisplayName("Should parse a simple string that starts a number")
+        void parseSimpleString_StartingWithNumber() {
+            assertLexed("123", "#123#");
+        }
+
+        @Test
         @DisplayName("Should parse a string")
         void parseString() {
             assertLexed("\"Hello!\"", "#Hello!#");

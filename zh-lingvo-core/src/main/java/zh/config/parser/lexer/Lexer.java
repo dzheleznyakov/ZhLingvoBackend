@@ -58,6 +58,7 @@ public class Lexer {
         line = 1;
         linePos = 0;
         totalPos = 0;
+        state = NEW_TOKEN;
     }
 
     private void handleEvent(char event) {
@@ -106,7 +107,7 @@ public class Lexer {
                 new Transition(NEW_TOKEN, this::isStartOfSimpleStringChar, SIMPLE_STRING, () -> markNameStartAt(totalPos)),
                 new Transition(NEW_TOKEN, this::isDoubleQuotation, STRING, () -> markNameStartAt(totalPos + 1)),
                 new Transition(NEW_TOKEN, this::isForwardslash, SLASH, this::moveForward),
-                new Transition(NEW_TOKEN, this::isNullChar, EOF, this::nothing),
+                new Transition(NEW_TOKEN, this::isNullChar, EOF, this::finish),
 
 
                 new Transition(NAME, this::isNameChar, NAME, this::moveForward),
@@ -133,7 +134,10 @@ public class Lexer {
                     collector.closedBrace(line, linePos);
                 }),
                 new Transition(NAME, this::isForwardslash, SLASH, () -> nameToken = input.substring(stringishStart, linePos++)),
-                new Transition(NAME, this::isNullChar, EOF, this::collectName),
+                new Transition(NAME, this::isNullChar, EOF, () -> {
+                    collectName();
+                    finish();
+                }),
 
 
                 new Transition(SIMPLE_STRING, this::isSimpleStringChar, SIMPLE_STRING, this::moveForward),
@@ -159,11 +163,15 @@ public class Lexer {
                     collectString();
                     collector.closedBrace(line, linePos);
                 }),
-                new Transition(SIMPLE_STRING, this::isNullChar, EOF, this::collectString),
+                new Transition(SIMPLE_STRING, this::isNullChar, EOF, () -> {
+                    collectString();
+                    finish();
+                }),
 
                 new Transition(STRING, this::isStringChar, STRING, this::moveForward),
                 new Transition(STRING, this::isBackslash, ESCAPE, this::prepareEscape),
                 new Transition(STRING, this::isDoubleQuotation, NEW_TOKEN, this::collectString),
+                new Transition(STRING, this::isNullChar, EOF, () -> collector.error(line, linePos)),
 
 
                 new Transition(ESCAPE, this::isDoubleQuotation, STRING, () -> escape(DOUBLE_QUOT)),
@@ -182,7 +190,7 @@ public class Lexer {
 
                 new Transition(COMMENT, ch -> !isNewLine(ch) && !isNullChar(ch), COMMENT, this::moveForward),
                 new Transition(COMMENT, this::isNewLine, NEW_TOKEN, this::newLine),
-                new Transition(COMMENT, this::isNullChar, EOF, this::nothing)
+                new Transition(COMMENT, this::isNullChar, EOF, this::finish)
         }).collect(Collectors.groupingBy(tr -> tr.currentState));
     }
 
@@ -271,9 +279,9 @@ public class Lexer {
     }
 
     private boolean isStartOfSimpleStringChar(char ch) {
-        return isNotNameChar(ch) &&
+        return (isNotNameChar(ch) &&
                 !isDoubleQuotation(ch) &&
-                !isForwardslash(ch);
+                !isForwardslash(ch)) || Character.isDigit(ch);
     }
 
     private void markNameStartAt(int totalPos) {
@@ -312,5 +320,7 @@ public class Lexer {
         ++linePos;
     }
 
-    private void nothing() {}
+    private void finish() {
+        collector.done(line, linePos);
+    }
 }

@@ -1,4 +1,4 @@
-PartsOfSpeech [
+parts_of_speech [
     [NOUN n]
     [VERB v]
     [ADJECTIVE adj]
@@ -14,7 +14,7 @@ PartsOfSpeech [
 English {
     name English
     code En
-    PartsOfSpeech [
+    parts_of_speech [
         [NOUN n noun]
         [VERB v verb]
         [ADJECTIVE adj adjective]
@@ -31,7 +31,7 @@ English {
 Russian {
     name Русский
     code Ru
-    PartsOfSpeech [
+    parts_of_speech [
         [NOUN сущ. "имя существительное"]
         [VERB гл. глагол]
         [ADJECTIVE прил. "имя прилагательное"]
@@ -47,7 +47,7 @@ Russian {
 Spanish {
     name Español
     code Es
-    PartsOfSpeech [
+    parts_of_speech [
         [NOUN n "nombre sustantivo"]
         [VERB v verbo]
         [ADJECTIVE adj adjetivo]
