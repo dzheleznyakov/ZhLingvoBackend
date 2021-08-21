@@ -67,7 +67,7 @@ class ListParserTest {
         lexer.lex("a b \"cd]");
 
         assertThat(errors, hasSize(1));
-        assertError(errors.get(0), SyntaxError.Type.SYNTAX, 1, 8);
+        assertError(errors.get(0), SyntaxError.Type.SYNTAX_ERROR, 1, 8);
     }
 
     private void assertError(SyntaxError error, SyntaxError.Type type, int lineNumber, int pos) {

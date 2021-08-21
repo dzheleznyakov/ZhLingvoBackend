@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static zh.config.parser.SyntaxError.Type.MAP_NAME_MISSING;
 import static zh.config.parser.SyntaxError.Type.MISMATCHING_BRACE;
 import static zh.config.parser.SyntaxError.Type.MISMATCHING_BRACKET;
-import static zh.config.parser.SyntaxError.Type.SYNTAX;
+import static zh.config.parser.SyntaxError.Type.SYNTAX_ERROR;
 
 @DisplayName("Test Config Parser")
 class ConfigParserTest implements Builder<String> {
@@ -338,14 +338,14 @@ class ConfigParserTest implements Builder<String> {
         @DisplayName("Should make a syntax error if a string is not closed in a list")
         void unclosedString() {
             assertErrors("key [\"abc]",
-                    new SyntaxError(SYNTAX, "", 1, 10));
+                    new SyntaxError(SYNTAX_ERROR, "", 1, 10));
         }
 
         @Test
         @DisplayName("Should make a syntax error if a string is not closed in a map")
         void unclosedString2() {
             assertErrors("key \"abc",
-                    new SyntaxError(SYNTAX, "", 1, 8));
+                    new SyntaxError(SYNTAX_ERROR, "", 1, 8));
         }
 
         @Test

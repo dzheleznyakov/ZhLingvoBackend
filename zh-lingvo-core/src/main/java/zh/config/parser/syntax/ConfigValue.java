@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface ConfigValue {
+    ConfigValue NULL = new ConfigValue() {};
+
     default int getInt() {
         return 0;
     }

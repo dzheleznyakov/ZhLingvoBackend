@@ -76,6 +76,6 @@ public class MapParser extends ValueParser {
 
     @Override
     public void error(int line, int pos) {
-        errors.add(new SyntaxError(Type.SYNTAX, "", line, pos));
+        errors.add(new SyntaxError(Type.SYNTAX_ERROR, "", line, pos));
     }
 }

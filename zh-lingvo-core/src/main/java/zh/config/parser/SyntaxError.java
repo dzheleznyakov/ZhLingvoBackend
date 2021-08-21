@@ -13,8 +13,10 @@ public class SyntaxError {
         this.msg = msg;
         this.lineNumber = lineNumber;
         this.position = position;
+    }
 
-
+    public SyntaxError(Type type, String msg) {
+        this(type, msg, -1, -1);
     }
 
     @Override
@@ -36,10 +38,12 @@ public class SyntaxError {
         return Objects.hashCode(type, lineNumber, position);
     }
 
-    enum Type {
+    public enum Type {
         MISMATCHING_BRACE,
         MISMATCHING_BRACKET,
         MAP_NAME_MISSING,
-        SYNTAX
+        LIST_ERROR,
+        SYNTAX_ERROR,
+        STRUCTURAL_ERROR
     }
 }

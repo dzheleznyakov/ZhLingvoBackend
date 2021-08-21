@@ -11,53 +11,55 @@ parts_of_speech [
     [DETERMINER det]
 ]
 
-English {
-    name English
-    code En
-    parts_of_speech [
-        [NOUN n noun]
-        [VERB v verb]
-        [ADJECTIVE adj adjective]
-        [ADVERB adv adverb]
-        [PRONOUN pron pronoun]
-        [NUMERAL num numeral]
-        [PREPOSITION prep preposition]
-        [CONJUNCTION conj conjunction]
-        [INTERJECTION interj interjection]
-        [DETERMINER det determiner]
-    ]
-}
+language_descriptions {
+    English {
+        name English
+        code En
+        parts_of_speech [
+            [NOUN n noun]
+            [VERB v verb]
+            [ADJECTIVE adj adjective]
+            [ADVERB adv adverb]
+            [PRONOUN pron pronoun]
+            [NUMERAL num numeral]
+            [PREPOSITION prep preposition]
+            [CONJUNCTION conj conjunction]
+            [INTERJECTION interj interjection]
+            [DETERMINER det determiner]
+        ]
+    }
 
-Russian {
-    name Русский
-    code Ru
-    parts_of_speech [
-        [NOUN сущ. "имя существительное"]
-        [VERB гл. глагол]
-        [ADJECTIVE прил. "имя прилагательное"]
-        [ADVERB нареч. наречие]
-        [PRONOUN мест. местоимение]
-        [NUMERAL числит. "имя числительное"]
-        [PREPOSITION предл. предлог]
-        [CONJUNCTION союз союз]
-        [INTERJECTION межд. междометие]
-    ]
-}
+    Russian {
+        name Русский
+        code Ru
+        parts_of_speech [
+            [NOUN сущ. "имя существительное"]
+            [VERB гл. глагол]
+            [ADJECTIVE прил. "имя прилагательное"]
+            [ADVERB нареч. наречие]
+            [PRONOUN мест. местоимение]
+            [NUMERAL числит. "имя числительное"]
+            [PREPOSITION предл. предлог]
+            [CONJUNCTION союз союз]
+            [INTERJECTION межд. междометие]
+        ]
+    }
 
-Spanish {
-    name Español
-    code Es
-    parts_of_speech [
-        [NOUN n "nombre sustantivo"]
-        [VERB v verbo]
-        [ADJECTIVE adj adjetivo]
-        [ADVERB adv adverbio]
-        [PRONOUN pron pronombre]
-        [NUMERAL num numeral]
-        [PREPOSITION prep preposición]
-        [CONJUNCTION conj conjunsión]
-        [INTERJECTION interj interjección]
-        [DETERMINER det determinador]
-    ]
+    Spanish {
+        name Español
+        code Es
+        parts_of_speech [
+            [NOUN n "nombre sustantivo"]
+            [VERB v verbo]
+            [ADJECTIVE adj adjetivo]
+            [ADVERB adv adverbio]
+            [PRONOUN pron pronombre]
+            [NUMERAL num numeral]
+            [PREPOSITION prep preposición]
+            [CONJUNCTION conj conjunsión]
+            [INTERJECTION interj interjección]
+            [DETERMINER det determinador]
+        ]
+    }
 }
 
