@@ -9,11 +9,11 @@ import javax.persistence.Converter;
 public class PartOfSpeechAttributeConverter implements AttributeConverter<PartOfSpeech, String> {
     @Override
     public String convertToDatabaseColumn(PartOfSpeech attribute) {
-        return attribute.getCode();
+        return attribute.getShortName();
     }
 
     @Override
     public PartOfSpeech convertToEntityAttribute(String dbData) {
-        return PartOfSpeech.fromCode(dbData);
+        return PartOfSpeech.fromShortName(dbData);
     }
 }

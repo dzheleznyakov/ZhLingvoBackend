@@ -31,7 +31,7 @@ public class SemanticBlockToSemanticBlockCommand implements Converter<SemanticBl
     }
 
     private String convertPos(SemanticBlock source) {
-        return source.getPos().getCode();
+        return source.getPos().getShortName();
     }
 
     private List<MeaningCommand> convertMeanings(SemanticBlock source) {

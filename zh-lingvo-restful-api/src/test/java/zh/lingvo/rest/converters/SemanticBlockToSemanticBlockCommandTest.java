@@ -70,7 +70,7 @@ class SemanticBlockToSemanticBlockCommandTest {
 
         assertThat(command, is(notNullValue()));
         assertThat(command.getId(), is(sBlock.getId()));
-        assertThat(command.getPos(), is(equalTo(NOUN.getCode())));
+        assertThat(command.getPos(), is(equalTo(NOUN.getShortName())));
         assertThat(command.getGender(), is(equalTo(sBlock.getGender())));
 
         assertThat(command.getMeanings(), is(notNullValue()));

@@ -1,3 +1,8 @@
+/*
+This code is automatically generated.
+Do not change it manually.
+*/
+
 package zh.lingvo.core.domain;
 
 import com.google.common.collect.ImmutableMap;
@@ -18,20 +23,20 @@ public enum PartOfSpeech {
     INTERJECTION("interj"),
     DETERMINER("det");
 
-    private final String code;
+    private final String shortName;
 
-    PartOfSpeech(String code) {
-        this.code = code;
+    PartOfSpeech(String shortName) {
+        this.shortName = shortName;
     }
 
-    private static final Map<String, PartOfSpeech> POS_BY_CODE = Arrays.stream(PartOfSpeech.values())
-            .collect(ImmutableMap.toImmutableMap(PartOfSpeech::getCode, Function.identity()));
-
-    public String getCode() {
-        return code;
+    public String getShortName() {
+        return this.shortName;
     }
 
-    public static PartOfSpeech fromCode(String code) {
-        return POS_BY_CODE.get(code);
+    private static final Map<String, PartOfSpeech> BY_SHORT_NAME = Arrays.stream(PartOfSpeech.values())
+            .collect(ImmutableMap.toImmutableMap(PartOfSpeech::getShortName, Function.identity()));
+
+    public static PartOfSpeech fromShortName(String shortName) {
+        return BY_SHORT_NAME.get(shortName);
     }
 }
