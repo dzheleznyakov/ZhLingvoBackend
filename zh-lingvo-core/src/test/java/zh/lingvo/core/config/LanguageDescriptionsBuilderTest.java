@@ -323,5 +323,25 @@ class LanguageDescriptionsBuilderTest {
             assertError(structure.errors, new SyntaxError(STRUCTURAL_ERROR,
                     "Language [Foo] code is not defined."));
         }
+
+        @Test
+        @DisplayName("Should detect an error if the PoS in a language spec is not defined in PoS spec")
+        void languageSpec_PosNotDefined() {
+            LanguageDescriptionsStructure structure = buildLanguageDescriptionStructure(LANGUAGES_DESCRIPTIONS_CONFIG_KEY + " " +
+                    "{\n" +
+                    "  Foo {\n" +
+                    "    name Fooish\n" +
+                    "    code \"Fo\"\n" +
+                    "    " + PARTS_OF_SPEECH_CONFIG_KEY + " [\n" +
+                    "      [AA a aAa]\n" +
+                    "      [BB b bBb]\n" +
+                    "      [DD d dDd]\n" +
+                    "    ]\n" +
+                    "  }\n" +
+                    "}");
+
+            assertError(structure.errors, new SyntaxError(STRUCTURAL_ERROR,
+                    "Part of speech [DD] in language [Foo] is not defined."));
+        }
     }
 }

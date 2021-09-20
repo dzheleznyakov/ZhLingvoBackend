@@ -126,7 +126,7 @@ public class LanguageDescriptionsBuilder implements Builder<LanguageDescriptions
 
         private void buildLanguagePosSpec(String name, Map<String, ConfigValue> specMap, LanguageSpec spec) {
             ConfigValue langPosSpec = specMap.get(PARTS_OF_SPEECH_KEY);
-            evaluatePos(langPosSpec, name);
+            evaluatePosSyntax(langPosSpec, name);
             spec.partsOfSpeech_nativeNames = buildPosNativeNames(langPosSpec);
             spec.partsOfSpeech_shortNames = buildPosShortNames(langPosSpec);
         }
@@ -148,12 +148,25 @@ public class LanguageDescriptionsBuilder implements Builder<LanguageDescriptions
                             cv -> cv.getList().get(valIndex).getString()));
         }
 
-        private void evaluatePos(ConfigValue config, String languageName) {
+        private void evaluatePosSyntax(ConfigValue config, String languageName) {
             config.getList()
                     .stream()
                     .map(ConfigValue::getList)
                     .filter(list -> list.size() < 3)
                     .forEach(list -> processLangSpecPosDefinitionError(languageName, list));
+            config.getList()
+                    .stream()
+                    .map(ConfigValue::getList)
+                    .filter(l -> !l.isEmpty())
+                    .map(l -> l.get(0))
+                    .forEach(values -> checkPosDefined(languageName, values));
+        }
+
+        private void checkPosDefined(String languageName, ConfigValue value) {
+            String pos = value.getString();
+            if (!structure.partsOfSpeech.containsKey(pos))
+                structure.errors.add(new SyntaxError(STRUCTURAL_ERROR,
+                        String.format("Part of speech [%s] in language [%s] is not defined.", pos, languageName)));
         }
 
         private void processLangSpecPosDefinitionError(String languageName, List<ConfigValue> list) {
