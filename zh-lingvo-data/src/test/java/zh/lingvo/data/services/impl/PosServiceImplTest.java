@@ -27,9 +27,9 @@ class PosServiceImplTest {
         Set<PartOfSpeech> allPos = posService.findAll();
 
         Set<PartOfSpeech> expectedAllPos = ImmutableSet.copyOf(new PartOfSpeech[]{
-                PartOfSpeech.NOUN, PartOfSpeech.VERB, PartOfSpeech.ADJECTIVE, PartOfSpeech.ADVERB, PartOfSpeech.NUMERAL,
+                PartOfSpeech.NOUN, PartOfSpeech.VERB, PartOfSpeech.ADJECTIVE, PartOfSpeech.ADVERB/*, PartOfSpeech.NUMERAL,
                 PartOfSpeech.PRONOUN, PartOfSpeech.PREPOSITION, PartOfSpeech.CONJUNCTION, PartOfSpeech.INTERJECTION,
-                PartOfSpeech.DETERMINER
+                PartOfSpeech.DETERMINER*/
         });
 
         assertThat(allPos, equalTo(expectedAllPos));

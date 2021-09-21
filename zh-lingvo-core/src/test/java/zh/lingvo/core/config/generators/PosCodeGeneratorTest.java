@@ -3,6 +3,7 @@ package zh.lingvo.core.config.generators;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import zh.lingvo.core.config.LanguageDescriptionsStructure;
 
 import java.util.Map;
 
@@ -14,11 +15,14 @@ class PosCodeGeneratorTest {
     @Test
     @DisplayName("Test generating of the PoS file context")
     void testGenerate() {
-        Map<String, String> partsOfSpeech = ImmutableMap.of(
+        LanguageDescriptionsStructure structure = new LanguageDescriptionsStructure();
+        structure.partsOfSpeech.putAll(ImmutableMap.of(
                 "POS_A", "a",
                 "POS_B", "b",
-                "POS_C", "c");
-        PosCodeGenerator generator = new PosCodeGenerator("PartOfSpeech", partsOfSpeech);
+                "POS_C", "c"));
+        Map<String, String> flags = ImmutableMap.of(PosCodeGenerator.CLASS_NAME, "PartOfSpeech");
+        PosCodeGenerator generator = new PosCodeGenerator(structure, flags);
+
         String actual = generator.generate();
 
         assertThat(actual, is("" +

@@ -1,17 +1,21 @@
 package zh.lingvo.core.config.generators;
 
+import zh.lingvo.core.config.LanguageDescriptionsStructure;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PosCodeGenerator implements Generator {
+    public static final String CLASS_NAME = "CLASS_NAME";
+
     private static final String INDENT = "    ";
     private final Map<String, String> partsOfSpeech;
     private final String className;
     private final StringBuilder contentBuilder = new StringBuilder();
 
-    public PosCodeGenerator(String className, Map<String, String> partsOfSpeech) {
-        this.partsOfSpeech = partsOfSpeech;
-        this.className = className;
+    public PosCodeGenerator(LanguageDescriptionsStructure structure, Map<String, String> flags) {
+        this.partsOfSpeech = structure.partsOfSpeech;
+        this.className = flags.get(CLASS_NAME);
     }
 
     @Override

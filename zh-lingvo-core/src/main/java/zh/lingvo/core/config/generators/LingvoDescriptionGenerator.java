@@ -1,5 +1,6 @@
 package zh.lingvo.core.config.generators;
 
+import com.google.common.collect.ImmutableMap;
 import zh.args.Args;
 import zh.args.ArgsException;
 import zh.config.parser.Builder;
@@ -15,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class LingvoDescriptionGenerator {
     private static final String ARGS_SCHEMA = "p*,o*";
@@ -32,11 +34,15 @@ public class LingvoDescriptionGenerator {
 
     private static class DescriptionCompiler {
         public static final String POS_FILENAME = "PartOfSpeech.java";
+        public static final String LANG_DESCR_FILENAME_TEMPLATE = "%sLanguageDescriptor.java";
+
+        public static final String DOMAIN_SUBPACKAGE = "domain";
+        public static final String DESCR_SUBPACKAGE = "descriptors";
 
         private final String[] args;
         private final Args argParser;
         private String outputDirectory = null;
-        private String outputPackage = null;
+        private String outputBasePackage = null;
         private Builder<LanguageDescriptionsStructure> builder;
         private ConfigParser parser;
         private Lexer lexer;
@@ -59,7 +65,7 @@ public class LingvoDescriptionGenerator {
             if (argParser.has('o'))
                 outputDirectory = argParser.getString('o');
             if (argParser.has('p'))
-                outputPackage = argParser.getString('p');
+                outputBasePackage = argParser.getString('p');
         }
 
         private String getSourceCode() throws IOException {
@@ -90,21 +96,48 @@ public class LingvoDescriptionGenerator {
 
         private void generateCode(LanguageDescriptionsStructure structure) throws IOException {
             generatePosCode(structure);
+            generateLanguageDescriptors(structure);
         }
 
         private void generatePosCode(LanguageDescriptionsStructure structure) throws IOException {
-            Path baseOutputDirectory = new File("").getAbsoluteFile().toPath().resolve(outputDirectory);
-            Path absoluteOutputDirectory = baseOutputDirectory.resolve(outputPackage.replace(".", File.separator));
-            File outputFile = absoluteOutputDirectory.resolve(POS_FILENAME).toFile();
-            String className = getClassName(outputFile);
-            String posFileContent = new PosCodeGenerator(className, structure.partsOfSpeech).generate();
-            String fullContent = generateFullContent(posFileContent);
+            String fullPackage = outputBasePackage + "." + DOMAIN_SUBPACKAGE;
+            File outputFile = getOutputFile(POS_FILENAME, fullPackage);
+            Map<String, String> flags = ImmutableMap.of(PosCodeGenerator.CLASS_NAME, getClassName(outputFile));
+            String posFileContent = new PosCodeGenerator(structure, flags).generate();
+            String fullContent = generateFullContent(posFileContent, fullPackage);
+            ensureFileExists(outputFile);
             Files.write(outputFile.toPath(), fullContent.getBytes(StandardCharsets.UTF_8));
         }
 
-        private String generateFullContent(String fileContent) {
+        private void generateLanguageDescriptors(LanguageDescriptionsStructure structure) throws IOException {
+            for (LanguageDescriptionsStructure.LanguageSpec languageSpec : structure.languageSpecs)
+                generateLanguageDescriptor(languageSpec);
+        }
+
+        private void generateLanguageDescriptor(LanguageDescriptionsStructure.LanguageSpec languageSpec) throws IOException {
+            String fullPackage = outputBasePackage + "." + DESCR_SUBPACKAGE;
+            String fileName = String.format(LANG_DESCR_FILENAME_TEMPLATE, languageSpec.name);
+            File outputFile = getOutputFile(fileName, fullPackage);
+            Map<String, String> flags = ImmutableMap.of(
+                    LanguageDescriptorCodeGenerator.CLASS_NAME, getClassName(outputFile),
+                    LanguageDescriptorCodeGenerator.POS_PACKAGE, outputBasePackage + "." + DOMAIN_SUBPACKAGE,
+                    LanguageDescriptorCodeGenerator.POS_CLASS_NAME, getClassName(getOutputFile(POS_FILENAME, outputBasePackage))
+            );
+            String descrFileContent = new LanguageDescriptorCodeGenerator(languageSpec, flags).generate();
+            String fullContent = generateFullContent(descrFileContent, fullPackage);
+            ensureFileExists(outputFile);
+            Files.write(outputFile.toPath(), fullContent.getBytes(StandardCharsets.UTF_8));
+        }
+
+        private File getOutputFile(String fileName, String fullPackage) {
+            Path baseOutputDirectory = new File("").getAbsoluteFile().toPath().resolve(outputDirectory);
+            Path absoluteOutputDirectory = baseOutputDirectory.resolve(fullPackage.replace(".", File.separator));
+            return absoluteOutputDirectory.resolve(fileName).toFile();
+        }
+
+        private String generateFullContent(String fileContent, String fullPackage) {
             return "/*\n" + GeneratorText.DISCLAIMER + "*/\n\n" +
-                    "package " + outputPackage + ";\n\n" +
+                    "package " + fullPackage + ";\n\n" +
                     fileContent;
         }
 
@@ -112,6 +145,13 @@ public class LingvoDescriptionGenerator {
             String fileName = outputFile.getName();
             int endIndex = fileName.lastIndexOf(".");
             return fileName.substring(0, endIndex);
+        }
+
+        private void ensureFileExists(File file) throws IOException {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
         }
     }
 }
