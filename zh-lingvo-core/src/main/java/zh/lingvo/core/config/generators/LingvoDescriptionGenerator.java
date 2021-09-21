@@ -104,9 +104,7 @@ public class LingvoDescriptionGenerator {
             File outputFile = getOutputFile(POS_FILENAME, fullPackage);
             Map<String, String> flags = ImmutableMap.of(PosCodeGenerator.CLASS_NAME, getClassName(outputFile));
             String posFileContent = new PosCodeGenerator(structure, flags).generate();
-            String fullContent = generateFullContent(posFileContent, fullPackage);
-            ensureFileExists(outputFile);
-            Files.write(outputFile.toPath(), fullContent.getBytes(StandardCharsets.UTF_8));
+            writeContent(posFileContent, fullPackage, outputFile);
         }
 
         private void generateLanguageDescriptors(LanguageDescriptionsStructure structure) throws IOException {
@@ -124,9 +122,7 @@ public class LingvoDescriptionGenerator {
                     LanguageDescriptorCodeGenerator.POS_CLASS_NAME, getClassName(getOutputFile(POS_FILENAME, outputBasePackage))
             );
             String descrFileContent = new LanguageDescriptorCodeGenerator(languageSpec, flags).generate();
-            String fullContent = generateFullContent(descrFileContent, fullPackage);
-            ensureFileExists(outputFile);
-            Files.write(outputFile.toPath(), fullContent.getBytes(StandardCharsets.UTF_8));
+            writeContent(descrFileContent, fullPackage, outputFile);
         }
 
         private File getOutputFile(String fileName, String fullPackage) {
@@ -147,11 +143,16 @@ public class LingvoDescriptionGenerator {
             return fileName.substring(0, endIndex);
         }
 
-        private void ensureFileExists(File file) throws IOException {
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            }
+        private void writeContent(String descrFileContent, String fullPackage, File outputFile) throws IOException {
+            String fullContent = generateFullContent(descrFileContent, fullPackage);
+            ensureParentsExist(outputFile);
+            Files.write(outputFile.toPath(), fullContent.getBytes(StandardCharsets.UTF_8));
+        }
+
+        private void ensureParentsExist(File file) throws IOException {
+            File parentFile = file.getParentFile();
+            if (!parentFile.exists())
+                parentFile.mkdirs();
         }
     }
 }

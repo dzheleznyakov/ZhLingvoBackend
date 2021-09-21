@@ -26,7 +26,7 @@ public class PosCodeGenerator implements Generator {
     }
 
     private void generateImports() {
-        contentBuilder.append("import com.google.common.collect.ImmutableMap;\n")
+        contentBuilder.append("import com.google.common.collect.ImmutableMap;\n\n")
                 .append("import java.util.Arrays;\n")
                 .append("import java.util.Map;\n")
                 .append("import java.util.function.Function;\n\n");

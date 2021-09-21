@@ -27,6 +27,7 @@ class PosCodeGeneratorTest {
 
         assertThat(actual, is("" +
                 "import com.google.common.collect.ImmutableMap;\n" +
+                "\n" +
                 "import java.util.Arrays;\n" +
                 "import java.util.Map;\n" +
                 "import java.util.function.Function;\n" +
