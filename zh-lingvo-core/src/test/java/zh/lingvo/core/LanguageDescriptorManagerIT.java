@@ -39,7 +39,7 @@ class LanguageDescriptorManagerIT {
     @Test
     @DisplayName("Should return a language descriptor by code")
     void testGetLanguageDescriptorByCode() {
-        LanguageDescriptor descriptor = manager.getLanguageDescriptor("Es");
+        LanguageDescriptor descriptor = manager.get("Es");
 
         assertThat(descriptor.getLanguageCode(), is("Es"));
         assertThat(descriptor.getLanguageName(), is("Spanish"));
@@ -49,7 +49,7 @@ class LanguageDescriptorManagerIT {
     @Test
     @DisplayName("Should return NULL language descriptor if the code is not supported")
     void testGetLanguageDescriptorByCode_NoLanguage() {
-        LanguageDescriptor descriptor = manager.getLanguageDescriptor("Fo");
+        LanguageDescriptor descriptor = manager.get("Fo");
 
         assertThat(descriptor.getLanguageCode(), is(""));
         assertThat(descriptor.getLanguageName(), is(""));

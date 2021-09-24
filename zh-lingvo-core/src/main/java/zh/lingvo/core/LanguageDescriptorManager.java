@@ -44,7 +44,7 @@ public class LanguageDescriptorManager {
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public LanguageDescriptor getLanguageDescriptor(String code) {
+    public LanguageDescriptor get(String code) {
         return descriptorsByCodes.getOrDefault(code, LanguageDescriptor.NULL);
     }
 }

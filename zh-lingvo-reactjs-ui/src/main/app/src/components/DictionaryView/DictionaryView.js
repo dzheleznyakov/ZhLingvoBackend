@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 import classes from './DictionaryView.module.scss';
@@ -13,12 +13,20 @@ import { useActionOnMount, useDynamicBreadcrumbs } from '../../hooks';
 
 const DictionaryView = () => {
     const { id, wordMainForm } = useParams();
+    const dispatch = useDispatch();
     useActionOnMount(actions.fetchDictionary(+id));
 
     const dictionary = useSelector(selectors.loadedDictionarySelector);
+    const { code: languageCode } = (dictionary || {}).language || {};
     const dictionaryName = (dictionary && dictionary.name) || '';
     const breadcrumbs = ['Dictionaries', dictionaryName];
     useDynamicBreadcrumbs([dictionaryName], ...breadcrumbs);
+
+    useEffect(() => {
+        if (languageCode) {
+            dispatch(actions.fetchPos(languageCode));
+        }
+    }, [languageCode]);
     
     const dictionaryLoading = useSelector(selectors.loadingDictionariesSelector);
 
