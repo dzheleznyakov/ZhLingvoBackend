@@ -27,10 +27,11 @@ public class PosController {
     public List<PosCommand> getAllPos(@PathVariable("langCode") String langCode) {
         return posService.findAll(langCode).stream()
                 .map(pos -> PosConversionRequest.builder()
-                        .langCode(langCode)
-                        .pos(pos)
-                        .build())
+                                .langCode(langCode)
+                                .pos(pos)
+                                .build())
                 .map(posConverter::convert)
                 .collect(ImmutableList.toImmutableList());
     }
+
 }

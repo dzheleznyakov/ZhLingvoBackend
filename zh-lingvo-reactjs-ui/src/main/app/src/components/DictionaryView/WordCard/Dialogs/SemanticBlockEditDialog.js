@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Form, formInputTypes, validators } from '../../../UI';
+import { Form, formInputTypes } from '../../../UI';
 import { useAutofocus } from '../../../../hooks';
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
@@ -15,6 +15,7 @@ const SemanticBlockEditDialog = props => {
     const allSemBlocks = useSelector(selectors.arrayPropertyToUpdateSelectorFactory(wordEditParentPath));
     const { pos } = semBlock;
     const dispatch = useDispatch();
+    const posList = useSelector(selectors.posListSelector);
 
     const semBlockGroup = {
         key: 'semBlockGroup',
@@ -27,7 +28,7 @@ const SemanticBlockEditDialog = props => {
         label: 'Part of Speech',
         type: formInputTypes.SELECT,
         defaultValue: pos || '',
-        values: ['v', 'n', 'adj'],
+        values: posList.map(pos => pos.nativeName),
         groupKey: semBlockGroup.key,
         forwardRef: posRef,
     };
@@ -35,7 +36,10 @@ const SemanticBlockEditDialog = props => {
     useAutofocus(posRef);
 
     const onConfirmed = () => {
-        const updatedPos = posRef.current.value.trim() || null;
+        const updatedNativePos = posRef.current.value.trim() || null;
+        const updatedPos = posList
+            .filter(pos => pos.nativeName === updatedNativePos)
+            .map(pos => pos.defaultShortName)[0];
         const updatedSemBlock = {
             ...semBlock,
             pos: updatedPos,

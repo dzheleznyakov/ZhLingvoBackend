@@ -28,4 +28,5 @@ export function* wordsWatcher() {
     yield takeEvery(actionTypes.CREATE_WORD, wordsSagas.createWordSaga);
     yield takeEvery(actionTypes.DELETE_SELECTED_WORD, wordsSagas.deleteSelectedWordSaga);
     yield takeEvery(actionTypes.UPDATE_WORD, wordsSagas.updateWordSaga);
+    yield takeEvery(actionTypes.FETCH_POS, wordsSagas.fetchPosSaga);
 }

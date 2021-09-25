@@ -14,6 +14,7 @@ const initialState = {
     showWordEditModal: false,
     wordEditModalType: NONE,
     wordEditPath: [],
+    posList: [],
 };
 
 const fetchWordsListSuccess = (state, action) => ({
@@ -96,6 +97,11 @@ const setWordEditModalType = (state, action) => ({
     wordEditPath: action.path,
 });
 
+const setPos = (state, action) => ({
+    ...state,
+    posList: action.posList,
+});
+
 const signOut = () => ({
     ...initialState
 });
@@ -112,6 +118,7 @@ export default (state = initialState, action) => {
         case actionTypes.UPDATE_WORD_ELEMENT: return updateWordElement(state, action);
         case actionTypes.SHOULD_SHOW_WORD_EDIT_MODAL: return shouldShowWordEditModal(state, action);
         case actionTypes.SET_WORD_EDIT_MODAL_TYPE: return setWordEditModalType(state, action);
+        case actionTypes.SET_POS: return setPos(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

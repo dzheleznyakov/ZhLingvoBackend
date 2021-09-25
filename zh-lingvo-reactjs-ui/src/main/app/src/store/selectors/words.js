@@ -10,6 +10,8 @@ export const shouldShowWordEditModalSelector = state => state.words.shouldShowWo
 export const wordEditModalTypeSelector = state => state.words.wordEditModalType;
 export const wordEditPathSelector = state => state.words.wordEditPath;
 
+export const posListSelector = state => state.words.posList;
+
 export const mainFormToUpdateSelector = state => _.get(state, 'words.updatedWord[0].mainForm', '');
 export const stringPropertyToUpdateSelectorFactory = path =>
     state => _.get(updatedWordSelector(state), path, '');

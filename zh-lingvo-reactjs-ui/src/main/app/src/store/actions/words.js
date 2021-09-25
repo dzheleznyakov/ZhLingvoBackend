@@ -76,3 +76,13 @@ export const setWordEditModalType = (modalType, path) => ({
     modalType,
     path,
 });
+
+export const fetchPos = lang => ({
+    type: actionTypes.FETCH_POS,
+    lang,
+});
+
+export const setPos = posList => ({
+    type: actionTypes.SET_POS,
+    posList,
+});
