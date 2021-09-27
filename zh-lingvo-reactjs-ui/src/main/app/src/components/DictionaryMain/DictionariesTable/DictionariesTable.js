@@ -6,11 +6,14 @@ import classes from './DictionariesTable.module.scss';
 import { Table, Spinner } from '../../UI';
 import TableControl from './TableControl/TableControl';
 import { useBreadcrumbs, useActionOnMount } from '../../../hooks';
+import { BREADCRUMBS_TYPES } from '../../../utils/breadcrumbs';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
 
+const BREADCRUMB = { type: BREADCRUMBS_TYPES.TEXT, text: 'Dictionaries' };
+
 const DictionariesTable = () => {    
-    useBreadcrumbs('Dictionaries');
+    useBreadcrumbs(BREADCRUMB);
     useActionOnMount(actions.fetchAllDictionaries());
     const dispatch = useDispatch();
     const loading = useSelector(selectors.loadingDictionariesSelector);

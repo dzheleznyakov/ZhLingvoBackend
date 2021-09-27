@@ -6,20 +6,50 @@ import PropTypes from 'prop-types';
 import classes from './WordsList.module.scss';
 
 import WordListControl from './WordListControl/WordListControl';
+import { BREADCRUMBS_TYPES } from '../../../utils/breadcrumbs';
 import { useActionOnMount, useDynamicBreadcrumbs } from '../../../hooks';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
 
+const URLS = {
+    DICTIONARIES: '/dictionaries',
+    GET_DICTIONARY_ID: id => `/dictionaries/${id}`,
+}
+
+const BREADCRUMBS_GETTER = ({ dictionaryName, dictionaryId, toHome, toDictionary }) => [{
+    type: BREADCRUMBS_TYPES.URL,
+    text: 'Dictionaries',
+    href: URLS.DICTIONARIES,
+    onClick: toHome,
+}, {
+    type: BREADCRUMBS_TYPES.URL,
+    text: dictionaryName,
+    href: URLS.GET_DICTIONARY_ID(dictionaryId),
+    onClick: toDictionary,
+}];
+
 const WordsList = props => {
-    const { dictionaryId, parentBreadcrumbs } = props;
+    const { dictionaryId, dictionaryName } = props;
     useActionOnMount(actions.fetchWordsList(dictionaryId));
+    const dispatch = useDispatch();
+    
+    const parentBreadcrumbs = BREADCRUMBS_GETTER({ 
+        dictionaryName, 
+        dictionaryId, 
+        toHome: () => dispatch(actions.navigateTo(URLS.DICTIONARIES)),
+        toDictionary: () => dispatch(actions.navigateTo(URLS.GET_DICTIONARY_ID(dictionaryId))), 
+    });
+
     const [breadcrumbs, setBreadcrumbs] = useState(parentBreadcrumbs);
     
     const { wordMainForm } =  useParams();
     useEffect(() => {
         if (wordMainForm)
-            setBreadcrumbs(parentBreadcrumbs.concat([wordMainForm]));
-    }, [wordMainForm, parentBreadcrumbs, setBreadcrumbs]);
+            setBreadcrumbs(parentBreadcrumbs.concat([{
+                type: BREADCRUMBS_TYPES.TEXT,
+                text: wordMainForm,
+            }]));
+    }, [wordMainForm, dictionaryId, dictionaryName, setBreadcrumbs]);
 
     useDynamicBreadcrumbs([breadcrumbs], ...breadcrumbs);
 
@@ -28,8 +58,6 @@ const WordsList = props => {
     const wrapperClasses = [classes.WordsListWrapper];
     if (selectedWordIndex >= 0)
         wrapperClasses.push(classes.Active);
-
-    const dispatch = useDispatch();
 
     const onWordClick = index => () => {
         dispatch(actions.selectWord(index));
@@ -58,7 +86,7 @@ const WordsList = props => {
 
 WordsList.propTypes = {
     dictionaryId: PropTypes.string.isRequired,
-    parentBreadcrumbs: PropTypes.arrayOf(PropTypes.string).isRequired,
+    parentBreadcrumbs: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default WordsList;
