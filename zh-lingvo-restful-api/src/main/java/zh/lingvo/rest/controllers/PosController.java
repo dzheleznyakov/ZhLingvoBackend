@@ -33,5 +33,4 @@ public class PosController {
                 .map(posConverter::convert)
                 .collect(ImmutableList.toImmutableList());
     }
-
 }

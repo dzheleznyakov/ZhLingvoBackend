@@ -29,11 +29,11 @@ const BREADCRUMBS_GETTER = ({ dictionaryName, dictionaryId, toHome, toDictionary
 }];
 
 const WordsList = props => {
-    const { dictionaryId, dictionaryName } = props;
+    const { dictionaryId, dictionaryName, parentBreadcrumbs } = props;
     useActionOnMount(actions.fetchWordsList(dictionaryId));
     const dispatch = useDispatch();
     
-    const parentBreadcrumbs = BREADCRUMBS_GETTER({ 
+    const baseParentBreadcrumbs = BREADCRUMBS_GETTER({ 
         dictionaryName, 
         dictionaryId, 
         toHome: () => dispatch(actions.navigateTo(URLS.DICTIONARIES)),
@@ -45,18 +45,20 @@ const WordsList = props => {
     const { wordMainForm } =  useParams();
     useEffect(() => {
         if (wordMainForm)
-            setBreadcrumbs(parentBreadcrumbs.concat([{
+            setBreadcrumbs(baseParentBreadcrumbs.concat([{
                 type: BREADCRUMBS_TYPES.TEXT,
                 text: wordMainForm,
             }]));
-    }, [wordMainForm, dictionaryId, dictionaryName, setBreadcrumbs]);
+        else
+            setBreadcrumbs(parentBreadcrumbs);
+    }, [wordMainForm, dictionaryId, dictionaryName, parentBreadcrumbs, setBreadcrumbs]);
 
     useDynamicBreadcrumbs([breadcrumbs], ...breadcrumbs);
 
     const wordsList = useSelector(selectors.wordsListSelector);
     const selectedWordIndex = useSelector(selectors.selectedWordIndexSelector);
     const wrapperClasses = [classes.WordsListWrapper];
-    if (selectedWordIndex >= 0)
+    if (wordMainForm)
         wrapperClasses.push(classes.Active);
 
     const onWordClick = index => () => {
