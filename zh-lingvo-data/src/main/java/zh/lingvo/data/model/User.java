@@ -1,8 +1,8 @@
 package zh.lingvo.data.model;
 
+import com.google.common.base.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Getter
 @Setter
@@ -21,9 +22,9 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode(of = "id")
 @Entity(name = "user")
 public class User implements Persistable {
+    @Transient
     public static final User NULL = new User() {
         @Override
         public Long getId() {
@@ -43,4 +44,17 @@ public class User implements Persistable {
 
     @Column(name = "name", unique = true)
     private String name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equal(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

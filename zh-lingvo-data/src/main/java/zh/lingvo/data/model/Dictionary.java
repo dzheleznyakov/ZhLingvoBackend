@@ -1,8 +1,8 @@
 package zh.lingvo.data.model;
 
+import com.google.common.base.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,8 +27,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "words")
-@EqualsAndHashCode(of = "id")
+@ToString
 @Entity(name = "dictionary")
 public class Dictionary implements Persistable {
     @Id
@@ -36,11 +35,11 @@ public class Dictionary implements Persistable {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "lang_id", referencedColumnName = "id")
     private Language language;
 
@@ -49,5 +48,19 @@ public class Dictionary implements Persistable {
 
     @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("main_form")
+    @ToString.Exclude
     private List<Word> words;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Dictionary)) return false;
+        Dictionary that = (Dictionary) o;
+        return Objects.equal(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

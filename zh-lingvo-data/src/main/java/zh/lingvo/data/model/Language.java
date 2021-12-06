@@ -1,8 +1,8 @@
 package zh.lingvo.data.model;
 
+import com.google.common.base.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +21,6 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
 @Entity(name = "language")
 public class Language implements Persistable {
     @Id
@@ -34,4 +33,17 @@ public class Language implements Persistable {
 
     @Column(name = "code", length = 2, unique = true)
     private String twoLetterCode;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Language)) return false;
+        Language language = (Language) o;
+        return Objects.equal(id, language.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

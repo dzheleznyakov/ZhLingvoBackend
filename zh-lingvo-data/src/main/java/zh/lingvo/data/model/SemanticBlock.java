@@ -31,7 +31,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "word")
+@ToString
 @Entity(name = "semantic_block")
 public class SemanticBlock implements Persistable, SubWordPart {
     @Id
@@ -40,6 +40,7 @@ public class SemanticBlock implements Persistable, SubWordPart {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ToString.Exclude
     @JoinColumn(name = "word_id", referencedColumnName = "id")
     private Word word;
 

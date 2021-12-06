@@ -1,8 +1,8 @@
 package zh.lingvo.data.model;
 
+import com.google.common.base.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,8 +24,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "meaning")
-@EqualsAndHashCode
+@ToString
 @Entity(name = "example")
 public class Example implements Persistable, SubWordPart {
     @Id
@@ -35,6 +34,7 @@ public class Example implements Persistable, SubWordPart {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "meaning_id", referencedColumnName = "id")
+    @ToString.Exclude
     private Meaning meaning;
 
     @Column(name = "remark", length = 20)
@@ -45,4 +45,17 @@ public class Example implements Persistable, SubWordPart {
 
     @Column(name = "explanation")
     private String explanation;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Example)) return false;
+        Example example = (Example) o;
+        return Objects.equal(id, example.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
