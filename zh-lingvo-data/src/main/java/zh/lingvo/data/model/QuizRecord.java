@@ -10,6 +10,7 @@ import lombok.ToString;
 import zh.lingvo.core.domain.PartOfSpeech;
 import zh.lingvo.data.model.converters.PartOfSpeechAttributeConverter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -19,6 +20,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -47,6 +51,9 @@ public class QuizRecord {
 
     @Column(name = "transcription")
     private String transcription;
+
+    @OneToMany(mappedBy = "record", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<QuizTranslation> translations = new LinkedHashSet<>();
 
     @Override
     public boolean equals(Object o) {
