@@ -55,6 +55,9 @@ public class QuizRecord {
     @OneToMany(mappedBy = "record", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<QuizTranslation> translations = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "record", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<QuizExample> examples = new LinkedHashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

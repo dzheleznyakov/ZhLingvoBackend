@@ -23,8 +23,8 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Builder
 @ToString
-@Entity(name = "quiz_translation")
-public class QuizTranslation {
+@Entity(name = "quiz_example")
+public class QuizExample {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,17 +35,20 @@ public class QuizTranslation {
     @ToString.Exclude
     private QuizRecord record;
 
-    @Column(name = "value", nullable = false)
-    private String value;
+    @Column(name = "remark", length = 20)
+    private String remark;
 
-    @Column(name = "elaboration")
-    private String elaboration;
+    @Column(name = "expression")
+    private String expression;
+
+    @Column(name = "explanation")
+    private String explanation;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof QuizTranslation)) return false;
-        QuizTranslation that = (QuizTranslation) o;
+        if (!(o instanceof QuizExample)) return false;
+        QuizExample that = (QuizExample) o;
         return Objects.equal(id, that.id);
     }
 
