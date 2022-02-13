@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS quiz_record (
     word_main_form VARCHAR NOT NULL,
     pos VARCHAR(6),
     transcription VARCHAR,
-    name VARCHAR,
+--    name VARCHAR,
     FOREIGN KEY (quiz_id) REFERENCES quiz(id)
 );
 
