@@ -36,8 +36,8 @@ public class Meaning implements Persistable, SubWordPart {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @ToString.Exclude
     @JoinColumn(name = "sem_bl_id", referencedColumnName = "id")
+    @ToString.Exclude
     private SemanticBlock semBlock;
 
     @Column(name = "remark")

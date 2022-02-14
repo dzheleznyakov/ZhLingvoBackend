@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS quiz_record (
     word_main_form VARCHAR NOT NULL,
     pos VARCHAR(6),
     transcription VARCHAR,
---    name VARCHAR,
+    statistics_id INTEGER NOT NULL,
     FOREIGN KEY (quiz_id) REFERENCES quiz(id)
 );
 
@@ -71,6 +71,9 @@ CREATE TABLE IF NOT EXISTS quiz_statistics (
     number_of_successes INTEGER,
     FOREIGN KEY (record_id) REFERENCES quiz_record(id)
 );
+
+ALTER TABLE quiz_record ADD CONSTRAINT IF NOT EXISTS quiz_record_to_statistics_fk
+    FOREIGN KEY (statistics_id) REFERENCES quiz_statistics(id);
 ---
 ---
 ---

@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -57,6 +58,10 @@ public class QuizRecord {
 
     @OneToMany(mappedBy = "record", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<QuizExample> examples = new LinkedHashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @JoinColumn(name = "statistics_id", nullable = false, referencedColumnName = "id")
+    private QuizRecordStatistics statistics;
 
     @Override
     public boolean equals(Object o) {
