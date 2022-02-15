@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import zh.lingvo.data.fixtures.Persistable;
-import zh.lingvo.data.fixtures.SubWordPart;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,7 +18,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.Set;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,33 +28,40 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @ToString
-@Entity(name = "meaning")
-public class Meaning implements Persistable, SubWordPart {
+@Entity(name = "quiz")
+public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "sem_bl_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     @ToString.Exclude
-    private SemanticBlock semBlock;
+    private User user;
 
-    @Column(name = "remark")
-    private String remark;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "target_lang_id", nullable = false, referencedColumnName = "id")
+    private Language language;
 
-    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Translation> translations;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "settings_id", nullable = false, referencedColumnName = "id")
+    private QuizSettings quizSettings;
 
-    @OneToMany(mappedBy = "meaning", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Example> examples;
+    @Column(name = "name")
+    private String name;
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OrderBy("id")
+    @ToString.Exclude
+    private List<QuizRecord> quizRecords;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Meaning)) return false;
-        Meaning meaning = (Meaning) o;
-        return Objects.equal(id, meaning.id);
+        if (!(o instanceof Quiz)) return false;
+        Quiz quiz = (Quiz) o;
+        return Objects.equal(id, quiz.id);
     }
 
     @Override
