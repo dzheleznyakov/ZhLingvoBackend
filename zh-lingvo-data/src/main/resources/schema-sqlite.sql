@@ -18,22 +18,16 @@ CREATE TABLE IF NOT EXISTS language (
 ---
 ---
 ---
-CREATE TABLE IF NOT EXISTS quiz_settings (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    quiz_regime VARCHAR(10),
-    max_score INTEGER NOT NULL,
-    matching_regime VARCHAR(8)
-);
-
 CREATE TABLE IF NOT EXISTS quiz (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     target_lang_id INTEGER NOT NULL,
-    settings_id INTEGER NOT NULL,
     name VARCHAR NOT NULL,
+    quiz_regime VARCHAR(10),
+    max_score INTEGER NOT NULL,
+    matching_regime VARCHAR(8)
     FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (target_lang_id) REFERENCES language(id),
-    FOREIGN KEY (settings_id) REFERENCES quiz_settings(id)
+    FOREIGN KEY (target_lang_id) REFERENCES language(id)
 );
 
 CREATE TABLE IF NOT EXISTS quiz_record (

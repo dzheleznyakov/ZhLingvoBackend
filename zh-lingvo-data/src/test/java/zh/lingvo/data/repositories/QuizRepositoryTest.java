@@ -9,7 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import zh.hamcrest.ZhMatchers;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
-import zh.lingvo.data.model.QuizSettings;
 import zh.lingvo.data.model.User;
 
 import java.util.List;
@@ -30,19 +29,18 @@ class QuizRepositoryTest extends BaseRepositoryTest<QuizRepository> {
     private final User USER_1 = User.builder().name("User 1").build();
     private final User USER_2 = User.builder().name("User 2").build();
     private final User USER_3 = User.builder().name("User 3").build();
-    private final QuizSettings SETTINGS_1 = QuizSettings.builder().quizRegime(FORWARD).matchingRegime(RELAXED).build();
-    private final QuizSettings SETTINGS_2 = QuizSettings.builder().quizRegime(FORWARD).matchingRegime(RELAXED).build();
-    private final QuizSettings SETTINGS_3 = QuizSettings.builder().quizRegime(FORWARD).matchingRegime(RELAXED).build();
-    private final Quiz QUIZ_1 = Quiz.builder().name("Quiz 1").language(LANGUAGE_1).user(USER_1).quizSettings(SETTINGS_1).build();
-    private final Quiz QUIZ_2 = Quiz.builder().name("Quiz 2").language(LANGUAGE_1).user(USER_2).quizSettings(SETTINGS_2).build();
-    private final Quiz QUIZ_3 = Quiz.builder().name("Quiz 3").language(LANGUAGE_2).user(USER_1).quizSettings(SETTINGS_3).build();
+    private final Quiz QUIZ_1 = Quiz.builder().name("Quiz 1").language(LANGUAGE_1).user(USER_1)
+            .quizRegime(FORWARD).matchingRegime(RELAXED).maxScore(30).build();
+    private final Quiz QUIZ_2 = Quiz.builder().name("Quiz 2").language(LANGUAGE_1).user(USER_2)
+            .quizRegime(FORWARD).matchingRegime(RELAXED).maxScore(30).build();
+    private final Quiz QUIZ_3 = Quiz.builder().name("Quiz 3").language(LANGUAGE_2).user(USER_1)
+            .quizRegime(FORWARD).matchingRegime(RELAXED).maxScore(30).build();
 
     @BeforeEach
     void setUp() {
         ImmutableList.of(
                 USER_1, USER_2, USER_3,
                 LANGUAGE_1, LANGUAGE_2,
-                SETTINGS_1, SETTINGS_2, SETTINGS_3,
                 QUIZ_1, QUIZ_2, QUIZ_3
         )
                 .forEach(entityManager::persist);

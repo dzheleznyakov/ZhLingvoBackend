@@ -16,9 +16,9 @@ public interface WordRepository extends CrudRepository<Word, Long> {
 
     List<Word> findAllByMainFormAndDictionary(String mainForm, Dictionary dictionary);
 
-    @Query("SELECT w from word w JOIN FETCH w.dictionary WHERE w.id = (:id)")
+    @Query("SELECT w FROM word w JOIN FETCH w.dictionary WHERE w.id = (:id)")
     Optional<Word> findByIdWithDictionary(@Param("id") Long id);
 
-    @Query("SELECT w from word w JOIN FETCH w.semanticBlocks WHERE w.id = (:id)")
+    @Query("SELECT w FROM word w JOIN FETCH w.semanticBlocks WHERE w.id = (:id)")
     Optional<Word> findByIdWithSubWordParts(@Param("id") Long id);
 }
