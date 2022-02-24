@@ -38,7 +38,7 @@ public class QuizRecord {
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "quiz_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "quiz_id", referencedColumnName = "id")
     @ToString.Exclude
     private Quiz quiz;
 

@@ -30,7 +30,7 @@ public class QuizTranslation {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "record_id", nullable = false, referencedColumnName = "id")
     @ToString.Exclude
     private QuizRecord record;
