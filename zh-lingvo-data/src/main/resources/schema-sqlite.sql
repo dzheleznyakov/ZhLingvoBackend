@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS quiz (
     name VARCHAR NOT NULL,
     quiz_regime VARCHAR(10),
     max_score INTEGER NOT NULL,
-    matching_regime VARCHAR(8)
+    matching_regime VARCHAR(8),
     FOREIGN KEY (user_id) REFERENCES user(id),
     FOREIGN KEY (target_lang_id) REFERENCES language(id)
 );
