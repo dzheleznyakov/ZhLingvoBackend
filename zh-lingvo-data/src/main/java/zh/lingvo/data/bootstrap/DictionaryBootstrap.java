@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Example;
@@ -33,6 +34,7 @@ import static zh.lingvo.data.constants.Profiles.DEV;
 @Component
 @Profile(DEV)
 @Slf4j
+@Order(1)
 public class DictionaryBootstrap implements CommandLineRunner {
     private final UserRepository userRepository;
     private final LanguageRepository languageRepository;
@@ -72,17 +74,17 @@ public class DictionaryBootstrap implements CommandLineRunner {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private void loadTestDictionary() {
         Optional<Dictionary> dictionaryOptional = dictionaryRepository.findById(1L);
-        Dictionary dictionary;
-        if (dictionaryOptional.isEmpty()) {
-            dictionary = new Dictionary();
-            User admin = userRepository.findByName("admin").get();
-            Language english = languageRepository.findByTwoLetterCode("En").get();
-            dictionary.setLanguage(english);
-            dictionary.setUser(admin);
-            dictionary.setName("Test dictionary");
-            dictionary = dictionaryRepository.save(dictionary);
-        } else
-            dictionary = dictionaryOptional.get();
+        Dictionary dictionary = dictionaryOptional
+                .orElseGet(() -> {
+                    User admin = userRepository.findByName("admin").get();
+                    Language english = languageRepository.findByTwoLetterCode("En").get();
+                    Dictionary d = Dictionary.builder()
+                            .language(english)
+                            .user(admin)
+                            .name("Test dictionary")
+                            .build();
+                    return dictionaryRepository.save(d);
+                });
         loadWords(dictionary);
         log.info("Test dictionary loaded");
     }
