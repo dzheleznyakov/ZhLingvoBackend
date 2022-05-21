@@ -11,4 +11,6 @@ public interface QuizRepository extends CrudRepository<Quiz, Long> {
     List<Quiz> findAllByUser(User user);
 
     Optional<Quiz> findByIdAndUser(Long id, User user);
+
+    boolean existsByIdAndUser(Long id, User user);
 }
