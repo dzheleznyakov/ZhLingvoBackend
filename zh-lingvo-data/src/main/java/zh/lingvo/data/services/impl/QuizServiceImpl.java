@@ -1,6 +1,7 @@
 package zh.lingvo.data.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.repositories.QuizRepository;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Service
 @Slf4j
 public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;

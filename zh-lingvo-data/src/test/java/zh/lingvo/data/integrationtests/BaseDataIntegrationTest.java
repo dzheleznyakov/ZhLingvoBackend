@@ -13,9 +13,11 @@ import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 import zh.lingvo.data.repositories.DictionaryRepository;
 import zh.lingvo.data.repositories.LanguageRepository;
+import zh.lingvo.data.repositories.QuizRepository;
 import zh.lingvo.data.repositories.UserRepository;
 import zh.lingvo.data.repositories.WordRepository;
 import zh.lingvo.data.services.DictionaryService;
+import zh.lingvo.data.services.QuizService;
 import zh.lingvo.data.services.UserService;
 import zh.lingvo.data.services.WordService;
 
@@ -41,6 +43,8 @@ public abstract class BaseDataIntegrationTest {
     protected DictionaryRepository dictionaryRepository;
     @Autowired
     protected WordRepository wordRepository;
+    @Autowired
+    protected QuizRepository quizRepository;
 
     @Autowired
     protected UserService userService;
@@ -48,6 +52,8 @@ public abstract class BaseDataIntegrationTest {
     protected DictionaryService dictionaryService;
     @Autowired
     protected WordService wordService;
+    @Autowired
+    protected QuizService quizService;
 
     protected <E extends Persistable> E findEntity(Class<E> entityClass, Object id) {
         return entityManager.find(entityClass, id);
