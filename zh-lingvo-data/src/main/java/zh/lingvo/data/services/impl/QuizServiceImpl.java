@@ -27,6 +27,11 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
+    public boolean existsById(Long id, User user) {
+        return quizRepository.existsByIdAndUser(id, user);
+    }
+
+    @Override
     public List<Quiz> findAll(User user) {
         return quizRepository.findAllByUser(user);
     }

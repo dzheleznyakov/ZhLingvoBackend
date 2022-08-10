@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import zh.lingvo.core.domain.PartOfSpeech;
+import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.model.converters.PartOfSpeechAttributeConverter;
 
 import javax.persistence.CascadeType;
@@ -31,7 +32,7 @@ import java.util.Set;
 @Builder
 @ToString
 @Entity(name = "quiz_record")
-public class QuizRecord {
+public class QuizRecord implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

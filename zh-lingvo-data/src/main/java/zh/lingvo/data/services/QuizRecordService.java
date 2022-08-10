@@ -16,5 +16,5 @@ public interface QuizRecordService {
 
     QuizRecord update(@Nonnull QuizRecord record, Long quizId, User user);
 
-    boolean delete(QuizRecord record, User user);
+    boolean deleteById(Long quizRecordId, User user);
 }

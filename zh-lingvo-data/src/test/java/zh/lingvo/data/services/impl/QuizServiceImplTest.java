@@ -88,6 +88,34 @@ class QuizServiceImplTest {
     }
 
     @Nested
+    @DisplayName("Test QuizServiceImpl.existsById(id, user)")
+    class ExistsById {
+        @Test
+        @DisplayName("Should return false if the quiz is not found for the user")
+        void quizDoesNotExistsForUser() {
+            when(quizRepository.existsByIdAndUser(ID, user)).thenReturn(false);
+
+            boolean exists = service.existsById(ID, user);
+
+            assertThat(exists, is(false));
+            verify(quizRepository, only()).existsByIdAndUser(ID, user);
+            verifyNoMoreInteractions(quizRepository);
+        }
+
+        @Test
+        @DisplayName("Should return true if the quiz is found for the user")
+        void quizIsFound() {
+            when(quizRepository.existsByIdAndUser(ID, user)).thenReturn(true);
+
+            boolean exists = service.existsById(ID, user);
+
+            assertThat(exists, is(true));
+            verify(quizRepository, only()).existsByIdAndUser(ID, user);
+            verifyNoMoreInteractions(quizRepository);
+        }
+    }
+
+    @Nested
     @DisplayName("Test QuizServiceImpl.findAll(user)")
     class FindAll {
         @Test

@@ -123,6 +123,11 @@ public class QuizServiceIT extends BaseDataIntegrationTest{
         assertThat(foundQuiz, is(empty()));
     }
 
+    private Quiz setUpPersistedQuiz(String name) {
+        Quiz quiz = newQuiz(name);
+        return quizRepository.save(quiz);
+    }
+
     private Quiz newQuiz(String name) {
         return Quiz.builder()
                 .name(name)
@@ -133,11 +138,5 @@ public class QuizServiceIT extends BaseDataIntegrationTest{
                 .maxScore(30)
                 .quizRecords(new ArrayList<>())
                 .build();
-    }
-
-    private Quiz setUpPersistedQuiz(String name) {
-        Quiz quiz = newQuiz(name);
-        return quizService.save(quiz, user)
-                .orElseThrow(RuntimeException::new);
     }
 }
