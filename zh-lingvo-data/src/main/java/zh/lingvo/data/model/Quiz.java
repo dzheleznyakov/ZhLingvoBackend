@@ -68,6 +68,13 @@ public class Quiz implements Persistable {
     @ToString.Exclude
     private List<QuizRecord> quizRecords;
 
+    public static void merge(Quiz baseQuiz, Quiz otherQuiz) {
+        if (otherQuiz.getName() != null)
+            baseQuiz.setName(otherQuiz.getName());
+        if (otherQuiz.getLanguage() != null)
+            baseQuiz.setLanguage(otherQuiz.getLanguage());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

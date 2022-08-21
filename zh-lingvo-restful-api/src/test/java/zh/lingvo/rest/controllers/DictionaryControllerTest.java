@@ -54,7 +54,6 @@ class DictionaryControllerTest {
     private static final String URL_DICTIONARY_TEMPLATE = URL + "/{id}";
 
     private static final User USER = User.builder().id(1L).name("Test").build();
-    private static final User OTHER_USER = User.builder().id(2L).name("Other user").build();
     private static final Language LANG_1 = Language.builder().id(1).name("Language 1").twoLetterCode("L1").build();
     private static final Language LANG_2 = Language.builder().id(2).name("Language 2").twoLetterCode("L2").build();
     private static final Dictionary DICTIONARY_1 = Dictionary.builder().id(1L).name("D1").language(LANG_1).build();
