@@ -49,7 +49,7 @@ class QuizToQuizSettingsCommandTest {
         assertThat(command, is(notNullValue()));
         assertThat(command.getQuizId(), is(quizId));
         assertThat(command.getMaxScore(), is(maxScore));
-        assertThat(command.getQuizRegime(), is(quizRegime.name()));
-        assertThat(command.getMatchingRegime(), is(matchingRegime.name()));
+        assertThat(command.getQuizRegime(), is(quizRegime.getCode()));
+        assertThat(command.getMatchingRegime(), is(matchingRegime.getCode()));
     }
 }

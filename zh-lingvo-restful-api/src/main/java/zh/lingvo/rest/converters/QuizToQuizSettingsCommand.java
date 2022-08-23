@@ -14,8 +14,16 @@ public class QuizToQuizSettingsCommand implements Converter<Quiz, QuizSettingsCo
         return source == null ? null : QuizSettingsCommand.builder()
                 .quizId(source.getId())
                 .maxScore(source.getMaxScore())
-                .quizRegime(source.getQuizRegime().name())
-                .matchingRegime(source.getMatchingRegime().name())
+                .quizRegime(convertQuizRegime(source))
+                .matchingRegime(convertMatchingRegime(source))
                 .build();
+    }
+
+    private String convertQuizRegime(Quiz source) {
+        return source.getQuizRegime() == null ? null : source.getQuizRegime().getCode();
+    }
+
+    private String convertMatchingRegime(Quiz source) {
+        return source.getMatchingRegime() == null ? null : source.getMatchingRegime().getCode();
     }
 }

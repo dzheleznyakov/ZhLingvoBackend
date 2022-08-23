@@ -200,7 +200,7 @@ class QuizControllerTest {
     @DisplayName("Test PUT /api/quizzes/")
     class UpdateQuiz {
         @Test
-        @DisplayName("Shoud return NOT FOUND 404 if the quiz does not exist")
+        @DisplayName("Should return NOT FOUND 404 if the quiz does not exist")
         void quizDoesNotExist_Failure() throws Exception {
             long quizId = 1L;
             when(quizService.findById(quizId, USER)).thenReturn(Optional.empty());
