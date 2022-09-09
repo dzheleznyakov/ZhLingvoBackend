@@ -36,7 +36,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <groovy-all.version>3.0.5</groovy-all.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-        <logback.version>1.2.3</logback.version>
+        <logback.version>1.2.9</logback.version>
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <guava.version>30.0-jre</guava.version>
     </properties>
