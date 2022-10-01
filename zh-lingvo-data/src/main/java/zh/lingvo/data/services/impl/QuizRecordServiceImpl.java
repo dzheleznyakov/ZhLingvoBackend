@@ -40,7 +40,7 @@ public class QuizRecordServiceImpl implements QuizRecordService {
     @Override
     public Optional<QuizRecord> findById(Long quizRecordId, User user) {
         return quizRecordRepository.findByIdWithQuiz(quizRecordId)
-                .filter(qr -> Objects.equals(qr.getQuiz().getUser(), user));
+                .filter(qr -> Objects.equals(qr.getQuiz().getUser().getId(), user.getId()));
     }
 
     @Override
@@ -59,21 +59,21 @@ public class QuizRecordServiceImpl implements QuizRecordService {
 
     @Override
     @Nullable
-    public QuizRecord update(@Nonnull QuizRecord record, Long quizId, User user) {
+    public Optional<QuizRecord> update(@Nonnull QuizRecord record, Long quizId, User user) {
         if (record.getQuiz() == null || !Objects.equals(record.getQuiz().getId(), quizId))
-            return null;
-        return quizService.findById(quizId, user)
-                .map(quiz -> quizRecordRepository.save(record))
-                .orElse(null);
+            return Optional.empty();
+        return quizService.existsById(quizId, user)
+                ? Optional.of(quizRecordRepository.save(record))
+                : Optional.empty();
     }
 
     @Override
-    public boolean deleteById(Long quizRecordId, User user) {
+    public boolean deleteById(Long quizRecordId, Long quizId, User user) {
         if (quizRecordId == null)
             return false;
         try {
             quizRecordRepository.findByIdWithQuiz(quizRecordId)
-                    .filter(Objects::nonNull)
+                    .filter(qr -> Objects.equals(qr.getQuiz().getId(), quizId))
                     .filter(qr -> Objects.equals(qr.getQuiz().getUser(), user))
                     .ifPresent(quizRecordRepository::delete);
             return true;

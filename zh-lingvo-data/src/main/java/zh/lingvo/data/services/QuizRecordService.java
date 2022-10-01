@@ -14,7 +14,7 @@ public interface QuizRecordService {
 
     Optional<QuizRecord> create(QuizRecord record, Long quizId, User user);
 
-    QuizRecord update(@Nonnull QuizRecord record, Long quizId, User user);
+    Optional<QuizRecord> update(@Nonnull QuizRecord record, Long quizId, User user);
 
-    boolean deleteById(Long quizRecordId, User user);
+    boolean deleteById(Long quizRecordId, Long quizId, User user);
 }

@@ -40,6 +40,7 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
     private User anotherUser;
     private Language language;
     private Quiz quiz;
+    @SuppressWarnings("FieldCanBeLocal")
     private Quiz anotherQuiz;
     private Long quizId;
     private Long anotherQuizId;
@@ -102,10 +103,11 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
         String updatedWordMainForm = "word";
         quizRecord.setWordMainForm(updatedWordMainForm);
 
-        QuizRecord updatedRecord = quizRecordService.update(quizRecord, quizId, user);
+        Optional<QuizRecord> optionalUpdatedRecord = quizRecordService.update(quizRecord, quizId, user);
 
-        assertThat(updatedRecord.getId(), is(equalTo(recordId)));
-        assertThat(updatedRecord.getWordMainForm(), is(equalTo(updatedWordMainForm)));
+        assertThat(optionalUpdatedRecord, is(not(empty())));
+        assertThat(optionalUpdatedRecord, hasPropertySatisfying(QuizRecord::getId, is(equalTo(recordId))));
+        assertThat(optionalUpdatedRecord, hasPropertySatisfying(QuizRecord::getWordMainForm, is(equalTo(updatedWordMainForm))));
     }
 
     @Test
@@ -115,9 +117,9 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
         QuizRecord quizRecord = getPersistedQuizRecord(oldWormMainForm);
 
         quizRecord.setWordMainForm("word");
-        QuizRecord updatedRecord = quizRecordService.update(quizRecord, quizId, anotherUser);
+        Optional<QuizRecord> optionalUpdatedRecord = quizRecordService.update(quizRecord, quizId, anotherUser);
 
-        assertThat(updatedRecord, is(nullValue()));
+        assertThat(optionalUpdatedRecord, is(empty()));
     }
 
     @Test
@@ -127,9 +129,9 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
         QuizRecord quizRecord = getPersistedQuizRecord(oldWormMainForm);
 
         quizRecord.setWordMainForm("word");
-        QuizRecord updatedRecord = quizRecordService.update(quizRecord, anotherQuizId, user);
+        Optional<QuizRecord> optionalUpdatedRecord = quizRecordService.update(quizRecord, anotherQuizId, user);
 
-        assertThat(updatedRecord, is(nullValue()));
+        assertThat(optionalUpdatedRecord, is(empty()));
     }
 
     @Test
@@ -138,7 +140,7 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
         QuizRecord quizRecord = getPersistedQuizRecord("home");
         Long id = quizRecord.getId();
 
-        boolean successful = quizRecordService.deleteById(id, user);
+        boolean successful = quizRecordService.deleteById(id, quizId, user);
 
         assertThat(successful, is(true));
         QuizRecord dbQuizRecord = findEntity(QuizRecord.class, id);
@@ -150,7 +152,7 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
     void testShouldNotDeleteQuizRecordIfItIsNotPersisted() {
         QuizRecord quizRecord = newQuizRecord(NOUN, "dog");
 
-        boolean successful = quizRecordService.deleteById(quizRecord.getId(), user);
+        boolean successful = quizRecordService.deleteById(quizRecord.getId(), quizId, user);
 
         assertThat(quizRecord.getId(), is(nullValue()));
         assertThat(successful, is(false));
@@ -162,7 +164,20 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
         QuizRecord quizRecord = getPersistedQuizRecord("cat");
         Long id = quizRecord.getId();
 
-        boolean successful = quizRecordService.deleteById(id, anotherUser);
+        boolean successful = quizRecordService.deleteById(id, quizId, anotherUser);
+
+        assertThat(successful, is(true));
+        QuizRecord dbQuizRecord = findEntity(QuizRecord.class, id);
+        assertThat(dbQuizRecord, is(notNullValue()));
+    }
+
+    @Test
+    @DisplayName("Should not really delete quiz record if it is in a different quiz")
+    void testShouldNotDeleteQuizRecordFromDifferentQuiz() {
+        QuizRecord quizRecord = getPersistedQuizRecord("cat");
+        Long id = quizRecord.getId();
+
+        boolean successful = quizRecordService.deleteById(id, anotherQuizId, user);
 
         assertThat(successful, is(true));
         QuizRecord dbQuizRecord = findEntity(QuizRecord.class, id);
@@ -176,7 +191,7 @@ public class QuizRecordServiceIT extends BaseDataIntegrationTest {
         QuizRecord dbRecord = findEntity(QuizRecord.class, id);
         assertThat(dbRecord, is(nullValue()));
 
-        boolean success = quizRecordService.deleteById(id, user);
+        boolean success = quizRecordService.deleteById(id, quizId, user);
 
         assertThat(success, is(true));
     }

@@ -25,6 +25,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import static zh.lingvo.util.Preconditions.checkNull;
+
 @Slf4j
 @ApiController
 @RequestMapping("/api/words")
@@ -76,8 +78,8 @@ public class WordController {
             @PathVariable("dictionaryId") Long dictionaryId,
             @RequestBody WordCommand newWord
     ) {
-        if (newWord.getId() != null)
-            throw new ResourceAlreadyExists(String.format("Word with id [%d] already exists", newWord.getId()));
+        checkNull(newWord::getId,
+                () -> new ResourceAlreadyExists(String.format("Word with id [%d] already exists", newWord.getId())));
 
         Word word = wordConverter.toWord(newWord);
         return wordService.create(word, dictionaryId, getUser())

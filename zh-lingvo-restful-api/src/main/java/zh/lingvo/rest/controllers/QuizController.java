@@ -22,6 +22,7 @@ import zh.lingvo.rest.util.RequestContext;
 
 import java.util.List;
 
+import static zh.lingvo.util.Preconditions.checkCondition;
 import static zh.lingvo.util.Preconditions.checkNull;
 
 @ApiController
@@ -53,7 +54,7 @@ public class QuizController {
     }
 
     @GetMapping("/{id}")
-    public QuizCommand getQuiz(@PathVariable("id") long id) {
+    public QuizCommand getQuiz(@PathVariable("id") Long id) {
         return quizService.findById(id, getUser())
                 .map(quizConverter::convert)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Quiz id=[%d] not found", id)));
@@ -79,10 +80,10 @@ public class QuizController {
     }
 
     @DeleteMapping("/{id}")
-    public Long deleteQuiz(@PathVariable("id") long id) {
+    public Long deleteQuiz(@PathVariable("id") Long id) {
         boolean successful = quizService.deleteById(id, getUser());
-        if (!successful)
-            throw new InternalError(String.format("Failed to delete quiz [%d]", id));
+        checkCondition(successful,
+                () -> new InternalError(String.format("Failed to delete quiz [%d]", id)));
         return id;
     }
 
