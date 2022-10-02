@@ -1,9 +1,14 @@
-import { take, takeEvery } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga/effects';
 
 import * as actionTypes from '../actionTypes';
+import * as appSagas from './app';
 import * as authSagas from './auth';
 import * as dictionariesSagas from './dictionaries';
 import * as wordsSagas from './words';
+
+export function* appWatcher() {
+    yield takeEvery(actionTypes.SET_APP, appSagas.changeAppSaga);
+}
 
 export function* authWatcher() {    
     yield takeEvery(actionTypes.SIGN_IN, authSagas.logInSaga, '/signin');

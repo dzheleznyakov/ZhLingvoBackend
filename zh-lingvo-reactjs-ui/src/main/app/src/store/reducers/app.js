@@ -1,10 +1,12 @@
 import * as actionTypes from '../actionTypes/app';
 import { SIGN_OUT } from '../actionTypes';
+import * as APPS from '../../static/constants/apps';
 
 const initialState = {
     showSidebar: false,
     errors: [],
     navigationDestination: null,
+    app: APPS.DICTIONARY,
 };
 
 const gen = (function* idGen() {
@@ -45,11 +47,17 @@ const signOut = (state) => ({
     navigationDestination: null,
 });
 
+const setApp = (state, action) => ({
+    ...state,
+    app: action.app,
+});
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SHOW_SIDEBAR: return showSidebar(state, action);
         case actionTypes.ADD_ERROR: return addError(state, action);
         case actionTypes.NAVIGATE_TO: return navigateTo(state, action);
+        case actionTypes.SET_APP: return setApp(state, action);
         case SIGN_OUT: return signOut(state, action);
         default: return state;
     }

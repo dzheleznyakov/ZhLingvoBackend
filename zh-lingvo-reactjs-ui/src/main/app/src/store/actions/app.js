@@ -15,3 +15,8 @@ export const navigateTo = url => ({
     type: actionTypes.NAVIGATE_TO,
     url,
 });
+
+export const setApp = app => ({
+    type: actionTypes.SET_APP,
+    app,
+})

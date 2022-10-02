@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, { Fragment, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import classes from './AuthenticationPanel.module.scss';
