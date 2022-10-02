@@ -23,6 +23,7 @@ public class DictionaryServiceIT extends BaseDataIntegrationTest {
     private Language language;
 
     @BeforeEach
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     void setUp() {
         user = userRepository.findById(1L).get();
         language = languageRepository.findById(1).get();

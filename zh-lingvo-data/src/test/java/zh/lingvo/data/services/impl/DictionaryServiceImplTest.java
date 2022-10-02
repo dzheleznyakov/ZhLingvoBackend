@@ -40,6 +40,7 @@ class DictionaryServiceImplTest {
     private static final Long ID = 42L;
 
     private final User user = User.builder().id(1L).build();
+    private final User otherUser = User.builder().id(2L).build();
 
     @BeforeEach
     void setUp() {
@@ -47,12 +48,24 @@ class DictionaryServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Test DictionaryServiceImpl.findById(id)")
+    @DisplayName("Test DictionaryServiceImpl.findById(id, user)")
     class FindById {
         @Test
         @DisplayName("Should return nothing if no dictionary is found by the id for the user")
         void foundNothing_ReturnNothing() {
             when(dictionaryRepository.findById(ID)).thenReturn(Optional.empty());
+
+            Optional<Dictionary> dictionaryOptional = service.findById(ID, user);
+
+            assertThat(dictionaryOptional, is(empty()));
+            verify(dictionaryRepository, only()).findById(ID);
+        }
+
+        @Test
+        @DisplayName("Should return nothing if the dictionary is found by id? but it does not belong to the user")
+        void dictionaryIsNotForUser_returnNothing() {
+            Dictionary dictionary = Dictionary.builder().id(ID).user(otherUser).build();
+            when(dictionaryRepository.findById(ID)).thenReturn(Optional.of(dictionary));
 
             Optional<Dictionary> dictionaryOptional = service.findById(ID, user);
 

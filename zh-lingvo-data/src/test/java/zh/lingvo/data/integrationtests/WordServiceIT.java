@@ -3,9 +3,6 @@ package zh.lingvo.data.integrationtests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import zh.lingvo.core.domain.PartOfSpeech;
 import zh.lingvo.data.fixtures.WordHelper;
 import zh.lingvo.data.model.Dictionary;
@@ -30,9 +27,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static zh.hamcrest.ZhMatchers.empty;
 import static zh.hamcrest.ZhMatchers.hasPropertySatisfying;
 
-@TestPropertySource(locations = "classpath:/test.properties")
-@Sql("/data-integration-tests.sql")
-@SpringBootTest
+@DisplayName("Test WordService related workflows")
 public class WordServiceIT extends BaseDataIntegrationTest {
     private User user;
     private Dictionary dictionary;

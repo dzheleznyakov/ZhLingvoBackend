@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import zh.lingvo.data.fixtures.Persistable;
 import zh.lingvo.data.model.converters.MatchingRegimeAttributeConverter;
 import zh.lingvo.data.model.converters.QuizRegimeAttributeConverter;
 import zh.lingvo.data.model.enums.MatchingRegime;
@@ -33,7 +34,7 @@ import java.util.List;
 @Builder
 @ToString
 @Entity(name = "quiz")
-public class Quiz {
+public class Quiz implements Persistable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -66,6 +67,13 @@ public class Quiz {
     @OrderBy("id")
     @ToString.Exclude
     private List<QuizRecord> quizRecords;
+
+    public static void merge(Quiz baseQuiz, Quiz otherQuiz) {
+        if (otherQuiz.getName() != null)
+            baseQuiz.setName(otherQuiz.getName());
+        if (otherQuiz.getLanguage() != null)
+            baseQuiz.setLanguage(otherQuiz.getLanguage());
+    }
 
     @Override
     public boolean equals(Object o) {
