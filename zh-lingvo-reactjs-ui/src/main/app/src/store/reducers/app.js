@@ -1,12 +1,11 @@
 import * as actionTypes from '../actionTypes/app';
 import { SIGN_OUT } from '../actionTypes';
-import * as APPS from '../../static/constants/apps';
 
 const initialState = {
     showSidebar: false,
     errors: [],
     navigationDestination: null,
-    app: APPS.DICTIONARY,
+    app: null,
 };
 
 const gen = (function* idGen() {

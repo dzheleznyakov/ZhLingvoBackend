@@ -25,6 +25,10 @@ const DictionaryView = lazy(() => {
   return import('./components/DictionaryView/DictionaryView');
 })
 
+const Tutor = lazy(() => {
+  return import('./components/TutorMain/TutorMain');
+})
+
 const App = () => {
   const dispath = useDispatch();
   const loggedIn = useSelector(loggedInSelector);
@@ -37,7 +41,7 @@ const App = () => {
     <Switch>
       <Route exact path={paths.DICTIONARY} render={() => <DictionaryView />} />
       <Route exact path={paths.DICTIONARIES_ROOT} render={() => <Dictionaries />} />
-      <Route exact path={paths.TUTOR_ROOT} render={() => <div>Tutor</div>} />
+      <Route exact path={paths.TUTOR_ROOT} render={() => <Tutor />} />
       <Redirect to={paths.DICTIONARIES_ROOT} />
     </Switch>
   ) : (

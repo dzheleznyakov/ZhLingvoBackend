@@ -24,11 +24,11 @@ const DictionariesTable = () => {
         { name: 'Language', label: 'language' },
     ];
 
-    const rowOnClickCb = (rowData, i) => {
+    const rowOnClickCb = (_, i) => {
         dispatch(actions.selectDictionary(i));
     };
 
-    const rowOnDbClickCb = (rowData, i) => {
+    const rowOnDbClickCb = (rowData) => {
         dispatch(actions.navigateTo(`/dictionaries/${rowData[0].id}`))
     };
 

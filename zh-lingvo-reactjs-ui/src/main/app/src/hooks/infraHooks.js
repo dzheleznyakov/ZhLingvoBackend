@@ -20,7 +20,7 @@ export const useConditionalActionOnMount = (action, condition, ...deps) => {
 
 export const useAutofocus = ref => {
     useEffect(() => {
-        if (ref)
+        if (ref && ref.current)
             ref.current.focus();
     }, [ref]);
 };
