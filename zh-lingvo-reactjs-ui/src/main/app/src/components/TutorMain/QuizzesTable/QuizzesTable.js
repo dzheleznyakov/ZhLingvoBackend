@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import classes from './QuizzesTable.module.scss';
 
@@ -16,17 +16,30 @@ const QuizzesTable = () => {
     useActionOnMount(actions.fetchAllQuizzes());
     const loading = useSelector(selectors.loadingQuizzesSelector);
     const data = useSelector(selectors.quizzesTableDataSelector);
+    const selectedQuizIndex = useSelector(selectors.selectedQuizIndexSelector);
+    const dispatch = useDispatch();
 
     const COLUMNS_DEF = [
         { name: 'Name', label: 'name' },
         { name: 'Target Language', label: 'language' },
     ]
+
+    const rowOnClickCb = (_, i) => {
+        dispatch(actions.selectQuiz(i));
+    };
+
+    const rowOnDbClickCb = (rowData) => {
+        dispatch(actions.navigateTo(`/tutor/quiz/${rowData[0].id}`));
+    };
     
     const table = loading ? <Spinner /> : (
         <Table
             columnsDef={COLUMNS_DEF}
             data={data}
+            rowOnClickCb={rowOnClickCb}
+            rowOnDbClickCb={rowOnDbClickCb}
             selectable
+            selectedRowIndex={selectedQuizIndex}
         />
     );
 

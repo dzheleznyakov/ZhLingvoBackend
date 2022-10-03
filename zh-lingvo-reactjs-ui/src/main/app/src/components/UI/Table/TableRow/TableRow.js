@@ -4,17 +4,22 @@ import PropTypes from 'prop-types';
 import classes from './TableRow.module.scss';
 
 import * as types from '../types';
-import { selectedDictionaryIndexSelector } from '../../../../store/selectors';
-import { useSelector } from 'react-redux';
 
-const TableRow = ({ rowData, rowIndex, rowOnClickCb, rowOnDbClickCb, children, selectable }) => {
+const TableRow = ({ 
+    rowData, 
+    rowIndex, 
+    rowOnClickCb, 
+    rowOnDbClickCb, 
+    children, 
+    selectable, 
+    selected,
+}) => {
     const [cssClasses, setCssClasses] = useState([]);
-    const selectedIndex = useSelector(selectedDictionaryIndexSelector);
     const ref = useRef();
     const trRef = selectable ? ref : null;
 
     useEffect(() => {
-        if (selectable && selectedIndex === rowIndex)
+        if (selectable && selected)
             setCssClasses(cssClasses.concat([classes.Focused]))
         else {
             const updatedCssClasses = [].concat(cssClasses);
@@ -22,7 +27,7 @@ const TableRow = ({ rowData, rowIndex, rowOnClickCb, rowOnDbClickCb, children, s
             updatedCssClasses.splice(index, 1);
             setCssClasses(updatedCssClasses);
         }
-    }, [selectedIndex, trRef]);
+    }, [selected, selectable, trRef]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const onClick = () => {
         rowOnClickCb && rowOnClickCb(rowData, rowIndex);
@@ -51,6 +56,7 @@ TableRow.propTypes = {
     rowOnDbClickCb: PropTypes.func,
     children: PropTypes.node,
     selectable: PropTypes.bool,
+    selected: PropTypes.bool,
 };
 
 export default TableRow;

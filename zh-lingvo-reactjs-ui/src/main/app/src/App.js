@@ -42,6 +42,7 @@ const App = () => {
       <Route exact path={paths.DICTIONARY} render={() => <DictionaryView />} />
       <Route exact path={paths.DICTIONARIES_ROOT} render={() => <Dictionaries />} />
       <Route exact path={paths.TUTOR_ROOT} render={() => <Tutor />} />
+      <Route exact path={paths.TUTOR_QUIZ} render={() => <div>Quiz</div>} />
       <Redirect to={paths.DICTIONARIES_ROOT} />
     </Switch>
   ) : (

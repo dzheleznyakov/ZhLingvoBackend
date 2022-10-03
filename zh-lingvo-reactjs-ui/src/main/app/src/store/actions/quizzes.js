@@ -16,3 +16,8 @@ export const fetchAllQuizzesSuccess = quizzes => ({
 export const fetchAllQuizzesFailure = () => ({
     type: actionTypes.FETCH_ALL_QUIZZES_FAILURE,
 });
+
+export const selectQuiz = index => ({
+    type: actionTypes.SELECT_QUIZ,
+    index,
+});
