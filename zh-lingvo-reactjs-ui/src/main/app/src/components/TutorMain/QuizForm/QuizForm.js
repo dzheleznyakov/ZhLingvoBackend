@@ -46,7 +46,7 @@ const QuizForm = props => {
         values: languages.map(({ name }) => name),
         groupKey: quizGroup.key,
         forwardRef: langRef,
-        disabledInputs: disabledInputs.language,
+        disabled: disabledInputs.targetLanguage,
     };
 
     useAutofocus(nameRef);

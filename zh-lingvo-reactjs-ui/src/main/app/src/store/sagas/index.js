@@ -32,6 +32,7 @@ export function* quizzesWatcher() {
     yield takeEvery(actionTypes.FETCH_ALL_QUIZZES, quizzesSagas.fetchAllQuizzesSaga);
 
     yield takeEvery(actionTypes.CREATE_QUIZ, quizzesSagas.createQuizSaga);
+    yield takeEvery(actionTypes.UPDATE_QUIZ, quizzesSagas.updateQuizSaga);
 }
 
 export function* wordsWatcher() {

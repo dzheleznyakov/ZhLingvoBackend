@@ -11,7 +11,7 @@ const EditDictionaryDialog = props => {
     const dispatch = useDispatch();
     const dictionary = useSelector(selectedDictionarySelector);
 
-    const confirmed = (name, language) => dispatch(actions.updateDictionary(name, language));
+    const confirmed = (name) => dispatch(actions.updateDictionary(name));
 
     return (
         <DictionaryForm 

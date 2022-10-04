@@ -68,7 +68,7 @@ export function* updateDictionarySaga(action) {
         yield call(api.put, '/dictionaries', updatedDictionary);
         yield put(actions.fetchAllDictionaries());
     } catch (error) {
-        yield put(actions.addError(error.response.data, `Error while updating dictionary [${name}]`));
+        yield put(actions.addError(error.response.data, `Error while updating dictionary [${currentDictionary.name}]`));
     }
 }
 

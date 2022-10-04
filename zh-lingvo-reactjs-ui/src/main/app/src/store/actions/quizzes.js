@@ -27,3 +27,8 @@ export const createQuiz = (name, targetLanguage) => ({
     name,
     targetLanguage,
 });
+
+export const updateQuiz = (name) => ({
+    type: actionTypes.UPDATE_QUIZ,
+    name,
+});

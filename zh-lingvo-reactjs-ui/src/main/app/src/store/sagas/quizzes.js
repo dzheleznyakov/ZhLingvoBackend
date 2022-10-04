@@ -1,7 +1,8 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 
 import api from '../../axios-api';
 import * as actions from '../actions';
+import * as selectors from '../selectors';
 
 export function* fetchAllQuizzesSaga() {
     yield put(actions.fetchAllQuizzesStart());
@@ -25,5 +26,18 @@ export function* createQuizSaga(action) {
         yield put(actions.fetchAllQuizzes());
     } catch (error) {
         yield put(actions.addError(error.response.data, `Error while creating dictionary [${name}]`));
+    }
+}
+
+export function* updateQuizSaga(action) {
+    const { name } = action;
+    const currentQuiz = yield select(selectors.selectedQuizSelector);
+    const updatedQuiz = { ...currentQuiz, name };
+
+    try {
+        yield call(api.put, '/quizzes', updatedQuiz);
+        yield put(actions.fetchAllQuizzes());
+    } catch (error) {
+        yield put(actions.addError(error.response.data, `Error while updating quiz [${currentQuiz.name}]`))
     }
 }
