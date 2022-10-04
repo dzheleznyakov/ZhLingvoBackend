@@ -41,3 +41,16 @@ export function* updateQuizSaga(action) {
         yield put(actions.addError(error.response.data, `Error while updating quiz [${currentQuiz.name}]`))
     }
 }
+
+export function* deleteQuizSaga(action) {
+    const { id } = action;
+    if (id < 0)
+        return;
+
+    try {
+        yield call(api.delete, `/quizzes/${id}`)
+        yield put(actions.fetchAllQuizzes());
+    } catch (error) {
+        yield put(actions.addError(error.response.data, `Error while deleting quiz [${id}]`));
+    }
+}

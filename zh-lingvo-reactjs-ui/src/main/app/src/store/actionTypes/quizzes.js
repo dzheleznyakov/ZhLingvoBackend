@@ -7,3 +7,4 @@ export const SELECT_QUIZ = 'SELECT_QUIZ';
 
 export const CREATE_QUIZ = 'CREATE_QUIZ';
 export const UPDATE_QUIZ = 'UPDATE_QUIZ';
+export const DELETE_QUIZ = 'DELETE_QUIZ';

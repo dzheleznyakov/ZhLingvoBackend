@@ -9,6 +9,7 @@ import * as actions from '../../../../store/actions';
 import { Modal, IconButton, iconButtonTypes } from '../../../UI';
 import NewQuizDialog from './NewQuizDialog/NewQuizDialog';
 import EditQuizDialog from './EditQuizDialog/EditQuizDialog';
+import DeleteQuizDialog from './DeleteQuizDialog/DeleteQuizDialog';
 
 const MODAL_TYPES = {
     NEW: 'NEW',
@@ -45,6 +46,8 @@ const TableControl = () => {
             panel = <NewQuizDialog close={closeModal}/>; break;
         case MODAL_TYPES.EDIT:
             panel = <EditQuizDialog close={closeModal} />; break;
+        case MODAL_TYPES.DELETE:
+            panel = <DeleteQuizDialog close={closeModal} />; break;
         default: panel = null;
     }
 

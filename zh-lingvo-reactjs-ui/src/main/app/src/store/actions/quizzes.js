@@ -32,3 +32,8 @@ export const updateQuiz = (name) => ({
     type: actionTypes.UPDATE_QUIZ,
     name,
 });
+
+export const deleteQuiz = (id) => ({
+    type: actionTypes.DELETE_QUIZ,
+    id,
+});
