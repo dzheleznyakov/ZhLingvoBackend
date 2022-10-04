@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import classes from './TableControl.module.scss';
@@ -57,14 +57,13 @@ const TableControl = () => {
         case MODAL_TYPES.DELETE: panel = (
             <DeleteDictionaryDialog 
                 close={closeModal}  
-                dictionary={selectedDictionary} 
             />
         ); break;
         default: panel = null;
     }
 
     return (
-        <Fragment>
+        <>
             <div className={classes.ButtonBox}>
                 <IconButton type={iconButtonTypes.NEW} clicked={onNew} />
                 <IconButton type={iconButtonTypes.EDIT} disabled={!dictionaryIsSelected} clicked={onEdit} />
@@ -72,7 +71,7 @@ const TableControl = () => {
                 <IconButton type={iconButtonTypes.FORWARD} disabled={!dictionaryIsSelected} clicked={onForward} />
             </div>
             <Modal show={showModal} close={closeModal}>{panel}</Modal>
-        </Fragment>
+        </>
     );
 };
 

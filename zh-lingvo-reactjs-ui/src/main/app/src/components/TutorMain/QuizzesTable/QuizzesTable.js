@@ -8,6 +8,7 @@ import { Spinner, Table } from '../../UI';
 import { BREADCRUMBS_TYPES } from '../../../utils/breadcrumbs';
 import { useActionOnMount, useBreadcrumbs } from '../../../hooks';
 import * as actions from '../../../store/actions';
+import TableControl from './TableControl/TableControl';
 
 const BREADCRUMB = { type: BREADCRUMBS_TYPES.TEXT, text: 'Tutor' };
 
@@ -42,10 +43,12 @@ const QuizzesTable = () => {
             selectedRowIndex={selectedQuizIndex}
         />
     );
+    const control = loading ? null : <TableControl />;
 
     return (
         <div className={classes.QuizzesTableWrapper}>
             {table}
+            {control}
         </div>
     )
 };

@@ -4,6 +4,13 @@ export const loadingQuizzesSelector = state => state.quizzes.loading;
 export const quizzesSelector = state => state.quizzes.quizzes;
 export const selectedQuizIndexSelector = state => state.quizzes.selectedQuizIndex;
 
+export const selectedQuizSelector = state => {
+    const { selectedQuizIndex, quizzes} = state.quizzes;
+    return selectedQuizIndex < 0
+        ? null
+        : quizzes[selectedQuizIndex];
+};
+
 export const quizzesTableDataSelector = createSelector(
     quizzesSelector,
     quizzes => quizzes.map(qz => ({

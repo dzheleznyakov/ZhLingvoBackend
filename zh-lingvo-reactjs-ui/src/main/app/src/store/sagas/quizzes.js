@@ -15,3 +15,15 @@ export function* fetchAllQuizzesSaga() {
         yield put(actions.fetchAllQuizzesFailure());
     }
 }
+
+export function* createQuizSaga(action) {
+    const { name, targetLanguage } = action;
+    const newQuiz = { name, targetLanguage };
+
+    try {
+        yield call(api.post, '/quizzes', newQuiz);
+        yield put(actions.fetchAllQuizzes());
+    } catch (error) {
+        yield put(actions.addError(error.response.data, `Error while creating dictionary [${name}]`));
+    }
+}

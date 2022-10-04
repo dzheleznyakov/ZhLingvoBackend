@@ -2,51 +2,51 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { Form, formInputTypes, validators } from '../../UI';
-import * as actions from '../../../store/actions';
-import { dictionaryType } from '../propTypes';
 import { languagesSelector } from '../../../store/selectors';
 import { useActionOnMount, useAutofocus } from '../../../hooks';
+import * as actions from '../../../store/actions';
+import { formInputTypes, validators, Form } from '../../UI';
+import { quizType } from '../propTypes';
 
-const DictionaryForm = props => {
-    const { close, confirmed, title, dictionary, disabledInputs } = props;
+const QuizForm = props => {
+    const { close, confirmed, title, quiz, disabledInputs } = props;
     const languages = useSelector(languagesSelector);
 
     useActionOnMount(actions.fetchAllLanguages());
 
-    const defaultName = dictionary.name || '';
-    const defaultLanguage = dictionary.language.name || '';
+    const defaultName = quiz.name || '';
+    const defaultLanguage = quiz.targetLanguage.name || '';
 
-    const dictionaryGroup = {
-        key: 'dictionary',
+    const quizGroup = {
+        key: 'quiz',
         label: title,
     };
 
     const nameRef = useRef();
-    const dicNameField = {
+    const quizNameField = {
         key: 'name',
-        label: 'Dictionary name',
+        label: 'Quiz name',
         type: formInputTypes.TEXT,
         defaultValue: defaultName,
-        groupKey: dictionaryGroup.key,
+        groupKey: quizGroup.key,
         forwardRef: nameRef,
         disabled: disabledInputs.name,
         validation: [{
             validate: validators.minLength(3),
-            failureMessage: 'Dicitonary name should contain at least 3 characters',
+            failureMessage: 'Quiz name should contain at least 3 characters',
         }],
     };
 
     const langRef = useRef();
     const langField = {
         key: 'lang',
-        label: 'Language',
+        label: 'Target language',
         type: formInputTypes.SELECT,
         defaultValue: defaultLanguage,
         values: languages.map(({ name }) => name),
-        groupKey: dictionaryGroup.key,
+        groupKey: quizGroup.key,
         forwardRef: langRef,
-        disabled: disabledInputs.language,
+        disabledInputs: disabledInputs.language,
     };
 
     useAutofocus(nameRef);
@@ -59,26 +59,26 @@ const DictionaryForm = props => {
 
     return (
         <Form 
-            fields={[dicNameField, langField]}
-            groups={[dictionaryGroup]}
+            fields={[quizNameField, langField]}
+            groups={[quizGroup]}
             canceled={close}
             confirmed={onConfirm}
         />
     );
 };
 
-DictionaryForm.propTypes = {
+QuizForm.propTypes = {
     title: PropTypes.string,
     close: PropTypes.func.isRequired,
     confirmed: PropTypes.func.isRequired,
-    dictionary: dictionaryType,
+    quiz: quizType,
     disabledInputs: PropTypes.objectOf(PropTypes.bool),
 };
 
-DictionaryForm.defaultProps = {
+QuizForm.defaultProps = {
     title: '',
-    dictionary: { language: {} },
+    quiz: { targetLanguage: {} },
     disabledInputs: {},
 };
 
-export default DictionaryForm;
+export default QuizForm;

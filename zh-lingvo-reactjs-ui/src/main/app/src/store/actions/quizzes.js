@@ -21,3 +21,9 @@ export const selectQuiz = index => ({
     type: actionTypes.SELECT_QUIZ,
     index,
 });
+
+export const createQuiz = (name, targetLanguage) => ({
+    type: actionTypes.CREATE_QUIZ,
+    name,
+    targetLanguage,
+});

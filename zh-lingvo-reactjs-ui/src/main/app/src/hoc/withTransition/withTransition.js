@@ -11,7 +11,7 @@ const withTransition = (mapPropsToTrProps, mapTrStateToProps) => Component => pr
             {transitionState => {
                 const cProps = typeof mapTrStateToProps === 'function'
                     ? mapTrStateToProps(transitionState)
-                    : mapTrStateToProps | {}
+                    : mapTrStateToProps || {}
                 return <Component {...props} {...cProps} nodeRef={nodeRef} />;
             }}
         </Transition>

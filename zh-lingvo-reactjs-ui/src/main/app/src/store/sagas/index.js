@@ -30,6 +30,8 @@ export function* dictionariesWatcher() {
 
 export function* quizzesWatcher() {
     yield takeEvery(actionTypes.FETCH_ALL_QUIZZES, quizzesSagas.fetchAllQuizzesSaga);
+
+    yield takeEvery(actionTypes.CREATE_QUIZ, quizzesSagas.createQuizSaga);
 }
 
 export function* wordsWatcher() {

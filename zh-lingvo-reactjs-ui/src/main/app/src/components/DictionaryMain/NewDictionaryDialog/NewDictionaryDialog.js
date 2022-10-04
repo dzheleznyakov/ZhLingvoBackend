@@ -13,7 +13,13 @@ const NewDictionaryDialog = props => {
     
     const confirmed = (name, language) => dispatch(actions.createDictionary(name, language));
 
-    return <DictionaryForm title="New Dictionary" close={close} confirmed={confirmed} />;
+    return (
+        <DictionaryForm 
+            title="New Dictionary" 
+            close={close} 
+            confirmed={confirmed} 
+        />
+    );
 };
 
 NewDictionaryDialog.propTypes = {
