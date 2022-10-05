@@ -3,7 +3,6 @@ import { SIGN_OUT } from '../actionTypes/auth';
 
 const initialState = {
     loading: false,
-    languages: [],
     dictionaries: [],
     selectedDictionaryIndex: -1,
     loadedDictionary: null,
@@ -57,18 +56,13 @@ const unselectDictionary = (state, action) => {
     return { ...state, selectedDictionaryIndex: updatedSelectedDictionaryIndex };
 };
 
-const fetchAllLanguages = (state, action) => ({
-    ...state,
-    languages: action.languages || [],
-});
-
 const signOut = state => ({
     ...state,
     dictionaries: [],
     selectedDictionaryIndex: -1,
 });
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_ALL_DICTIONARIES_START: return fetchAllDictionariesStart(state, action);
         case actionTypes.FETCH_ALL_DICTIONARIES_SUCCESS: return fetchAllDictionariesSuccess(state, action);
@@ -78,8 +72,9 @@ export default (state = initialState, action) => {
         case actionTypes.FETCH_DICTIONARY_FAILURE: return fetchDictionaryFailure(state, action);
         case actionTypes.SELECT_DICTIONARY: return selectDictionary(state, action);
         case actionTypes.UNSELECT_DICTIONARY: return unselectDictionary(state, action);
-        case actionTypes.FETCH_ALL_LANGUAGES_SUCCESS: return fetchAllLanguages(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }
 };
+
+export default reducer;

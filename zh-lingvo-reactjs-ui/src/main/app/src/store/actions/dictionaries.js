@@ -60,12 +60,3 @@ export const unselectDictionary = dictionaryIndex => ({
     type: actionTypes.UNSELECT_DICTIONARY,
     dictionaryIndex,
 });
-
-export const fetchAllLanguages = () => ({
-    type: actionTypes.FETCH_ALL_LANGUAGES,
-});
-
-export const fetchAllLanguagesSuccess = languages => ({
-    type: actionTypes.FETCH_ALL_LANGUAGES_SUCCESS,
-    languages,
-});

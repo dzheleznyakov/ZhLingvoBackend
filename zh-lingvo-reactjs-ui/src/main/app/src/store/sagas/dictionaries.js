@@ -34,19 +34,6 @@ export function* fetchDictionarySaga(action) {
     }
 }
 
-export function* fetchAllLanguagesSaga() {
-    const languages = yield select(selectors.languagesSelector);
-    if (languages.length)
-        return;
-
-    try {
-        const { data } = yield call(api.get, '/languages');
-        yield put(actions.fetchAllLanguagesSuccess(data));
-    } catch (error) {
-        yield put(actions.addError(error.response.data, 'Erorr while fetching languages'));
-    }
-}
-
 export function* createDictionarySaga(action) {
     const { name, language } = action;
     const newDictionary = { name, language}

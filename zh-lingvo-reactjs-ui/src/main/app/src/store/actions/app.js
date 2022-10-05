@@ -20,3 +20,12 @@ export const setApp = app => ({
     type: actionTypes.SET_APP,
     app,
 })
+
+export const fetchAllLanguages = () => ({
+    type: actionTypes.FETCH_ALL_LANGUAGES,
+});
+
+export const fetchAllLanguagesSuccess = languages => ({
+    type: actionTypes.FETCH_ALL_LANGUAGES_SUCCESS,
+    languages,
+});
