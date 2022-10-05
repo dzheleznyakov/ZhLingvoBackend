@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -7,32 +7,31 @@ import classes from './AppChooser.module.scss';
 import { appSelector } from '../../../../store/selectors';
 import * as actions from '../../../../store/actions';
 import * as APPS from '../../../../static/constants/apps';
-import * as paths from '../../../../static/constants/paths';
+import { getApp } from '../../../../utils/appUtils';
 
 const AppChooser = () => {
-    let app = useSelector(appSelector);
+    const app = useSelector(appSelector);
     const dispatch = useDispatch();
-
     const history = useHistory();
-    if (app === null) {
-        const pathname = history.location.pathname;
-        if (pathname.match(`${paths.DICTIONARIES_ROOT}.*`))
-            app = APPS.DICTIONARY;
-        else if (pathname.match(`${paths.TUTOR_ROOT}.*`))
-            app = APPS.TUTOR;
-        else
-            app = APPS.DICTIONARY;
-    }
+    const pathname = history.location.pathname;
+
+    useEffect(() => {
+        const newApp = getApp(pathname);
+        if (app !== newApp)
+            dispatch(actions.setApp(newApp));
+    }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const onAppChange = event => {
         const newApp = event.target.value;
         dispatch(actions.setApp(newApp));
     }
 
+    const options = Object.keys(APPS)
+        .map(key => <option key={key}>{APPS[key]}</option>)
+
     return (
-        <select className={classes.AppChooser} defaultValue={app} onChange={onAppChange}>
-            <option>{APPS.DICTIONARY}</option>
-            <option>{APPS.TUTOR}</option>
+        <select className={classes.AppChooser} onChange={onAppChange} value={app || ''}>
+            {options}
         </select>
     );
 };
