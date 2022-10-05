@@ -88,7 +88,7 @@ class QuizControllerTest {
     @DisplayName("Test GET /api/quizzes")
     class GetAllQuizzes {
         @Test
-        @DisplayName("")
+        @DisplayName("Should return an empty list if not quizzes found for the user")
         void quizzesNotFound_ReturnEmptyList() throws Exception {
             when(quizService.findAll(USER)).thenReturn(ImmutableList.of());
 
@@ -128,7 +128,7 @@ class QuizControllerTest {
         @Test
         @DisplayName("Should return NOT FOUND 404 if the quiz does not exist for the user")
         void getQuiz_NotFound() throws Exception {
-            long quizId = 1L;
+            Long quizId = 1L;
             when(quizService.findById(quizId, USER)).thenReturn(Optional.empty());
 
             mockMvc.perform(get(GET_QUIZ_URL_TEMPLATE, quizId))
@@ -279,7 +279,7 @@ class QuizControllerTest {
 
         @Test
         @DisplayName("Should return OK 200 and delete the quiz if it exists and belongs to the right user")
-        void deleteDictionary_Success() throws Exception {
+        void deleteQuiz_Success() throws Exception {
             long quizId = QUIZ_1.getId();
             when(quizService.deleteById(quizId, USER)).thenReturn(true);
 

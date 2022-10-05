@@ -1,5 +1,6 @@
-export const setCookie = (key, value) => {
-    document.cookie = `${key}=${value}`;
+export const setCookie = (key, value, path) => {
+    const pathSection = path ? `; path=${path}` : '; path=/'
+    document.cookie = `${key}=${value}${pathSection}`;
 };
 
 export const getCookie = key => {

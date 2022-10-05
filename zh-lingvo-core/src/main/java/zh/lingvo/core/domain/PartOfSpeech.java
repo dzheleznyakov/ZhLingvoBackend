@@ -21,7 +21,8 @@ public enum PartOfSpeech {
     PREPOSITION("prep"),
     CONJUNCTION("conj"),
     INTERJECTION("interj"),
-    DETERMINER("det");
+    DETERMINER("det"),
+    EXCLAMATION("excl");
 
     private final String shortName;
 

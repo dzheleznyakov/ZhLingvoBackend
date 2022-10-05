@@ -15,7 +15,7 @@ const DictionaryForm = props => {
     useActionOnMount(actions.fetchAllLanguages());
 
     const defaultName = dictionary.name || '';
-    const defaultLanguage = dictionary.language.name;
+    const defaultLanguage = dictionary.language.name || '';
 
     const dictionaryGroup = {
         key: 'dictionary',
@@ -42,7 +42,7 @@ const DictionaryForm = props => {
         key: 'lang',
         label: 'Language',
         type: formInputTypes.SELECT,
-        defaultValue: defaultLanguage || '',
+        defaultValue: defaultLanguage,
         values: languages.map(({ name }) => name),
         groupKey: dictionaryGroup.key,
         forwardRef: langRef,
@@ -54,7 +54,7 @@ const DictionaryForm = props => {
     const onConfirm = () => {
         const name = nameRef.current.value;
         const language = languages.find(lang => lang.name === langRef.current.value);
-        confirmed(name, language)
+        confirmed(name, language);
     };
 
     return (

@@ -106,7 +106,7 @@ const signOut = () => ({
     ...initialState
 });
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_WORDS_LIST_SUCCESS: return fetchWordsListSuccess(state, action);
         case actionTypes.FETCH_WORD_START: return fetchWordStart(state, action);
@@ -123,3 +123,5 @@ export default (state = initialState, action) => {
         default: return state;
     }
 };
+
+export default reducer;

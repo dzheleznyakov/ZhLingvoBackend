@@ -1,6 +1,6 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Redirect, Route, withRouter } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
 import Spinner from './components/UI/Spinner/Spinner';
@@ -8,6 +8,7 @@ import RouterHelper from './components/RouterHelper/RouterHelper';
 import * as actions from './store/actions';
 import { loggedInSelector } from './store/selectors';
 import * as paths from './static/constants/paths';
+import { useActionOnMount, useLastVisitedPage } from './hooks';
 
 const Authentication = React.lazy(() => {
   return import('./components/Authentication/Authentication');
@@ -25,18 +26,22 @@ const DictionaryView = lazy(() => {
   return import('./components/DictionaryView/DictionaryView');
 })
 
+const Tutor = lazy(() => {
+  return import('./components/TutorMain/TutorMain');
+})
+
 const App = () => {
-  const dispath = useDispatch();
   const loggedIn = useSelector(loggedInSelector);
 
-  useEffect(() => {
-    dispath(actions.autoSignIn());
-  }, [dispath]);
+  useActionOnMount(actions.autoSignIn())
+  useLastVisitedPage();
 
   const routes = loggedIn ? (
     <Switch>
       <Route exact path={paths.DICTIONARY} render={() => <DictionaryView />} />
       <Route exact path={paths.DICTIONARIES_ROOT} render={() => <Dictionaries />} />
+      <Route exact path={paths.TUTOR_ROOT} render={() => <Tutor />} />
+      <Route exact path={paths.TUTOR_QUIZ} render={() => <div>Quiz</div>} />
       <Redirect to={paths.DICTIONARIES_ROOT} />
     </Switch>
   ) : (

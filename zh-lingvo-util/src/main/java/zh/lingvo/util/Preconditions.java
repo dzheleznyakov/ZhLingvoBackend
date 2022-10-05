@@ -16,8 +16,18 @@ public class Preconditions {
             throw exceptionSupplier.get();
     }
 
+    public static <E extends Exception> void checkNotBlank(Supplier<String> stringSupplier, Supplier<E> exceptionSupplier) throws E {
+        String str = stringSupplier.get();
+        checkCondition(str != null && !str.isBlank(), exceptionSupplier);
+    }
+
     public static <E extends Exception> void checkNull(Supplier<Object> objectSupplier, Supplier<E> exceptionSupplier) throws E {
         if (objectSupplier.get() != null)
+            throw exceptionSupplier.get();
+    }
+
+    public static <E extends Exception> void checkNotNull(Supplier<Object> objectSupplier, Supplier<E> exceptionSupplier) throws E {
+        if (objectSupplier.get() == null)
             throw exceptionSupplier.get();
     }
 }

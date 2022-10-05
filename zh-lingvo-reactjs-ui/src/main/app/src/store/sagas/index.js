@@ -1,9 +1,16 @@
-import { take, takeEvery } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga/effects';
 
 import * as actionTypes from '../actionTypes';
+import * as appSagas from './app';
 import * as authSagas from './auth';
 import * as dictionariesSagas from './dictionaries';
+import * as quizzesSagas from './quizzes';
 import * as wordsSagas from './words';
+
+export function* appWatcher() {
+    yield takeEvery(actionTypes.SET_APP, appSagas.changeAppSaga);
+    yield takeEvery(actionTypes.FETCH_ALL_LANGUAGES, appSagas.fetchAllLanguagesSaga);
+}
 
 export function* authWatcher() {    
     yield takeEvery(actionTypes.SIGN_IN, authSagas.logInSaga, '/signin');
@@ -15,11 +22,18 @@ export function* authWatcher() {
 export function* dictionariesWatcher() {
     yield takeEvery(actionTypes.FETCH_ALL_DICTIONARIES, dictionariesSagas.fetchAllDictionariesSaga);
     yield takeEvery(actionTypes.FETCH_DICTIONARY, dictionariesSagas.fetchDictionarySaga);
-    yield takeEvery(actionTypes.FETCH_ALL_LANGUAGES, dictionariesSagas.fetchAllLanguagesSaga);
 
     yield takeEvery(actionTypes.CREATE_DICTIONARY, dictionariesSagas.createDictionarySaga);
     yield takeEvery(actionTypes.UPDATE_DICTIONARY, dictionariesSagas.updateDictionarySaga,);
     yield takeEvery(actionTypes.DELETE_DICTIONARY, dictionariesSagas.deleteDictionarySaga);
+}
+
+export function* quizzesWatcher() {
+    yield takeEvery(actionTypes.FETCH_ALL_QUIZZES, quizzesSagas.fetchAllQuizzesSaga);
+
+    yield takeEvery(actionTypes.CREATE_QUIZ, quizzesSagas.createQuizSaga);
+    yield takeEvery(actionTypes.UPDATE_QUIZ, quizzesSagas.updateQuizSaga);
+    yield takeEvery(actionTypes.DELETE_QUIZ, quizzesSagas.deleteQuizSaga);
 }
 
 export function* wordsWatcher() {

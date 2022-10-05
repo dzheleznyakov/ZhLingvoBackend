@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+import { getApp } from '../utils/appUtils';
+import { getCookie, setCookie } from '../utils/cookies';
+import * as actions from '../store/actions';
 
 export const useActionOnMount = action => {
     const dispatch = useDispatch();
@@ -20,7 +25,23 @@ export const useConditionalActionOnMount = (action, condition, ...deps) => {
 
 export const useAutofocus = ref => {
     useEffect(() => {
-        if (ref)
+        if (ref && ref.current)
             ref.current.focus();
     }, [ref]);
+};
+
+export const useLastVisitedPage = () => {
+    const history = useHistory();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const pathname = history.location.pathname;
+        if (pathname === '/') {
+          const lastVisited = getCookie('lastVisited');
+          const app = getApp(lastVisited);
+          dispatch(actions.setApp(app));
+          dispatch(actions.navigateTo(lastVisited));
+        } else {
+            setCookie('lastVisited', pathname);
+        }
+      }, [])
 };

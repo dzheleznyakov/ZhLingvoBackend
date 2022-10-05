@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import classes from './Table.module.scss';
@@ -9,7 +9,7 @@ import EmptyTableRow from './TableRow/EmptyTableRow';
 import TableCell from './TableCell/TableCell';
 
 const Table = props => {
-    const { columnsDef, data, rowOnClickCb, rowOnDbClickCb } = props;
+    const { columnsDef, data, rowOnClickCb, rowOnDbClickCb, selectedRowIndex } = props;
 
     const headers = columnsDef.map(({ name, label }) => <th key={label}>{name}</th>);
     let body = data.map((d, i) => {
@@ -22,6 +22,7 @@ const Table = props => {
                 cellOnClickCb={def.cellOnClickCb} 
             />
         ));
+        const rowIsSelected = i === selectedRowIndex;
         return (
             <TableRow 
                 key={`row-${i}`} 
@@ -30,6 +31,7 @@ const Table = props => {
                 rowOnClickCb={rowOnClickCb}
                 rowOnDbClickCb={rowOnDbClickCb}
                 selectable
+                selected={rowIsSelected}
             >{rows}</TableRow>
         );
     });
@@ -51,10 +53,12 @@ Table.propTypes = {
     rowOnClickCb: PropTypes.func,
     rowOnDbClickCb: PropTypes.func,
     selectable: PropTypes.bool,
+    selectedRowIndex: PropTypes.number,
 };
 
 Table.defaultProps = {
     data: [],
+    selectedRowIndex: -1,
 };
 
 export default Table;

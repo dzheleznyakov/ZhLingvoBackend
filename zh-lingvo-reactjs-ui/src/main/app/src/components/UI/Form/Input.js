@@ -20,8 +20,8 @@ const Input = props => {
     } = props;
 
     const validate = validation && validation.length ? () => {
-        const errors = validation.
-            filter(({ validate }) => !validate(forwardRef))
+        const errors = validation
+            .filter(({ validate }) => !validate(forwardRef))
             .map(({ failureMessage }) => failureMessage);
         onValidate(errors);
     } : null;

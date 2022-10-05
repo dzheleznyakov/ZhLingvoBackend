@@ -27,5 +27,3 @@ export const dictionariesTableDataSelector = createSelector(
         language: { value: dic.language.name }
     }))
 );
-
-export const languagesSelector = state => state.dictionaries.languages;

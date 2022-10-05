@@ -2,6 +2,7 @@ import React from 'react';
 
 import classes from './DictionaryMain.module.scss';
 
+import Greeting from '../Common/Greeting/Greeting';
 import DictionariesTable from './DictionariesTable/DictionariesTable';
 import { useUsername } from '../../hooks';
 
@@ -10,10 +11,10 @@ const DictionaryList = () => {
 
     return (
         <div className={classes.DictionaryListWrapper}>
-            <div className={classes.Titles}>
-                <h1>Welcome, {username}!</h1>
-                <h2>Your dictionaries:</h2>
-            </div>
+            <Greeting 
+                title={`Welcome, ${username}!`} 
+                subtitle="Your dictionaries:"
+            />
             <DictionariesTable />
         </div>
     );
