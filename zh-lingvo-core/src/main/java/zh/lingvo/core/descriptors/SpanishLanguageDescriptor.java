@@ -7,13 +7,12 @@ package zh.lingvo.core.descriptors;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import zh.lingvo.core.LanguageDescriptor;
 import zh.lingvo.core.domain.PartOfSpeech;
 
 import java.util.List;
 import java.util.Map;
 
-public class SpanishLanguageDescriptor implements LanguageDescriptor {
+public class SpanishLanguageDescriptor implements zh.lingvo.core.LanguageDescriptor {
     private static final Map<PartOfSpeech, String[]> POS_DATA = ImmutableMap.<PartOfSpeech, String[]>builder()
             .put(PartOfSpeech.NOUN, new String[]{"n", "nombre sustantivo"})
             .put(PartOfSpeech.VERB, new String[]{"v", "verbo"})
@@ -25,6 +24,7 @@ public class SpanishLanguageDescriptor implements LanguageDescriptor {
             .put(PartOfSpeech.CONJUNCTION, new String[]{"conj", "conjunsión"})
             .put(PartOfSpeech.INTERJECTION, new String[]{"interj", "interjección"})
             .put(PartOfSpeech.DETERMINER, new String[]{"det", "determinador"})
+            .put(PartOfSpeech.EXCLAMATION, new String[]{"excl", "exclamación"})
             .build();
 
     @Override

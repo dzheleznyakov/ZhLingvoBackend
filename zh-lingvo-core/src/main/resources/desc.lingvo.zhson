@@ -9,6 +9,7 @@ parts_of_speech [
     [CONJUNCTION conj]
     [INTERJECTION interj]
     [DETERMINER det]
+    [EXCLAMATION excl]
 ]
 
 language_descriptions {
@@ -26,6 +27,7 @@ language_descriptions {
             [CONJUNCTION conj conjunction]
             [INTERJECTION interj interjection]
             [DETERMINER det determiner]
+            [EXCLAMATION excl exclamation]
         ]
     }
 
@@ -42,6 +44,7 @@ language_descriptions {
             [PREPOSITION предл. предлог]
             [CONJUNCTION союз союз]
             [INTERJECTION межд. междометие]
+            [EXCLAMATION воскл. восклицание]
         ]
     }
 
@@ -59,6 +62,7 @@ language_descriptions {
             [CONJUNCTION conj conjunsión]
             [INTERJECTION interj interjección]
             [DETERMINER det determinador]
+            [EXCLAMATION excl exclamación]
         ]
     }
 }
