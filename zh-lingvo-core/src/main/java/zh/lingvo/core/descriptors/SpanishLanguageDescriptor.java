@@ -24,7 +24,6 @@ public class SpanishLanguageDescriptor implements zh.lingvo.core.LanguageDescrip
             .put(PartOfSpeech.CONJUNCTION, new String[]{"conj", "conjunsión"})
             .put(PartOfSpeech.INTERJECTION, new String[]{"interj", "interjección"})
             .put(PartOfSpeech.DETERMINER, new String[]{"det", "determinador"})
-            .put(PartOfSpeech.EXCLAMATION, new String[]{"excl", "exclamación"})
             .build();
 
     @Override

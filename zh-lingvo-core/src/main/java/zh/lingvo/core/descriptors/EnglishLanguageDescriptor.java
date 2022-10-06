@@ -24,7 +24,6 @@ public class EnglishLanguageDescriptor implements zh.lingvo.core.LanguageDescrip
             .put(PartOfSpeech.CONJUNCTION, new String[]{"conj", "conjunction"})
             .put(PartOfSpeech.INTERJECTION, new String[]{"interj", "interjection"})
             .put(PartOfSpeech.DETERMINER, new String[]{"det", "determiner"})
-            .put(PartOfSpeech.EXCLAMATION, new String[]{"excl", "exclamation"})
             .build();
 
     @Override

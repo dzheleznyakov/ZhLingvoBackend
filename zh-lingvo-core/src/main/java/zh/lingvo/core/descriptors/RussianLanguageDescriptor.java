@@ -23,7 +23,6 @@ public class RussianLanguageDescriptor implements zh.lingvo.core.LanguageDescrip
             .put(PartOfSpeech.PREPOSITION, new String[]{"предл.", "предлог"})
             .put(PartOfSpeech.CONJUNCTION, new String[]{"союз", "союз"})
             .put(PartOfSpeech.INTERJECTION, new String[]{"межд.", "междометие"})
-            .put(PartOfSpeech.EXCLAMATION, new String[]{"воскл.", "восклицание"})
             .build();
 
     @Override
