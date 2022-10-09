@@ -1,5 +1,9 @@
 import * as actionTypes from '../actionTypes/app';
 
+export const finishStartingUp = () => ({
+    type: actionTypes.FINISH_STARTING_UP,
+});
+
 export const showSidebar = show => ({
     type: actionTypes.SHOW_SIDEBAR,
     show,

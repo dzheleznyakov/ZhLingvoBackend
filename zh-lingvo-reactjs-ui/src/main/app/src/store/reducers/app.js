@@ -2,6 +2,7 @@ import * as actionTypes from '../actionTypes/app';
 import { SIGN_OUT } from '../actionTypes';
 
 const initialState = {
+    isStartingUp: true,
     showSidebar: false,
     errors: [],
     navigationDestination: null,
@@ -17,6 +18,11 @@ const gen = (function* idGen() {
     }
 })();
 const nextId = () => gen.next().value;
+
+const finishStartingUp = state => ({
+    ...state,
+    isStartingUp: false,
+});
 
 const showSidebar = (state, action) => ({
     ...state,
@@ -59,6 +65,7 @@ const signOut = (state) => ({
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.FINISH_STARTING_UP: console.log(state); return finishStartingUp(state, action);
         case actionTypes.SHOW_SIDEBAR: return showSidebar(state, action);
         case actionTypes.ADD_ERROR: return addError(state, action);
         case actionTypes.NAVIGATE_TO: return navigateTo(state, action);

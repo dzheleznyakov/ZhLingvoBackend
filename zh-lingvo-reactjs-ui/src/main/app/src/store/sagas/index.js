@@ -5,6 +5,7 @@ import * as appSagas from './app';
 import * as authSagas from './auth';
 import * as dictionariesSagas from './dictionaries';
 import * as quizzesSagas from './quizzes';
+import * as quizRecordsSagas from './quizRecords';
 import * as wordsSagas from './words';
 
 export function* appWatcher() {
@@ -34,6 +35,11 @@ export function* quizzesWatcher() {
     yield takeEvery(actionTypes.CREATE_QUIZ, quizzesSagas.createQuizSaga);
     yield takeEvery(actionTypes.UPDATE_QUIZ, quizzesSagas.updateQuizSaga);
     yield takeEvery(actionTypes.DELETE_QUIZ, quizzesSagas.deleteQuizSaga);
+    yield takeEvery(actionTypes.FETCH_QUIZ, quizzesSagas.fetchQuizSaga);
+}
+
+export function* quizRecordsWatcher() {
+    yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS, quizRecordsSagas.fetchQuizRecords);
 }
 
 export function* wordsWatcher() {

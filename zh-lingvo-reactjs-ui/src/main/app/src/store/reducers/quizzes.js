@@ -32,6 +32,23 @@ const selectQuiz = (state, action) => ({
     selectedQuizIndex: action.index,
 });
 
+const fetchQuizStart = state => ({
+    ...state,
+    loadedQuiz: null,
+    loading: true,
+});
+
+const fetchQuizSuccess = (state, action) => ({
+    ...state,
+    loadedQuiz: action.quiz,
+    loading: false,
+});
+
+const fetchQuizFailure = state => ({
+    ...state,
+    loading: false,
+});
+
 const signOut = state => ({
     ...state,
     quizzes: [],
@@ -45,6 +62,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_ALL_QUIZZES_SUCCESS: return fetchAllQuizzesSuccess(state, action);
         case actionTypes.FETCH_ALL_QUIZZES_FAILURE: return fetchAllQuizzesFailure(state, action);
         case actionTypes.SELECT_QUIZ: return selectQuiz(state, action);
+        case actionTypes.FETCH_QUIZ_START: return fetchQuizStart(state, action);
+        case actionTypes.FETCH_QUIZ_SUCCESS: return fetchQuizSuccess(state, action);
+        case actionTypes.FETCH_QUIZ_FAIURE: return fetchQuizFailure(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

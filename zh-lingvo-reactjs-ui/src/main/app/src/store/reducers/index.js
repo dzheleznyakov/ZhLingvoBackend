@@ -5,6 +5,7 @@ import app from './app';
 import control from './control';
 import dictionaries from './dictionaries';
 import quizzes  from './quizzes';
+import quizRecords from './quizRecords';
 import words from './words';
 
 export default combineReducers({
@@ -13,5 +14,6 @@ export default combineReducers({
     control,
     dictionaries,
     quizzes,
+    quizRecords,
     words,
 });

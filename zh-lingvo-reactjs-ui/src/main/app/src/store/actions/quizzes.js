@@ -28,12 +28,30 @@ export const createQuiz = (name, targetLanguage) => ({
     targetLanguage,
 });
 
-export const updateQuiz = (name) => ({
+export const updateQuiz = name => ({
     type: actionTypes.UPDATE_QUIZ,
     name,
 });
 
-export const deleteQuiz = (id) => ({
+export const deleteQuiz = id => ({
     type: actionTypes.DELETE_QUIZ,
     id,
+});
+
+export const fetchQuiz = id => ({
+    type: actionTypes.FETCH_QUIZ,
+    id,
+});
+
+export const fetchQuizStart = () => ({
+    type: actionTypes.FETCH_QUIZ_START,
+});
+
+export const fetchQuizSuccess = quiz => ({
+    type: actionTypes.FETCH_QUIZ_SUCCESS,
+    quiz,
+});
+
+export const fetchQuizFailure = () => ({
+    type: actionTypes.FETCH_QUIZ_FAIURE,
 });

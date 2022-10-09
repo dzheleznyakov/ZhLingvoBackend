@@ -1,0 +1,30 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+@import "./sizes";
+
+.ListViewPort {
+    padding: 0;
+    margin: 8px 0 0;
+    width: fit-content;
+    min-width: $list_view_min-width;
+    max-width: 50%;
+    min-height: 60vh;
+    max-height: 60vh;
+    overflow-y: scroll;
+    border: 1px solid darken(map-get($palette, light), 5%);
+    border-radius: $button-border-radius;
+    display: flex;
+    flex-direction: column;
+
+    li {
+        list-style: none;
+        padding: 4px 8px;
+        border: 1px solid transparent;
+        &:nth-child(even) {
+        background-color: map-get($palette, light);
+        }
+        &.SelectedWord {
+            outline: 1px auto map-get($palette, url);
+        }
+    }
+}

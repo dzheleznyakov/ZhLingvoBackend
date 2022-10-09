@@ -2,10 +2,9 @@
 @import "../../../static/styles/sizes";
 @import "../../Common/ListView/sizes";
 
-
 $wrapper-min-width: $list_view_min_width;
 $wrapper-margin-left: calc((100vw - #{$wrapper-min-width}) / 2);
-.WordsListWrapper {
+.QuizRecordListWrapper {
     margin: 0 auto 0 $wrapper-margin-left;
 
     transition: margin-left 1s ease;

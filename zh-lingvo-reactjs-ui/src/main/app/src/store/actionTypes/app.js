@@ -1,3 +1,5 @@
+export const FINISH_STARTING_UP = 'FINISH_STARTING_UP';
+
 export const SHOW_SIDEBAR = 'SHOW_SIDEBAR';
 
 export const ADD_ERROR = 'ADD_ERROR';

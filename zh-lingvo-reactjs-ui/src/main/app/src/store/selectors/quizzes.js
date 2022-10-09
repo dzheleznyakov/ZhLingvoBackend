@@ -3,11 +3,12 @@ import { createSelector } from 'reselect';
 export const loadingQuizzesSelector = state => state.quizzes.loading;
 export const quizzesSelector = state => state.quizzes.quizzes;
 export const selectedQuizIndexSelector = state => state.quizzes.selectedQuizIndex;
+export const loadedQuizSelector = state => state.quizzes.loadedQuiz;
 
 export const selectedQuizSelector = state => {
     const { selectedQuizIndex, quizzes} = state.quizzes;
     return selectedQuizIndex < 0
-        ? null
+        ? { targetLanguage: {} }
         : quizzes[selectedQuizIndex];
 };
 

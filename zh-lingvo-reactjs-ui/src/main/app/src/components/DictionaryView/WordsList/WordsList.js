@@ -10,6 +10,7 @@ import { BREADCRUMBS_TYPES } from '../../../utils/breadcrumbs';
 import { useActionOnMount, useDynamicBreadcrumbs } from '../../../hooks';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
+import ListView from '../../Common/ListView/ListView';
 
 const URLS = {
     DICTIONARIES: '/dictionaries',
@@ -56,7 +57,6 @@ const WordsList = props => {
     useDynamicBreadcrumbs([breadcrumbs], ...breadcrumbs);
 
     const wordsList = useSelector(selectors.wordsListSelector);
-    const selectedWordIndex = useSelector(selectors.selectedWordIndexSelector);
     const wrapperClasses = [classes.WordsListWrapper];
     if (wordMainForm)
         wrapperClasses.push(classes.Active);
@@ -66,21 +66,11 @@ const WordsList = props => {
         const wordMainForm = wordsList[index];
         dispatch(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordMainForm}`));
     };
-    const getItemClassName = index => (index === selectedWordIndex ? classes.SelectedWord : null);
+    const items = wordsList.map(word => ({ key: word, node: word }));
 
     return (
         <div className={wrapperClasses.join(' ')}>
-            <ul>
-                {wordsList.map((word, i) => (
-                    <li 
-                        key={word}
-                        className={getItemClassName(i)}
-                        onClick={onWordClick(i)}
-                    >
-                        {word}
-                    </li>
-                ))}
-            </ul>
+            <ListView onItemClick={onWordClick} items={items} />
             <WordListControl />
         </div>
     );
@@ -88,6 +78,7 @@ const WordsList = props => {
 
 WordsList.propTypes = {
     dictionaryId: PropTypes.string.isRequired,
+    dictionaryName: PropTypes.string.isRequired,
     parentBreadcrumbs: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 

@@ -6,16 +6,17 @@ import { BREADCRUMBS_TYPES } from '../../../utils/breadcrumbs';
 
 import classes from './Breadcrumbs.module.scss';
 
-const breadcrumbMapper = crumbConf => {
+const breadcrumbMapper = (crumbConf, lastCrumb) => {
+    const postfix = lastCrumb ? '' : ' >';
     switch (crumbConf.type) {
         case BREADCRUMBS_TYPES.TEXT: 
             const { text } = crumbConf;
-            return <span key={text}>{text} {'>'}</span>;
+            return <span key={text}>{text} {postfix}</span>;
         case BREADCRUMBS_TYPES.URL:
             const { text: urlText, href, onClick = () => {} } = crumbConf;
             return (
                 <span key={urlText}>
-                    <Link to={href} onClick={onClick}>{urlText}</Link>{' >'}
+                    <Link to={href} onClick={onClick}>{urlText}</Link>{postfix}
                 </span>
             );
         default: 
@@ -26,7 +27,8 @@ const breadcrumbMapper = crumbConf => {
 const Breadcrumbs = () => {
     const breadcrumbs = useSelector(state => state.control.breadcrumbs);
     
-    const breadcrumbsElement = breadcrumbs.map(breadcrumbMapper);
+    const breadcrumbsElement = 
+        breadcrumbs.map((conf, i) => breadcrumbMapper(conf, i === breadcrumbs.length - 1));
 
     return (
         <div className={classes.Breadcrumbs}>{breadcrumbsElement}</div>

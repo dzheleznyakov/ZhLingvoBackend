@@ -8,6 +8,9 @@ import * as selectors from '../selectors';
 
 export function* changeAppSaga(action) {
     const { app } = action;
+    const isStartingUp = yield select(selectors.isStartingUpSelector);
+    if (isStartingUp)
+        return;
 
     let path = null;
     switch (app) {
@@ -17,6 +20,8 @@ export function* changeAppSaga(action) {
         default: 
             path = paths.DICTIONARIES_ROOT;
     }
+
+    console.log(path);
 
     path && (yield put(actions.navigateTo(path)));
 }

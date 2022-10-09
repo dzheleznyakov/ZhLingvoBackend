@@ -1,4 +1,4 @@
-import { call, put, select } from "redux-saga/effects";
+import { all, call, put, select } from "redux-saga/effects";
 
 import api from '../../axios-api';
 import * as actions from '../actions';
@@ -52,5 +52,25 @@ export function* deleteQuizSaga(action) {
         yield put(actions.fetchAllQuizzes());
     } catch (error) {
         yield put(actions.addError(error.response.data, `Error while deleting quiz [${id}]`));
+    }
+}
+
+export function* fetchQuizSaga(action) {
+    yield put(actions.fetchQuizStart());
+    const { id } = action;
+    const selectedQuiz = yield select(selectors.selectedQuizSelector);
+    if (selectedQuiz.id === id) {
+        yield put(actions.fetchQuizSuccess(selectedQuiz));
+        return;
+    }
+
+    try {
+        const { data: fetchedQuiz } = yield call(api.get, `/quizzes/${id}`);
+        yield put(actions.fetchQuizSuccess(fetchedQuiz))
+    } catch (error) {
+        yield all(
+            put(actions.addError(error.response.data, `Error while fetching quiz [${id}]`)),
+            put(actions.fetchQuizFailure()),
+        );
     }
 }

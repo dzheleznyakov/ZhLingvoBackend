@@ -8,3 +8,8 @@ export const SELECT_QUIZ = 'SELECT_QUIZ';
 export const CREATE_QUIZ = 'CREATE_QUIZ';
 export const UPDATE_QUIZ = 'UPDATE_QUIZ';
 export const DELETE_QUIZ = 'DELETE_QUIZ';
+
+export const FETCH_QUIZ = 'FETCH_QUIZ';
+export const FETCH_QUIZ_START = 'FETCH_QUIZ_START';
+export const FETCH_QUIZ_SUCCESS = 'FETCH_QUIZ_SUCCESS';
+export const FETCH_QUIZ_FAIURE = 'FETCH_QUIZ_FAIURE';

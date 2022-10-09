@@ -37,10 +37,9 @@ const DictionaryView = () => {
     useDynamicBreadcrumbs([dictionaryName], ...breadcrumbs);
 
     useEffect(() => {
-        if (languageCode) {
+        if (languageCode)
             dispatch(actions.fetchPos(languageCode));
-        }
-    }, [languageCode]);
+    }, [languageCode, dispatch]);
     
     const dictionaryLoading = useSelector(selectors.loadingDictionariesSelector);
 
