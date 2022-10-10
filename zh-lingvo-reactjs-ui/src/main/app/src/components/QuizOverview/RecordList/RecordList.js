@@ -8,6 +8,7 @@ import { useActionOnMount } from '../../../hooks';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
 import ListView from '../../Common/ListView/ListView';
+import RecordListItem from './RecordListItem/RecordListItem';
 
 const RecordList = () => {
     const { qid: quizId, rid } = useParams();
@@ -16,7 +17,7 @@ const RecordList = () => {
     const overviews = useSelector(selectors.quizRecordsOverviewsSelector);
 
     const items = overviews.map(overview => 
-        ({ key: `${overview.id}`, node: overview.wordMainForm }));
+        ({ key: `${overview.id}`, node: <RecordListItem quizRecord={overview} /> }));
     const onRecordClick = index => () => {
         dispatch(actions.selectQuizRecord(index));
         const recordId = overviews[index].id;
