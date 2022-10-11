@@ -65,7 +65,7 @@ const signOut = (state) => ({
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.FINISH_STARTING_UP: console.log(state); return finishStartingUp(state, action);
+        case actionTypes.FINISH_STARTING_UP: return finishStartingUp(state, action);
         case actionTypes.SHOW_SIDEBAR: return showSidebar(state, action);
         case actionTypes.ADD_ERROR: return addError(state, action);
         case actionTypes.NAVIGATE_TO: return navigateTo(state, action);

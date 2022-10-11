@@ -7,11 +7,12 @@ import classes from './ListView.module.scss';
 import * as selectors from '../../../store/selectors';
 
 const ListView = props => {
-    const { items, onItemClick } = props;
+    const { items, onItemClick, width } = props;
     const selectedWordIndex = useSelector(selectors.selectedWordIndexSelector);
     const getItemClassName = index => (index === selectedWordIndex ? classes.SelectedWord : null);
+    const style = { width };
     return (
-        <ul className={classes.ListViewPort}>
+        <ul className={classes.ListViewPort} style={style}>
             {items.map(({ key, node }, i) => (
                 <li 
                     key={key}
@@ -31,6 +32,7 @@ ListView.propTypes = {
         node: PropTypes.node.isRequired,
     })),
     onItemClick: PropTypes.func,
+    width: PropTypes.number,
 };
 
 ListView.defaultProps = {

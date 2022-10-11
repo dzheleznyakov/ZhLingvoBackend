@@ -21,8 +21,6 @@ export function* changeAppSaga(action) {
             path = paths.DICTIONARIES_ROOT;
     }
 
-    console.log(path);
-
     path && (yield put(actions.navigateTo(path)));
 }
 

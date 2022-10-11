@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import classes from './NotificationsContainer.module.scss';
 
-const NotificationsContainer = props => {
+const NotificationsContainer = () => {
     const errors = useSelector(state => state.app.errors);
     const [processedErrorIds, setProcessedErrorIds] = useState(new Set());
 

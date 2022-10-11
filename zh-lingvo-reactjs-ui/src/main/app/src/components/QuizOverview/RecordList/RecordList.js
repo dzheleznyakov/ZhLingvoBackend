@@ -30,7 +30,7 @@ const RecordList = () => {
     
     return (
         <div className={wrapperClasses.join(' ')}>
-            <ListView items={items} onItemClick={onRecordClick} />
+            <ListView items={items} onItemClick={onRecordClick} width={160} />
         </div>
     );
 };

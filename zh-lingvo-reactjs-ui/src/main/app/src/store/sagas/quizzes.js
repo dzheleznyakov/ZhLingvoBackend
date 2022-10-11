@@ -11,7 +11,6 @@ export function* fetchAllQuizzesSaga() {
         const { data } = yield call(api.get, '/quizzes');
         yield put(actions.fetchAllQuizzesSuccess(data));
     } catch (error) {
-        console.log(error);
         yield put(actions.addError(error.response.data, 'Error while fetching quizzes'));
         yield put(actions.fetchAllQuizzesFailure());
     }

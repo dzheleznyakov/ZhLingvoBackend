@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 import { setBreadcrumbs, navigateTo } from '../store/actions';
-import { loadedQuizSelector } from '../store/selectors';
+import { loadedQuizSelector, selectedQuizRecordSelector } from '../store/selectors';
 import { BREADCRUMBS_TYPES } from '../utils/breadcrumbs';
 
 export const useBreadcrumbs = (...breadcrumbs) => {
@@ -22,10 +22,14 @@ export const useDynamicBreadcrumbs = (deps, ...breadcrumbs) => {
 }
 
 export const useTutorQuizOverivewBreadcrumbs = () => {
+    const dispatch = useDispatch();
     const { qid: quizId, rid: recordId } = useParams();
+    
     const quiz = useSelector(loadedQuizSelector);
     const quizName = (quiz && quiz.name) || '';
-    const dispatch = useDispatch();
+
+    const selectedQuizRecord = useSelector(selectedQuizRecordSelector);
+    const { wordMainForm } = selectedQuizRecord || '';
 
     const breadcrumbs = [{
         type: BREADCRUMBS_TYPES.URL,
@@ -44,7 +48,7 @@ export const useTutorQuizOverivewBreadcrumbs = () => {
         });
         breadcrumbs.push({
             type: BREADCRUMBS_TYPES.TEXT,
-            text: 'word',
+            text: wordMainForm,
         });
     } else {
         breadcrumbs.push({
