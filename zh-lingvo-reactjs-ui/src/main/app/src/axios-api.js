@@ -11,8 +11,8 @@ const prepareConfig = (customConfig = {}) => {
   return { ...customConfig, headers };
 };
 
-export const baseURL = 'http://192.168.1.116:8080';
-// export const baseURL = 'http://10.101.11.117:8080';
+// export const baseURL = 'http://192.168.1.116:8080';
+export const baseURL = 'http://10.101.11.117:8080';
 
 const instance = axios.create({
     baseURL: `${baseURL}/api`,

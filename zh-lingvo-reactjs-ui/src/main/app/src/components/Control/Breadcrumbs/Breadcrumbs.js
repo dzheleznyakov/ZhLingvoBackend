@@ -27,11 +27,11 @@ const breadcrumbMapper = (crumbConf, lastCrumb) => {
 const Breadcrumbs = () => {
     const breadcrumbs = useSelector(state => state.control.breadcrumbs);
     
-    const breadcrumbsElement = 
+    const breadcrumbsElements = 
         breadcrumbs.map((conf, i) => breadcrumbMapper(conf, i === breadcrumbs.length - 1));
 
     return (
-        <div className={classes.Breadcrumbs}>{breadcrumbsElement}</div>
+        <div className={classes.Breadcrumbs}>{breadcrumbsElements}</div>
     );
 };
 

@@ -29,7 +29,7 @@ export const useTutorQuizOverivewBreadcrumbs = () => {
     const quizName = (quiz && quiz.name) || '';
 
     const selectedQuizRecord = useSelector(selectedQuizRecordSelector);
-    const { wordMainForm } = selectedQuizRecord || '';
+    const { wordMainForm = '' } = selectedQuizRecord;
 
     const breadcrumbs = [{
         type: BREADCRUMBS_TYPES.URL,
@@ -39,17 +39,20 @@ export const useTutorQuizOverivewBreadcrumbs = () => {
     }];
 
     if (recordId !== null && recordId !== undefined) {
-        const quizPath = `/tutor/quiz/${quizId}`;
-        breadcrumbs.push({
-            type: BREADCRUMBS_TYPES.URL,
-            text: quizName,
-            href: quizPath,
-            onClick: () => dispatch(navigateTo(quizPath))
-        });
-        breadcrumbs.push({
-            type: BREADCRUMBS_TYPES.TEXT,
-            text: wordMainForm,
-        });
+        if (quizName) {
+            const quizPath = `/tutor/quiz/${quizId}`;
+            breadcrumbs.push({
+                type: BREADCRUMBS_TYPES.URL,
+                text: quizName,
+                href: quizPath,
+                onClick: () => dispatch(navigateTo(quizPath))
+            });
+        }
+        if (wordMainForm)
+            breadcrumbs.push({
+                type: BREADCRUMBS_TYPES.TEXT,
+                text: wordMainForm,
+            });
     } else {
         breadcrumbs.push({
             type: BREADCRUMBS_TYPES.TEXT,

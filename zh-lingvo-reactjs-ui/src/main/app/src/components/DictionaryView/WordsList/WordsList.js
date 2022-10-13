@@ -31,8 +31,11 @@ const BREADCRUMBS_GETTER = ({ dictionaryName, dictionaryId, toHome, toDictionary
 
 const WordsList = props => {
     const { dictionaryId, dictionaryName, parentBreadcrumbs } = props;
-    useActionOnMount(actions.fetchWordsList(dictionaryId));
+    const selectedWordIndex = useSelector(selectors.selectedWordIndexSelector);
+    const wordsList = useSelector(selectors.wordsListSelector);
     const dispatch = useDispatch();
+    
+    useActionOnMount(actions.fetchWordsList(dictionaryId));
     
     const baseParentBreadcrumbs = BREADCRUMBS_GETTER({ 
         dictionaryName, 
@@ -56,21 +59,31 @@ const WordsList = props => {
 
     useDynamicBreadcrumbs([breadcrumbs], ...breadcrumbs);
 
-    const wordsList = useSelector(selectors.wordsListSelector);
     const wrapperClasses = [classes.WordsListWrapper];
     if (wordMainForm)
         wrapperClasses.push(classes.Active);
 
+    const items = wordsList.map(word => ({ key: word, node: word }));
     const onWordClick = index => () => {
         dispatch(actions.selectWord(index));
         const wordMainForm = wordsList[index];
         dispatch(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordMainForm}`));
     };
-    const items = wordsList.map(word => ({ key: word, node: word }));
+    const defaultSelectedIndex = () => {
+        if (wordMainForm && selectedWordIndex < 0)
+            return wordsList.indexOf(wordMainForm);
+        return -1;
+    };
+    const listView = items.length === 0 
+        ? null 
+        : <ListView 
+            items={items} 
+            onItemClick={onWordClick} 
+            defaultSlectedIndex={defaultSelectedIndex} />;
 
     return (
         <div className={wrapperClasses.join(' ')}>
-            <ListView onItemClick={onWordClick} items={items} />
+            {listView}
             <WordListControl />
         </div>
     );
