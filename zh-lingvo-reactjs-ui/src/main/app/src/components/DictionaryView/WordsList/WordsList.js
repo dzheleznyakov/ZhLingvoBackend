@@ -31,7 +31,6 @@ const BREADCRUMBS_GETTER = ({ dictionaryName, dictionaryId, toHome, toDictionary
 
 const WordsList = props => {
     const { dictionaryId, dictionaryName, parentBreadcrumbs } = props;
-    const selectedWordIndex = useSelector(selectors.selectedWordIndexSelector);
     const wordsList = useSelector(selectors.wordsListSelector);
     const dispatch = useDispatch();
     
@@ -69,17 +68,17 @@ const WordsList = props => {
         const wordMainForm = wordsList[index];
         dispatch(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordMainForm}`));
     };
-    const defaultSelectedIndex = () => {
-        if (wordMainForm && selectedWordIndex < 0)
-            return wordsList.indexOf(wordMainForm);
-        return -1;
-    };
+    
+    const selectedIndex = wordMainForm 
+        ? wordsList.indexOf(wordMainForm)
+        : -1;
+
     const listView = items.length === 0 
         ? null 
         : <ListView 
             items={items} 
             onItemClick={onWordClick} 
-            defaultSlectedIndex={defaultSelectedIndex} />;
+            selectedIndex={selectedIndex} />;
 
     return (
         <div className={wrapperClasses.join(' ')}>

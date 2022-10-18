@@ -40,6 +40,9 @@ export function* quizzesWatcher() {
 
 export function* quizRecordsWatcher() {
     yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS, quizRecordsSagas.fetchQuizRecords);
+    yield takeEvery(actionTypes.CREATE_QUIZ_RECORD, quizRecordsSagas.createQuizSaga);
+    yield takeEvery(actionTypes.DELETE_QUIZ_RECORD, quizRecordsSagas.deleteQuizRecordSaga);
+    yield takeEvery(actionTypes.FETCH_QUIZ_RECORD, quizRecordsSagas.fetchQuizRecordSaga);
 }
 
 export function* wordsWatcher() {

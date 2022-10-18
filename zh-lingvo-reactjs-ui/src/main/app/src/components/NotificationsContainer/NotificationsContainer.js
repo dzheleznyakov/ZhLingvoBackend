@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-
-import classes from './NotificationsContainer.module.scss';
 
 const NotificationsContainer = () => {
     const errors = useSelector(state => state.app.errors);
@@ -26,9 +23,5 @@ const NotificationsContainer = () => {
 
     return <div id="notification-container" />;
 };
-
-NotificationsContainer.propTypes = {};
-
-NotificationsContainer.defaultProps = {};
 
 export default NotificationsContainer;

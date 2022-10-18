@@ -28,7 +28,7 @@ export const useTutorQuizOverivewBreadcrumbs = () => {
     const quiz = useSelector(loadedQuizSelector);
     const quizName = (quiz && quiz.name) || '';
 
-    const selectedQuizRecord = useSelector(selectedQuizRecordSelector);
+    const selectedQuizRecord = useSelector(selectedQuizRecordSelector) || {};
     const { wordMainForm = '' } = selectedQuizRecord;
 
     const breadcrumbs = [{

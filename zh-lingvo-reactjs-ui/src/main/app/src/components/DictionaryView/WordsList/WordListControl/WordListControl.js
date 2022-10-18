@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import classes from './WordListControl.module.scss';
@@ -31,13 +31,13 @@ const WordListControl = () => {
     }
 
     return (
-        <Fragment>
+        <>
             <div className={classes.ButtonBox}>
                 <IconButton type={iconButtonTypes.NEW} clicked={onNew} />
                 <IconButton type={iconButtonTypes.DELETE} disabled={nothingIsSelected} clicked={onDelete} />
             </div>
             <Modal show={showModal} close={closeModal}>{panel}</Modal>
-        </Fragment>
+        </>
     );
 };
 

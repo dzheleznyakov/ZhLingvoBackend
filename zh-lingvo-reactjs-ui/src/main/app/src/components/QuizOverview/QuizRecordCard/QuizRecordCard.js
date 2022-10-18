@@ -6,12 +6,21 @@ import { useSelector } from 'react-redux';
 import classes from './QuizRecordCard.module.scss';
 
 import * as selectors from '../../../store/selectors';
+import * as actions from '../../../store/actions';
+import { useConditionalActionOnMount } from '../../../hooks';
 
 const QuizRecordCard = props => {
-    const { id: quizId } = useParams();
+    const { qid, rid } = useParams();
+    const quizId = +qid;
+    const recordId = +rid;
     const quizIsLoading = useSelector(selectors.quizIsLoadingSelector);
 
-    return null;
+    useConditionalActionOnMount(
+        actions.fetchQuizRecord(quizId, recordId),
+        !Number.isNaN(quizId) && !Number.isNaN(recordId),
+        quizId, recordId);
+
+    return <div>{quizId}: {recordId}</div>;
 };
 
 QuizRecordCard.propTypes = {};

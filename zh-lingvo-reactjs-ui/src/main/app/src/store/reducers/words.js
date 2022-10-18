@@ -25,7 +25,7 @@ const fetchWordsListSuccess = (state, action) => ({
     updatedWord: null,
 });
 
-const fetchWordStart = (state) => ({
+const fetchWordStart = state => ({
     ...state,
     loading: true,
 });
@@ -46,7 +46,7 @@ const fetchWordSuccess = (state, action) => {
     };
 };
 
-const fetchWordFailure = (state) => ({
+const fetchWordFailure = state => ({
     ...state,
     loading: false,
 });

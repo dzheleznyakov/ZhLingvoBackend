@@ -40,7 +40,7 @@ export function* createWordSaga(action) {
     } catch (error) {
         yield put(actions.addError(
             error.response.data,
-            `Error while createing word [${mainForm}] for dictionary [${dictionaryId}]`));
+            `Error while creating word [${mainForm}] for dictionary [${dictionaryId}]`));
         return;
     }
 
@@ -49,14 +49,14 @@ export function* createWordSaga(action) {
     const selectedWordIndex = wordsList.indexOf(mainForm);
     const currentBreadcrumbs = yield select(state => state.control.breadcrumbs);
     yield all([
-        yield put(actions.selectWord(selectedWordIndex)),
-        yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${mainForm}`)),
-        yield put(actions.setBreadcrumbs([
+         put(actions.selectWord(selectedWordIndex)),
+         put(actions.navigateTo(`/dictionaries/${dictionaryId}/${mainForm}`)),
+         put(actions.setBreadcrumbs([
                 currentBreadcrumbs[0],
                 currentBreadcrumbs[1],
                 mainForm,
         ])),
-        yield put(actions.fetchWord(dictionaryId, mainForm)),
+        put(actions.fetchWord(dictionaryId, mainForm)),
     ]);
 }
 
@@ -68,7 +68,7 @@ export function* deleteSelectedWordSaga(action) {
     
     try {
         for (let i = 0, l = word.length; i < l; ++i)
-            yield call(axios.delete, `/words/${word[i].id}`)
+            yield call(axios.delete, `/words/${word[i].id}`);
     } catch (error) {
         yield put(actions.addError(
             error.response.data,

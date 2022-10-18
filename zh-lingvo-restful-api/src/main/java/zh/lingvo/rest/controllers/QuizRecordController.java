@@ -75,7 +75,7 @@ public class QuizRecordController {
                         "Quiz record create request should not contain id; found [%d]",
                         command.getId())));
         return quizRecordService
-                .create(quizRecordConverter.toQuizRecord(command), quizId, getUser())
+                .create(quizRecordConverter.createQuizRecord(command), quizId, getUser())
                 .map(quizRecordConverter::toCommand)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Quiz id=[%d] not found", quizId)));
     }
