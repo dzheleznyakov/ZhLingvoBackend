@@ -1,9 +1,0 @@
-.ButtonBox {
-    display: flex;
-    justify-content: space-evenly;
-    margin: 8px 0;
-
-    & > * {
-        margin: 0 8px;
-    }
-}

@@ -6,6 +6,9 @@ const initialState = {
     quizzes: [],
     selectedQuizIndex: -1,
     loadedQuiz: null,
+    matchingRegimes: [],
+    quizRegimes: [],
+    settings: {},
 };
 
 const fetchAllQuizzesStart = state => ({
@@ -49,6 +52,36 @@ const fetchQuizFailure = state => ({
     loading: false,
 });
 
+const fetchMatchingRegimesSuccess = (state, action) => ({
+    ...state,
+    matchingRegimes: action.matchingRegimes,
+});
+
+const fetchQuizRegimesSuccess = (state, action) => ({
+    ...state,
+    quizRegimes: action.quizRegimes,
+});
+
+const fetchQuizSettingsSuccess = (state, action) => {
+    const { settings: currentSettings } = state;
+    const { quizId, settings: newSettingsEntry } = action;
+    const numberOfEntries = Object.keys(currentSettings).length;
+    const updatedSettings = numberOfEntries < 5
+        ? { ...currentSettings, [quizId]: newSettingsEntry }
+        : { [quizId]: newSettingsEntry };
+    return { ...state, settings: updatedSettings };
+};
+
+const updateQuizSettingsSuccess = (state, action) => {
+    const { settings: currentSettings } = state;
+    const { quizId, settings: updatedQuizSettings } = action;
+    if (currentSettings[quizId]) {
+        const updatedSettings = { ...currentSettings, [quizId]: updatedQuizSettings };
+        return { ...state, settings: updatedSettings };
+    }
+    return fetchQuizSettingsSuccess(state, action);
+};
+
 const signOut = state => ({
     ...state,
     quizzes: [],
@@ -65,6 +98,10 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_QUIZ_START: return fetchQuizStart(state, action);
         case actionTypes.FETCH_QUIZ_SUCCESS: return fetchQuizSuccess(state, action);
         case actionTypes.FETCH_QUIZ_FAIURE: return fetchQuizFailure(state, action);
+        case actionTypes.FETCH_MATCHING_REGIMES_SUCCESS: return fetchMatchingRegimesSuccess(state, action);
+        case actionTypes.FETCH_QUIZ_REGIMES_SUCCESS: return fetchQuizRegimesSuccess(state, action);
+        case actionTypes.FETCH_QUIZ_SETTINGS_SUCCESS: return fetchQuizSettingsSuccess(state, action);
+        case actionTypes.UPDATE_QUIZ_SETTINGS_SUCCESS: return updateQuizSettingsSuccess(state, action); 
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

@@ -4,6 +4,7 @@ import ControlBox, { MODAL_TYPES } from '../../../Common/ControlBox/ControlBox';
 
 import DeleteRecordDialog from './DeleteRecordDialog/DeleteRecordDialog';
 import NewRecordDialog from './NewRecordDialog/NewRecordDialog';
+import QuizSettingsDialog from './QuizSettingsDialog/QuizSettingsDialog';
 
 
 const RecordListControl = () => {
@@ -17,6 +18,12 @@ const RecordListControl = () => {
             {
                 modalType: MODAL_TYPES.NEW,
                 panel: NewRecordDialog,
+                disabled: false,
+            },
+            {
+                modalType: MODAL_TYPES.SETTINGS,
+                panel: QuizSettingsDialog,
+                disabled: false,
             },
             {
                 modalType: MODAL_TYPES.DELETE,

@@ -44,6 +44,18 @@ const Input = props => {
                     { ...listeners }
                 />
             );
+        case inputTypes.NUMBER:
+            return (
+                <input
+                    id={id}
+                    type="number"
+                    defaultValue={defaultValue}
+                    disabled={disabled}
+                    ref={forwardRef}
+                    onChange={validate}
+                    { ...listeners }
+                />
+            );
         case inputTypes.SELECT: 
             const options = values.map(value => (
                 <option key={`${id}-op-${value}`}>{value}</option>
@@ -66,7 +78,7 @@ const Input = props => {
 Input.propTypes = {
     id: PropTypes.string.isRequired,
     type: PropTypes.oneOf(inputTypesArray).isRequired,
-    defaultValue: PropTypes.string.isRequired,
+    defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     forwardRef: PropTypes.object.isRequired,
     values: PropTypes.arrayOf(PropTypes.string),
     disabled: PropTypes.bool,

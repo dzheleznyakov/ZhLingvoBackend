@@ -13,6 +13,7 @@ const typeToClass = type => {
         case buttonTypes.EDIT: return classes.Edit;
         case buttonTypes.DELETE: return classes.Delete;
         case buttonTypes.FORWARD: return classes.Forward;
+        case buttonTypes.SETTINGS: return classes.Settings;
         default: return '';
     }
 };

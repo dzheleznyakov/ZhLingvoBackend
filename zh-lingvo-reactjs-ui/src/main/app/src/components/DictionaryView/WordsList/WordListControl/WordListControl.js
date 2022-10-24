@@ -16,6 +16,7 @@ const WordListControl = () => {
             {
                 modalType: MODAL_TYPES.NEW,
                 panel: NewWordDialog,
+                disabled: false,
             },
             {
                 modalType: MODAL_TYPES.DELETE,

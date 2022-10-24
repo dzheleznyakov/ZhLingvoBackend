@@ -8,6 +8,9 @@ import { IconButton, iconButtonTypes, Modal } from '../../UI';
 export const MODAL_TYPES = {
     NEW: 'NEW',
     DELETE: 'DELETE',
+    SETTINGS: 'SETTINGS',
+    EDIT: 'EDIT',
+    FORWARD: 'FORWARD',
     NONE: 'NONE',
 };
 
@@ -26,13 +29,24 @@ const ControlBox = props => {
     const Panel = panelContainer.length === 0 ? () => null : panelContainer[0];
 
     const buttons = panels
-        .map(panelConfig => panelConfig.modalType)
-        .map(modalType => <IconButton
-            key={panelKeyPrefix + modalType}
-            type={iconButtonTypes[modalType]}
-            clicked={() => setModalType(modalType)}
-            disabled={modalType !== MODAL_TYPES.NEW && disabled} />
-        );
+        .map(panelConfig => {
+            const buttonType = panelConfig.modalType;
+
+            let { disabled: buttonDisabled } = panelConfig;
+            if (buttonDisabled === null || buttonDisabled === undefined)
+                buttonDisabled = disabled;
+
+            let buttonClicked = panelConfig.clicked;
+            if (buttonClicked === null || buttonClicked === undefined)
+                buttonClicked = () => setModalType(buttonType);
+
+            return <IconButton
+                key={panelKeyPrefix + buttonType}
+                type={iconButtonTypes[buttonType]}
+                clicked={buttonClicked}
+                disabled={buttonDisabled} 
+            />;
+        });
 
     return (
         <>
@@ -49,8 +63,10 @@ ControlBox.propTypes = {
     disabled: PropTypes.bool,
     panels: PropTypes.arrayOf(
             PropTypes.shape({
-                modalType: PropTypes.oneOf(modalTypesArray),
+                modalType: PropTypes.oneOf(modalTypesArray).isRequired,
                 panel: PropTypes.func,
+                clicked: PropTypes.func,
+                disabled: PropTypes.bool,
         })
     ),
 };

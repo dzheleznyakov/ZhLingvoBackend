@@ -18,7 +18,7 @@ export const fieldType = PropTypes.shape({
     key: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     type: PropTypes.oneOf(inputTypesArray).isRequired,
-    defaultValue: PropTypes.string.isRequired,
+    defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     forwardRef: PropTypes.object.isRequired,
     values: PropTypes.arrayOf(PropTypes.string),
     disabled: PropTypes.bool,

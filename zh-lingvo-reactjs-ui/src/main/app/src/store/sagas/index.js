@@ -1,4 +1,4 @@
-import { takeEvery } from 'redux-saga/effects';
+import { takeEvery, takeLatest } from 'redux-saga/effects';
 
 import * as actionTypes from '../actionTypes';
 import * as appSagas from './app';
@@ -36,6 +36,11 @@ export function* quizzesWatcher() {
     yield takeEvery(actionTypes.UPDATE_QUIZ, quizzesSagas.updateQuizSaga);
     yield takeEvery(actionTypes.DELETE_QUIZ, quizzesSagas.deleteQuizSaga);
     yield takeEvery(actionTypes.FETCH_QUIZ, quizzesSagas.fetchQuizSaga);
+
+    yield takeLatest(actionTypes.FETCH_MATCHING_REGIMES, quizzesSagas.fetchMatchingRegimesSaga);
+    yield takeLatest(actionTypes.FETCH_QUIZ_REGIMES, quizzesSagas.fetchQuizRegimesSaga);
+    yield takeLatest(actionTypes.FETCH_QUIZ_SETTINGS, quizzesSagas.fetchQuizSettingsSaga);
+    yield takeEvery(actionTypes.UPDATE_QUIZ_SETTINGS, quizzesSagas.updateQuizSettingsSaga);
 }
 
 export function* quizRecordsWatcher() {

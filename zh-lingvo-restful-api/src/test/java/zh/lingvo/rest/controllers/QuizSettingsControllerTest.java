@@ -16,11 +16,14 @@ import zh.lingvo.data.model.enums.MatchingRegime;
 import zh.lingvo.data.model.enums.QuizRegime;
 import zh.lingvo.data.services.QuizService;
 import zh.lingvo.rest.commands.QuizSettingsCommand;
+import zh.lingvo.rest.converters.MatchingRegimeToMatchingRegimeCommand;
+import zh.lingvo.rest.converters.QuizRegimeToQuizRegimeCommand;
 import zh.lingvo.rest.converters.QuizToQuizSettingsCommand;
 import zh.lingvo.rest.util.RequestContext;
 
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.hamcrest.Matchers.notNullValue;
@@ -29,6 +32,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Test QuizSettingsController")
 class QuizSettingsControllerTest {
     private static final Gson GSON = new Gson();
-    private static final String URL_PATTERN = "/api/quizzes/{id}/settings";
+    private static final String BASE_URL_PATTERN = "/api/quizzes";
+    private static final String SETTINGS_URL_PATTERN = BASE_URL_PATTERN + "/{id}/settings";
 
     private static final User USER = User.builder().id(1L).name("Test").build();
     private static final Quiz QUIZ = Quiz.builder()
@@ -65,6 +70,8 @@ class QuizSettingsControllerTest {
         QuizSettingsController controller = new QuizSettingsController(
                 quizService,
                 new QuizToQuizSettingsCommand(),
+                new MatchingRegimeToMatchingRegimeCommand(),
+                new QuizRegimeToQuizRegimeCommand(),
                 context);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -82,7 +89,7 @@ class QuizSettingsControllerTest {
         Long quizId = QUIZ.getId();
         when(quizService.findById(quizId, USER)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get(URL_PATTERN, quizId))
+        mockMvc.perform(get(SETTINGS_URL_PATTERN, quizId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", is(notNullValue())))
                 .andExpect(jsonPath("$.message", matchesRegex(".*not found.*")));
@@ -96,7 +103,7 @@ class QuizSettingsControllerTest {
         Long quizId = QUIZ.getId();
         when(quizService.findById(quizId, USER)).thenReturn(Optional.of(QUIZ));
 
-        mockMvc.perform(get(URL_PATTERN, quizId))
+        mockMvc.perform(get(SETTINGS_URL_PATTERN, quizId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(notNullValue())))
                 .andExpect(jsonPath("$.quizId", is(quizId.intValue())))
@@ -116,7 +123,7 @@ class QuizSettingsControllerTest {
         QuizSettingsCommand command = QuizSettingsCommand.builder()
                 .quizId(quizId)
                 .build();
-        mockMvc.perform(put(URL_PATTERN, quizId)
+        mockMvc.perform(put(SETTINGS_URL_PATTERN, quizId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toPayload(command))
                 )
@@ -150,7 +157,7 @@ class QuizSettingsControllerTest {
                 .quizRegime(newQuizRegime)
                 .matchingRegime(newMatchingRegime)
                 .build();
-        mockMvc.perform(put(URL_PATTERN, quizId)
+        mockMvc.perform(put(SETTINGS_URL_PATTERN, quizId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toPayload(settings))
                 )
@@ -164,5 +171,35 @@ class QuizSettingsControllerTest {
         verify(quizService, times(1)).findById(quizId, USER);
         verify(quizService, times(1)).save(any(Quiz.class), eq(USER));
         verifyNoMoreInteractions(quizService);
+    }
+
+    @Test
+    @DisplayName("Should return the list of matching regimes")
+    void getMatchingRegimes() throws Exception {
+        mockMvc.perform(get(BASE_URL_PATTERN + "/matchingRegimes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is(notNullValue())))
+                .andExpect(jsonPath("$[0].value", is(equalTo("STRICT"))))
+                .andExpect(jsonPath("$[0].code", is(equalTo("s"))))
+                .andExpect(jsonPath("$[1].value", is(equalTo("LOOSENED"))))
+                .andExpect(jsonPath("$[1].code", is(equalTo("l"))))
+                .andExpect(jsonPath("$[2].value", is(equalTo("RELAXED"))))
+                .andExpect(jsonPath("$[2].code", is(equalTo("r"))));
+
+        verifyNoInteractions(quizService);
+    }
+
+    @Test
+    @DisplayName("Should return the list of quiz regimes")
+    void getQuizRegimes() throws Exception {
+        mockMvc.perform(get(BASE_URL_PATTERN + "/quizRegimes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is(notNullValue())))
+                .andExpect(jsonPath("$[0].value", is(equalTo("FORWARD"))))
+                .andExpect(jsonPath("$[0].code", is(equalTo("f"))))
+                .andExpect(jsonPath("$[1].value", is(equalTo("BACKWARD"))))
+                .andExpect(jsonPath("$[1].code", is(equalTo("b"))))
+                .andExpect(jsonPath("$[2].value", is(equalTo("ALTERNATING"))))
+                .andExpect(jsonPath("$[2].code", is(equalTo("a"))));
     }
 }

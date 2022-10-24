@@ -55,3 +55,44 @@ export const fetchQuizSuccess = quiz => ({
 export const fetchQuizFailure = () => ({
     type: actionTypes.FETCH_QUIZ_FAIURE,
 });
+
+export const fetchMatchingRegimes = () => ({
+    type: actionTypes.FETCH_MATCHING_REGIMES,
+});
+
+export const fetchMatchingRegimesSuccess = matchingRegimes => ({
+    type: actionTypes.FETCH_MATCHING_REGIMES_SUCCESS,
+    matchingRegimes,
+});
+
+export const fetchQuizRegimes = () => ({
+    type: actionTypes.FETCH_QUIZ_REGIMES,
+});
+
+export const fetchQuizRegimesSuccess = quizRegimes => ({
+    type: actionTypes.FETCH_QUIZ_REGIMES_SUCCESS,
+    quizRegimes,
+});
+
+export const fetchQuizSettings = quizId => ({
+    type: actionTypes.FETCH_QUIZ_SETTINGS,
+    quizId,
+});
+
+export const fetchQuizSettingsSuccess = (quizId, settings) => ({
+    type: actionTypes.FETCH_QUIZ_SETTINGS_SUCCESS,
+    quizId,
+    settings,
+});
+
+export const updateQuizSettings = (quizId, settings) => ({
+    type: actionTypes.UPDATE_QUIZ_SETTINGS,
+    quizId,
+    settings
+});
+
+export const updateQuizSettingsSuccess = (quizId, settings) => ({
+    type: actionTypes.UPDATE_QUIZ_SETTINGS_SUCCESS,
+    quizId,
+    settings,
+});

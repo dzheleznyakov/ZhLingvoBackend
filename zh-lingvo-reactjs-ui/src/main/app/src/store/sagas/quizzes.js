@@ -3,6 +3,7 @@ import { all, call, put, select } from "redux-saga/effects";
 import api from '../../axios-api';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
+import { quizSettingsSelector } from "../selectors";
 
 export function* fetchAllQuizzesSaga() {
     yield put(actions.fetchAllQuizzesStart());
@@ -71,5 +72,56 @@ export function* fetchQuizSaga(action) {
             put(actions.addError(error.response.data, `Error while fetching quiz [${id}]`)),
             put(actions.fetchQuizFailure()),
         );
+    }
+}
+
+export function* fetchMatchingRegimesSaga() {
+    const storedMatchingRegimes = yield select(selectors.matchingRegimesSelector);
+    if (storedMatchingRegimes.length)
+        return;
+
+    try {
+        const { data } = yield call(api.get, '/quizzes/matchingRegimes');
+        yield put(actions.fetchMatchingRegimesSuccess(data));
+    } catch (error) {
+        yield put(actions.addError(error.response.data, 'Error while fetching quiz matching regimes'));
+    }
+}
+
+export function* fetchQuizRegimesSaga() {
+    const storedQuizRegimes = yield select(selectors.quizRegimeSelector);
+    if (storedQuizRegimes.length)
+        return;
+    
+    try {
+        const { data } = yield call(api.get, '/quizzes/quizRegimes');
+        yield put(actions.fetchQuizRegimesSuccess(data));
+    } catch (error) {
+        yield put(actions.addError(error.response.data, 'Error while fetching quiz regimes'));
+    }
+}
+
+export function* fetchQuizSettingsSaga(action) {
+    const { quizId } = action;
+    const settings = (yield select(quizSettingsSelector))[quizId];
+
+    if (settings) return;
+
+    try {
+        const { data } = yield call(api.get, `/quizzes/${quizId}/settings`);
+        yield put(actions.fetchQuizSettingsSuccess(quizId, data));
+    } catch (error) {
+        yield put(actions.addError(error.response.data, `Error while fetching settings for quiz [${quizId}]`));
+    }
+}
+
+export function* updateQuizSettingsSaga(action) {
+    const { quizId, settings } = action;
+        
+    try {
+        const { data } = yield call(api.put, `/quizzes/${quizId}/settings`, settings);
+        yield put(actions.updateQuizSettingsSuccess(quizId, data));
+    } catch (error) {
+        yield put(actions.addError(error.response.data, `Error while updateing settings for quiz [${quizId}]`));
     }
 }
