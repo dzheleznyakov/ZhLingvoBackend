@@ -11,6 +11,7 @@ import * as wordsSagas from './words';
 export function* appWatcher() {
     yield takeEvery(actionTypes.SET_APP, appSagas.changeAppSaga);
     yield takeEvery(actionTypes.FETCH_ALL_LANGUAGES, appSagas.fetchAllLanguagesSaga);
+    yield takeEvery(actionTypes.FETCH_POS, appSagas.fetchPosSaga);
 }
 
 export function* authWatcher() {    
@@ -56,5 +57,4 @@ export function* wordsWatcher() {
     yield takeEvery(actionTypes.CREATE_WORD, wordsSagas.createWordSaga);
     yield takeEvery(actionTypes.DELETE_SELECTED_WORD, wordsSagas.deleteSelectedWordSaga);
     yield takeEvery(actionTypes.UPDATE_WORD, wordsSagas.updateWordSaga);
-    yield takeEvery(actionTypes.FETCH_POS, wordsSagas.fetchPosSaga);
 }

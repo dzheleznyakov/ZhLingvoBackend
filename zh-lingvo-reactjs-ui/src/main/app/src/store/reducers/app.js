@@ -8,6 +8,7 @@ const initialState = {
     navigationDestination: null,
     app: null,
     languages: [],
+    posList: [],
 };
 
 const gen = (function* idGen() {
@@ -56,6 +57,11 @@ const fetchAllLanguages = (state, action) => ({
     languages: action.languages || [],
 });
 
+const setPos = (state, action) => ({
+    ...state,
+    posList: action.posList,
+});
+
 const signOut = (state) => ({
     ...state,
     showSidebar: false,
@@ -71,6 +77,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.NAVIGATE_TO: return navigateTo(state, action);
         case actionTypes.SET_APP: return setApp(state, action);
         case actionTypes.FETCH_ALL_LANGUAGES_SUCCESS: return fetchAllLanguages(state, action);
+        case actionTypes.SET_POS: return setPos(state, action);
         case SIGN_OUT: return signOut(state, action);
         default: return state;
     }

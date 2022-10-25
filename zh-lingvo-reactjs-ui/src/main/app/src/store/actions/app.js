@@ -33,3 +33,13 @@ export const fetchAllLanguagesSuccess = languages => ({
     type: actionTypes.FETCH_ALL_LANGUAGES_SUCCESS,
     languages,
 });
+
+export const fetchPos = lang => ({
+    type: actionTypes.FETCH_POS,
+    lang,
+});
+
+export const setPos = posList => ({
+    type: actionTypes.SET_POS,
+    posList,
+});

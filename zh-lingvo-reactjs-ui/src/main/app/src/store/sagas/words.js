@@ -123,16 +123,3 @@ export function* updateWordSaga(action) {
         yield put(actions.navigateTo(`/dictionaries/${dictionaryId}/${wordsList[selectedWordIndex]}`)),
     ]);
 }
-
-export function* fetchPosSaga(action) {
-    const { lang } = action;
-    try {
-        const { data } = yield call(axios.get, `/pos/${lang}`);
-        yield put(actions.setPos(data));
-    } catch (error) {
-        yield call(actions.addError(
-            error.response.data,
-            `Error while fetching parts of speech for [${lang}] language`));
-        yield put(actions.setPos([]));
-    }
-}

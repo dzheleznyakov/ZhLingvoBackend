@@ -36,3 +36,16 @@ export function* fetchAllLanguagesSaga() {
         yield put(actions.addError(error.response.data, 'Erorr while fetching languages'));
     }
 }
+
+export function* fetchPosSaga(action) {
+    const { lang } = action;
+    try {
+        const { data } = yield call(api.get, `/pos/${lang}`);
+        yield put(actions.setPos(data));
+    } catch (error) {
+        yield call(actions.addError(
+            error.response.data,
+            `Error while fetching parts of speech for [${lang}] language`));
+        yield put(actions.setPos([]));
+    }
+}
