@@ -2,9 +2,9 @@ import React from 'react';
 
 import classes from './DictionaryMain.module.scss';
 
-import Greeting from '../Common/Greeting/Greeting';
 import DictionariesTable from './DictionariesTable/DictionariesTable';
 import { useUsername } from '../../hooks';
+import { Greeting } from '../UI';
 
 const DictionaryList = () => {
     const username = useUsername();

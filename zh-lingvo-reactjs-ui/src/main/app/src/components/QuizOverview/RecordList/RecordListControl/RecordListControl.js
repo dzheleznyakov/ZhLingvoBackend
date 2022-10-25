@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import ControlBox, { MODAL_TYPES } from '../../../Common/ControlBox/ControlBox';
+import { ControlBox, MODAL_TYPES } from '../../../UI';
 
 import DeleteRecordDialog from './DeleteRecordDialog/DeleteRecordDialog';
 import NewRecordDialog from './NewRecordDialog/NewRecordDialog';

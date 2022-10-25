@@ -7,9 +7,9 @@ import classes from './RecordList.module.scss';
 import { useActionOnMount } from '../../../hooks';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
-import ListView from '../../Common/ListView/ListView';
 import RecordListItem from './RecordListItem/RecordListItem';
 import RecordListControl from './RecordListControl/RecordListControl';
+import { ListView } from '../../UI';
 
 const RecordList = () => {
     const { qid: quizId, rid } = useParams();
@@ -44,7 +44,7 @@ const RecordList = () => {
 
     const listView = items.length === 0
         ? null
-        : <ListView 
+        : <ListView
             items={items}
             onItemClick={onRecordClick} 
             selectedIndex={selectedIndex}

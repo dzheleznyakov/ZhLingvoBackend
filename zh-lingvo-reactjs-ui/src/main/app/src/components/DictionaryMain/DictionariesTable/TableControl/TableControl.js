@@ -7,7 +7,7 @@ import DeleteDictionaryDialog from '../../DeleteDictionaryDialog/DeleteDictionar
 import { selectedDictionarySelector } from '../../../../store/selectors';
 import { DICTIONARY as dictionaryUrlPattern } from '../../../../static/constants/paths';
 import * as actions from '../../../../store/actions';
-import ControlBox, { MODAL_TYPES } from '../../../Common/ControlBox/ControlBox';
+import { ControlBox, MODAL_TYPES } from '../../../UI';
 
 const TableControl = () => {
     const selectedDictionary = useSelector(selectedDictionarySelector);

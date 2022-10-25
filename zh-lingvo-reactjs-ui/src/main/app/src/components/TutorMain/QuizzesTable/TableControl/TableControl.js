@@ -7,8 +7,8 @@ import * as actions from '../../../../store/actions';
 import NewQuizDialog from './NewQuizDialog/NewQuizDialog';
 import EditQuizDialog from './EditQuizDialog/EditQuizDialog';
 import DeleteQuizDialog from './DeleteQuizDialog/DeleteQuizDialog';
-import ControlBox, { MODAL_TYPES } from '../../../Common/ControlBox/ControlBox';
 import QuizSettingsDialog from './QuizSettingsDialog/QuizSettingsDialog';
+import { ControlBox, MODAL_TYPES } from '../../../UI';
 
 const TableControl = () => {
     const selectedQuiz = useSelector(selectedQuizSelector);
@@ -26,7 +26,7 @@ const TableControl = () => {
         dispatch(actions.navigateTo(path));
     };
 
-    return <ControlBox 
+    return <ControlBox
         panelKeyPrefix="quizzed_table_control-"
         disabled={!quizIsSelected}
         panels={[

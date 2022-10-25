@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import NewWordDialog from '../NewWordDialog/NewWordDialog';
 import DeleteWordDialog from '../DeleteWordDialog/DeleteWordDialog';
-import ControlBox, { MODAL_TYPES } from '../../../Common/ControlBox/ControlBox';
+import { ControlBox, MODAL_TYPES } from '../../../UI';
 
 const WordListControl = () => {
     const { wordMainForm } = useParams();

@@ -8,6 +8,9 @@ import ActionButtonComponent from './Button/ActionButton';
 import SpinnerComponent from './Spinner/Spinner';
 import TableComponent from './Table/Table';
 import VerticalRuleComponent from './VerticalRule/VerticalRule';
+import ControlBoxComponent from './ControlBox/ControlBox';
+import GreetingComponent from './Greeting/Greeting';
+import ListViewComponent from './ListView/ListView';
 
 export const Backdrop = BackdropComponent;
 export const Dialog = DialogComponent;
@@ -24,3 +27,7 @@ export * as buttonSizes from './Button/sizes';
 export const Spinner = SpinnerComponent;
 export const Table = TableComponent;
 export const VerticalRule = VerticalRuleComponent;
+export const ControlBox = ControlBoxComponent;
+export { MODAL_TYPES } from './ControlBox/ControlBox';
+export const Greeting = GreetingComponent;
+export const ListView = ListViewComponent;
