@@ -1,0 +1,30 @@
+@import "../../../static/styles/colours";
+@import "../../../static/styles/sizes";
+
+$min-wrapper-width: 300px;
+.QuizRecordCardWrapper {
+    margin-top: 8px;
+    min-width: $min-wrapper-width;
+    max-width: 50%;
+    animation: quiz-record-card-wrapper-in 0.5s ease-out;
+}
+
+@keyframes quiz-record-card-wrapper-in {
+    from { opacity: 0 ;}
+    to { opacity: 1; }
+}
+
+.QuizRecordViewWrapper {
+    padding: 4px 8px;
+    width: 100%;
+    min-height: 60vh;
+    max-height: 60vh;
+    overflow-y: scroll;
+    word-wrap: break-word;
+
+    border: 1px solid darken(map-get($palette, light), 5%);
+    border-radius: $button-border-radius;
+
+    display: flex;
+    flex-direction: column;
+}

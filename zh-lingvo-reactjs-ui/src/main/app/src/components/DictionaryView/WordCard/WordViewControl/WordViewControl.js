@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
@@ -30,13 +30,11 @@ const WordViewControl = () => {
     );
 
     return (
-        <Fragment>
-            <div className={classes.ButtonBox}>
-                {editButton}
-                {okButton}
-                {cancelButton}
-            </div>
-        </Fragment>
+        <div className={classes.ButtonBox}>
+            {editButton}
+            {okButton}
+            {cancelButton}
+        </div>
     );
 };
 

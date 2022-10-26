@@ -23,8 +23,8 @@ const StaticEditable = props => {
 
     const onHovered = isEditing ? () => {
         setHovered(true);
-        const boundingRect = tagRef.current.getBoundingClientRect()//event.nativeEvent.target.getBoundingClientRect();
-        const { y, right } = boundingRect
+        const boundingRect = tagRef.current.getBoundingClientRect();
+        const { y, right } = boundingRect;
         setButtonsCoordinates({ x: right - 52, y: y - 25 });
     } : null;
 

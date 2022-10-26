@@ -17,7 +17,7 @@ const EditableTranscription = props => {
             label="transcription"
             modalType={TRANSCRIPTION_NEW}
             path={path}
-        />
+        />;
 
     return (
         <OnHoverEditable
