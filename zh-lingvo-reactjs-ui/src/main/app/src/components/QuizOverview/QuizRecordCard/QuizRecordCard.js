@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 
@@ -10,13 +9,17 @@ import * as actions from '../../../store/actions';
 import { useConditionalActionOnMount } from '../../../hooks';
 import { Spinner } from '../../UI';
 import { WordMainForm } from './parts';
+import QuizRecordView from './QuizRecordView/QuizRecordView';
+import QuizRecordControl from './QuizRecordControl/QuizRecordControl';
 
-const QuizRecordCard = props => {
+const NULL_QUIZ_RECORD = {};
+
+const QuizRecordCard = () => {
     const { qid, rid } = useParams();
     const quizId = +qid;
     const recordId = +rid;
     const quizIsLoading = useSelector(selectors.quizIsLoadingSelector);
-    const loadedQuizRecord = useSelector(selectors.loadedQuizRecordSelector) || {};
+    const loadedQuizRecord = useSelector(selectors.loadedQuizRecordSelector) || NULL_QUIZ_RECORD;
     const { wordMainForm } = loadedQuizRecord;
     
 
@@ -27,19 +30,17 @@ const QuizRecordCard = props => {
 
     switch (true) {
         case quizIsLoading: return <Spinner />;
-        case !!wordMainForm: return (
+        case !!rid && !!wordMainForm: return (
             <div className={classes.QuizRecordCardWrapper}>
                 <div className={classes.QuizRecordViewWrapper}>
                     <WordMainForm>{wordMainForm}</WordMainForm>
+                {loadedQuizRecord !== NULL_QUIZ_RECORD && <QuizRecordView quizRecord={loadedQuizRecord} />}
                 </div>
+            {loadedQuizRecord !== NULL_QUIZ_RECORD && <QuizRecordControl />}
             </div>
         );
         default: return null;
     }
 };
-
-QuizRecordCard.propTypes = {};
-
-QuizRecordCard.defaultProps = {};
 
 export default QuizRecordCard;

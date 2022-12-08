@@ -4,14 +4,11 @@ import PropTypes from 'prop-types';
 
 import classes from './NewPartButton.module.scss';
 
-import { IconButton, iconButtonTypes, buttonSizes } from '../../../../UI';
 import OnHoverEditable from './Editable/OnHoverEditable';
-import * as actions from '../../../../../store/actions';
 import * as allModalTypes from '../../../../../static/constants/wordEditModalTypes';
 
 const NewPartButton = props => {
     const { block, modalType, path, label } = props;
-    const dispatch = useDispatch();
 
     return (
         <OnHoverEditable

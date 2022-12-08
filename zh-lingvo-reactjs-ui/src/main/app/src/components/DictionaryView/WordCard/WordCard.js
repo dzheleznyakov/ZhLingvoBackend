@@ -40,7 +40,7 @@ const WordCard = props => {
             dispatch(actions.selectWord(wordIndex));
     }, [dispatch, wordIndex]);
 
-    const wordViews = word.map((w, i) => <WordView key={w.id} word={w} index={i} />);
+    const wordViews = word.map((w, i) => <WordView key={`word_view-${w.id}`} word={w} index={i} />);
 
     switch (true) {
         case wordIsLoading: return <Spinner />;

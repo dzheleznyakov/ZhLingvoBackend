@@ -1,0 +1,18 @@
+.OnHoverEditableBase {
+    position: relative;
+    transition: background-color linear 0.3s;
+    width: fit-content;
+
+    &:hover {
+        background-color: rgba(223, 221, 221, 0.728);
+    }
+}
+
+.ButtonBox {
+    position: fixed;
+    z-index: 10;
+    
+    button {
+        margin: 4px;
+    }
+}

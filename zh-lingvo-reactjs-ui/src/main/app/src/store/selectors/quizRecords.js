@@ -6,6 +6,7 @@ export const quizRecordsOverviewsSelector = simpleSelectorFactory('quizRecordsOv
 export const selectedQuizRecordIndexSelector = simpleSelectorFactory('selectedQuizRecordIndex');
 export const quizIsLoadingSelector = simpleSelectorFactory('loading');
 export const loadedQuizRecordSelector = simpleSelectorFactory('loadedQuizRecord');
+export const quizRecordIsEditingSelector = simpleSelectorFactory('isEditing');
 
 export const selectedQuizRecordSelector = createSelector(
     quizRecordsOverviewsSelector,

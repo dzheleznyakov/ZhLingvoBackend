@@ -46,3 +46,8 @@ export const fetchQuizRecordSuccess = quizRecord => ({
 export const fetchQuizRecordFailure = () => ({
     type: actionTypes.FETCH_QUIZ_RECORD_FAILURE,
 });
+
+export const setQuizRecordEditing = isEditing => ({
+    type: actionTypes.SET_QUIZ_RECORD_EDITING,
+    isEditing,
+});

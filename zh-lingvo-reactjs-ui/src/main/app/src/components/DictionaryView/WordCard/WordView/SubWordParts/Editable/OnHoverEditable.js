@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import classes from './Editable.module.scss';
-
-import ButtonBox from './ButtonBox';
 import * as selectors from '../../../../../../store/selectors';
+import * as actions from '../../../../../../store/actions';
+import {OnHoverEditableBase} from '../../../../../UI';
 
 const OnHoverEditable = props => {
     const { 
@@ -15,43 +14,27 @@ const OnHoverEditable = props => {
         newModalType,
         path, 
         block,
+        isEditing: isEditingProps,
     } = props;
-    const isEditing = useSelector(selectors.isEditingSelector);
-    const [hovered, setHovered] = useState(false);
-    const [buttonsCoordinates, setButtonsCoordinates] = useState({ x: 0, y: 0});
+    const dispatch = useDispatch();
+    const isEditingDefault = useSelector(selectors.isEditingSelector);
+    const isEditing = isEditingProps === null ? isEditingDefault : isEditingProps;
 
-    const onHovered = isEditing ? event => {
-        setHovered(true);
-        const { clientX: x, clientY: y } = event;
-        setButtonsCoordinates({ x, y });
-    } : null;
 
-    const onUnhovered = isEditing ? () => {
-        setHovered(false);
-    } : null;
-
-    const buttons = <ButtonBox
-        newModalType={newModalType}
-        editModalType={editModalType}
-        deleteModalType={deleteModalType}
-        path={path}
-        show={hovered}
-        buttonsCoordinates={buttonsCoordinates}
-        afterActionCb={() => setHovered(false)}
-    />
-
-    const className = isEditing ? classes.OnHoverEditable : null;
-
-    const Tag = block ? 'div' : 'span';
     return (
-        <Tag
-            className={className}
-            onMouseEnter={onHovered}
-            onMouseLeave={onUnhovered}
+        <OnHoverEditableBase
+            newModalType={newModalType}
+            editModalType={editModalType}
+            deleteModalType={deleteModalType}
+            block={block}
+            isEditing={isEditing}
+            modalTypeToAction={modalType => {
+                dispatch(actions.shouldShowWordEditModal(true));
+                dispatch(actions.setWordEditModalType(modalType, path));
+            }}
         >
             {children}
-            {buttons}
-        </Tag>
+        </OnHoverEditableBase>
     );
 };
 
@@ -62,10 +45,12 @@ OnHoverEditable.propTypes = {
     newModalType: PropTypes.string,
     path: PropTypes.arrayOf(PropTypes.string),
     block: PropTypes.bool,
+    isEditing: PropTypes.bool,
 };
 
 OnHoverEditable.defaultProps = {
     path: [],
+    isEditing: null,
 };
 
 export default OnHoverEditable;

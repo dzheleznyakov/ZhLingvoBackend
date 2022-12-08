@@ -7,6 +7,9 @@ $min-wrapper-width: 300px;
     min-width: $min-wrapper-width;
     max-width: 50%;
     animation: quiz-record-card-wrapper-in 0.5s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 @keyframes quiz-record-card-wrapper-in {

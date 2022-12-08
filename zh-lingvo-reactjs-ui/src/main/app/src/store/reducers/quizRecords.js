@@ -1,11 +1,19 @@
+import _ from 'lodash';
+
 import * as actionTypes from '../actionTypes/quizRecords';
 import { SIGN_OUT } from '../actionTypes';
+import { NONE } from '../../static/constants/quizRecordEditModalTypes';
 
 const initialState = {
     quizRecordsOverviews: [],
     selectedQuizRecordIndex: -1,
     loading: false,
     loadedQuizRecord: null,
+    isEditing: false,
+    updatedQuizRecord: null,
+    showQuizRecordEditModal: false,
+    quizRecordEditModalType: NONE,
+    quizRecordEditPath: [],
 };
 
 const fetchQuizRecordsSuccess = (state, action) => ({
@@ -34,6 +42,21 @@ const fetchQuizRecordFailure = state => ({
     loading: false,
 });
 
+const setQuizRectordEditing = (state, action) => {
+    const { loadedQuizRecord } = state;
+    const { isEditing } = action;
+    const newUpdatedQuizRecord = isEditing 
+        ? _.cloneDeep(loadedQuizRecord)
+        : null;
+    return {
+        ...state,
+        isEditing,
+        updatedQuizRecord: newUpdatedQuizRecord,
+        quizRecordEditModalType: NONE,
+        quizRecordEditPath: [],
+    };
+};
+
 const signOut = () => ({
     ...initialState
 });
@@ -45,6 +68,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_QUIZ_RECORD_START: return fetchQuizRecordStart(state, action);
         case actionTypes.FETCH_QUIZ_RECORD_SUCCESS: return fetchQuizRecordSuccess(state, action);
         case actionTypes.FETCH_QUIZ_RECORD_FAILURE: return fetchQuizRecordFailure(state, action);
+        case actionTypes.SET_QUIZ_RECORD_EDITING: return setQuizRectordEditing(state, action);
         case SIGN_OUT: return signOut();
         default: return state;
     }
