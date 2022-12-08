@@ -20,7 +20,6 @@ const OnHoverEditable = props => {
     const isEditingDefault = useSelector(selectors.isEditingSelector);
     const isEditing = isEditingProps === null ? isEditingDefault : isEditingProps;
 
-
     return (
         <OnHoverEditableBase
             newModalType={newModalType}

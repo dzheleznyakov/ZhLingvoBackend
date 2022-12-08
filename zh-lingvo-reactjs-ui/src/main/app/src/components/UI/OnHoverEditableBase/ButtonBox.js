@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import classes from './OnHoverEditableBase.module.scss';
+import classes from './EditableBase.module.scss';
 import { buttonSizes, IconButton, iconButtonTypes } from '..';
 
 const ButtonBox = props => {

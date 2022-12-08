@@ -12,6 +12,7 @@ import ControlBoxComponent from './ControlBox/ControlBox';
 import GreetingComponent from './Greeting/Greeting';
 import ListViewComponent from './ListView/ListView';
 import OnHoverEditableBaseComponent from './OnHoverEditableBase/OnHoverEditableBase';
+import StaticEditableBaseComponent from './OnHoverEditableBase/StaticEditableBase';
 
 export const Backdrop = BackdropComponent;
 export const Dialog = DialogComponent;
@@ -33,3 +34,4 @@ export { MODAL_TYPES } from './ControlBox/ControlBox';
 export const Greeting = GreetingComponent;
 export const ListView = ListViewComponent;
 export const OnHoverEditableBase = OnHoverEditableBaseComponent;
+export const StaticEditableBase = StaticEditableBaseComponent;

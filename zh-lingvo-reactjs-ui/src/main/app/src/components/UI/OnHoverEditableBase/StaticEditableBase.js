@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import classes from './EditableBase.module.scss';
 import ButtonBox from './ButtonBox';
 
-const OnHoverEditableBase = props => {
+const StaticEditableBase = props => {
     const {
         children,
         editModalType,
@@ -16,11 +16,13 @@ const OnHoverEditableBase = props => {
     } = props;
     const [hovered, setHovered] = useState(false);
     const [buttonsCoordinates, setButtonsCoordinates] = useState({ x: 0, y: 0});
+    const tagRef = useRef();
 
-    const onHovered = isEditing ? event => {
+    const onHovered = isEditing ? () => {
         setHovered(true);
-        const { clientX: x, clientY: y } = event;
-        setButtonsCoordinates({ x, y });
+        const boundingRect = tagRef.current.getBoundingClientRect();
+        const { y, right } = boundingRect;
+        setButtonsCoordinates({ x: right - 52, y: y - 25 });
     } : null;
 
     const onUnhovered = isEditing ? () => {
@@ -38,11 +40,12 @@ const OnHoverEditableBase = props => {
         isEditing={isEditing}
     />;
 
-    const className = isEditing ? classes.OnHoverEditableBase : null;
+    const className = isEditing ? classes.StaticEditableBase : null;
     const Tag = block ? 'div' : 'span';
 
     return (
         <Tag
+            ref={tagRef}
             className={className}
             onMouseEnter={onHovered}
             onMouseLeave={onUnhovered}
@@ -53,7 +56,7 @@ const OnHoverEditableBase = props => {
     );
 };
 
-OnHoverEditableBase.propTypes = {
+StaticEditableBase.propTypes = {
     children: PropTypes.node.isRequired,
     editModalType: PropTypes.string,
     deleteModalType: PropTypes.string,
@@ -63,8 +66,8 @@ OnHoverEditableBase.propTypes = {
     modalTypeToAction: PropTypes.func.isRequired,
 };
 
-OnHoverEditableBase.defaultProps = {
+StaticEditableBase.defaultProps = {
     isEditing: false,
 };
 
-export default OnHoverEditableBase;
+export default StaticEditableBase;

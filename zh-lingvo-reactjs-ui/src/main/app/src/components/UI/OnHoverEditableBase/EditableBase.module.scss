@@ -1,3 +1,6 @@
+@import "../../../static/styles/sizes";
+@import "../../../static/styles/colours";
+
 .OnHoverEditableBase {
     position: relative;
     transition: background-color linear 0.3s;
@@ -5,6 +8,16 @@
 
     &:hover {
         background-color: rgba(223, 221, 221, 0.728);
+    }
+}
+
+.StaticEditableBase {
+    padding: 4px;
+    border: 1px solid transparent;
+    border-radius: $panel-border-radius;
+
+    &:hover {
+        border-color: map-get($palette, lighter-primary);
     }
 }
 
