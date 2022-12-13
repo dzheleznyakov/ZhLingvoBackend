@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import classes from './WordMainForm.module.scss';
-import OnHoverEditable from '../../../../DictionaryView/WordCard/WordView/SubWordParts/Editable/OnHoverEditable';
 import { MAIN_FORM } from '../../../../../static/constants/quizRecordEditModalTypes';
 import { quizRecordIsEditingSelector } from '../../../../../store/selectors';
+import OnHoverEditable from '../Editable/OnHoverEditable';
 
 const WordMainForm = props => {
     const { children: mainForm } = props;

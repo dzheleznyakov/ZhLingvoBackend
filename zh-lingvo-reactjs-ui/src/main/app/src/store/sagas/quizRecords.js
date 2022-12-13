@@ -1,4 +1,5 @@
 import { all, call, put, select, take } from "redux-saga/effects";
+import _ from 'lodash';
 
 import api from '../../axios-api';
 import * as actions from '../actions';
@@ -96,4 +97,31 @@ export function* deleteQuizRecordSaga(action) {
         put(actions.navigateTo(`/tutor/quiz/${quizId}/${newSelectedQuizRecordId}`)),
         put(actions.fetchQuizRecord(quizId, newSelectedQuizRecordId)),
     ]);
+}
+
+export function* updateQuizRecordSaga(action) {
+    const record = _.cloneDeep(
+        yield select(selectors.updatedQuizRecordSelector));
+    if (!record) {
+        yield put(actions.setQuizRecordEditing(false));
+        return;
+    }
+
+    const { quizId } = action;
+    try {
+        yield call(api.put, `/quizzes/${quizId}/records`, record);
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while update quiz record [${record.id}]`));
+        return;
+    }
+
+    yield put(actions.setQuizRecordEditing(false));
+    yield put(actions.fetchQuizRecords(quizId));
+    yield put(actions.fetchQuizRecord(quizId, record.id));
+    const { overviews: recordList } = yield take(actionTypes.FETCH_QUIZ_RECORDS_SUCCESS);
+    const selectedQuizRecordIndex = recordList.findIndex(rec => rec.id === record.id);
+    yield put(actions.selectQuizRecord(selectedQuizRecordIndex));
+    yield put(actions.navigateTo(`/tutor/quiz/${quizId}/${record.id}`));
 }

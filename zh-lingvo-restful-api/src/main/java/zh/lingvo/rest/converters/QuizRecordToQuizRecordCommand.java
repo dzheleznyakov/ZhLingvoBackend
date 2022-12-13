@@ -36,6 +36,7 @@ public class QuizRecordToQuizRecordCommand implements Converter<QuizRecord, Quiz
                 .wordMainForm(source.getWordMainForm())
                 .pos(source.getPos().getShortName())
                 .transcription(source.getTranscription())
+                .currentScore(source.getCurrentScore())
                 .numberOfRuns(source.getNumberOfRuns())
                 .numberOfSuccesses(source.getNumberOfSuccesses())
                 .translations(convertTranslations(source))

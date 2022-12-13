@@ -60,8 +60,13 @@ public class QuizRecordServiceImpl implements QuizRecordService {
     @Override
     @Nullable
     public Optional<QuizRecord> update(@Nonnull QuizRecord record, Long quizId, User user) {
-        if (record.getQuiz() == null || !Objects.equals(record.getQuiz().getId(), quizId))
+        Optional<QuizRecord> optionalPersistedRecord = quizRecordRepository.findByIdWithQuiz(record.getId());
+        boolean recordBelongsToQuiz = optionalPersistedRecord
+                .map(pr -> pr.getQuiz() != null && Objects.equals(pr.getQuiz().getId(), quizId))
+                .orElse(false);
+        if (!recordBelongsToQuiz)
             return Optional.empty();
+        optionalPersistedRecord.ifPresent(pr -> record.setQuiz(pr.getQuiz()));
         return quizService.existsById(quizId, user)
                 ? Optional.of(quizRecordRepository.save(record))
                 : Optional.empty();

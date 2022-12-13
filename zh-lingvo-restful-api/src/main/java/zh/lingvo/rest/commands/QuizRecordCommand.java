@@ -20,6 +20,7 @@ public class QuizRecordCommand {
     private String wordMainForm;
     private String pos;
     private String transcription;
+    private Float currentScore;
     private Integer numberOfRuns;
     private Integer numberOfSuccesses;
     private List<TranslationCommand> translations;

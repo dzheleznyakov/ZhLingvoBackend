@@ -52,10 +52,35 @@ const setQuizRectordEditing = (state, action) => {
         ...state,
         isEditing,
         updatedQuizRecord: newUpdatedQuizRecord,
+        showQuizRecordEditModal: false,
         quizRecordEditModalType: NONE,
         quizRecordEditPath: [],
     };
 };
+
+const setQuizRecordEditModalType = (state, action) => ({
+    ...state,
+    quizRecordEditModalType: action.modalType,
+    quizRecordEditPath: action.path,
+});
+
+const shouldShowQuizRecordEditModal = (state, action) => ({
+    ...state,
+    showQuizRecordEditModal: action.show,
+});
+
+const updateWord = (state, action, decorator) => {
+    if (!state.loadedQuizRecord)
+        return state;
+    const newUpdatedQuizRecord = state.updatedQuizRecord
+        ? _.cloneDeep(state.updatedQuizRecord)
+        : _.cloneDeep(state.loadedQuizRecord);
+    decorator(newUpdatedQuizRecord, action);
+    return { ...state, updatedQuizRecord: newUpdatedQuizRecord };
+}
+
+const updateQuizRecordMainForm = (state, action) => updateWord(state, action,
+    (nuw, action) => nuw.wordMainForm = action.updatedMainForm);
 
 const signOut = () => ({
     ...initialState
@@ -69,6 +94,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_QUIZ_RECORD_SUCCESS: return fetchQuizRecordSuccess(state, action);
         case actionTypes.FETCH_QUIZ_RECORD_FAILURE: return fetchQuizRecordFailure(state, action);
         case actionTypes.SET_QUIZ_RECORD_EDITING: return setQuizRectordEditing(state, action);
+        case actionTypes.SET_QUIZ_RECORD_EDIT_MODAL_TYPE: return setQuizRecordEditModalType(state, action);
+        case actionTypes.SHOULD_SHOW_QUIZ_RECORD_EDIT_MODAL: return shouldShowQuizRecordEditModal(state, action);
+        case actionTypes.UPDATE_QUIZ_RECORD_MAIN_FORM: return updateQuizRecordMainForm(state, action);
         case SIGN_OUT: return signOut();
         default: return state;
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import classes from './QuizRecordControl.module.scss';
 
@@ -8,6 +9,8 @@ import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 
 const QuizRecordControl = () => {
+    const { qid } = useParams();
+    const quizId = +qid;
     const dispatch = useDispatch();
     const isEditing = useSelector(selectors.quizRecordIsEditingSelector);
 
@@ -26,7 +29,7 @@ const QuizRecordControl = () => {
     const okButton = (
         <ActionButton 
             type={actionButtonTypes.CONFIRM} 
-            clicked={() => {}}
+            clicked={() => dispatch(actions.updateQuizRecord(quizId))}
         >
             OK
         </ActionButton>

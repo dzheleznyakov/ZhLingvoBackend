@@ -51,3 +51,24 @@ export const setQuizRecordEditing = isEditing => ({
     type: actionTypes.SET_QUIZ_RECORD_EDITING,
     isEditing,
 });
+
+export const shouldShowQuizRecordEditModal = show => ({
+    type: actionTypes.SHOULD_SHOW_QUIZ_RECORD_EDIT_MODAL,
+    show,
+});
+
+export const updateQuizRecordMainForm = updatedMainForm => ({
+    type: actionTypes.UPDATE_QUIZ_RECORD_MAIN_FORM,
+    updatedMainForm,
+});
+
+export const setQuizRecordEditModalType = (modalType, path) => ({
+    type: actionTypes.SET_QUIZ_RECORD_EDIT_MODAL_TYPE,
+    modalType,
+    path,
+});
+
+export const updateQuizRecord = quizId => ({
+    type: actionTypes.UPDATE_QUIZ_RECORD,
+    quizId,
+});

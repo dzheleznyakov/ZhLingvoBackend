@@ -11,6 +11,7 @@ import { Spinner } from '../../UI';
 import { WordMainForm } from './parts';
 import QuizRecordView from './QuizRecordView/QuizRecordView';
 import QuizRecordControl from './QuizRecordControl/QuizRecordControl';
+import QuizRecordEditModal from './QuizRecordEditModal/QuizRecordEditModal';
 
 const NULL_QUIZ_RECORD = {};
 
@@ -20,8 +21,11 @@ const QuizRecordCard = () => {
     const recordId = +rid;
     const quizIsLoading = useSelector(selectors.quizIsLoadingSelector);
     const loadedQuizRecord = useSelector(selectors.loadedQuizRecordSelector) || NULL_QUIZ_RECORD;
-    const { wordMainForm } = loadedQuizRecord;
+    const updatedQuizRecord = useSelector(selectors.updatedQuizRecordSelector) || NULL_QUIZ_RECORD;
+    const isEditing = useSelector(selectors.quizRecordIsEditingSelector);
     
+    const quizRecord = isEditing ? updatedQuizRecord : loadedQuizRecord;
+    const { wordMainForm } = quizRecord;
 
     useConditionalActionOnMount(
         actions.fetchQuizRecord(quizId, recordId),
@@ -34,9 +38,10 @@ const QuizRecordCard = () => {
             <div className={classes.QuizRecordCardWrapper}>
                 <div className={classes.QuizRecordViewWrapper}>
                     <WordMainForm>{wordMainForm}</WordMainForm>
-                {loadedQuizRecord !== NULL_QUIZ_RECORD && <QuizRecordView quizRecord={loadedQuizRecord} />}
+                {quizRecord !== NULL_QUIZ_RECORD && <QuizRecordView quizRecord={quizRecord} />}
                 </div>
-            {loadedQuizRecord !== NULL_QUIZ_RECORD && <QuizRecordControl />}
+            {quizRecord !== NULL_QUIZ_RECORD && <QuizRecordControl />}
+            <QuizRecordEditModal />
             </div>
         );
         default: return null;

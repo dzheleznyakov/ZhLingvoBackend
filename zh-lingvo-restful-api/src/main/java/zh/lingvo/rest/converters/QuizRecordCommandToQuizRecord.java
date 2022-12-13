@@ -38,6 +38,7 @@ public class QuizRecordCommandToQuizRecord implements Converter<QuizRecordComman
                 .wordMainForm(source.getWordMainForm())
                 .pos(convertPos(source))
                 .transcription(source.getTranscription())
+                .currentScore(source.getCurrentScore())
                 .numberOfRuns(source.getNumberOfRuns())
                 .numberOfSuccesses(source.getNumberOfSuccesses())
                 .translations(convertTranslations(source))
