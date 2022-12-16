@@ -10,6 +10,7 @@ export const loadedQuizRecordSelector = simpleSelectorFactory('loadedQuizRecord'
 export const updatedQuizRecordSelector = simpleSelectorFactory('updatedQuizRecord');
 export const quizRecordIsEditingSelector = simpleSelectorFactory('isEditing');
 export const quizRecordEditModalTypeSelector = simpleSelectorFactory('quizRecordEditModalType');
+export const quizRecordEditPathSelector = simpleSelectorFactory('quizRecordEditPath');
 
 export const showQuizRecordEditModalSelector = simpleSelectorFactory('showQuizRecordEditModal');
 
@@ -21,3 +22,5 @@ export const selectedQuizRecordSelector = createSelector(
 
 export const quizRecordMainFormToUpdateSelector =
     state => _.get(state, 'quizRecords.updatedQuizRecord.wordMainForm', '');
+export const quizRecordStringPropertyToUpdateSelectorFactory = path =>
+    state => _.get(updatedQuizRecordSelector(state), path, '');

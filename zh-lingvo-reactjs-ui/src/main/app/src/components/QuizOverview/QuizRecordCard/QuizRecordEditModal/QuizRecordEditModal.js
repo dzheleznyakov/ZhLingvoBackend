@@ -15,6 +15,9 @@ const QuizRecordEditModal = () => {
     let panel;
     switch (modalType) {
         case modalTypes.MAIN_FORM: panel = <dialogs.MainFormDialog />; break;
+        case modalTypes.TRANSCRIPTION_NEW: panel = <dialogs.TranscriptionEditDialog />; break;
+        case modalTypes.TRANSCRIPTION_EDIT: panel = <dialogs.TranscriptionEditDialog editing />; break;
+        case modalTypes.TRANSCRIPTION_DELETE: panel = <dialogs.TranscriptionDeleteDialog />; break;
         default: panel = null;
     }
 

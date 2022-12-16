@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import classes from './NewPartButton.module.scss';
 
-import OnHoverEditable from './Editable/OnHoverEditable';
-import * as allModalTypes from '../../../../../static/constants/wordEditModalTypes';
+import * as allModalTypes from '../../../../../../static/constants/quizRecordEditModalTypes';
+import OnHoverEditable from '../OnHoverEditable';
 
 const NewPartButton = props => {
     const { block, modalType, path, label } = props;
@@ -35,6 +35,7 @@ NewPartButton.propTypes = {
 
 NewPartButton.defaultProps = {
     path: [],
+    block: false,
 };
 
 export default NewPartButton;

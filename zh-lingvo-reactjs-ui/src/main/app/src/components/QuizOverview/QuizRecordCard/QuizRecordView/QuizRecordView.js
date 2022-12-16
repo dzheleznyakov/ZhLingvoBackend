@@ -5,13 +5,19 @@ import classes from './QuizRecordView.module.scss';
 
 import { quizRecordExampleType, quizRecordTranslationType } from '../types';
 import { QuizRecordExample, QuizRecordTranslation, Transcription } from '../parts';
+import EditableTranscription from '../parts/Transcription/EditableTranscription';
+
+const TRANSCRIPTION_PATH_SEGMENT = 'transcription';
 
 const QuizRecordView = props => {
     const { quizRecord } = props;
     const { transcription, translations, examples } = quizRecord;
 
-    const transcriptionElement = transcription 
-        && <Transcription>{transcription}</Transcription>;
+    const transcriptionElement = (
+        <EditableTranscription path={[TRANSCRIPTION_PATH_SEGMENT]}>
+            {transcription}
+        </EditableTranscription>
+    );
 
     const translationElements = translations
         .map((translation, index) => <QuizRecordTranslation 

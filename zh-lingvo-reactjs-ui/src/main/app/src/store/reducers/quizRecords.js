@@ -69,7 +69,7 @@ const shouldShowQuizRecordEditModal = (state, action) => ({
     showQuizRecordEditModal: action.show,
 });
 
-const updateWord = (state, action, decorator) => {
+const updateQuizRecord = (state, action, decorator) => {
     if (!state.loadedQuizRecord)
         return state;
     const newUpdatedQuizRecord = state.updatedQuizRecord
@@ -79,8 +79,11 @@ const updateWord = (state, action, decorator) => {
     return { ...state, updatedQuizRecord: newUpdatedQuizRecord };
 }
 
-const updateQuizRecordMainForm = (state, action) => updateWord(state, action,
-    (nuw, action) => nuw.wordMainForm = action.updatedMainForm);
+const updateQuizRecordMainForm = (state, action) => updateQuizRecord(state, action,
+    (nuqr, action) => nuqr.wordMainForm = action.updatedMainForm);
+
+const updateQuizRecordElement = (state, action) => updateQuizRecord(state, action,
+    (nuqr, action) => _.set(nuqr, action.path, action.value));
 
 const signOut = () => ({
     ...initialState
@@ -97,6 +100,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_QUIZ_RECORD_EDIT_MODAL_TYPE: return setQuizRecordEditModalType(state, action);
         case actionTypes.SHOULD_SHOW_QUIZ_RECORD_EDIT_MODAL: return shouldShowQuizRecordEditModal(state, action);
         case actionTypes.UPDATE_QUIZ_RECORD_MAIN_FORM: return updateQuizRecordMainForm(state, action);
+        case actionTypes.UPDATE_QUIZ_RECORD_ELEMENT: return updateQuizRecordElement(state, action);
         case SIGN_OUT: return signOut();
         default: return state;
     }

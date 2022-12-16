@@ -5,7 +5,7 @@ import classes from './Transcription.module.scss';
 
 const Transcription = props => {
     const { children: transcription } = props;
-    return (
+    return transcription && (
         <div className={classes.Transcription}>
             [{transcription}]
         </div>
@@ -13,7 +13,7 @@ const Transcription = props => {
 };
 
 Transcription.propTypes = {
-    children: PropTypes.string.isRequired,
+    children: PropTypes.string,
 };
 
 export default Transcription;

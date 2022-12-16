@@ -62,6 +62,12 @@ export const updateQuizRecordMainForm = updatedMainForm => ({
     updatedMainForm,
 });
 
+export const updateQuizRecordElement = (path, value) => ({
+    type: actionTypes.UPDATE_QUIZ_RECORD_ELEMENT,
+    path,
+    value,
+})
+
 export const setQuizRecordEditModalType = (modalType, path) => ({
     type: actionTypes.SET_QUIZ_RECORD_EDIT_MODAL_TYPE,
     modalType,
