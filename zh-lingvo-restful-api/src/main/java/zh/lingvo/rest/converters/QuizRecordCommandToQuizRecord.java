@@ -33,7 +33,9 @@ public class QuizRecordCommandToQuizRecord implements Converter<QuizRecordComman
 
     @Override
     public QuizRecord convert(@Nullable QuizRecordCommand source) {
-        return source == null ? null : QuizRecord.builder()
+        if (source == null)
+            return null;
+        QuizRecord quizRecord = QuizRecord.builder()
                 .id(source.getId())
                 .wordMainForm(source.getWordMainForm())
                 .pos(convertPos(source))
@@ -44,6 +46,11 @@ public class QuizRecordCommandToQuizRecord implements Converter<QuizRecordComman
                 .translations(convertTranslations(source))
                 .examples(convertExamples(source))
                 .build();
+        quizRecord.getTranslations()
+                .forEach(qt -> qt.setRecord(quizRecord));
+        quizRecord.getExamples()
+                .forEach(qe -> qe.setRecord(quizRecord));
+        return quizRecord;
     }
 
     private PartOfSpeech convertPos(QuizRecordCommand source) {
