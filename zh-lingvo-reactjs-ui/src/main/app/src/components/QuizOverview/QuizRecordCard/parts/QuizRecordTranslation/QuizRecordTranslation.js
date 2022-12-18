@@ -6,7 +6,7 @@ import classes from './QuizRecordTranslation.module.scss';
 import { quizRecordTranslationType } from '../../types';
 
 const QuizRecordTranslation = props => {
-    const { translation, postfix } = props;
+    const { entry: translation, postfix } = props;
     const { value, elaboration } = translation;
     const elaborationComp = elaboration ? (
         <span className={classes.Elaboration}> ({elaboration})</span>
@@ -16,7 +16,7 @@ const QuizRecordTranslation = props => {
 };
 
 QuizRecordTranslation.propTypes = {
-    translation: quizRecordTranslationType.isRequired,
+    entry: quizRecordTranslationType.isRequired,
     postfix: PropTypes.string,
 };
 

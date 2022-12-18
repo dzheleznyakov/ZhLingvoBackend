@@ -13,6 +13,7 @@ import GreetingComponent from './Greeting/Greeting';
 import ListViewComponent from './ListView/ListView';
 import OnHoverEditableBaseComponent from './OnHoverEditableBase/OnHoverEditableBase';
 import StaticEditableBaseComponent from './OnHoverEditableBase/StaticEditableBase';
+import ExcerptComponent from './Excerpt/Excerpt';
 
 export const Backdrop = BackdropComponent;
 export const Dialog = DialogComponent;
@@ -35,3 +36,4 @@ export const Greeting = GreetingComponent;
 export const ListView = ListViewComponent;
 export const OnHoverEditableBase = OnHoverEditableBaseComponent;
 export const StaticEditableBase = StaticEditableBaseComponent;
+export const Excerpt = ExcerptComponent;

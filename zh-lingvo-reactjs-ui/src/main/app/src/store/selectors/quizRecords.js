@@ -24,3 +24,7 @@ export const quizRecordMainFormToUpdateSelector =
     state => _.get(state, 'quizRecords.updatedQuizRecord.wordMainForm', '');
 export const quizRecordStringPropertyToUpdateSelectorFactory = path =>
     state => _.get(updatedQuizRecordSelector(state), path, '');
+export const quizRecordObjectPropertyToUpdateSelectorFactory = path =>
+    state => _.get(updatedQuizRecordSelector(state), path,  {});
+export const quizRecordArrayPropertyToUpdateSelectorFactory = path =>
+    state => _.get(updatedQuizRecordSelector(state), path, []);

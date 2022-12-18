@@ -18,6 +18,9 @@ const QuizRecordEditModal = () => {
         case modalTypes.TRANSCRIPTION_NEW: panel = <dialogs.TranscriptionEditDialog />; break;
         case modalTypes.TRANSCRIPTION_EDIT: panel = <dialogs.TranscriptionEditDialog editing />; break;
         case modalTypes.TRANSCRIPTION_DELETE: panel = <dialogs.TranscriptionDeleteDialog />; break;
+        case modalTypes.TRANSLATION_NEW: panel = <dialogs.TranslationEditDialog />; break;
+        case modalTypes.TRANSLATION_EDIT: panel = <dialogs.TranslationEditDialog editing />; break;
+        case modalTypes.TRANSLATION_DELETE: panel = <dialogs.TranslationDeleteDialog />; break;
         default: panel = null;
     }
 

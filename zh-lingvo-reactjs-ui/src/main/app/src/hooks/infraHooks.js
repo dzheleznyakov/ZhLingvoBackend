@@ -2,10 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { getApp } from '../utils/appUtils';
 import { getCookie, setCookie } from '../utils/cookies';
 import * as actions from '../store/actions';
-import LoginButton from '../components/Control/Navigation/LoginButton/LoginButton';
 
 export const useActionOnMount = action => {
     const dispatch = useDispatch();

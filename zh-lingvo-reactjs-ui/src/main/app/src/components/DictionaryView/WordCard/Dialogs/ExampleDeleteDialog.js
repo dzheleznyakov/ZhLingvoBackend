@@ -1,9 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Dialog } from '../../../UI';
+import { Dialog, Excerpt } from '../../../UI';
 import { Example } from '../WordView/SubWordParts' ;
-import Excerpt from './Excerpt';
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 

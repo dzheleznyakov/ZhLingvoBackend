@@ -33,6 +33,7 @@ const EditableTranslation = props => {
 EditableTranslation.propTypes = {
     entry: translationType.isRequired,
     path: PropTypes.arrayOf(PropTypes.string).isRequired,
+    postfix: PropTypes.string,
 };
 
 export default EditableTranslation;

@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
-import Excerpt from '../../../DictionaryView/WordCard/Dialogs/Excerpt';
-import { Dialog } from '../../../UI';
+import { Dialog, Excerpt } from '../../../UI';
 import { Transcription } from '../parts';
 
 const TranscriptionDeleteDialog = () => {

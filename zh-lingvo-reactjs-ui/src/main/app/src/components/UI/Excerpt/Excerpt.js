@@ -28,8 +28,4 @@ const Excerpt = props => {
     );
 };
 
-Excerpt.propTypes = {};
-
-Excerpt.defaultProps = {};
-
 export default Excerpt;
