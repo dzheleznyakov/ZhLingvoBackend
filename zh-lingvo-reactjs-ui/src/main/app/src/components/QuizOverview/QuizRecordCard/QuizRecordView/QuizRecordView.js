@@ -9,9 +9,11 @@ import { QuizRecordExample, QuizRecordTranslation } from '../parts';
 import EditableTranscription from '../parts/Transcription/EditableTranscription';
 import EditableQuizRecordTranslation, { NULL_QUIZ_RECORD_TRANSLATION } from '../parts/QuizRecordTranslation/EditableQuizRecordTranslation';
 import { quizRecordIsEditingSelector } from '../../../../store/selectors';
+import EditableQuizRecordExample, { NULL_EXAMPLE } from '../parts/QuizRecordExample/EditableQuizRecordExample';
 
 const TRANSCRIPTION_PATH_SEGMENT = 'transcription';
 const TRANSLATIONS_PATH_SEGMENT = 'translations';
+const EXAMPLES_PATH_SEGMENT = 'examples';
 
 const getTranslations = (translations, path, isEditing, editable) => {
     const TranslationComp = editable 
@@ -36,6 +38,27 @@ const getTranslations = (translations, path, isEditing, editable) => {
     return translationComponents;
 }
 
+const getExamples = (examples, path, isEditing, editable) => {
+    const ExampleComp = editable ? EditableQuizRecordExample : QuizRecordExample;
+    const exampleComponents = (examples || [])
+        .map((ex, i) => (
+            <ExampleComp
+                key={ex.id}
+                path={[...path, EXAMPLES_PATH_SEGMENT, `${i}`]}
+                entry={ex}
+            />
+        ));
+    
+    if (editable && isEditing)
+        exampleComponents.push(<EditableQuizRecordExample 
+            key="example-new"
+            path={[...path, EXAMPLES_PATH_SEGMENT, `${examples.length}`]}
+            entry={NULL_EXAMPLE}
+        />);
+
+    return exampleComponents;
+};
+
 const QuizRecordView = props => {
     const { quizRecord } = props;
     const { transcription, translations, examples } = quizRecord;
@@ -48,12 +71,7 @@ const QuizRecordView = props => {
     );
 
     const translationElements = getTranslations(translations, [], isEditing, true);
-
-    const exampleElements = examples
-            .map(example => <QuizRecordExample 
-                key={`qr_example-${example.id}`}
-                example={example}
-            />);
+    const exampleElements = getExamples(examples, [], isEditing, true);
 
     return (
         <div className={classes.QuizRecoedView}>

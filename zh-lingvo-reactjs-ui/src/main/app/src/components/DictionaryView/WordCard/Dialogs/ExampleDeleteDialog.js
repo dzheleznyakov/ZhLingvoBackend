@@ -25,7 +25,7 @@ const ExampleDeleteDialog = () => {
             close={() => dispatch(actions.shouldShowWordEditModal(false))}
             confirmed={onConfirm}
         >
-            Are you sure you want to delete this translation?
+            Are you sure you want to delete this example?
             <Excerpt>
                 <Example entry={example} />
             </Excerpt>

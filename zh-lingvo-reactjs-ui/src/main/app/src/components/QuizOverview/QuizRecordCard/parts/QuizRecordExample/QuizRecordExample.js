@@ -6,7 +6,7 @@ import { quizRecordExampleType } from '../../types';
 import { Remark } from '../../../../DictionaryView/WordCard/WordView/SubWordParts';
 
 const QuizRecordExample = props => {
-    const { example } = props;
+    const { entry: example } = props;
     const { remark, expression, explanation } = example;
 
     return (
@@ -20,7 +20,7 @@ const QuizRecordExample = props => {
 };
 
 QuizRecordExample.propTypes = {
-    example: quizRecordExampleType.isRequired,
+    entry: quizRecordExampleType.isRequired,
 };
 
 export default QuizRecordExample;
