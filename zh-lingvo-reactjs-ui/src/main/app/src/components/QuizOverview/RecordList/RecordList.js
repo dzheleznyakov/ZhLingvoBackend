@@ -15,6 +15,7 @@ const RecordList = () => {
     const { qid: quizId, rid } = useParams();
     const dispatch = useDispatch();
     const overviews = useSelector(selectors.quizRecordsOverviewsSelector);
+    const isEditing = useSelector(selectors.quizRecordIsEditingSelector);
 
     const selectedIndex = rid !== null && rid !== undefined
         ? overviews.findIndex(overview => overview.id === +rid)
@@ -54,6 +55,7 @@ const RecordList = () => {
         <div className={wrapperClasses.join(' ')}>
             {listView}
             <RecordListControl />
+            {isEditing && <div className={classes.Overlay} />}
         </div>
     );
 };

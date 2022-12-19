@@ -5,6 +5,7 @@
 $wrapper-min-width: $list_view_min_width;
 $wrapper-margin-left: calc((100vw - #{$wrapper-min-width}) / 2);
 .QuizRecordListWrapper {
+    position: relative;
     margin: 0 auto 0 $wrapper-margin-left;
 
     transition: margin-left 1s ease;
@@ -20,4 +21,14 @@ $wrapper-margin-left: calc((100vw - #{$wrapper-min-width}) / 2);
         margin-left: 0;
         margin-right: 10%;
     }
+}
+
+.Overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    opacity: 0.5;
 }

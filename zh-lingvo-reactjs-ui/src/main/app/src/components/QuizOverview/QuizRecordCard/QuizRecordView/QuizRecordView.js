@@ -74,7 +74,7 @@ const QuizRecordView = props => {
     const exampleElements = getExamples(examples, [], isEditing, true);
 
     return (
-        <div className={classes.QuizRecoedView}>
+        <div className={classes.QuizRecordView}>
             {transcriptionElement}
             {translationElements}
             {exampleElements}
