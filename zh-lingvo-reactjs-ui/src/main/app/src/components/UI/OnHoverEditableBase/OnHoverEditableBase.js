@@ -7,9 +7,10 @@ import ButtonBox from './ButtonBox';
 const OnHoverEditableBase = props => {
     const {
         children,
+        newModalType,
         editModalType,
         deleteModalType,
-        newModalType,
+        redirectModalType,
         block,
         isEditing,
         modalTypeToAction,
@@ -31,6 +32,7 @@ const OnHoverEditableBase = props => {
         newModalType={newModalType}
         editModalType={editModalType}
         deleteModalType={deleteModalType}
+        redirectModalType={redirectModalType}
         show={hovered}
         buttonsCoordinates={buttonsCoordinates}
         afterActionCb={() => setHovered(false)}
@@ -55,9 +57,10 @@ const OnHoverEditableBase = props => {
 
 OnHoverEditableBase.propTypes = {
     children: PropTypes.node.isRequired,
+    newModalType: PropTypes.string,
     editModalType: PropTypes.string,
     deleteModalType: PropTypes.string,
-    newModalType: PropTypes.string,
+    redirectModalType: PropTypes.string,
     block: PropTypes.bool,
     isEditing: PropTypes.bool,
     modalTypeToAction: PropTypes.func.isRequired,

@@ -6,11 +6,11 @@ import classes from './Dialog.module.scss';
 import { ActionButton, actionButtonTypes } from '../';
 
 const Dialog = props => {
-    const { children, close, confirmed, cancelled, disabled } = props;
+    const { children, close, confirmed, cancelled, disabled, chained } = props;
 
     const onConfirm = event => {
         confirmed && confirmed(event);
-        close();
+        !chained && close();
     };
 
     const onCancel = event => {
@@ -36,6 +36,7 @@ Dialog.propTypes = {
     confirmed: PropTypes.func,
     cancelled: PropTypes.func,
     disabled: PropTypes.bool,
+    chained: PropTypes.bool,
     children: PropTypes.node,
 };
 
@@ -43,6 +44,7 @@ Dialog.defaultProps = {
     confirmed: () => {},
     cancelled: () => {},
     disabled: false,
+    chained: false,
     children: null,
 };
 

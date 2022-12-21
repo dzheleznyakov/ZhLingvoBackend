@@ -51,5 +51,5 @@ export const useModal = (show, onClosed, content) => {
             dispatch(actions.setModal(onClosed, content));
         else
             dispatch(actions.clearModal());
-    }, [show]);
+    }, [show, onClosed, content]);
 };
