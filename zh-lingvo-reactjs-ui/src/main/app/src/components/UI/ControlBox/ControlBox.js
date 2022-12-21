@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
 import classes from './ControlBox.module.scss';
 
 import { IconButton, iconButtonTypes, Modal } from '../../UI';
+import * as actions from '../../../store/actions';
+import { useModal } from '../../../hooks';
 
 export const MODAL_TYPES = {
     NEW: 'NEW',
@@ -20,6 +23,7 @@ const ControlBox = props => {
     const { panelKeyPrefix, disabled, panels } = props;
     const [modalType, setModalType] = useState(MODAL_TYPES.NONE);
     const showModal = modalType !== MODAL_TYPES.NONE;
+    const dispatch = useDispatch();
 
     const closeModal = () => setModalType(MODAL_TYPES.NONE);
 
@@ -48,13 +52,12 @@ const ControlBox = props => {
             />;
         });
 
+    useModal(showModal, closeModal, <Panel close={closeModal} />);
+
     return (
-        <>
-            <div className={classes.ButtonBox}>
+        <div className={classes.ButtonBox}>
                 {buttons}
-            </div>
-            <Modal show={showModal} close={closeModal}><Panel close={closeModal} /></Modal>
-        </>
+        </div>
     );
 };
 

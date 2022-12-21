@@ -43,3 +43,13 @@ export const useLastVisitedPage = () => {
         dispatch(actions.finishStartingUp());
     }, []);
 };
+
+export const useModal = (show, onClosed, content) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (show)
+            dispatch(actions.setModal(onClosed, content));
+        else
+            dispatch(actions.clearModal());
+    }, [show]);
+};

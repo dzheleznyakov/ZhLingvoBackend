@@ -43,3 +43,13 @@ export const setPos = posList => ({
     type: actionTypes.SET_POS,
     posList,
 });
+
+export const setModal = (onClosed, content) => ({
+    type: actionTypes.SET_MODAL,
+    onClosed,
+    content,
+});
+
+export const clearModal = () => ({
+    type: actionTypes.CLEAR_MODAL,
+});

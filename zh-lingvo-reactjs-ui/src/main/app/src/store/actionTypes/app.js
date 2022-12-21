@@ -14,3 +14,6 @@ export const FETCH_ALL_LANGUAGES_FAILURE = 'FETCH_ALL_LANGUAGES_FAILURE';
 
 export const FETCH_POS = 'FETCH_POS';
 export const SET_POS = 'SET_POS';
+
+export const SET_MODAL = 'SET_MODAL';
+export const CLEAR_MODAL = 'CLEAR_MODAL';

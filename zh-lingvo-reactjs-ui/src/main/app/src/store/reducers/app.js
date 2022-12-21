@@ -9,6 +9,9 @@ const initialState = {
     app: null,
     languages: [],
     posList: [],
+    modal: {
+        show: false,
+    },
 };
 
 const gen = (function* idGen() {
@@ -62,11 +65,30 @@ const setPos = (state, action) => ({
     posList: action.posList,
 });
 
+const setModal = (state, action) => ({
+    ...state,
+    modal: {
+        onClosed: action.onClosed,
+        content: action.content,
+        show: true,
+    },
+});
+
+const clearModal = (state) => ({
+    ...state,
+    modal: {
+        show: false,
+    },
+});
+
 const signOut = (state) => ({
     ...state,
     showSidebar: false,
     errors: [],
     navigationDestination: null,
+    modal: {
+        show: false,
+    },
 });
 
 const reducer = (state = initialState, action) => {
@@ -78,6 +100,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_APP: return setApp(state, action);
         case actionTypes.FETCH_ALL_LANGUAGES_SUCCESS: return fetchAllLanguages(state, action);
         case actionTypes.SET_POS: return setPos(state, action);
+        case actionTypes.SET_MODAL: return setModal(state, action);
+        case actionTypes.CLEAR_MODAL: return clearModal(state, action);
         case SIGN_OUT: return signOut(state, action);
         default: return state;
     }

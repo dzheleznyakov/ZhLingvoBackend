@@ -6,6 +6,7 @@ import * as modalTypes from '../../../../static/constants/quizRecordEditModalTyp
 import * as dialogs from '../Dialogs';
 import { Modal } from '../../../UI';
 import { shouldShowQuizRecordEditModal } from '../../../../store/actions';
+import { useModal } from '../../../../hooks';
 
 const QuizRecordEditModal = () => {
     const showModal = useSelector(showQuizRecordEditModalSelector);
@@ -27,14 +28,13 @@ const QuizRecordEditModal = () => {
         default: panel = null;
     }
 
-    return (
-        <Modal
-            show={showModal}
-            close={() => dispatch(shouldShowQuizRecordEditModal(false))}
-        >
-            {panel}
-        </Modal>
+    useModal(
+        showModal,
+        () => dispatch(shouldShowQuizRecordEditModal(false)),
+        panel,
     );
+
+    return <></>;
 };
 
 export default QuizRecordEditModal;

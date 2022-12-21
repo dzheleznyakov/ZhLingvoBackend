@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Modal } from '../../../UI';
@@ -6,6 +6,7 @@ import * as selectors from '../../../../store/selectors';
 import * as actions from '../../../../store/actions';
 import * as modalTypes from '../../../../static/constants/wordEditModalTypes';
 import * as dialogs from '../Dialogs';
+import { useModal } from '../../../../hooks';
 
 const WordEditModal = () => {
     const showWordEditModal = useSelector(selectors.shouldShowWordEditModalSelector);
@@ -35,14 +36,9 @@ const WordEditModal = () => {
         default: panel = null;
     }
 
-    return (
-        <Modal 
-            show={showWordEditModal}
-            close={() => dispatch(actions.shouldShowWordEditModal(false))}
-        >
-            {panel}
-        </Modal>
-    );
+    useModal(showWordEditModal, () => dispatch(actions.shouldShowWordEditModal(false)), panel);
+
+    return <></>;
 };
 
 export default WordEditModal;
