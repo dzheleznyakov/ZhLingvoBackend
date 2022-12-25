@@ -96,3 +96,21 @@ export const updateQuizSettingsSuccess = (quizId, settings) => ({
     quizId,
     settings,
 });
+
+export const fetchAllQuizzesByLanguage = language => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE,
+    language,
+});
+
+export const fetchAllQuizzesByLanguageStart = () => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_START,
+});
+
+export const fetchAllQuizzesByLanguageSuccess = quizzes => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_SUCCESS,
+    quizzes,
+});
+
+export const fetchAllQuizzesByLanguageFailure = () => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_FAILURE,
+});

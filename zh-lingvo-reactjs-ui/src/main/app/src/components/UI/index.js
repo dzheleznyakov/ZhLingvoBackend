@@ -1,5 +1,6 @@
 import BackdropComponent from './Backdrop/Backdrop';
 import DialogComponent from './Dialog/Dialog';
+import DialogBaseComponent from './Dialog/DialogBase';
 import ErrorComponent from './Error/ErrorContainer';
 import FormComponent from './Form/Form';
 import ModalComponent from './Modal/Modal';
@@ -17,6 +18,7 @@ import ExcerptComponent from './Excerpt/Excerpt';
 
 export const Backdrop = BackdropComponent;
 export const Dialog = DialogComponent;
+export const DialogBase = DialogBaseComponent;
 export const Error = ErrorComponent;
 export const Form = FormComponent;
 export * as formInputTypes from './Form/inputTypes';

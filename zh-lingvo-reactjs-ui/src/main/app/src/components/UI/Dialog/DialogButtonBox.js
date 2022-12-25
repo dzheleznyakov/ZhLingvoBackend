@@ -28,15 +28,15 @@ const DialogButtonBox = props => {
 const actionButtonTypesArray = Object.keys(actionButtonTypes)
     .map(key => actionButtonTypes[key]);
 
+export const dialogButtonConfigType = PropTypes.shape({
+    type: PropTypes.oneOf(actionButtonTypesArray).isRequired,
+    onClicked: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
+    label: PropTypes.string.isRequired,
+});
+
 DialogButtonBox.propTypes = {
-    buttons: PropTypes.arrayOf(
-        PropTypes.shape({
-            type: PropTypes.oneOf(actionButtonTypesArray).isRequired,
-            onClicked: PropTypes.func.isRequired,
-            disabled: PropTypes.bool,
-            label: PropTypes.string,
-        }),
-    ),
+    buttons: PropTypes.arrayOf(dialogButtonConfigType),
 };
 
 DialogButtonBox.defaultProps = {

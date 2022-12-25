@@ -25,3 +25,5 @@ export const quizzesTableDataSelector = createSelector(
         language: { value: qz.targetLanguage.name },
     }))
 );
+
+export const meaningToQuizRecordSelector = state => state.quizzes.meaningToQuizRecord;

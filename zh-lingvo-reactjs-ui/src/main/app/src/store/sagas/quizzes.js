@@ -125,3 +125,17 @@ export function* updateQuizSettingsSaga(action) {
         yield put(actions.addError(error.response.data, `Error while updateing settings for quiz [${quizId}]`));
     }
 }
+
+export function* fetchAllQuizzesByLanguage(action) {
+    const { language } = action;
+    const { code: langCode } = language;
+
+    yield put(actions.fetchAllQuizzesByLanguageStart());
+    try {
+        const { data: quizzes } = yield call(api.get, '/quizzes',  { params: { lang: langCode }});
+        yield put(actions.fetchAllQuizzesByLanguageSuccess(quizzes));
+    } catch (error) {
+        yield put(actions.addError(error.response.data, 'Error while fetching quizzes'));
+        yield put(actions.fetchAllQuizzesByLanguageFailure());
+    }
+}

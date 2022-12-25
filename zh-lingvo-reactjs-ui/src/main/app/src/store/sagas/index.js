@@ -42,6 +42,8 @@ export function* quizzesWatcher() {
     yield takeLatest(actionTypes.FETCH_QUIZ_REGIMES, quizzesSagas.fetchQuizRegimesSaga);
     yield takeLatest(actionTypes.FETCH_QUIZ_SETTINGS, quizzesSagas.fetchQuizSettingsSaga);
     yield takeEvery(actionTypes.UPDATE_QUIZ_SETTINGS, quizzesSagas.updateQuizSettingsSaga);
+
+    yield takeEvery(actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE, quizzesSagas.fetchAllQuizzesByLanguage);
 }
 
 export function* quizRecordsWatcher() {

@@ -9,6 +9,10 @@ const initialState = {
     matchingRegimes: [],
     quizRegimes: [],
     settings: {},
+    meaningToQuizRecord: {
+        quizzes: [],
+        loadingQuizzes: false,
+    },
 };
 
 const fetchAllQuizzesStart = state => ({
@@ -82,6 +86,39 @@ const updateQuizSettingsSuccess = (state, action) => {
     return fetchQuizSettingsSuccess(state, action);
 };
 
+const updateMeaningToQuizRecord = (state, action, decorator) => {
+    const updatedMeaningToQuizRecord = {
+        ...state.meaningToQuizRecord,
+    };
+    return {
+        ...state,
+        meaningToQuizRecord: decorator(updatedMeaningToQuizRecord, action),
+    };
+};
+
+const fetchAllQuizzesByLanguageStart = state => updateMeaningToQuizRecord(state, null,
+  umtqr => {
+    umtqr.loadingQuizzes = true;
+    return umtqr;
+  },
+);
+
+const fetchAllQuizzesByLanguageSuccess = (state, action) => updateMeaningToQuizRecord(state, action,
+    (umtqr, ac) => {
+        umtqr.loadingQuizzes = false;
+        umtqr.quizzes = ac.quizzes;
+        return umtqr;
+    },
+);
+
+const fetchAllQuizzesByLanguageFailure = state => updateMeaningToQuizRecord(state, null, 
+    umtqr => {
+        umtqr.loadingQuizzes = false;
+        umtqr.quizzes = [];
+        return umtqr;
+    }
+);
+
 const signOut = state => ({
     ...state,
     quizzes: [],
@@ -102,6 +139,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_QUIZ_REGIMES_SUCCESS: return fetchQuizRegimesSuccess(state, action);
         case actionTypes.FETCH_QUIZ_SETTINGS_SUCCESS: return fetchQuizSettingsSuccess(state, action);
         case actionTypes.UPDATE_QUIZ_SETTINGS_SUCCESS: return updateQuizSettingsSuccess(state, action); 
+        case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_START: return fetchAllQuizzesByLanguageStart(state, action);
+        case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_SUCCESS: return fetchAllQuizzesByLanguageSuccess(state, action);
+        case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_FAILURE: return fetchAllQuizzesByLanguageFailure(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

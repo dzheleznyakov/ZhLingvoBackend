@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import classes from './Dialog.module.scss';
 
-import { ActionButton, actionButtonTypes } from '../';
+import { actionButtonTypes } from '../';
 import DialogButtonBox from './DialogButtonBox';
+import DialogBase from './DialogBase';
 
 const Dialog = props => {
     const { children, close, confirmed, cancelled, disabled, chained } = props;
@@ -27,10 +28,9 @@ const Dialog = props => {
     ];
 
     return (
-        <div className={classes.Dialog}>
+        <DialogBase buttons={buttons}>
             {children}
-            <DialogButtonBox buttons={buttons} />
-        </div>
+        </DialogBase>
     );
 };
 
