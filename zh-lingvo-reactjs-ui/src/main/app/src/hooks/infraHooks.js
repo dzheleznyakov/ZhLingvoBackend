@@ -44,12 +44,12 @@ export const useLastVisitedPage = () => {
     }, []);
 };
 
-export const useModal = (show, onClosed, content) => {
+export const useModal = (show, onClosed, content, deps = []) => {
     const dispatch = useDispatch();
     useEffect(() => {
         if (show)
             dispatch(actions.setModal(onClosed, content));
         else
             dispatch(actions.clearModal());
-    }, [show, onClosed, content]);
+    }, [show, ...deps]);
 };

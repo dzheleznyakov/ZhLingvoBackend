@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
 import classes from './ControlBox.module.scss';
 
-import { IconButton, iconButtonTypes, Modal } from '../../UI';
+import { IconButton, iconButtonTypes } from '../../UI';
 import * as actions from '../../../store/actions';
 import { useModal } from '../../../hooks';
 
@@ -23,7 +23,6 @@ const ControlBox = props => {
     const { panelKeyPrefix, disabled, panels } = props;
     const [modalType, setModalType] = useState(MODAL_TYPES.NONE);
     const showModal = modalType !== MODAL_TYPES.NONE;
-    const dispatch = useDispatch();
 
     const closeModal = () => setModalType(MODAL_TYPES.NONE);
 
@@ -31,17 +30,18 @@ const ControlBox = props => {
         .filter(panelConfig => panelConfig.modalType === modalType)
         .map(panelConfig => panelConfig.panel);
     const Panel = panelContainer.length === 0 ? () => null : panelContainer[0];
+    const panel =  <Panel close={closeModal} />;
 
     const buttons = panels
         .map(panelConfig => {
             const buttonType = panelConfig.modalType;
 
             let { disabled: buttonDisabled } = panelConfig;
-            if (buttonDisabled === null || buttonDisabled === undefined)
+            if (buttonDisabled == null)
                 buttonDisabled = disabled;
 
             let buttonClicked = panelConfig.clicked;
-            if (buttonClicked === null || buttonClicked === undefined)
+            if (buttonClicked == null)
                 buttonClicked = () => setModalType(buttonType);
 
             return <IconButton
@@ -52,7 +52,7 @@ const ControlBox = props => {
             />;
         });
 
-    useModal(showModal, closeModal, <Panel close={closeModal} />);
+    useModal(showModal, closeModal, panel, [modalType]);
 
     return (
         <div className={classes.ButtonBox}>

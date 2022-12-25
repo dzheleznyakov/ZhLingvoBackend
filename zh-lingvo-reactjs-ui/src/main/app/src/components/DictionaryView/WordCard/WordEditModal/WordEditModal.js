@@ -41,7 +41,11 @@ const WordEditModal = () => {
         default: panel = null;
     }
 
-    useModal(showWordEditModal, () => dispatch(actions.shouldShowWordEditModal(false)), panel);
+    useModal(
+        showWordEditModal, 
+        () => dispatch(actions.shouldShowWordEditModal(false)), 
+        panel,
+        [wordEditModalType]);
 
     return <></>;
 };

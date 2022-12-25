@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classes from './Dialog.module.scss';
 
 import { ActionButton, actionButtonTypes } from '../';
+import DialogButtonBox from './DialogButtonBox';
 
 const Dialog = props => {
     const { children, close, confirmed, cancelled, disabled, chained } = props;
@@ -20,13 +21,15 @@ const Dialog = props => {
 
     const { CANCEL, CONFIRM } = actionButtonTypes;
 
+    const buttons = [
+        { type: CONFIRM, onClicked: onConfirm, disabled: disabled, label: 'OK' },
+        { type: CANCEL, onClicked: onCancel, label: 'Cancel' },
+    ];
+
     return (
         <div className={classes.Dialog}>
             {children}
-            <div className={classes.ButtonBox}>
-                <ActionButton type={CONFIRM} clicked={onConfirm} disabled={disabled}>OK</ActionButton>
-                <ActionButton type={CANCEL} clicked={onCancel}>Cancel</ActionButton>
-            </div>
+            <DialogButtonBox buttons={buttons} />
         </div>
     );
 };

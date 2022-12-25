@@ -1,5 +1,6 @@
 package zh.lingvo.data.services;
 
+import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.User;
 
@@ -12,6 +13,8 @@ public interface QuizService {
     boolean existsById(Long id, User user);
 
     List<Quiz> findAll(User user);
+
+    List<Quiz> findAll(User user, Language language);
 
     Optional<Quiz> save(Quiz quiz, User user);
 
