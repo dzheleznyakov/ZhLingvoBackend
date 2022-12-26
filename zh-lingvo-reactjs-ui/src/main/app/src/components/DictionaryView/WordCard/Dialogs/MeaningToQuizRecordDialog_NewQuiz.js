@@ -16,7 +16,6 @@ import { useAutofocus } from '../../../../hooks';
 const MeaningToQuizRecordDialog_NewQuiz = () => {
     const { language } = useSelector(selectors.loadedDictionarySelector);
     const path = useSelector(selectors.wordEditPathSelector);
-    const [nameFieldDisabled, setNameFieldDisabled] = useState(false);
     const [valid, setValid] = useState(false);
     const [creatingNewQuiz, setCreatingNewQuiz] = useState(false);
     const dispatch = useDispatch();
@@ -34,7 +33,7 @@ const MeaningToQuizRecordDialog_NewQuiz = () => {
         defaultValue: '',
         groupKey: quizGroup.key,
         forwardRef: nameRef,
-        disabled: nameFieldDisabled,
+        disabled: creatingNewQuiz,
         validation: [{
             validate: validators.minLength(3),
             failureMessage: 'Quiz name should contain at least 3 characters',
@@ -57,7 +56,6 @@ const MeaningToQuizRecordDialog_NewQuiz = () => {
 
     const onBack = () => dispatch(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__CHOOSE_QUIZ, path));
     const onOk = () => {
-        setNameFieldDisabled(true);
         setCreatingNewQuiz(true);
         const name = nameRef.current.value;
         dispatch(actions.createQuizForMeaningToQuizRecord(name, language));
