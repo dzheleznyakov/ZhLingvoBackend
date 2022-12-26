@@ -114,3 +114,14 @@ export const fetchAllQuizzesByLanguageSuccess = quizzes => ({
 export const fetchAllQuizzesByLanguageFailure = () => ({
     type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_FAILURE,
 });
+
+export const createQuizForMeaningToQuizRecord = (name, targetLanguage) => ({
+    type: actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD,
+    name,
+    targetLanguage,
+});
+
+export const createQuizForMeaningToQuizRecordSuccess = quiz => ({
+    type: actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD_SUCCESS,
+    quiz,
+});

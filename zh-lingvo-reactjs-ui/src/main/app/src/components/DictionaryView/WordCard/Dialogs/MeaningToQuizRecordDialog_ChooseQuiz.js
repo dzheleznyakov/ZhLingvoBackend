@@ -7,7 +7,10 @@ import { useActionOnMount } from '../../../../hooks';
 import * as actions from '../../../../store/actions';
 import * as selectors from '../../../../store/selectors';
 import { actionButtonTypes, DialogBase, ListView, Spinner } from '../../../UI';
-import { MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD } from '../../../../static/constants/wordEditModalTypes';
+import { 
+    MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD, 
+    MEANING_TO_QUIZ_RECORD__NEW_QUIZ, 
+} from '../../../../static/constants/wordEditModalTypes';
 
 const MeaningToQuizRecordDialog_ChooseQuiz = () => { 
     const { language } = useSelector(selectors.loadedDictionarySelector);
@@ -35,10 +38,10 @@ const MeaningToQuizRecordDialog_ChooseQuiz = () => {
 
     const onBack = () => dispatch(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD, path));
     const onConfirm = () => {};
-    const onNew = () => {};
+    const onNew = () => dispatch(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__NEW_QUIZ, path));
     const onClosed = () => dispatch(actions.shouldShowWordEditModal(false));
     const { CONFIRM, CANCEL } = actionButtonTypes
-    let buttons = [
+    const buttons = [
         { type: CANCEL, onClicked: onBack, label: 'Back'},
         { type: CONFIRM, onClicked: onConfirm, disabled: selectedQuizIndex < 0, label: 'OK' },
         { type: CONFIRM, onClicked: onNew, disabled: loadingQuizzes, label: 'New' },

@@ -1,6 +1,7 @@
 import { all, call, put, select } from "redux-saga/effects";
 
 import api from '../../axios-api';
+import { MEANING_TO_QUIZ_RECORD__RESULT } from "../../static/constants/wordEditModalTypes";
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { quizSettingsSelector } from "../selectors";
@@ -126,7 +127,7 @@ export function* updateQuizSettingsSaga(action) {
     }
 }
 
-export function* fetchAllQuizzesByLanguage(action) {
+export function* fetchAllQuizzesByLanguageSaga(action) {
     const { language } = action;
     const { code: langCode } = language;
 
@@ -137,5 +138,19 @@ export function* fetchAllQuizzesByLanguage(action) {
     } catch (error) {
         yield put(actions.addError(error.response.data, 'Error while fetching quizzes'));
         yield put(actions.fetchAllQuizzesByLanguageFailure());
+    }
+}
+
+export function* createQuizForMeaningToQuizRecordSaga(action) {
+    const { name, targetLanguage } = action;
+    const newQuiz = { name, targetLanguage };
+
+    try {
+        const { data: quiz } = yield call(api.post, '/quizzes', newQuiz);
+        yield put(actions.createQuizForMeaningToQuizRecordSuccess(quiz));
+        yield put(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__RESULT));
+    } catch (error) {
+        yield put(actions.addError(error.response.data, `Error while creating dictionary [${name}]`));
+        return;
     }
 }

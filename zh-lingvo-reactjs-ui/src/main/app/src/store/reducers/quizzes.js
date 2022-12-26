@@ -12,6 +12,7 @@ const initialState = {
     meaningToQuizRecord: {
         quizzes: [],
         loadingQuizzes: false,
+        targetQuiz: {},
     },
 };
 
@@ -119,6 +120,13 @@ const fetchAllQuizzesByLanguageFailure = state => updateMeaningToQuizRecord(stat
     }
 );
 
+const createQuizForMeaningToQuizRecordSuccess = (state, action) => updateMeaningToQuizRecord(state, action,
+    (umtqr, ac) => {
+        umtqr.targetQuiz = ac.quiz;
+        return umtqr;
+    },
+);
+
 const signOut = state => ({
     ...state,
     quizzes: [],
@@ -142,6 +150,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_START: return fetchAllQuizzesByLanguageStart(state, action);
         case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_SUCCESS: return fetchAllQuizzesByLanguageSuccess(state, action);
         case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_FAILURE: return fetchAllQuizzesByLanguageFailure(state, action);
+        case actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD_SUCCESS: return createQuizForMeaningToQuizRecordSuccess(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }
