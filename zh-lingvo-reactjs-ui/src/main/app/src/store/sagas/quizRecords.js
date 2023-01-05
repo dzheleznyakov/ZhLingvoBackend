@@ -21,7 +21,7 @@ export function* fetchQuizRecords(action) {
     }
 }
 
-export function* createQuizSaga(action) {
+export function* createQuizRecordSaga(action) {
     const { quizId, wordMainForm, pos } = action;
     try { 
         const newRecord = { wordMainForm, pos };
@@ -124,4 +124,25 @@ export function* updateQuizRecordSaga(action) {
     const selectedQuizRecordIndex = recordList.findIndex(rec => rec.id === record.id);
     yield put(actions.selectQuizRecord(selectedQuizRecordIndex));
     yield put(actions.navigateTo(`/tutor/quiz/${quizId}/${record.id}`));
+}
+
+export function* convertMeaningToQuizRecordSaga(action) {
+    const { meaning } = action;
+    
+    yield put(actions.convertMeaningToQuizRecordStart());
+    const { targetQuiz: quiz } = yield select(selectors.meaningToQuizRecordSelector);
+
+    const meaningId = meaning.id;
+    const quizId = quiz.id;
+
+    try {
+        yield call(api.post, `/quizzes/${quizId}/records/meaning/${meaningId}`, {});
+        yield put(actions.convertMeaningToQuizRecordSuccess());
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while creating a quiz record from meaning [${meaningId}] for quiz [${quizId}]`,
+        ));
+        yield put(actions.convertMeaningToQuizRecordFailure());
+    }
 }

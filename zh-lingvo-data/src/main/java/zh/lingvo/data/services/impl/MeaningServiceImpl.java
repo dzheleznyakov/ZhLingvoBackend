@@ -1,5 +1,6 @@
 package zh.lingvo.data.services.impl;
 
+import org.springframework.stereotype.Service;
 import zh.lingvo.data.model.Meaning;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
@@ -9,6 +10,7 @@ import zh.lingvo.data.services.WordService;
 
 import java.util.Optional;
 
+@Service
 public class MeaningServiceImpl implements MeaningService {
     private final MeaningRepository meaningRepository;
     private final WordService wordService;

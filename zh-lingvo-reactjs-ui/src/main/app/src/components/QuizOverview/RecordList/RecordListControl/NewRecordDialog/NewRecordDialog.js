@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Form, formInputTypes, validators } from '../../../../UI';
@@ -9,8 +8,7 @@ import * as actions from '../../../../../store/actions';
 import { posListSelector } from '../../../../../store/selectors';
 
 const NewRecordDialog = props => {
-    const { close } = props;
-    const { qid: quizId } = useParams();
+    const { close, quizId } = props;
     const posList = useSelector(posListSelector)
     const dispatch = useDispatch();
 
@@ -63,6 +61,7 @@ const NewRecordDialog = props => {
 
 NewRecordDialog.propTypes = {
     close: PropTypes.func.isRequired,
+    quizId: PropTypes.string.isRequired
 };
 
 export default NewRecordDialog;

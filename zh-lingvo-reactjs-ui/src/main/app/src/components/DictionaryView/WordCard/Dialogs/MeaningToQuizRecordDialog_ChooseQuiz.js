@@ -9,7 +9,8 @@ import * as selectors from '../../../../store/selectors';
 import { actionButtonTypes, DialogBase, ListView, Spinner } from '../../../UI';
 import { 
     MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD, 
-    MEANING_TO_QUIZ_RECORD__NEW_QUIZ, 
+    MEANING_TO_QUIZ_RECORD__NEW_QUIZ,
+    MEANING_TO_QUIZ_RECORD__RESULT, 
 } from '../../../../static/constants/wordEditModalTypes';
 
 const MeaningToQuizRecordDialog_ChooseQuiz = () => { 
@@ -37,7 +38,11 @@ const MeaningToQuizRecordDialog_ChooseQuiz = () => {
     }
 
     const onBack = () => dispatch(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD, path));
-    const onConfirm = () => {};
+    const onConfirm = () => {
+        const selectedQuiz = quizzes[selectedQuizIndex];
+        dispatch(actions.createQuizForMeaningToQuizRecordSuccess(selectedQuiz));
+        dispatch(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__RESULT, path))
+    };
     const onNew = () => dispatch(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__NEW_QUIZ, path));
     const onClosed = () => dispatch(actions.shouldShowWordEditModal(false));
     const { CONFIRM, CANCEL } = actionButtonTypes

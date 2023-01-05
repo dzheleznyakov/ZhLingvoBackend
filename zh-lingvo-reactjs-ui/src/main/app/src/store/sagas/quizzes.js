@@ -4,6 +4,7 @@ import api from '../../axios-api';
 import { MEANING_TO_QUIZ_RECORD__RESULT } from "../../static/constants/wordEditModalTypes";
 import * as actions from '../actions';
 import * as selectors from '../selectors';
+import * as APPS from '../../static/constants/apps';
 import { quizSettingsSelector } from "../selectors";
 
 export function* fetchAllQuizzesSaga() {
@@ -148,9 +149,17 @@ export function* createQuizForMeaningToQuizRecordSaga(action) {
     try {
         const { data: quiz } = yield call(api.post, '/quizzes', newQuiz);
         yield put(actions.createQuizForMeaningToQuizRecordSuccess(quiz));
-        yield put(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__RESULT));
+        const path = yield select(selectors.wordEditPathSelector);
+        yield put(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__RESULT, path));
     } catch (error) {
         yield put(actions.addError(error.response.data, `Error while creating dictionary [${name}]`));
         return;
     }
+}
+
+export function* navigateToQuizSaga(action) {
+    const { quizId } = action;
+    yield put(actions.shouldShowWordEditModal(false));
+    yield put(actions.setApp(APPS.TUTOR));
+    yield put(actions.navigateTo(`/tutor/quiz/${quizId}`));
 }

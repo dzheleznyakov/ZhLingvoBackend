@@ -8,7 +8,7 @@ import QuizSettingsDialog from './QuizSettingsDialog/QuizSettingsDialog';
 
 
 const RecordListControl = () => {
-    const { rid: recordId } = useParams();
+    const { rid: recordId, qid: quizId } = useParams();
     const noRecordSelected = recordId === null || recordId === undefined;
 
     return <ControlBox
@@ -18,16 +18,19 @@ const RecordListControl = () => {
             {
                 modalType: MODAL_TYPES.NEW,
                 panel: NewRecordDialog,
+                panelProps: { quizId },
                 disabled: false,
             },
             {
                 modalType: MODAL_TYPES.SETTINGS,
                 panel: QuizSettingsDialog,
+                panelProps: { quizId },
                 disabled: false,
             },
             {
                 modalType: MODAL_TYPES.DELETE,
                 panel: DeleteRecordDialog,
+                panelProps: { quizId, recordId },
             },
         ]}
     />;

@@ -1,11 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 
 import classes from './ControlBox.module.scss';
 
 import { IconButton, iconButtonTypes } from '../../UI';
-import * as actions from '../../../store/actions';
 import { useModal } from '../../../hooks';
 
 export const MODAL_TYPES = {
@@ -28,9 +26,9 @@ const ControlBox = props => {
 
     const panelContainer = panels
         .filter(panelConfig => panelConfig.modalType === modalType)
-        .map(panelConfig => panelConfig.panel);
-    const Panel = panelContainer.length === 0 ? () => null : panelContainer[0];
-    const panel =  <Panel close={closeModal} />;
+        .map(panelConfig => [panelConfig.panel, panelConfig.panelProps]);
+    const [Panel, panelProps = {}] = panelContainer.length === 0 ? [() => null, {}] : panelContainer[0];
+    const panel =  <Panel {...panelProps} close={closeModal} />;
 
     const buttons = panels
         .map(panelConfig => {
@@ -68,6 +66,7 @@ ControlBox.propTypes = {
             PropTypes.shape({
                 modalType: PropTypes.oneOf(modalTypesArray).isRequired,
                 panel: PropTypes.func,
+                panelProps: PropTypes.shape({}),
                 clicked: PropTypes.func,
                 disabled: PropTypes.bool,
         })

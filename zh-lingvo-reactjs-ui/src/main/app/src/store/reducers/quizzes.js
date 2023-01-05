@@ -132,6 +132,7 @@ const signOut = state => ({
     quizzes: [],
     selectedQuizIndex: -1,
     loadedQuiz: null,
+    meaningToQuizRecord: { ...initialState.meaningToQuizRecord },
 });
 
 const reducer = (state = initialState, action) => {

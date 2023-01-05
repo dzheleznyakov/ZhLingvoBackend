@@ -78,3 +78,20 @@ export const updateQuizRecord = quizId => ({
     type: actionTypes.UPDATE_QUIZ_RECORD,
     quizId,
 });
+
+export const convertMeaningToQuizRecord = meaning => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD,
+    meaning,
+});
+
+export const convertMeaningToQuizRecordStart = () => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_START,
+});
+
+export const convertMeaningToQuizRecordFailure = () => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_FAILURE,
+});
+
+export const convertMeaningToQuizRecordSuccess = () => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_SUCCESS,
+});

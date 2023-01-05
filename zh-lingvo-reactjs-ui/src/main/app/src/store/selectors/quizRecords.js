@@ -14,6 +14,8 @@ export const quizRecordEditPathSelector = simpleSelectorFactory('quizRecordEditP
 
 export const showQuizRecordEditModalSelector = simpleSelectorFactory('showQuizRecordEditModal');
 
+export const convertingMeaningToQuizRecordSelector = simpleSelectorFactory('convertingMeaingToQuizRecord');
+
 export const selectedQuizRecordSelector = createSelector(
     quizRecordsOverviewsSelector,
     selectedQuizRecordIndexSelector,

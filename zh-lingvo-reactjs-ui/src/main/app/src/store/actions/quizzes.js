@@ -125,3 +125,8 @@ export const createQuizForMeaningToQuizRecordSuccess = quiz => ({
     type: actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD_SUCCESS,
     quiz,
 });
+
+export const navigateToQuiz = quizId => ({
+    type: actionTypes.NAVIGATE_TO_QUIZ,
+    quizId,
+});

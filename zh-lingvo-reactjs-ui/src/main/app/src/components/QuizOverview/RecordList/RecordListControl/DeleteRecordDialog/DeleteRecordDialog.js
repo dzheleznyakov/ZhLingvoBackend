@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 
 import { loadedQuizRecordSelector } from '../../../../../store/selectors';
 import { Dialog } from '../../../../UI';
 import * as actions from '../../../../../store/actions';
 
 const DeleteRecordDialog = props => {
-    const { close } = props;
-    const { qid: quizId, rid: recordId } = useParams();
+    const { close, quizId, recordId } = props;
     const record = useSelector(loadedQuizRecordSelector);
     const dispatch = useDispatch();
 
@@ -33,6 +31,8 @@ const DeleteRecordDialog = props => {
 
 DeleteRecordDialog.propTypes = {
     close: PropTypes.func.isRequired,
+    quizId: PropTypes.string.isRequired,
+    recordId: PropTypes.string.isRequired,
 };
 
 export default DeleteRecordDialog;
