@@ -14,6 +14,7 @@ import zh.lingvo.data.model.converters.MatchingRegimeAttributeConverter;
 import zh.lingvo.data.model.converters.QuizRegimeAttributeConverter;
 import zh.lingvo.data.model.enums.MatchingRegime;
 import zh.lingvo.data.model.enums.QuizRegime;
+import zh.lingvo.util.BasicClock;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -60,6 +61,10 @@ public class QuizRun implements Persistable {
     @Convert(converter = LongToBooleanMapAttributeConverter.class)
     @Column(name = "done_records")
     private Map<Long, Boolean> doneRecords;
+
+    @Column(name = "created_timestamp")
+    @Builder.Default
+    private Long createdTimestamp = BasicClock.get().now();
 
     @Column(name = "accessed_timestamp")
     private Long accessedTimestamp;

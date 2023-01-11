@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS quiz_run (
     matching_regime VARCHAR(8),
     records TEXT,
     done_records TEXT,
+    created_timestamp INTEGER,
     accessed_timestamp INTEGER,
     FOREIGN KEY (quiz_id) REFERENCES quiz(id)
 );

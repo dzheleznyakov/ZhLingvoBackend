@@ -69,7 +69,7 @@ public class Quiz implements Persistable {
     private List<QuizRecord> quizRecords;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
-    @OrderBy("id")
+    @OrderBy("accessed_timestamp")
     @ToString.Exclude
     private List<QuizRun> quizRuns;
 
