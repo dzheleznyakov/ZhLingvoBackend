@@ -40,7 +40,7 @@ public class QuizRun implements Persistable {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "quiz_id", referencedColumnName = "id")
     @ToString.Exclude
     private Quiz quiz;
@@ -60,6 +60,9 @@ public class QuizRun implements Persistable {
     @Convert(converter = LongToBooleanMapAttributeConverter.class)
     @Column(name = "done_records")
     private Map<Long, Boolean> doneRecords;
+
+    @Column(name = "accessed_timestamp")
+    private Long accessedTimestamp;
 
     @Override
     public boolean equals(Object o) {

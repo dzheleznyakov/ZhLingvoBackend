@@ -68,6 +68,11 @@ public class Quiz implements Persistable {
     @ToString.Exclude
     private List<QuizRecord> quizRecords;
 
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OrderBy("id")
+    @ToString.Exclude
+    private List<QuizRun> quizRuns;
+
     public static void merge(Quiz baseQuiz, Quiz otherQuiz) {
         if (otherQuiz.getName() != null)
             baseQuiz.setName(otherQuiz.getName());
