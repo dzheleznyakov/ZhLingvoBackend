@@ -1,6 +1,7 @@
 package zh.lingvo.data.model;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,13 +55,16 @@ public class Quiz implements Persistable {
 
     @Convert(converter = QuizRegimeAttributeConverter.class)
     @Column(name = "quiz_regime", nullable = false)
+    @Builder.Default
     private QuizRegime quizRegime = QuizRegime.FORWARD;
 
     @Column(name = "max_score")
+    @Builder.Default
     private Integer maxScore = 30;
 
     @Convert(converter = MatchingRegimeAttributeConverter.class)
     @Column(name = "matching_regime", nullable = false)
+    @Builder.Default
     private MatchingRegime matchingRegime = MatchingRegime.LOOSENED;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -70,8 +74,9 @@ public class Quiz implements Persistable {
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderBy("accessed_timestamp")
+    @Builder.Default
     @ToString.Exclude
-    private List<QuizRun> quizRuns;
+    private List<QuizRun> quizRuns = ImmutableList.of();
 
     public static void merge(Quiz baseQuiz, Quiz otherQuiz) {
         if (otherQuiz.getName() != null)

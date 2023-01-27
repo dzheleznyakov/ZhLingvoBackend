@@ -72,6 +72,14 @@
             </dependency>
             <dependency>
                 <groupId>zh.lingvo</groupId>
+                <artifactId>zh-lingvo-util</artifactId>
+                <type>test-jar</type>
+                <scope>test</scope>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>zh.lingvo</groupId>
                 <artifactId>zh-lingvo-data</artifactId>
                 <version>${project.version}</version>
             </dependency>
