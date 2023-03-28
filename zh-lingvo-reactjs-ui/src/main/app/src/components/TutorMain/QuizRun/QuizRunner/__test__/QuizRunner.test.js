@@ -166,7 +166,7 @@ describe('QuizRunner', () => {
         const TRANSLATION_1_1 = 'Lorem';
         const TRANSLATION_1_2 = 'ipsum';
         const TRANSLATION_2_1 = 'dolor';
-        const TRANSLATION_2_2 = 'sit';
+        const TRANSLATION_2_2 = 'et';
         const TRANSLATION_2_3 = 'amet';
         const TRANSLATION_3_1 = 'consectetur';
         const TRANSLATION_3_2 = 'adipiscing';
@@ -182,8 +182,19 @@ describe('QuizRunner', () => {
             quiz.records = [record];
         });
 
-        const wordMainFormFullWordsAnswers = [FIRST_WORD, SECOND_WORD, THRID_WORD];
         const wordMainFormCombinedAnswersCore = [
+            {
+                answer: FIRST_WORD,
+                expected: true,
+            },
+            {
+                answer: SECOND_WORD,
+                expected: true,
+            },
+            {
+                answer: THRID_WORD,
+                expected: true,
+            },
             {
                 answer: FIRST_WORD + ' ' + SECOND_WORD.substring(0, SECOND_WORD.length / 2),
                 expected: true,
@@ -221,10 +232,6 @@ describe('QuizRunner', () => {
             },
         ];
         const wordMainFormCombinedAnswersRelaxed = [
-            ...wordMainFormFullWordsAnswers.map(answer => ({
-                answer,
-                expected: true,
-            })),
             ...wordMainFormCombinedAnswersCore,
             {
                 answer: SECOND_WORD.substring(0, SECOND_WORD.length / 2),
@@ -235,8 +242,23 @@ describe('QuizRunner', () => {
                 expected: false,
             },
         ];
-        const translationsFullWordsAnswers = [TRANSLATION_1_1, TRANSLATION_3_2, TRANSLATION_1_1.toLowerCase()];
         const translationCombinedAnswersCore = [
+            {
+                answer: TRANSLATION_1_1,
+                expected: true,
+            },
+            {
+                answer: TRANSLATION_2_2,
+                expected: true,
+            },
+            {
+                answer: TRANSLATION_3_2,
+                expected: true,
+            },
+            {
+                answer: TRANSLATION_1_1.toLowerCase(),
+                expected: true,
+            },
             {
                 answer: TRANSLATION_1_1 + ' ' + TRANSLATION_1_2.substring(0, TRANSLATION_1_2.length / 2),
                 expected: true,
@@ -278,10 +300,6 @@ describe('QuizRunner', () => {
             },
         ];
         const translationCombinedAnswersRelaxed = [
-            ...translationsFullWordsAnswers.map(answer => ({
-                answer,
-                expected: true,
-            })),
             ...translationCombinedAnswersCore,
             {
                 answer: TRANSLATION_3_1.substring(0, TRANSLATION_3_1.length / 2),
@@ -298,22 +316,10 @@ describe('QuizRunner', () => {
                 quiz.matchingRegime = matchingRegimes.STRICT;
             });
 
-            describe.each(wordMainFormFullWordsAnswers)('The full word answer', answer => {
-                it(`[${answer}] should be evaluated correctly under BACWARD quiz regime`, () => {
-                    assertAnswerEvaluation(quizRegimes.BACKWARD, answer, true);
-                });
-            });
-
             describe.each(wordMainFormCombinedAnswersStrict)('An answer', input => {
                 it(`[${input.answer}] should be evaluated correctly under BACWARD quiz regime`, () => {
                     const { answer, expected } = input;
                     assertAnswerEvaluation(quizRegimes.BACKWARD, answer, expected);
-                });
-            });
-
-            describe.each(translationsFullWordsAnswers)('The full word answer', answer => {
-                it(`[${answer}] should be evaluated correctly under FORWARD quiz regime`, () => {
-                    assertAnswerEvaluation(quizRegimes.FORWARD, answer, true);
                 });
             });
 
@@ -332,6 +338,26 @@ describe('QuizRunner', () => {
 
             describe.each(wordMainFormCombinedAnswersRelaxed)('The answer', input => {
                 it(`[${input.answer}] should be evaluated correctly under BACWARD quiz regime`, () => {
+                    const { answer, expected } = input;
+                    assertAnswerEvaluation(quizRegimes.BACKWARD, answer, expected);
+                });
+            });
+
+            describe.each(translationCombinedAnswersRelaxed)('The answer', input => {
+                it(`[${input.answer}] should be evaluated correctly under FORWARD quiz regime`, () => {
+                    const { answer, expected } = input;
+                    assertAnswerEvaluation(quizRegimes.FORWARD, answer, expected);
+                });
+            });
+        });
+
+        describe('LOOSENED, matching regime', () => {
+            beforeEach(() => {
+                quiz.matchingRegime = matchingRegimes.LOOSENED;
+            });
+
+            describe.each(wordMainFormCombinedAnswersStrict)('The answer', input => {
+                it(`[${input.answer}] should be evaluated correctly under BACKWARD quiz regime`, () => {
                     const { answer, expected } = input;
                     assertAnswerEvaluation(quizRegimes.BACKWARD, answer, expected);
                 });

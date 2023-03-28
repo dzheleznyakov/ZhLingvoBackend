@@ -136,6 +136,8 @@ export default class QuizRunner {
                 return this.matchStrict(rightAnswers, answer);
             case matchingRegimes.RELAXED:
                 return this.matchRelaxed(rightAnswers, answer);
+            case matchingRegimes.LOOSENED:
+                return this.matchLoosened(rightAnswers, answer);
             default: 
                 return false;
         }
@@ -144,8 +146,8 @@ export default class QuizRunner {
 
     private matchStrict(rightAnswers: string[], answer: string): boolean {
         const quizRegime = this.getNextQuizRegime();
-        let tokens = [] as string[];
         const allAnswersInString = rightAnswers.join(' ');
+        let tokens = [] as string[];
         for (let i = 0, len = rightAnswers.length; i < len; ++i) {
             const group = rightAnswers[i]
             tokens = tokens.concat(group.split(' '));
@@ -162,21 +164,36 @@ export default class QuizRunner {
     }
 
     private matchRelaxed(rightAnswers: string[], answer: string): boolean {
-        if (answer.length < 3)
-            return false;
-
-        const quizRegime = this.getNextQuizRegime();
         let tokens = [] as string[];
-        const allAnswersInString = rightAnswers.join(' ');
         for (let i = 0, len = rightAnswers.length; i < len; ++i) {
             const group = rightAnswers[i]
             tokens = tokens.concat(group.split(' '));
         }
+
+        const answerCoincideWithSomeWord = tokens.reduce(
+            (disj, token) => disj || answer === token, 
+            false,
+        );
+        if (answerCoincideWithSomeWord)
+            return true;
+
+        if (answer.length < 3)
+            return false;
+
+        const quizRegime = this.getNextQuizRegime();
+        const allAnswersInString = rightAnswers.join(' ');
         const flags = quizRegime === quizRegimes.FORWARD ? 'i' : undefined;
         const regExpStr = `(^${answer}| ${answer})`;
         const answerIsContainedInGroup = !!allAnswersInString.match(new RegExp(regExpStr, flags));
         const matched = answerIsContainedInGroup;
         return matched;
+    }
+
+    private matchLoosened(rightAnswers: string[], answer: string): boolean {
+        const quizRegime = this.getNextQuizRegime();
+        return quizRegime === quizRegimes.BACKWARD
+            ? this.matchStrict(rightAnswers, answer)
+            : this.matchRelaxed(rightAnswers, answer);
     }
 
     public toQuizRun(): QuizRun {
