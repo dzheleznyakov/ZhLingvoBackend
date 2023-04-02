@@ -12,6 +12,7 @@ export const MODAL_TYPES = {
     SETTINGS: 'SETTINGS',
     EDIT: 'EDIT',
     FORWARD: 'FORWARD',
+    PLAY: 'PLAY',
     NONE: 'NONE',
 };
 
@@ -28,7 +29,7 @@ const ControlBox = props => {
         .filter(panelConfig => panelConfig.modalType === modalType)
         .map(panelConfig => [panelConfig.panel, panelConfig.panelProps]);
     const [Panel, panelProps = {}] = panelContainer.length === 0 ? [() => null, {}] : panelContainer[0];
-    const panel =  <Panel {...panelProps} close={closeModal} />;
+    const panel = <Panel {...panelProps} close={closeModal} />;
 
     const buttons = panels
         .map(panelConfig => {

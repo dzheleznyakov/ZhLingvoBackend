@@ -15,6 +15,7 @@ const typeToClass = type => {
         case buttonTypes.FORWARD: return classes.Forward;
         case buttonTypes.SETTINGS: return classes.Settings;
         case buttonTypes.REDIRECT: return classes.Redirect;
+        case buttonTypes.PLAY: return classes.Play;
         default: return '';
     }
 };
