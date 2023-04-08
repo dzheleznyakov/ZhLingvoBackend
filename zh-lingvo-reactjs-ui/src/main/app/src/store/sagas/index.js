@@ -49,7 +49,8 @@ export function* quizzesWatcher() {
 }
 
 export function* quizRecordsWatcher() {
-    yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS, quizRecordsSagas.fetchQuizRecords);
+    yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS, quizRecordsSagas.fetchQuizRecordsOverviewsSaga);
+    yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS, quizRecordsSagas.fetchQuizRecordsSaga);
     yield takeEvery(actionTypes.CREATE_QUIZ_RECORD, quizRecordsSagas.createQuizRecordSaga);
     yield takeEvery(actionTypes.DELETE_QUIZ_RECORD, quizRecordsSagas.deleteQuizRecordSaga);
     yield takeEvery(actionTypes.FETCH_QUIZ_RECORD, quizRecordsSagas.fetchQuizRecordSaga);

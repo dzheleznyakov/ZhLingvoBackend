@@ -21,7 +21,7 @@ const RecordList = () => {
         ? overviews.findIndex(overview => overview.id === +rid)
         : -1;
 
-    useActionOnMount(actions.fetchQuizRecords(quizId));
+    useActionOnMount(actions.fetchQuizRecordsOverviews(quizId));
 
     useEffect(() => {
         if (rid !== null && rid !== undefined) {

@@ -12,9 +12,9 @@ const prepareConfig = (customConfig = {}) => {
 };
 
 export const baseURL = 'http://192.168.1.116:8080';
-// export const baseURL = 'http://192.168.10.23:8080';
-// export const baseURL = 'http://169.254.19.1:8080';
-//  export const baseURL = 'http://10.101.11.117:8080';
+// export const baseURL = 'http://192.168.10.104:8080';
+// export const baseURL = 'http://172.22.84.13:8080';
+//  export const baseURL = 'http://10.101.11.29:8080';
 
 const instance = axios.create({
     baseURL: `${baseURL}/api`,

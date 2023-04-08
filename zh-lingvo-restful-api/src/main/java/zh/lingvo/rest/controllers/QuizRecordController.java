@@ -63,6 +63,14 @@ public class QuizRecordController {
                 .collect(ImmutableList.toImmutableList());
     }
 
+    @GetMapping
+    public List<QuizRecordCommand> getAllRecords(@PathVariable("id") Long quizId) {
+        return quizRecordService.findAll(quizId, getUser())
+                .stream()
+                .map(quizRecordConverter::toCommand)
+                .collect(ImmutableList.toImmutableList());
+    }
+
     @GetMapping("/{rid}")
     public QuizRecordCommand getQuizRecord(
             @PathVariable("rid") Long recordId)

@@ -6,6 +6,7 @@ import { NONE } from '../../static/constants/quizRecordEditModalTypes';
 
 const initialState = {
     quizRecordsOverviews: [],
+    quizRecords: [],
     selectedQuizRecordIndex: -1,
     loading: false,
     loadedQuizRecord: null,
@@ -17,9 +18,14 @@ const initialState = {
     convertingMeaingToQuizRecord: false,
 };
 
-const fetchQuizRecordsSuccess = (state, action) => ({
+const fetchQuizRecordsOverviewsSuccess = (state, action) => ({
     ...state,
     quizRecordsOverviews: action.overviews,
+});
+
+const fetchQuizRecordsSuccess = (state, action) => ({
+    ...state,
+    quizRecords: action.records,
 });
 
 const selectQuizRecord = (state, action) => ({
@@ -32,7 +38,7 @@ const fetchQuizRecordStart = state => ({
     loading: true,
 });
 
-const fetchQuizRecordSuccess = (state, action) =>({
+const fetchQuizRecordSuccess = (state, action) => console.log(action) || ({
     ...state,
     loading: false,
     loadedQuizRecord: action.quizRecord,
@@ -107,7 +113,8 @@ const signOut = () => ({
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.FETCH_QUIZ_RECORDS_SUCCESS: return fetchQuizRecordsSuccess(state, action);
+        case actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS_SUCCESS: return fetchQuizRecordsOverviewsSuccess(state, action);
+        case actionTypes.FETCH_QUIZ_RECORDS_SUCCESS: return fetchQuizRecordsSuccess (state, action);
         case actionTypes.SELECT_QUIZ_RECORD: return selectQuizRecord(state, action);
         case actionTypes.FETCH_QUIZ_RECORD_START: return fetchQuizRecordStart(state, action);
         case actionTypes.FETCH_QUIZ_RECORD_SUCCESS: return fetchQuizRecordSuccess(state, action);

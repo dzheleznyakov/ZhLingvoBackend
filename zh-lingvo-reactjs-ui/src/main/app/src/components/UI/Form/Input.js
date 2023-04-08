@@ -6,6 +6,17 @@ import { validationType } from './formTypes';
 
 const inputTypesArray = Object.keys(inputTypes).map(key => inputTypes[key]);
 
+const resizeTextArea = (elem) => {
+    const str = elem.value;
+    const cols = elem.cols;
+
+    let linecount = 0;
+    str.split('\n').forEach(line => {
+        linecount += Math.ceil(line.length / cols);
+    });
+    elem.rows = linecount + 1;
+};
+
 const Input = props => {
     const { 
         id, 
@@ -30,6 +41,11 @@ const Input = props => {
         if (validate && forwardRef && forwardRef.current)
             validate(forwardRef);
     }, [forwardRef]);
+
+    useEffect(() => {
+        if (type === inputTypes.TEXT_AREA && forwardRef.current && defaultValue)
+            resizeTextArea(forwardRef.current);
+    }, [type, forwardRef, defaultValue]);
 
     switch (type) {
         case inputTypes.TEXT:  
@@ -70,6 +86,21 @@ const Input = props => {
                 >
                     {options}
                 </select>
+            );
+        case inputTypes.TEXT_AREA:
+            return (
+                <textarea 
+                    id={id}
+                    defaultValue={defaultValue}
+                    disabled={disabled}
+                    ref={forwardRef}
+                    rows={3}
+                    onChange={() => {
+                        validate && validate();
+                        resizeTextArea(forwardRef.current);
+                    }}
+                    { ...listeners }
+                />
             );
         default: return null;
     }

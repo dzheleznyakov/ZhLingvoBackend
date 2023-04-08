@@ -62,3 +62,23 @@ export const useTutorQuizOverivewBreadcrumbs = () => {
 
     useDynamicBreadcrumbs([quizName, recordId], ...breadcrumbs);
 }
+
+export const useQuizRunBreadcrumbs = (quizId, quiz) => {
+    const dispatch = useDispatch();
+    const quizPath = `/tutor/quiz/${quizId}`;
+    const breadcrumbs = [{
+        type: BREADCRUMBS_TYPES.URL,
+        text: 'Tutor',
+        href: '/tutor',
+        onClick: () => dispatch(navigateTo('/tutor')),
+    }, {
+        type: BREADCRUMBS_TYPES.URL,
+        text: quiz.name,
+        href: quizPath,
+        onClick: () => dispatch(navigateTo(quizPath)),
+    }, {
+        type: BREADCRUMBS_TYPES.TEXT,
+        text: 'Quiz',
+    }];
+    useDynamicBreadcrumbs([quizId, quiz], ...breadcrumbs);
+}
