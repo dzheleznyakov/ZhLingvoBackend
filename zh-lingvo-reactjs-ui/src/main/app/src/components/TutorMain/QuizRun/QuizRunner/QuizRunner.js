@@ -35,6 +35,7 @@ type QuizRun = {
 type Question = {
     quizRegime: string,
     recordId: number,
+    done: boolean,
 };
 
 type Input = {
@@ -95,6 +96,7 @@ export default class QuizRunner {
         return {
             quizRegime: this.getNextQuizRegime(),
             recordId: this.records[this.nextIndex].id,
+            done: this.nextIndex === this.records.length,
         };
     }
 
@@ -106,8 +108,6 @@ export default class QuizRunner {
         switch (quizRegime) {
             case quizRegimes.FORWARD:
                 const { translations } = record;
-                const matchedTranslation = translations
-                    .filter(translation => translation === answer);
                 isCorrect = this.match(translations, answer);
                 break;
             case quizRegimes.BACKWARD:
@@ -261,6 +261,7 @@ export default class QuizRunner {
         return {
             quizRegime: this.getNextQuizRegime(),
             recordId: this.records[this.nextIndex].id,
+            done: this.nextIndex === this.records.length - 1,
         };
     }
 
@@ -272,8 +273,6 @@ export default class QuizRunner {
         switch (quizRegime) {
             case quizRegimes.FORWARD:
                 const { translations } = record;
-                const matchedTranslation = translations
-                    .filter(translation => translation === answer);
                 isCorrect = this.match(translations, answer);
                 break;
             case quizRegimes.BACKWARD:

@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import QUIZ_REGIMES from '../../../../static/constants/quizRegimes';
 import { useAutofocus } from '../../../../hooks';
 import { FormBase, formInputTypes } from '../../../UI';
+import { refType } from '../../../../static/types/generalTypes';
 
 const quizFormTranslationType = PropTypes.shape({
     value: PropTypes.string.isRequired,
@@ -60,14 +61,31 @@ function getExamplesValue(quizRegime, shouldRevealAnswer, record) {
         .join('\n\n');
 }
 
+const ENTER_KEY_CODE = 13;
+
 const QuizForm = props => {
-    const { record, quizRegime, shouldRevealAnswer } = props;
+    const { 
+        record, 
+        quizRegime, 
+        shouldRevealAnswer, 
+        mainFormRef,
+        translationsRef,
+        onSubmit,
+    } = props;
+
     const quizFormGroup = {
         key: 'quizFormGroup',
         label: 'Quiz',
     };
 
-    const mainFormRef = useRef();
+    const mainFormListeners = {};
+    if (quizRegime === QUIZ_REGIMES.BACKWARD)
+        mainFormListeners.onKeyDown = event => {
+            if (event.keyCode === ENTER_KEY_CODE) {
+                event.preventDefault();
+                onSubmit();
+            }
+        };
     const mainFormField = {
         key: 'mainFormField',
         label: 'Word',
@@ -75,21 +93,39 @@ const QuizForm = props => {
         defaultValue: getMainFormValue(quizRegime, shouldRevealAnswer, record),
         groupKey: quizFormGroup.key,
         forwardRef: mainFormRef,
+        disabled: shouldRevealAnswer || quizRegime !== QUIZ_REGIMES.BACKWARD,
+        autocomplete: false,
+        listeners: mainFormListeners,
+    };
+
+    const posField = {
+        key: 'posField',
+        label: 'Part of Speech',
+        type: formInputTypes.TEXT,
+        defaultValue: record && record.pos,
+        groupKey: quizFormGroup.key,
+        forwardRef: null,
         disabled: true,
     };
     
-    const transcriptionRef = useRef();
     const transcriptionField = {
         key: 'transcriptionField',
         label: 'Transcription',
         type: formInputTypes.TEXT,
         defaultValue: getTranscriptionValue(quizRegime, shouldRevealAnswer, record),
         groupKey: quizFormGroup.key,
-        forwardRef: transcriptionRef,
+        forwardRef: null,
         disabled: true,
     };
 
-    const translationsRef = useRef();
+    const translationsListeners = {};
+    if (quizRegime === QUIZ_REGIMES.FORWARD)
+        translationsListeners.onKeyDown = event => {
+            if (event.keyCode === ENTER_KEY_CODE) {
+                event.preventDefault();
+                onSubmit();
+            }
+        }
     const translationsField = {
         key: 'translationsField',
         label: 'Translation',
@@ -97,21 +133,22 @@ const QuizForm = props => {
         defaultValue: getTranslationsValue(quizRegime, shouldRevealAnswer, record),
         groupKey: quizFormGroup.key,
         forwardRef: translationsRef,
-        disabled: true,
+        disabled: shouldRevealAnswer || quizRegime !== QUIZ_REGIMES.FORWARD,
+        autocomplete: false,
+        listeners: translationsListeners,
     };
 
-    const examplesRef = useRef();
     const examplesField = {
         key: 'examplesField',
         label: 'Examples',
         type: formInputTypes.TEXT_AREA,
         defaultValue: getExamplesValue(quizRegime, shouldRevealAnswer, record),
         groupKey: quizFormGroup.key,
-        forwardRef: examplesRef,
+        forwardRef: null,
         disabled: true,
     };
 
-    const fields = [mainFormField];
+    const fields = [mainFormField, posField];
     if (record && record.transcription)
         fields.push(transcriptionField);
     fields.push(translationsField);
@@ -135,6 +172,9 @@ QuizForm.propTypes = {
     record: quizFormRecordType.isRequired,
     quizRegime: PropTypes.oneOf(quizRegimesArray).isRequired,
     shouldRevealAnswer: PropTypes.bool,
+    mainFormRef: refType.isRequired,
+    translationsRef: refType.isRequired,
+    onSubmit: PropTypes.func.isRequired,
 };
 
 QuizForm.defaultProps = {

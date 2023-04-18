@@ -20,7 +20,9 @@ export const useQuizRunner = (quizSettings, records) => {
                     const result = [value];
                     if (elaboration)
                         result.push(elaboration);
-                    return result;
+                    return result
+                        .join(' ')
+                        .replaceAll(/,/g, '');
                 }),
             }));
             const qr = QuizRunner.fromQuiz(quiz);

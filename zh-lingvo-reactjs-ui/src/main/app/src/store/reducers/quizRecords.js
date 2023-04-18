@@ -38,7 +38,7 @@ const fetchQuizRecordStart = state => ({
     loading: true,
 });
 
-const fetchQuizRecordSuccess = (state, action) => console.log(action) || ({
+const fetchQuizRecordSuccess = (state, action) => ({
     ...state,
     loading: false,
     loadedQuizRecord: action.quizRecord,

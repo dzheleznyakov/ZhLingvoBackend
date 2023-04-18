@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as inputTypes from './inputTypes';
 import { validationType } from './formTypes';
+import { refType } from '../../../static/types/generalTypes';
 
 const inputTypesArray = Object.keys(inputTypes).map(key => inputTypes[key]);
 
@@ -24,6 +25,7 @@ const Input = props => {
         defaultValue, 
         values, 
         disabled, 
+        autocomplete,
         listeners, 
         forwardRef,
         validation,
@@ -43,7 +45,7 @@ const Input = props => {
     }, [forwardRef]);
 
     useEffect(() => {
-        if (type === inputTypes.TEXT_AREA && forwardRef.current && defaultValue)
+        if (type === inputTypes.TEXT_AREA && forwardRef && forwardRef.current && defaultValue)
             resizeTextArea(forwardRef.current);
     }, [type, forwardRef, defaultValue]);
 
@@ -55,6 +57,7 @@ const Input = props => {
                     type="text"
                     defaultValue={defaultValue}
                     disabled={disabled}
+                    autoComplete={autocomplete === false ? 'off' : null}
                     ref={forwardRef}
                     onKeyUp={validate}
                     { ...listeners }
@@ -67,6 +70,7 @@ const Input = props => {
                     type="number"
                     defaultValue={defaultValue}
                     disabled={disabled}
+                    autoComplete={autocomplete === false ? 'off' : null}
                     ref={forwardRef}
                     onChange={validate}
                     { ...listeners }
@@ -81,6 +85,7 @@ const Input = props => {
                     id={id}
                     defaultValue={defaultValue}
                     disabled={disabled}
+                    autoComplete={autocomplete === false ? 'off' : null}
                     ref={forwardRef}
                     { ...listeners }
                 >
@@ -93,6 +98,7 @@ const Input = props => {
                     id={id}
                     defaultValue={defaultValue}
                     disabled={disabled}
+                    autoComplete={autocomplete === false ? 'off' : null}
                     ref={forwardRef}
                     rows={3}
                     onChange={() => {
@@ -110,9 +116,10 @@ Input.propTypes = {
     id: PropTypes.string.isRequired,
     type: PropTypes.oneOf(inputTypesArray).isRequired,
     defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    forwardRef: PropTypes.object.isRequired,
+    forwardRef: refType,
     values: PropTypes.arrayOf(PropTypes.string),
     disabled: PropTypes.bool,
+    autocomplete: PropTypes.bool,
     validation: PropTypes.arrayOf(validationType),
     onValidate: PropTypes.func.isRequired,
     listeners: PropTypes.objectOf(PropTypes.func),
