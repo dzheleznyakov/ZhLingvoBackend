@@ -130,3 +130,8 @@ export const navigateToQuiz = quizId => ({
     type: actionTypes.NAVIGATE_TO_QUIZ,
     quizId,
 });
+
+export const setQuizRun = quizRun => ({
+    type: actionTypes.SET_QUIZ_RUN,
+    quizRun,
+});

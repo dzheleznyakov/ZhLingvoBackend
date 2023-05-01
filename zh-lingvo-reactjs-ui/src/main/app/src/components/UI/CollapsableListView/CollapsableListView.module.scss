@@ -1,0 +1,15 @@
+.Heading {
+    font-weight: bold;
+    
+    &::before {
+        content: '▶︎';
+    }
+
+    &.Collapsed::before {
+        transform: rotate(180deg);
+    }
+
+    &.Expanded::before {
+        transform: rotate(90deg);
+    }
+}

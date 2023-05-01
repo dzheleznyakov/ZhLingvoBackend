@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import classes from './QuizRun.module.scss';
 
@@ -10,6 +10,7 @@ import { useConditionalActionOnMount, useQuizRunBreadcrumbs } from '../../../hoo
 import QuizForm from './QuizForm/QuizForm';
 import { useQuizRunner } from './quizRunHooks';
 import quizRegimes from '../../../static/constants/quizRegimes';
+import { TUTOR_QUIZ_RUN_RESULT } from '../../../static/constants/paths';
 
 const NULL_QUIZ = { id: -1, name: '', targetLanguage: {}};
 
@@ -33,6 +34,7 @@ const QUIZ_PHASE = {
 
 const QuizRun = () => {
     const { qid } = useParams();
+    const dispatch = useDispatch();
     const records = useSelector(selectors.allQuizRecordsSelector);
     const quiz = useSelector(selectors.loadedQuizSelector) || NULL_QUIZ;
     const quizSettings = useSelector(selectors.quizSettingsSelector)[quiz.id];
@@ -80,18 +82,14 @@ const QuizRun = () => {
 
     const answerRef = quizRegime === quizRegimes.BACKWARD ? mainFormRef : translationsRef;
     const onSubmitAnswer = () => {
-        console.log('onSubmitAnswer')
         const answer = answerRef.current.value.trim().replaceAll(/\s+/g, ' ');
         const isCorrect = quizRunner.evaluate(answer);
         setLastAnswerIsCorrect(isCorrect);
-        console.log(`[${answer}]`)
-        console.log(isCorrect);
         const nextPhase = done ? QUIZ_PHASE.COMPLETED : QUIZ_PHASE.ANSWER;
         setPhase(nextPhase);
         setReady(false);
     };
     const onNextQuestion = () => {
-        console.log('onNextQuestion')
         const nextQuestion = getNextQuestion(quizRunner, records);
         setQuizRegime(nextQuestion.quizRegime);
         setRecord(nextQuestion.record);
@@ -100,8 +98,8 @@ const QuizRun = () => {
         setReady(false);
     };
     const onCompleted = () => {
-        console.log('onCompleted')
-        console.log(quizRunner.toQuizRun());
+        dispatch(actions.navigateTo(TUTOR_QUIZ_RUN_RESULT.replace(/:qid/, qid)));
+        dispatch(actions.setQuizRun(quizRunner.toQuizRun()));
     };
 
     const onButtonClicked = () => {
@@ -113,8 +111,15 @@ const QuizRun = () => {
             onCompleted();
     };
 
+    const quizButtonRef = useRef();
+    useEffect(() => {
+        if (phase !== QUIZ_PHASE.QUESTION && ready) {
+            quizButtonRef.current.focus();
+        }
+    }, [phase, ready]);
     const quizButton = (
         <button 
+            ref={quizButtonRef}
             className={classes.QuizRunButton}
             onClick={onButtonClicked}
         >
