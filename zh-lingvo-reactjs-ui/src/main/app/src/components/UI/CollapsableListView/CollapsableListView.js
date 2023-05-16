@@ -9,14 +9,14 @@ const CollabsableListView = props => {
 
     const headingClasses = [
         classes.Heading,
-        collapsed ? classes.Collapsed : classes.Expanded,
+        collapsed ? null : classes.Expanded,
     ];
     const toggleCollapsed = () => setCollapsed(col => !col);
 
     return (
         <ul>
             <div className={headingClasses.join(' ')} onClick={toggleCollapsed}>{heading}</div>
-            {items.map(({ key,  node }) => <li key={key}>{node}</li>)}
+            {!collapsed && items.map(({ key,  node }) => <li className={classes.ListItem} key={key}>{node}</li>)}
         </ul>
     );
 };

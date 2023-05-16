@@ -5,11 +5,12 @@
         content: '▶︎';
     }
 
-    &.Collapsed::before {
-        transform: rotate(180deg);
-    }
-
     &.Expanded::before {
-        transform: rotate(90deg);
+        content: '▼';
     }
+}
+
+.ListItem {
+    list-style: none;
+    padding-left: 16px;
 }
