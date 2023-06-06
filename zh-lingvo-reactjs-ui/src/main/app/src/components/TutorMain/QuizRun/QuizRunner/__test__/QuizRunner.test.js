@@ -399,7 +399,19 @@ describe('QuizRunner', () => {
 
             const quizRun = quizRunner.toQuizRun();
 
-            assert.isNull(quizRun.id);
+            assert.notExists(quizRun.id);
+        });
+
+        test('should have a set id if it was indeed set', () => {
+            const quiz = QUIZ();
+            const quizRunner = QuizRunner.fromQuiz(quiz);
+            quizRunner.initRun();
+            const quizRunId = 42;
+            
+            quizRunner.setId(quizRunId);
+            const quizRun = quizRunner.toQuizRun();
+
+            assert.equal(quizRun.id, quizRunId);
         });
 
         test('should have only remaining records', () => {

@@ -11,6 +11,7 @@ import QuizForm from './QuizForm/QuizForm';
 import { useQuizRunner } from './quizRunHooks';
 import quizRegimes from '../../../static/constants/quizRegimes';
 import { TUTOR_QUIZ_RUN_RESULT } from '../../../static/constants/paths';
+import { Spinner } from '../../UI';
 
 const NULL_QUIZ = { id: -1, name: '', targetLanguage: {}};
 
@@ -33,7 +34,7 @@ const QUIZ_PHASE = {
 };
 
 const QuizRun = () => {
-    const { qid } = useParams();
+    const { runid: runId, qid } = useParams();
     const dispatch = useDispatch();
     const records = useSelector(selectors.allQuizRecordsSelector);
     const quiz = useSelector(selectors.loadedQuizSelector) || NULL_QUIZ;
@@ -88,6 +89,7 @@ const QuizRun = () => {
         const nextPhase = done ? QUIZ_PHASE.COMPLETED : QUIZ_PHASE.ANSWER;
         setPhase(nextPhase);
         setReady(false);
+        dispatch(actions.updateQuizRun(quizRunner.toQuizRun(), qid));
     };
     const onNextQuestion = () => {
         const nextQuestion = getNextQuestion(quizRunner, records);
@@ -98,7 +100,10 @@ const QuizRun = () => {
         setReady(false);
     };
     const onCompleted = () => {
-        dispatch(actions.navigateTo(TUTOR_QUIZ_RUN_RESULT.replace(/:qid/, qid)));
+        dispatch(actions.navigateTo(
+            TUTOR_QUIZ_RUN_RESULT
+                .replace(/:qid/, qid)
+                .replace(/:runid\?/, runId)));
         dispatch(actions.setQuizRun(quizRunner.toQuizRun()));
     };
 
@@ -143,7 +148,7 @@ const QuizRun = () => {
     }
     const indicator = <div className={indicatorClasses.join(' ')}>{indicatorLabel}</div>;
     
-    return (
+    return runId == null ? <Spinner /> : (
         <div className={classes.QuizRunWrapper}>
             <div className={classes.QuizRunContent}>
                 {ready && record && quizRegime && 

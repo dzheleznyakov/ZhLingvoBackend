@@ -49,13 +49,17 @@ public class QuizRunServiceImpl implements QuizRunService {
 
     @Override
     public Optional<QuizRun> update(QuizRun quizRun, User user) {
-        boolean quizRunExists = quizRunRepository
-                .findByIdAndUser(quizRun.getId(), user)
-                .isPresent();
-        if (!quizRunExists)
+        Optional<QuizRun> optionalFoundQuizRun = quizRunRepository
+                .findByIdAndUser(quizRun.getId(), user);
+        if (optionalFoundQuizRun.isEmpty())
             return Optional.empty();
 
+        QuizRun foundQuizRun = optionalFoundQuizRun.get();
+        quizRun.setQuiz(foundQuizRun.getQuiz());
         quizRun.setAccessedTimestamp(BasicClock.get().now());
+        System.out.println("---------");
+        System.out.println(quizRun);
+        System.out.println("---------");
         return Optional.of(quizRunRepository.save(quizRun));
     }
 

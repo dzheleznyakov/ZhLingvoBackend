@@ -163,3 +163,29 @@ export function* navigateToQuizSaga(action) {
     yield put(actions.setApp(APPS.TUTOR));
     yield put(actions.navigateTo(`/tutor/quiz/${quizId}`));
 }
+
+export function* createQuizRunSaga(action) {
+    const { quizRun, quizId } = action;
+
+    try {
+        const { data } = yield call(api.post, `/quizzes/${quizId}/runs`, quizRun);
+        yield put(actions.navigateTo(`/quiz/${quizId}/run/${data.id}`));
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data, 
+            `Error while creating a quiz run for quiz [${quizId}]`));
+    }
+}
+
+export function* updateQuizRunSaga(action) {
+    const { quizRun, quizId } = action;
+
+    try {
+        const { data } = yield call(api.put, `/quizzes/${quizId}/runs`, quizRun);
+        console.log(data);
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data, 
+            `Error while updating a quiz run [${quizRun.id}]`));
+    }
+}
