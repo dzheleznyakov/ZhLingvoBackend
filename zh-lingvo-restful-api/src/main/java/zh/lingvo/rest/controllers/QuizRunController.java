@@ -11,8 +11,11 @@ import zh.lingvo.rest.annotations.ApiController;
 import zh.lingvo.rest.commands.QuizRunCommand;
 import zh.lingvo.rest.converters.QuizRunCommandToQuizRun;
 import zh.lingvo.rest.converters.QuizRunToQuizRunCommand;
+import zh.lingvo.rest.exceptions.RequestMalformed;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
+
+import static zh.lingvo.util.Preconditions.checkCondition;
 
 @ApiController
 @RequestMapping("/api/quizzes/{id}/runs")
@@ -39,6 +42,9 @@ public class QuizRunController {
             @PathVariable("id") Long quizId,
             @RequestBody QuizRunCommand command
     ) {
+        checkCondition(
+                command != null && command.getId() == null,
+                () -> new RequestMalformed("New quiz run should not have a set id"));
         return quizRunService.create(quizRunCommandConverter.convert(command), quizId, getUser())
                 .map(quizRunConverter::convert)
                 .orElseThrow(() -> new ResourceNotFound(String.format(
@@ -49,6 +55,9 @@ public class QuizRunController {
     public QuizRunCommand updateQuizRun(
             @RequestBody QuizRunCommand command
     ) {
+        checkCondition(
+                command != null && command.getId() != null,
+                () -> new RequestMalformed("Quiz run to be updated should have an id"));
         return quizRunService.update(quizRunCommandConverter.convert(command), getUser())
                 .map(quizRunConverter::convert)
                 .orElseThrow(() -> new ResourceNotFound(String.format(

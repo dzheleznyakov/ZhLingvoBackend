@@ -57,16 +57,11 @@ public class QuizRunServiceImpl implements QuizRunService {
         QuizRun foundQuizRun = optionalFoundQuizRun.get();
         quizRun.setQuiz(foundQuizRun.getQuiz());
         quizRun.setAccessedTimestamp(BasicClock.get().now());
-        System.out.println("---------");
-        System.out.println(quizRun);
-        System.out.println("---------");
         return Optional.of(quizRunRepository.save(quizRun));
     }
 
     @Override
     public Optional<QuizRun> create(QuizRun quizRun, Long quizId, User user) {
-        if (quizRun.getId() != null)
-            return Optional.empty();
         Optional<Quiz> optionalQuiz = quizService.findById(quizId, user);
         if (optionalQuiz.isEmpty())
             return Optional.empty();

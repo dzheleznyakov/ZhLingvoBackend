@@ -85,7 +85,7 @@ class QuizControllerTest {
                 .build();
     }
 
-    private String toPayload(Object object) {
+    private static String toPayload(Object object) {
         return GSON.toJson(object);
     }
 
