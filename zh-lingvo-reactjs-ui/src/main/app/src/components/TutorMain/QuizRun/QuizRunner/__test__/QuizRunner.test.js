@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import _ from 'lodash';
 
 import QuizRunner from '../QuizRunner';
-import { QUIZ, QUIZ_RECORDS } from './QuizRunnerTestData';
+import { QUIZ, QUIZ_RECORDS, QUIZ_RUN } from './QuizRunnerTestData';
 import quizRegimes from '../../../../../static/constants/quizRegimes';
 import matchingRegimes from '../../../../../static/constants/matchingRegimes';
 
@@ -46,6 +46,19 @@ describe('QuizRunner', () => {
                 }
             }
             assert.isBelow(equalCount, 999);
+        });
+    });
+
+    describe ('QuizRunner from existing quiz run', () => {
+        test('should create new QuizRunner from QuizRun', () => {
+            const quizRun = QUIZ_RUN();
+            const quizRunner = QuizRunner.fromQuizRun(quizRun, QUIZ());
+            
+            assert.exists(quizRunner);
+            assert.deepEqual(quizRunner.records.map(record => record.id), quizRun.records);
+            assert.deepEqual(quizRunner.doneRecords, quizRun.doneRecords);
+            assert.exists(quizRunner.id);
+            assert.equal(quizRunner.id, quizRun.id);
         });
     });
 

@@ -30,7 +30,7 @@ type QuizRun = {
     readonly quizRegime: string,
     readonly matchingRegime: string,
     readonly records: number[],
-    readonly doneRecords: DoneRecordEntry[]
+    readonly doneRecords: DoneRecordEntry[],
 };
 
 type Question = {
@@ -49,11 +49,11 @@ type Input = {
 };
 
 function shuffle<T>(array: T[]): void {
-    let currentIndex = array.length,  randomIndex;
+    let currentIndex = array.length, randomIndex;
   
     while (currentIndex != 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+      --currentIndex;
   
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
@@ -83,12 +83,25 @@ export default class QuizRunner {
         const records = quiz.records
             .filter(record => record.currentScore < 1)
         return new this({
-            records: records,
+            records,
             doneRecords: [],
             quizRegime: quiz.quizRegime,
             matchingRegime: quiz.matchingRegime,
             quizId: quiz.id,
             id: null,
+        });
+    }
+
+    public static fromQuizRun(quizRun: QuizRun, quiz: Quiz): QuizRunner {
+        const records = quiz.records
+            .filter(record => quizRun.records.includes(record.id));
+        return new this({
+            records: records,
+            doneRecords: quizRun.doneRecords,
+            quizRegime: quizRun.quizRegime,
+            matchingRegime: quizRun.matchingRegime,
+            quizId: quizRun.quizId,
+            id: quizRun.id,
         });
     }
 
@@ -222,11 +235,11 @@ export default class QuizRunner {
 */
 
 function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
+    let currentIndex = array.length, randomIndex;
   
     while (currentIndex != 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+      --currentIndex;
   
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
@@ -262,6 +275,19 @@ export default class QuizRunner {
             matchingRegime: quiz.matchingRegime,
             id: null,
             quizId: quiz.id,
+        });
+    }
+
+    static fromQuizRun(quizRun, quiz) {
+        const records = quiz.records
+            .filter(record => quizRun.records.includes(record.id));
+        return new this({
+            records: records,
+            doneRecords: quizRun.doneRecords,
+            quizRegime: quizRun.quizRegime,
+            matchingRegime: quizRun.matchingRegime,
+            quizId: quizRun.quizId,
+            id: quizRun.id,
         });
     }
 

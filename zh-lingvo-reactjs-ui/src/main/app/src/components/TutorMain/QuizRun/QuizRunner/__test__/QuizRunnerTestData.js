@@ -55,3 +55,14 @@ const quiz = {
 };
 
 export const QUIZ = () => _.cloneDeep(quiz);
+
+const quizRun = {
+    id: 1000,
+    quizId: 101,
+    quizRegime: quizRegimes.ALTERNATING,
+    matchingRegime: matchingRegimes.LOOSENED,
+    records: [42, 1000],
+    doneRecords: [{ recordId: 52, correct: true }, { recordId: 1001, correct: false }],
+};
+
+export const QUIZ_RUN = () => _.cloneDeep(quizRun);
