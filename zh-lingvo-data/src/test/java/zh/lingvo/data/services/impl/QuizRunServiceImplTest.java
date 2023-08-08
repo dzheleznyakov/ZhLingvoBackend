@@ -13,6 +13,7 @@ import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.QuizRun;
 import zh.lingvo.data.model.User;
+import zh.lingvo.data.repositories.QuizRecordRepository;
 import zh.lingvo.data.repositories.QuizRunRepository;
 import zh.lingvo.data.services.QuizRunService;
 import zh.lingvo.data.services.QuizService;
@@ -54,10 +55,12 @@ class QuizRunServiceImplTest {
     private QuizRunRepository quizRunRepository;
     @Mock
     private QuizService quizService;
+    @Mock
+    private QuizRecordRepository quizRecordRepository;
 
     @BeforeEach
     void setUp() {
-        service = new QuizRunServiceImpl(quizRunRepository, quizService);
+        service = new QuizRunServiceImpl(quizRunRepository, quizService, quizRecordRepository);
         ClockTestHelper.setBasicClock(clock);
     }
 

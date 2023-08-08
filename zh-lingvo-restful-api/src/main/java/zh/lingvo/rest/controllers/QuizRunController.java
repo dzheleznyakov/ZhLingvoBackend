@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import zh.lingvo.data.model.QuizRun;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.services.QuizRunService;
 import zh.lingvo.rest.annotations.ApiController;
@@ -14,6 +15,7 @@ import zh.lingvo.rest.converters.QuizRunToQuizRunCommand;
 import zh.lingvo.rest.exceptions.RequestMalformed;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
+import zh.lingvo.util.Either;
 
 import static zh.lingvo.util.Preconditions.checkCondition;
 
@@ -62,6 +64,28 @@ public class QuizRunController {
                 .map(quizRunConverter::convert)
                 .orElseThrow(() -> new ResourceNotFound(String.format(
                         "Quiz run not found when trying to update quiz run [%d]", command.getId())));
+    }
+
+    @PutMapping("/{runId}/complete")
+    public void completeQuizRun(
+            @PathVariable("runId") Long runId,
+            @PathVariable("id") Long quizId,
+            @RequestBody QuizRunCommand command
+    ) {
+        QuizRun quizRun = quizRunCommandConverter.convert(command);
+        Either<QuizRunService.ServiceError, Boolean> result = quizRunService.complete(quizRun, quizId, getUser());
+        if (result.isLeft())
+            handleOnCompleteErrors(runId, result);
+    }
+
+    private static void handleOnCompleteErrors(Long runId, Either<QuizRunService.ServiceError, Boolean> result) {
+        switch (result.getLeft()) {
+            case RECORDS_PRESENT:
+                throw new RequestMalformed(String.format(
+                        "Exception when completing quiz run [%d]: it should not have remaining records", runId));
+            case MISSING_QUIZ_RUN:
+                throw new ResourceNotFound(String.format("Quiz run [%d] not found", runId));
+        }
     }
 
     private User getUser() {

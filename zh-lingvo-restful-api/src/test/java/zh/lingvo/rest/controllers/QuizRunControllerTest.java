@@ -1,5 +1,7 @@
 package zh.lingvo.rest.controllers;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,12 +13,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import zh.lingvo.core.domain.PartOfSpeech;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
+import zh.lingvo.data.model.QuizRecord;
 import zh.lingvo.data.model.QuizRun;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.enums.MatchingRegime;
 import zh.lingvo.data.model.enums.QuizRegime;
+import zh.lingvo.data.repositories.QuizRecordRepository;
 import zh.lingvo.data.repositories.QuizRepository;
 import zh.lingvo.data.repositories.QuizRunRepository;
 import zh.lingvo.data.services.QuizRunService;
@@ -28,11 +33,19 @@ import zh.lingvo.rest.converters.QuizRunCommandToQuizRun;
 import zh.lingvo.rest.converters.QuizRunToQuizRunCommand;
 import zh.lingvo.rest.util.RequestContext;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -53,11 +66,13 @@ public class QuizRunControllerTest {
     private static final User USER_1 = User.builder().id(1L).name("Test user").build();
     private static final User USER_2 = User.builder().id(2L).name("Wrong test user").build();
     private static final Language LANGUAGE = Language.builder().id(1).name("Language 1").twoLetterCode("L1").build();
-    private static final Quiz QUIZ_1 = Quiz.builder().id(1L).name("Quiz").user(USER_1).language(LANGUAGE).quizRegime(QuizRegime.FORWARD).matchingRegime(MatchingRegime.LOOSENED).build();
-    private static final Quiz QUIZ_2 = Quiz.builder().id(2L).name("Wrong user quiz").user(USER_2).language(LANGUAGE).name("Quiz").build();
+    private final Quiz QUIZ_1 = Quiz.builder().id(1L).name("Quiz").user(USER_1).language(LANGUAGE).quizRegime(QuizRegime.FORWARD).matchingRegime(MatchingRegime.LOOSENED).build();
+    private final Quiz QUIZ_2 = Quiz.builder().id(2L).name("Wrong user quiz").user(USER_2).language(LANGUAGE).name("Quiz").build();
 
     @Mock
     private QuizRepository quizRepository;
+    @Mock
+    private QuizRecordRepository quizRecordRepository;
     @Mock
     QuizRunRepository quizRunRepository;
 
@@ -69,7 +84,7 @@ public class QuizRunControllerTest {
         context.setUser(USER_1);
 
         QuizService quizService = new QuizServiceImpl(quizRepository);
-        QuizRunService quizRunService = new QuizRunServiceImpl(quizRunRepository, quizService);
+        QuizRunService quizRunService = new QuizRunServiceImpl(quizRunRepository, quizService, quizRecordRepository);
         QuizRunController controller = new QuizRunController(
                 new QuizRunCommandToQuizRun(),
                 new QuizRunToQuizRunCommand(),
@@ -237,6 +252,242 @@ public class QuizRunControllerTest {
             verify(quizRunRepository, times(1)).save(any(QuizRun.class));
             verifyNoMoreInteractions(quizRunRepository);
             verifyNoInteractions(quizRepository);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test PUT /api/quizzes/{id}/runs/{runId}/complete")
+    class CompleteQuizRun {
+        private final String URL = BASE_URL_PATTERN + "/{runId}/complete";
+        private final Long QUIZ_ID = QUIZ_1.getId();
+        private final Long QUIZ_RUN_ID = 42L;
+
+        private final QuizRecord QUIZ_RECORD_1 = buildQuizRecord(101L, "alpha", 0.1f, 10, 1);
+        private final QuizRecord QUIZ_RECORD_2 = buildQuizRecord(102L, "beta", 0.97f, 15, 8);
+        private final QuizRecord QUIZ_RECORD_3 = buildQuizRecord(103L, "gamma", 0f, 10, 2);
+        private final QuizRecord QUIZ_RECORD_4 = buildQuizRecord(104L, "delta", 1f, 10, 1);
+
+        private QuizRecord buildQuizRecord(
+                Long id,
+                String wordMainForm,
+                Float currentScore,
+                Integer numberOfRuns,
+                Integer numberOfSuccesses
+        ) {
+            return QuizRecord.builder()
+                    .id(id)
+                    .quiz(QUIZ_1)
+                    .wordMainForm(wordMainForm)
+                    .pos(PartOfSpeech.NOUN)
+                    .currentScore(currentScore)
+                    .numberOfRuns(numberOfRuns)
+                    .numberOfSuccesses(numberOfSuccesses)
+                    .build();
+        }
+
+        @Test
+        @DisplayName("Should return BAD REQUEST 400 if the submitted quiz run still has remaining records")
+        void quizRunHasRemainingRecords_BadRequest() throws Exception {
+            QuizRunCommand command = getQuizRunCommand(ImmutableList.of(1L));
+
+            mockMvc.perform(put(URL, QUIZ_ID, QUIZ_RUN_ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(toPayload(command))
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", matchesRegex(".*should not.*")));
+
+            verifyNoInteractions(quizRepository, quizRunRepository);
+        }
+
+        @Test
+        @DisplayName("Should return OK 200 if the quiz run has empty doneRecords")
+        void doneRecordsIsEmpty_Complete() throws Exception {
+            QuizRunCommand command = getQuizRunCommand(ImmutableMap.of());
+
+            mockMvc.perform(put(URL, QUIZ_ID, QUIZ_RUN_ID)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toPayload(command))
+            ).andExpect(status().isOk());
+
+            verifyNoInteractions(quizRepository, quizRunRepository);
+        }
+
+        @Test
+        @DisplayName("Should return NOT FOUND 404 if the quiz run not found for the user")
+        void quizRunNotFound_ReturnNotFound() throws Exception {
+            QuizRunCommand command = getQuizRunCommand();
+
+            when(quizRunRepository.findByIdAndUser(QUIZ_RUN_ID, USER_1)).thenReturn(Optional.empty());
+
+            mockMvc.perform(put(URL, QUIZ_ID, QUIZ_RUN_ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(toPayload(command))
+                    )
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", matchesRegex(".*not found.*")));
+
+            verify(quizRunRepository, times(1)).findByIdAndUser(QUIZ_RUN_ID, USER_1);
+            verifyNoMoreInteractions(quizRepository, quizRepository);
+        }
+
+        @Test
+        @DisplayName("Should return OK 200 if the quiz in not found for the user")
+        void quizNotFound_ReturnOK() throws Exception {
+            QuizRunCommand command = getQuizRunCommand();
+
+            when(quizRunRepository.findByIdAndUser(QUIZ_RUN_ID, USER_1)).thenReturn(Optional.of(new QuizRun()));
+            when(quizRepository.findById(QUIZ_ID)).thenReturn(Optional.empty());
+
+            mockMvc.perform(put(URL, QUIZ_ID, QUIZ_RUN_ID)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toPayload(command))
+            )
+                    .andExpect(status().isOk());
+
+            verify(quizRunRepository, times(1)).findByIdAndUser(QUIZ_RUN_ID, USER_1);
+            verify(quizRepository, times(1)).findById(QUIZ_ID);
+            verifyNoMoreInteractions(quizRepository, quizRunRepository);
+        }
+
+        @Test
+        @DisplayName("Should increase the score for all correctly answered records and return OK 200")
+        void updateStatistics_allCorrect() throws Exception {
+            QuizRunCommand command = getQuizRunCommand();
+            QUIZ_1.setQuizRecords(ImmutableList.of(
+                    QUIZ_RECORD_1,
+                    QUIZ_RECORD_2,
+                    QUIZ_RECORD_3,
+                    QUIZ_RECORD_4
+            ));
+
+            when(quizRunRepository.findByIdAndUser(QUIZ_RUN_ID, USER_1)).thenReturn(Optional.of(new QuizRun()));
+            when(quizRepository.findById(QUIZ_ID)).thenReturn(Optional.of(QUIZ_1));
+
+            List<QuizRecord> persistedQuizRecords = new ArrayList<>();
+            when(quizRecordRepository.saveAll(any(List.class))).then(invocation -> {
+                Collection<QuizRecord> records = invocation.getArgument(0);
+                persistedQuizRecords.addAll(records);
+                return records;
+            });
+
+            mockMvc.perform(put(URL, QUIZ_ID, QUIZ_RUN_ID)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toPayload(command))
+            )
+                    .andExpect(status().isOk());
+
+            assertThat(persistedQuizRecords, hasSize(4));
+            assertPersistedQuizRecords(persistedQuizRecords, ImmutableMap.of(
+                    101L, new Object[]{11, 2, 0.13f},
+                    102L, new Object[]{16, 9, 1.0f},
+                    103L, new Object[]{11, 3, 0.033f},
+                    104L, new Object[]{10, 1, 1.0f}
+            ));
+
+            verify(quizRunRepository, times(1)).findByIdAndUser(QUIZ_RUN_ID, USER_1);
+            verify(quizRepository, times(1)).findById(QUIZ_ID);
+            verify(quizRecordRepository, times(1)).saveAll(any(List.class));
+            verifyNoMoreInteractions(quizRunRepository, quizRepository, quizRecordRepository);
+        }
+
+        @Test
+        @DisplayName("Should decrease the score for all incorrectly answered records and return OK 200")
+        void updateStatistics_allIncorrect() throws Exception {
+            QuizRunCommand command = getQuizRunCommand(
+                    ImmutableList.of(),
+                    ImmutableMap.of(
+                            QUIZ_RECORD_1.getId(), false,
+                            QUIZ_RECORD_2.getId(), false,
+                            QUIZ_RECORD_3.getId(), false
+                    )
+            );
+            QUIZ_1.setQuizRecords(ImmutableList.of(
+                    QUIZ_RECORD_1,
+                    QUIZ_RECORD_2,
+                    QUIZ_RECORD_3,
+                    QUIZ_RECORD_4
+            ));
+
+            when(quizRunRepository.findByIdAndUser(QUIZ_RUN_ID, USER_1)).thenReturn(Optional.of(new QuizRun()));
+            when(quizRepository.findById(QUIZ_ID)).thenReturn(Optional.of(QUIZ_1));
+
+            List<QuizRecord> persistedQuizRecords = new ArrayList<>();
+            when(quizRecordRepository.saveAll(any(List.class))).then(invocation -> {
+                Collection<QuizRecord> records = invocation.getArgument(0);
+                persistedQuizRecords.addAll(records);
+                return records;
+            });
+
+            mockMvc.perform(put(URL, QUIZ_ID, QUIZ_RUN_ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(toPayload(command))
+                    )
+                    .andExpect(status().isOk());
+
+            assertThat(persistedQuizRecords, hasSize(4));
+            assertPersistedQuizRecords(persistedQuizRecords, ImmutableMap.of(
+                    101L, new Object[]{11, 1, 0.067f},
+                    102L, new Object[]{16, 8, 0.94f},
+                    103L, new Object[]{11, 2, 0f},
+                    104L, new Object[]{10, 1, 1.0f}
+            ));
+
+            verify(quizRunRepository, times(1)).findByIdAndUser(QUIZ_RUN_ID, USER_1);
+            verify(quizRepository, times(1)).findById(QUIZ_ID);
+            verify(quizRecordRepository, times(1)).saveAll(any(List.class));
+            verifyNoMoreInteractions(quizRunRepository, quizRecordRepository, quizRepository);
+        }
+
+        private void assertPersistedQuizRecords(List<QuizRecord> persistedQuizRecords, ImmutableMap<Long, Object[]> expectedAll) {
+            for (QuizRecord quizRecord : persistedQuizRecords)
+                assertPersistedQuizRecord(expectedAll, quizRecord);
+        }
+
+        private void assertPersistedQuizRecord(ImmutableMap<Long, Object[]> expectedAll, QuizRecord quizRecord) {
+            var expected = expectedAll.get(quizRecord.getId());
+            assertThat(quizRecord.getNumberOfRuns(), is(expected[0]));
+            assertThat(quizRecord.getNumberOfSuccesses(), is(expected[1]));
+            assertEquals((float)expected[2], quizRecord.getCurrentScore(), 0.04);
+            assertTrue((float)expected[2] <= 1.0f);
+            assertTrue((float)expected[2] >= 0.0f);
+        }
+
+        private QuizRunCommand getQuizRunCommand() {
+            return getQuizRunCommand(
+                    ImmutableList.of(),
+                    ImmutableMap.of(
+                            QUIZ_RECORD_1.getId(), true,
+                            QUIZ_RECORD_2.getId(), true,
+                            QUIZ_RECORD_3.getId(), true
+                    ));
+        }
+
+        private QuizRunCommand getQuizRunCommand(List<Long> records) {
+            return getQuizRunCommand(records, ImmutableMap.of());
+        }
+
+        private QuizRunCommand getQuizRunCommand(Map<Long, Boolean> doneRecordsAsMap) {
+            return getQuizRunCommand(ImmutableList.of(), doneRecordsAsMap);
+        }
+
+        private QuizRunCommand getQuizRunCommand(
+                List<Long> records,
+                Map<Long, Boolean> doneRecordsAsMap
+        ) {
+            var doneRecords = doneRecordsAsMap.entrySet()
+                    .stream()
+                    .map(entry -> new QuizRunCommand.DoneRecord(entry.getKey(), entry.getValue()))
+                    .collect(ImmutableList.toImmutableList());
+            return QuizRunCommand.builder()
+                    .id(QUIZ_RUN_ID)
+                    .matchingRegime("l")
+                    .quizRegime("f")
+                    .doneRecords(doneRecords)
+                    .records(records)
+                    .build();
         }
     }
 }
