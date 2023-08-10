@@ -6,15 +6,15 @@ import classes from './QuizRunResult.module.scss';
 
 import { allQuizRecordsSelector, quizRunSelector } from '../../../../store/selectors';
 import { CollapsableListView } from '../../../UI';
+import { useActionOnMount } from '../../../../hooks';
+import * as actions from '../../../../store/actions';
 
 const QuizRunResult = () => {
     const { qid } = useParams();
     const quizRun = useSelector(quizRunSelector);
     const records = useSelector(allQuizRecordsSelector) || [];
 
-    console.log(qid)
-    console.log(quizRun)
-    console.log(records)
+    useActionOnMount(actions.completeQuizRun(quizRun, qid));
 
     const correctAswers = quizRun && records.length 
         ? quizRun.doneRecords

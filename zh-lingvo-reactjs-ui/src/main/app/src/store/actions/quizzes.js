@@ -147,3 +147,9 @@ export const updateQuizRun = (quizRun, quizId) => ({
     quizRun,
     quizId,
 });
+
+export const completeQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.COMPLETE_QUIZ_RUN,
+    quizRun,
+    quizId,
+})

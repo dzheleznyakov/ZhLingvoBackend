@@ -37,3 +37,4 @@ export const NAVIGATE_TO_QUIZ = 'NAVIGATE_TO_QUIZ';
 export const SET_QUIZ_RUN = 'SET_QUIZ_RUN';
 export const CREATE_QUIZ_RUN = 'CREATE_QUIZ_RUN';
 export const UPDATE_QUIZ_RUN = 'UPDATE_QUIZ_RUN';
+export const COMPLETE_QUIZ_RUN = 'COMPLETE_QUIZ_RUN';

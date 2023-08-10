@@ -181,11 +181,23 @@ export function* updateQuizRunSaga(action) {
     const { quizRun, quizId } = action;
 
     try {
-        const { data } = yield call(api.put, `/quizzes/${quizId}/runs`, quizRun);
-        console.log(data);
+        yield call(api.put, `/quizzes/${quizId}/runs`, quizRun);
     } catch (error) {
         yield put(actions.addError(
             error.response.data, 
-            `Error while updating a quiz run [${quizRun.id}]`));
+            `Error while updating quiz run [${quizRun.id}]`));
+    }
+}
+
+export function* completeQuizRunSaga(action) {
+    const { quizRun, quizId } = action;
+    const { id: quizRunId } = quizRun;
+    
+    try {
+        yield call(api.put, `/quizzes/${quizId}/runs/${quizRunId}/complete`, quizRun);
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data, 
+            `Error while completing quiz run [${quizRun.id}]`));
     }
 }

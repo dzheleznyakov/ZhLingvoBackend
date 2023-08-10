@@ -67,7 +67,7 @@ public class QuizRunController {
     }
 
     @PutMapping("/{runId}/complete")
-    public void completeQuizRun(
+    public boolean completeQuizRun(
             @PathVariable("runId") Long runId,
             @PathVariable("id") Long quizId,
             @RequestBody QuizRunCommand command
@@ -76,6 +76,7 @@ public class QuizRunController {
         Either<QuizRunService.ServiceError, Boolean> result = quizRunService.complete(quizRun, quizId, getUser());
         if (result.isLeft())
             handleOnCompleteErrors(runId, result);
+        return true;
     }
 
     private static void handleOnCompleteErrors(Long runId, Either<QuizRunService.ServiceError, Boolean> result) {
