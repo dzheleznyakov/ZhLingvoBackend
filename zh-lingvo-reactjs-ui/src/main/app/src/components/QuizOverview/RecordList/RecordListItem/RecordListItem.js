@@ -6,11 +6,15 @@ import Dotdotdot from 'react-dotdotdot';
 
 const RecordListItem = props => {
     const { quizRecord } = props;
-    const { translations = [], wordMainForm } = quizRecord;
+    const { translations = [], wordMainForm, currentScore } = quizRecord;
     const hint = translations.map(({ value }) => value).join(', ')
+    const currentScorePct = Math.round(currentScore * 100);
     return (
         <>
-            <div>{wordMainForm}</div>
+            <div className={classes.MainWrapper}>
+                <span>{wordMainForm}</span>
+                <span className={classes.CurrentScore}>{currentScorePct}%</span>
+            </div>
             <div className={classes.Hint}>
                 <Dotdotdot clamp={2}>{hint}</Dotdotdot>
             </div>

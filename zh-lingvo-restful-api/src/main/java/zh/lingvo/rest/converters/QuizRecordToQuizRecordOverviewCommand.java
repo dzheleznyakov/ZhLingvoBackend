@@ -28,6 +28,7 @@ public class QuizRecordToQuizRecordOverviewCommand implements Converter<QuizReco
         return source == null ? null : QuizRecordOverviewCommand.builder()
                 .id(source.getId())
                 .wordMainForm(source.getWordMainForm())
+                .currentScore(source.getCurrentScore())
                 .translations(convertTranslations(source))
                 .build();
     }

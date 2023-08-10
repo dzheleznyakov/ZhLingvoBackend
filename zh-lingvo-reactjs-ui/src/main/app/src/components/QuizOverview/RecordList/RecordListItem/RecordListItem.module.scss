@@ -2,3 +2,13 @@
     font-size: 0.75rem;
     color: gray;
 }
+
+.MainWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.CurrentScore {
+    font-size: 0.75rem;
+}

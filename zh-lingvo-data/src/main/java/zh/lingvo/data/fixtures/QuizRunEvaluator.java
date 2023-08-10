@@ -42,7 +42,7 @@ public class QuizRunEvaluator {
 
     private void updateStatsForFailure(QuizRecord quizRecord) {
         quizRecord.setNumberOfRuns(quizRecord.getNumberOfRuns() + 1);
-        float currentScore = quizRecord.getCurrentScore() - 1f / maxScore;
+        float currentScore = Math.max(quizRecord.getCurrentScore() - 1f / maxScore, 0.0f);
         quizRecord.setCurrentScore(currentScore);
     }
 }
