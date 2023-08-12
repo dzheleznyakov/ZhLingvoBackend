@@ -12,3 +12,12 @@
 .CurrentScore {
     font-size: 0.75rem;
 }
+
+$completedColor: #2b9977;
+.Completed {
+    font-weight: bold;
+    color: $completedColor;
+    padding: 2px;
+    border: 1px solid $completedColor;
+    border-radius: 50%;
+}

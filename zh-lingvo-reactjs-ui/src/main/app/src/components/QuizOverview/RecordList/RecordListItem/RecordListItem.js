@@ -9,11 +9,17 @@ const RecordListItem = props => {
     const { translations = [], wordMainForm, currentScore } = quizRecord;
     const hint = translations.map(({ value }) => value).join(', ')
     const currentScorePct = Math.round(currentScore * 100);
+    const currentScoreContent = currentScorePct < 100 ? `${currentScorePct}%` : '✓';
+
+    const currentScoreClasses = [classes.CurrentScore];
+    if (currentScorePct === 100)
+        currentScoreClasses.push(classes.Completed);
+    
     return (
         <>
             <div className={classes.MainWrapper}>
                 <span>{wordMainForm}</span>
-                <span className={classes.CurrentScore}>{currentScorePct}%</span>
+                <span className={currentScoreClasses.join(' ')}>{currentScoreContent}</span>
             </div>
             <div className={classes.Hint}>
                 <Dotdotdot clamp={2}>{hint}</Dotdotdot>
