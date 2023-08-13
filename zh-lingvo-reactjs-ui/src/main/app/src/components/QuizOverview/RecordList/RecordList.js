@@ -34,8 +34,19 @@ const RecordList = () => {
     if (rid !== null && rid !== undefined)
         wrapperClasses.push(classes.Active);
 
-    const items = overviews.map(overview => 
-        ({ key: `${overview.id}`, node: <RecordListItem quizRecord={overview} /> }));
+    const items = overviews
+        .map(overview => 
+            ({ 
+                key: `${overview.id}`, 
+                node: <RecordListItem quizRecord={overview} /> ,
+                currentScore: overview.currentScore,
+            }));
+    items.sort((a, b) => {
+        const scoreDiff = a.currentScore - b.currentScore;
+        if (scoreDiff !== 0)
+            return scoreDiff;
+        return a.id - b.id;
+    });
 
     const onRecordClick = index => () => {
         dispatch(actions.selectQuizRecord(index));
