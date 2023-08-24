@@ -5,12 +5,12 @@ import { useHistory } from 'react-router-dom';
 import { getCookie, setCookie } from '../utils/cookies';
 import * as actions from '../store/actions';
 
-export const useActionOnMount = action => {
+export const useActionOnMount = (action, ...deps) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(action);
-    }, [dispatch]);
+    }, [dispatch].concat(deps));
 };
 
 export const useConditionalActionOnMount = (action, condition, ...deps) => {

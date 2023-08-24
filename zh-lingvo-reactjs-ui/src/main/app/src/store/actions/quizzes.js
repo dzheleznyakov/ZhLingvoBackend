@@ -152,4 +152,14 @@ export const completeQuizRun = (quizRun, quizId) => ({
     type: actionTypes.COMPLETE_QUIZ_RUN,
     quizRun,
     quizId,
-})
+});
+
+export const fetchAllQuizRuns = quizId => ({
+    type: actionTypes.FETCH_ALL_QUIZ_RUNS,
+    quizId,
+});
+
+export const setAllQuizRuns = quizRuns => ({
+    type: actionTypes.SET_ALL_QUIZ_RUNS,
+    quizRuns,
+});

@@ -1,10 +1,13 @@
 package zh.lingvo.rest.controllers;
 
+import com.google.common.collect.ImmutableList;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.QuizRun;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.services.QuizRunService;
@@ -16,6 +19,8 @@ import zh.lingvo.rest.exceptions.RequestMalformed;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
 import zh.lingvo.util.Either;
+
+import java.util.List;
 
 import static zh.lingvo.util.Preconditions.checkCondition;
 
@@ -37,6 +42,16 @@ public class QuizRunController {
         this.quizRunConverter = quizRunConverter;
         this.quizRunService = quizRunService;
         this.requestContext = requestContext;
+    }
+
+    @GetMapping
+    public List<QuizRunCommand> getAllQuizRuns(@PathVariable("id") Long quizId) {
+        Quiz quiz = Quiz.builder().id(quizId).build();
+        return quizRunService
+                .findAllByQuiz(quiz, getUser())
+                .stream()
+                .map(quizRunConverter::convert)
+                .collect(ImmutableList.toImmutableList());
     }
 
     @PostMapping

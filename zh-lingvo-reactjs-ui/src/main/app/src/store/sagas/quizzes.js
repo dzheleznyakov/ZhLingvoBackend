@@ -201,3 +201,16 @@ export function* completeQuizRunSaga(action) {
             `Error while completing quiz run [${quizRun.id}]`));
     }
 }
+
+export function* fetchAllQuizRunsSaga(action) {
+    const { quizId } = action;
+
+    try {
+        const { data } = yield call(api.get, `quizzes/${quizId}/runs`);
+        console.log(data)
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while fetching quiz runs for quiz [${quizId}]`));
+    }
+}

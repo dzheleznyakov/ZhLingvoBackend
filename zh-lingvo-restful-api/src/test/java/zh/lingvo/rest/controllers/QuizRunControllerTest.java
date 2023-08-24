@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
@@ -48,11 +49,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -488,6 +491,58 @@ public class QuizRunControllerTest {
                     .doneRecords(doneRecords)
                     .records(records)
                     .build();
+        }
+    }
+
+    @Nested
+    @DisplayName("Test GET /api/quizzes/{id}/runs")
+    class GetQuizRuns {
+        private final String URL = BASE_URL_PATTERN;
+        private final Long QUIZ_ID = QUIZ_1.getId();
+
+        @Test
+        @DisplayName("Should return empty list if the quiz does not belong to the user")
+        void quizRunsNotFoundForQuizAndUser_ReturnEmptyList() throws Exception {
+            when(quizRunRepository.findAllByQuizAndUser(QUIZ_ID, USER_1))
+                    .thenReturn(ImmutableList.of());
+
+            mockMvc.perform(get(URL, QUIZ_ID))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$", is(empty())));
+
+            verify(quizRunRepository, only()).findAllByQuizAndUser(QUIZ_ID, USER_1);
+        }
+
+        @Test
+        @DisplayName("Should return found quiz runs")
+        void quizRunsFound() throws Exception {
+            Long quizRunId1 = 42L;
+            Long quizRunId2 = 43L;
+            QuizRun quizRun1 = QuizRun.builder()
+                    .id(quizRunId1)
+                    .quiz(QUIZ_1)
+                    .quizRegime(QuizRegime.FORWARD)
+                    .matchingRegime(MatchingRegime.LOOSENED)
+                    .build();
+            QuizRun quizRun2 = QuizRun.builder()
+                    .id(quizRunId2)
+                    .quiz(QUIZ_1)
+                    .quizRegime(QuizRegime.FORWARD)
+                    .matchingRegime(MatchingRegime.LOOSENED)
+                    .build();
+
+            when(quizRunRepository.findAllByQuizAndUser(QUIZ_ID, USER_1))
+                    .thenReturn(ImmutableList.of(quizRun1, quizRun2));
+
+            mockMvc.perform(get(URL, QUIZ_ID))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$", hasSize(2)))
+                    .andExpect(jsonPath("$[0].id", is(quizRunId1.intValue())))
+                    .andExpect(jsonPath("$[1].id", is(quizRunId2.intValue())));
+
+            verify(quizRunRepository, only()).findAllByQuizAndUser(QUIZ_ID, USER_1);
         }
     }
 }
