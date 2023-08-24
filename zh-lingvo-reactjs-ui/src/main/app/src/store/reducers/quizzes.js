@@ -14,6 +14,7 @@ const initialState = {
         loadingQuizzes: false,
         targetQuiz: {},
     },
+    quizRun: null,
 };
 
 const fetchAllQuizzesStart = state => ({
@@ -127,12 +128,18 @@ const createQuizForMeaningToQuizRecordSuccess = (state, action) => updateMeaning
     },
 );
 
+const setQuizRun = (state, action) => ({
+    ...state,
+    quizRun: action.quizRun,
+});
+
 const signOut = state => ({
     ...state,
     quizzes: [],
     selectedQuizIndex: -1,
     loadedQuiz: null,
     meaningToQuizRecord: { ...initialState.meaningToQuizRecord },
+    quizRun: null,
 });
 
 const reducer = (state = initialState, action) => {
@@ -152,6 +159,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_SUCCESS: return fetchAllQuizzesByLanguageSuccess(state, action);
         case actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_FAILURE: return fetchAllQuizzesByLanguageFailure(state, action);
         case actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD_SUCCESS: return createQuizForMeaningToQuizRecordSuccess(state, action);
+        case actionTypes.SET_QUIZ_RUN: return setQuizRun(state, action);
         case SIGN_OUT: return signOut(state);
         default: return state;
     }

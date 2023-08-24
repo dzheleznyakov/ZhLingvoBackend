@@ -48,6 +48,10 @@ const TableControl = () => {
                 panel: DeleteQuizDialog,
             },
             {
+                modalType: MODAL_TYPES.PLAY,
+                clicked: () => dispatch(actions.navigateTo(`/quiz/${selectedQuiz.id}/run`)),
+            },
+            {
                 modalType: MODAL_TYPES.FORWARD,
                 clicked: onForward,
             },

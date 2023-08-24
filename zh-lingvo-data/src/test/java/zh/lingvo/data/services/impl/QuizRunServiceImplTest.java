@@ -13,6 +13,7 @@ import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.QuizRun;
 import zh.lingvo.data.model.User;
+import zh.lingvo.data.repositories.QuizRecordRepository;
 import zh.lingvo.data.repositories.QuizRunRepository;
 import zh.lingvo.data.services.QuizRunService;
 import zh.lingvo.data.services.QuizService;
@@ -27,7 +28,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -55,10 +55,12 @@ class QuizRunServiceImplTest {
     private QuizRunRepository quizRunRepository;
     @Mock
     private QuizService quizService;
+    @Mock
+    private QuizRecordRepository quizRecordRepository;
 
     @BeforeEach
     void setUp() {
-        service = new QuizRunServiceImpl(quizRunRepository, quizService);
+        service = new QuizRunServiceImpl(quizRunRepository, quizService, quizRecordRepository);
         ClockTestHelper.setBasicClock(clock);
     }
 
@@ -193,19 +195,6 @@ class QuizRunServiceImplTest {
     @Nested
     @DisplayName("Test QuizRunService.create(quizRun, quizId, user")
     class Create {
-        @Test
-        @DisplayName("Should not create a new test run if the passed one not new, i.e. has an id")
-        void testExistingQuizRunNotPersisted() {
-            QuizRun quizRun = newQuizRun();
-            assertThat(quizRun.getId(), is(notNullValue()));
-
-            Optional<QuizRun> optionalPersisted = service.create(quizRun, QUIZ_ID_1, USER_1);
-
-            assertThat(optionalPersisted, is(empty()));
-
-            verifyNoInteractions(quizService, quizRunRepository);
-        }
-
         @Test
         @DisplayName("Should not create a new test run if the quiz does not belong to the user")
         void testNotCreatedIfUserIsWrong() {

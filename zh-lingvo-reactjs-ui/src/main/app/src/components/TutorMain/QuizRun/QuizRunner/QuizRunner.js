@@ -26,10 +26,11 @@ type DoneRecordEntry = {
 
 type QuizRun = {
     readonly id: number | null,
+    readonly quizId: number | null,
     readonly quizRegime: string,
     readonly matchingRegime: string,
     readonly records: number[],
-    readonly doneRecords: DoneRecordEntry[]
+    readonly doneRecords: DoneRecordEntry[],
 };
 
 type Question = {
@@ -39,7 +40,8 @@ type Question = {
 };
 
 type Input = {
-    quizRunId: number | null,
+    id: number | null,
+    quizId: number | null,
     records: QuizRecord[],
     quizRegime: string,
     matchingRegime: string,
@@ -47,11 +49,11 @@ type Input = {
 };
 
 function shuffle<T>(array: T[]): void {
-    let currentIndex = array.length,  randomIndex;
+    let currentIndex = array.length, randomIndex;
   
     while (currentIndex != 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+      --currentIndex;
   
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
@@ -64,27 +66,47 @@ export default class QuizRunner {
     nextIndex: number;
     quizRegime: string;
     matchingRegime: string;
-    quizRunId: number | null;
+    quizId: number | null;
+    id: number | null;
 
-    private constructor ({ records, quizRegime, matchingRegime, quizRunId, doneRecords }: Input) {
+    private constructor ({ records, quizRegime, matchingRegime, id, quizId, doneRecords }: Input) {
         this.records = records;
         this.doneRecords = doneRecords;
         this.nextIndex = 0;
         this.quizRegime = quizRegime;
         this.matchingRegime = matchingRegime;
-        this.quizRunId = quizRunId;
+        this.quizId = quizId;
+        this.id = id;
     }
 
     public static fromQuiz(quiz: Quiz): QuizRunner {
         const records = quiz.records
             .filter(record => record.currentScore < 1)
         return new this({
-            records: records,
+            records,
             doneRecords: [],
             quizRegime: quiz.quizRegime,
             matchingRegime: quiz.matchingRegime,
-            quizRunId: null,
+            quizId: quiz.id,
+            id: null,
         });
+    }
+
+    public static fromQuizRun(quizRun: QuizRun, quiz: Quiz): QuizRunner {
+        const records = quiz.records
+            .filter(record => quizRun.records.includes(record.id));
+        return new this({
+            records: records,
+            doneRecords: quizRun.doneRecords,
+            quizRegime: quizRun.quizRegime,
+            matchingRegime: quizRun.matchingRegime,
+            quizId: quizRun.quizId,
+            id: quizRun.id,
+        });
+    }
+
+    public setId(id: number) {
+        this.id = id;
     }
 
     public initRun(): void {
@@ -201,7 +223,8 @@ export default class QuizRunner {
         const remainingRecordIds = this.records.slice(this.nextIndex)
             .map(record => record.id);
         return {
-            id: this.quizRunId,
+            id: this.id,
+            quizId: this.quizId,
             quizRegime: this.quizRegime,
             matchingRegime: this.matchingRegime,
             records: remainingRecordIds,
@@ -212,11 +235,11 @@ export default class QuizRunner {
 */
 
 function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
+    let currentIndex = array.length, randomIndex;
   
     while (currentIndex != 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+      --currentIndex;
   
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
@@ -229,15 +252,17 @@ export default class QuizRunner {
     nextIndex;
     quizRegime;
     matchingRegime;
-    quizRunId;
+    quizId;
+    id;
 
-    constructor ({ records, quizRegime, matchingRegime, quizRunId, doneRecords }) {
+    constructor ({ records, quizRegime, matchingRegime, quizId, id, doneRecords }) {
         this.records = records;
         this.doneRecords = doneRecords;
         this.nextIndex = 0;
         this.quizRegime = quizRegime;
         this.matchingRegime = matchingRegime;
-        this.quizRunId = quizRunId;
+        this.quizId = quizId;
+        this.id = id;
     }
 
     static fromQuiz(quiz) {
@@ -248,8 +273,26 @@ export default class QuizRunner {
             doneRecords: [],
             quizRegime: quiz.quizRegime,
             matchingRegime: quiz.matchingRegime,
-            quizRunId: null,
+            id: null,
+            quizId: quiz.id,
         });
+    }
+
+    static fromQuizRun(quizRun, quiz) {
+        const records = quiz.records
+            .filter(record => quizRun.records.includes(record.id));
+        return new this({
+            records: records,
+            doneRecords: quizRun.doneRecords,
+            quizRegime: quizRun.quizRegime,
+            matchingRegime: quizRun.matchingRegime,
+            quizId: quizRun.quizId,
+            id: quizRun.id,
+        });
+    }
+
+    setId(id) {
+        this.id = id;
     }
 
     initRun() {
@@ -366,7 +409,8 @@ export default class QuizRunner {
         const remainingRecordIds = this.records.slice(this.nextIndex)
             .map(record => record.id);
         return {
-            id: this.quizRunId,
+            id: this.id,
+            quizId: this.quizId,
             quizRegime: this.quizRegime,
             matchingRegime: this.matchingRegime,
             records: remainingRecordIds,

@@ -130,3 +130,26 @@ export const navigateToQuiz = quizId => ({
     type: actionTypes.NAVIGATE_TO_QUIZ,
     quizId,
 });
+
+export const setQuizRun = quizRun => ({
+    type: actionTypes.SET_QUIZ_RUN,
+    quizRun,
+});
+
+export const createQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.CREATE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const updateQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.UPDATE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const completeQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.COMPLETE_QUIZ_RUN,
+    quizRun,
+    quizId,
+})

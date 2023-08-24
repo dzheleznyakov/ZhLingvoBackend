@@ -46,6 +46,10 @@ export function* quizzesWatcher() {
     yield takeEvery(actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE, quizzesSagas.fetchAllQuizzesByLanguageSaga);
     yield takeEvery(actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD, quizzesSagas.createQuizForMeaningToQuizRecordSaga);
     yield takeEvery(actionTypes.NAVIGATE_TO_QUIZ, quizzesSagas.navigateToQuizSaga);
+    
+    yield takeEvery(actionTypes.CREATE_QUIZ_RUN, quizzesSagas.createQuizRunSaga);
+    yield takeEvery(actionTypes.UPDATE_QUIZ_RUN, quizzesSagas.updateQuizRunSaga);
+    yield takeEvery(actionTypes.COMPLETE_QUIZ_RUN, quizzesSagas.completeQuizRunSaga);
 }
 
 export function* quizRecordsWatcher() {
