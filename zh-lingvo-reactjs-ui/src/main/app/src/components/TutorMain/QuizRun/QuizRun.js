@@ -6,7 +6,7 @@ import classes from './QuizRun.module.scss';
 
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
-import { useConditionalActionOnMount, useQuizRunBreadcrumbs } from '../../../hooks';
+import { useActionOnMount, useConditionalActionOnMount, useQuizRunBreadcrumbs } from '../../../hooks';
 import QuizForm from './QuizForm/QuizForm';
 import { useQuizRunner } from './quizRunHooks';
 import quizRegimes from '../../../static/constants/quizRegimes';
@@ -52,6 +52,7 @@ const QuizRun = () => {
     useConditionalActionOnMount(actions.fetchQuiz(qid), qid != null, qid);
     useConditionalActionOnMount(actions.fetchQuizRecords(qid), qid != null, qid);
     useConditionalActionOnMount(actions.fetchQuizSettings(qid), qid != null, qid);
+    useActionOnMount(actions.setAllQuizRuns([]));
 
     useQuizRunBreadcrumbs(qid, quiz);
 

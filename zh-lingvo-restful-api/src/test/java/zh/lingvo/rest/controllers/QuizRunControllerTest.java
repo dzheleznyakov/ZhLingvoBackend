@@ -55,6 +55,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -519,17 +520,21 @@ public class QuizRunControllerTest {
         void quizRunsFound() throws Exception {
             Long quizRunId1 = 42L;
             Long quizRunId2 = 43L;
+            Long accessedTimestamp1 = 1L;
+            Long accessedTimestamp2 = 2L;
             QuizRun quizRun1 = QuizRun.builder()
                     .id(quizRunId1)
                     .quiz(QUIZ_1)
                     .quizRegime(QuizRegime.FORWARD)
                     .matchingRegime(MatchingRegime.LOOSENED)
+                    .accessedTimestamp(accessedTimestamp1)
                     .build();
             QuizRun quizRun2 = QuizRun.builder()
                     .id(quizRunId2)
                     .quiz(QUIZ_1)
                     .quizRegime(QuizRegime.FORWARD)
                     .matchingRegime(MatchingRegime.LOOSENED)
+                    .accessedTimestamp(accessedTimestamp2)
                     .build();
 
             when(quizRunRepository.findAllByQuizAndUser(QUIZ_ID, USER_1))
@@ -540,9 +545,90 @@ public class QuizRunControllerTest {
                     .andExpect(jsonPath("$", is(notNullValue())))
                     .andExpect(jsonPath("$", hasSize(2)))
                     .andExpect(jsonPath("$[0].id", is(quizRunId1.intValue())))
-                    .andExpect(jsonPath("$[1].id", is(quizRunId2.intValue())));
+                    .andExpect(jsonPath("$[1].id", is(quizRunId2.intValue())))
+                    .andExpect(jsonPath("$[0].ts", is(accessedTimestamp1.intValue())))
+                    .andExpect(jsonPath("$[1].ts", is(accessedTimestamp2.intValue())));
 
             verify(quizRunRepository, only()).findAllByQuizAndUser(QUIZ_ID, USER_1);
+        }
+
+        @Test
+        @DisplayName("If quiz run does not have accessed timestamp, then created timestamp is returned")
+        void quizRunWithNullAccessedTimestamp() throws Exception {
+            Long quizRunId = 42L;
+            Long createdTimestamp = 1L;
+            QuizRun quizRun = QuizRun.builder()
+                    .id(quizRunId)
+                    .quiz(QUIZ_1)
+                    .quizRegime(QuizRegime.FORWARD)
+                    .matchingRegime(MatchingRegime.LOOSENED)
+                    .accessedTimestamp(null)
+                    .createdTimestamp(createdTimestamp)
+                    .build();
+
+            when(quizRunRepository.findAllByQuizAndUser(QUIZ_ID, USER_1))
+                    .thenReturn(ImmutableList.of(quizRun));
+
+            mockMvc.perform(get(URL, QUIZ_ID))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$", hasSize(1)))
+                    .andExpect(jsonPath("$[0].id", is(quizRunId.intValue())))
+                    .andExpect(jsonPath("$[0].ts", is(createdTimestamp.intValue())));
+
+            verify(quizRunRepository, only()).findAllByQuizAndUser(QUIZ_ID, USER_1);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test DELETE /api/quizzes/{id}/runs/{runId}")
+    class DeleteQuizRun {
+        private final String URL = BASE_URL_PATTERN + "/{runId}";
+
+        @Test
+        @DisplayName("Should return OK 200 when the quiz is deleted")
+        void deleteQuiz() throws Exception {
+            long queryRunId = 42L;
+            when(quizRunRepository.findByIdAndUser(queryRunId, USER_1))
+                    .thenReturn(Optional.of(QuizRun.builder().id(queryRunId).build()));
+
+            mockMvc.perform(delete(URL, QUIZ_1.getId(), queryRunId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(true)));
+
+            verify(quizRunRepository, times(1)).findByIdAndUser(queryRunId, USER_1);
+            verify(quizRunRepository, times(1)).deleteById(queryRunId);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test GET /api/quizzed/{id}/runs/{runId}")
+    class GetQuizRun {
+        private final String URL = BASE_URL_PATTERN + "/{runId}";
+
+        @Test
+        @DisplayName("Should return OK 200 if the quiz run is found for the user")
+        void quizRunFound() throws Exception {
+            Long quizRunId = 42L;
+            QuizRun persistedQuizRun = QuizRun.builder()
+                    .id(quizRunId)
+                    .quiz(QUIZ_1)
+                    .quizRegime(QuizRegime.FORWARD)
+                    .matchingRegime(MatchingRegime.LOOSENED)
+                    .build();
+
+            when(quizRunRepository.findByIdAndUser(quizRunId, USER_1))
+                    .thenReturn(Optional.of(persistedQuizRun));
+
+            mockMvc.perform(get(URL, QUIZ_1.getId(), quizRunId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath(("$.id"), is(quizRunId.intValue())));
+
+            verify(quizRunRepository, times(1)).findByIdAndUser(quizRunId, USER_1);
+            verify(quizRunRepository, times(1)).save(persistedQuizRun);
+            verifyNoMoreInteractions(quizRunRepository);
+            verifyNoInteractions(quizRepository, quizRecordRepository);
         }
     }
 }

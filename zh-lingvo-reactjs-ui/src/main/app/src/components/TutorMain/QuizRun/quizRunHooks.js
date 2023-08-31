@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 
 import QuizRunner from './QuizRunner/QuizRunner';
 import * as actions from '../../../store/actions';
+import * as selectors from '../../../store/selectors';
 
 export const useQuizRunner = (quizSettings, records) => {
     const [currentQuizRunner, setQuizRunner] = useState();
     const { qid: quizId, runid: quizRunId } = useParams();
+    const fetchedQuizRun = useSelector(selectors.quizRunSelector);
+    const selectedQuiz = useSelector(selectors.quizRecordsOverviewsSelector);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -19,6 +22,11 @@ export const useQuizRunner = (quizSettings, records) => {
             dispatch(actions.createQuizRun(quizRunner.toQuizRun(), quizId));
         } else if (quizRunId != null && currentQuizRunner && currentQuizRunner.id == null) {
             currentQuizRunner.setId(quizRunId);
+        } else if (quizRunId != null && currentQuizRunner == null && fetchedQuizRun == null) {
+            dispatch(actions.fetchQuizRun(quizId, quizRunId));
+        } else if (quizRunId != null && currentQuizRunner == null && fetchedQuizRun != null) {
+            const quizRunner = QuizRunner.fromQuizRun(fetchedQuizRun, { records });
+            setQuizRunner(quizRunner);
         }
     }, [quizSettings, currentQuizRunner, records, quizId, quizRunId, dispatch]);
 

@@ -148,6 +148,12 @@ export const updateQuizRun = (quizRun, quizId) => ({
     quizId,
 });
 
+export const deleteQuizRun = (quizId, quizRunId) => ({
+    type: actionTypes.DELETE_QUIZ_RUN,
+    quizId, 
+    quizRunId,
+});
+
 export const completeQuizRun = (quizRun, quizId) => ({
     type: actionTypes.COMPLETE_QUIZ_RUN,
     quizRun,
@@ -157,6 +163,12 @@ export const completeQuizRun = (quizRun, quizId) => ({
 export const fetchAllQuizRuns = quizId => ({
     type: actionTypes.FETCH_ALL_QUIZ_RUNS,
     quizId,
+});
+
+export const fetchQuizRun = (quizId, quizRunId) => ({
+    type: actionTypes.FETCH_QUIZ_RUN,
+    quizId,
+    quizRunId,
 });
 
 export const setAllQuizRuns = quizRuns => ({

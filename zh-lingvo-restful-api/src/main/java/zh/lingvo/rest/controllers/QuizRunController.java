@@ -1,6 +1,7 @@
 package zh.lingvo.rest.controllers;
 
 import com.google.common.collect.ImmutableList;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,6 +55,13 @@ public class QuizRunController {
                 .collect(ImmutableList.toImmutableList());
     }
 
+    @GetMapping("/{runId}")
+    public QuizRunCommand getQuizRun(@PathVariable("runId") Long quizRunId) {
+        return quizRunService.findById(quizRunId, getUser())
+                .map(quizRunConverter::convert)
+                .orElse(null);
+    }
+
     @PostMapping
     public QuizRunCommand newQuizRun(
             @PathVariable("id") Long quizId,
@@ -92,6 +100,11 @@ public class QuizRunController {
         if (result.isLeft())
             handleOnCompleteErrors(runId, result);
         return true;
+    }
+
+    @DeleteMapping("/{runId}")
+    public boolean deleteQuizRun(@PathVariable("runId") Long runId) {
+        return quizRunService.deleteById(runId, getUser());
     }
 
     private static void handleOnCompleteErrors(Long runId, Either<QuizRunService.ServiceError, Boolean> result) {
