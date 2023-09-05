@@ -20,6 +20,7 @@ public class QuizRunCommand {
     private Long quizId;
     private String quizRegime;
     private String matchingRegime;
+    private Long ts;
     private List<Long> records;
     private List<DoneRecord> doneRecords;
 

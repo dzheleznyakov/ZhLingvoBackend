@@ -21,6 +21,7 @@ public class QuizRunEvaluator {
         getListSafely(quiz::getQuizRecords)
                 .stream()
                 .filter(qr -> quizRun.getDoneRecords().containsKey(qr.getId()))
+                .filter(qr -> qr.getCurrentScore() < 1.0f)
                 .forEach(this::updateStats);
     }
 

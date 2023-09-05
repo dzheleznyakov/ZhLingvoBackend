@@ -29,3 +29,4 @@ export const quizzesTableDataSelector = createSelector(
 export const meaningToQuizRecordSelector = state => state.quizzes.meaningToQuizRecord;
 
 export const quizRunSelector = state => state.quizzes.quizRun;
+export const allQuizRunsSelector = state => state.quizzes.quizRuns;

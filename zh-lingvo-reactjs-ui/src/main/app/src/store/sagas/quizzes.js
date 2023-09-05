@@ -201,3 +201,48 @@ export function* completeQuizRunSaga(action) {
             `Error while completing quiz run [${quizRun.id}]`));
     }
 }
+
+export function* fetchAllQuizRunsSaga(action) {
+    const { quizId } = action;
+    const currentQuizRuns = yield select(selectors.allQuizRunsSelector);
+    if (currentQuizRuns.length > 0 && currentQuizRuns[0].quizId === quizId) {
+        return;
+    }
+
+    try {
+        const { data: quizRuns } = yield call(api.get, `quizzes/${quizId}/runs`);
+        quizRuns.sort((a, b) => b.ts - a.ts || a.id - b.id);
+        yield put(actions.setAllQuizRuns(quizRuns));
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while fetching quiz runs for quiz [${quizId}]`));
+    }
+}
+
+export function* fetchQuizRunSaga(action) {
+    const { quizId, quizRunId } = action;
+    
+    try {
+        const { data: quizRun } = yield call(api.get, `quizzes/${quizId}/runs/${quizRunId}`);
+        yield put(actions.setQuizRun(quizRun));
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while fetching quiz run [${quizRunId}] for quiz [${quizId}]`));
+    }
+}
+
+export function* deleteQuizRunSaga(action) {
+    const { quizId, quizRunId } = action;
+    
+    try {
+        yield call(api.delete, `quizzes/${quizId}/runs/${quizRunId}`);
+        yield put(actions.setAllQuizRuns([]));
+        yield put(actions.fetchAllQuizRuns(quizId));
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while deleting quiz run [${quizRunId}]`));
+    }
+}

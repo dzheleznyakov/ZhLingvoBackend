@@ -1,10 +1,14 @@
 package zh.lingvo.rest.controllers;
 
+import com.google.common.collect.ImmutableList;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.QuizRun;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.services.QuizRunService;
@@ -16,6 +20,8 @@ import zh.lingvo.rest.exceptions.RequestMalformed;
 import zh.lingvo.rest.exceptions.ResourceNotFound;
 import zh.lingvo.rest.util.RequestContext;
 import zh.lingvo.util.Either;
+
+import java.util.List;
 
 import static zh.lingvo.util.Preconditions.checkCondition;
 
@@ -37,6 +43,23 @@ public class QuizRunController {
         this.quizRunConverter = quizRunConverter;
         this.quizRunService = quizRunService;
         this.requestContext = requestContext;
+    }
+
+    @GetMapping
+    public List<QuizRunCommand> getAllQuizRuns(@PathVariable("id") Long quizId) {
+        Quiz quiz = Quiz.builder().id(quizId).build();
+        return quizRunService
+                .findAllByQuiz(quiz, getUser())
+                .stream()
+                .map(quizRunConverter::convert)
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    @GetMapping("/{runId}")
+    public QuizRunCommand getQuizRun(@PathVariable("runId") Long quizRunId) {
+        return quizRunService.findById(quizRunId, getUser())
+                .map(quizRunConverter::convert)
+                .orElse(null);
     }
 
     @PostMapping
@@ -77,6 +100,11 @@ public class QuizRunController {
         if (result.isLeft())
             handleOnCompleteErrors(runId, result);
         return true;
+    }
+
+    @DeleteMapping("/{runId}")
+    public boolean deleteQuizRun(@PathVariable("runId") Long runId) {
+        return quizRunService.deleteById(runId, getUser());
     }
 
     private static void handleOnCompleteErrors(Long runId, Either<QuizRunService.ServiceError, Boolean> result) {

@@ -30,9 +30,14 @@ public class QuizRunToQuizRunCommand implements Converter<QuizRun, QuizRunComman
                 .quizId(source.getQuiz().getId())
                 .quizRegime(source.getQuizRegime().getCode())
                 .matchingRegime(source.getMatchingRegime().getCode())
+                .ts(getTimestamp(source))
                 .records(source.getRecords())
                 .doneRecords(getDoneRecords(source))
                 .build();
+    }
+
+    private static Long getTimestamp(QuizRun source) {
+        return firstNonNull(source.getAccessedTimestamp(), source.getCreatedTimestamp());
     }
 
     private List<QuizRunCommand.DoneRecord> getDoneRecords(@Nonnull QuizRun source) {
