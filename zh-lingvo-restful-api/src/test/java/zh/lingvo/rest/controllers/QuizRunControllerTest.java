@@ -392,6 +392,7 @@ public class QuizRunControllerTest {
             ));
 
             verify(quizRunRepository, times(1)).findByIdAndUser(QUIZ_RUN_ID, USER_1);
+            verify(quizRunRepository, times(1)).delete(any(QuizRun.class));
             verify(quizRepository, times(1)).findById(QUIZ_ID);
             verify(quizRecordRepository, times(1)).saveAll(any(List.class));
             verifyNoMoreInteractions(quizRunRepository, quizRepository, quizRecordRepository);
@@ -440,6 +441,53 @@ public class QuizRunControllerTest {
             ));
 
             verify(quizRunRepository, times(1)).findByIdAndUser(QUIZ_RUN_ID, USER_1);
+            verify(quizRunRepository, times(1)).delete(any(QuizRun.class));
+            verify(quizRepository, times(1)).findById(QUIZ_ID);
+            verify(quizRecordRepository, times(1)).saveAll(any(List.class));
+            verifyNoMoreInteractions(quizRunRepository, quizRecordRepository, quizRepository);
+        }
+
+        @Test
+        @DisplayName("Should not decrease the score for an incorrectly answered record that is already done")
+        void updateStatistics_AlreadyDoneIsIncorrect() throws Exception {
+            QuizRunCommand command = getQuizRunCommand(
+                    ImmutableList.of(),
+                    ImmutableMap.of(
+                            QUIZ_RECORD_4.getId(), false
+                    )
+            );
+            QUIZ_1.setQuizRecords(ImmutableList.of(
+                    QUIZ_RECORD_1,
+                    QUIZ_RECORD_2,
+                    QUIZ_RECORD_3,
+                    QUIZ_RECORD_4
+            ));
+
+            when(quizRunRepository.findByIdAndUser(QUIZ_RUN_ID, USER_1)).thenReturn(Optional.of(new QuizRun()));
+            when(quizRepository.findById(QUIZ_ID)).thenReturn(Optional.of(QUIZ_1));
+
+            List<QuizRecord> persistedQuizRecords = new ArrayList<>();
+            when(quizRecordRepository.saveAll(any(List.class))).then(invocation -> {
+                Collection<QuizRecord> records = invocation.getArgument(0);
+                persistedQuizRecords.addAll(records);
+                return records;
+            });
+
+            mockMvc.perform(put(URL, QUIZ_ID, QUIZ_RUN_ID)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toPayload(command))
+            ).andExpect(status().isOk());
+
+            assertThat(persistedQuizRecords, hasSize(4));
+            assertPersistedQuizRecords(persistedQuizRecords, ImmutableMap.of(
+                    101L, new Object[]{10, 1, 0.1f},
+                    102L, new Object[]{15, 8, 0.97f},
+                    103L, new Object[]{10, 2, 0f},
+                    104L, new Object[]{10, 1, 1f}
+            ));
+
+            verify(quizRunRepository, times(1)).findByIdAndUser(QUIZ_RUN_ID, USER_1);
+            verify(quizRunRepository, times(1)).delete(any(QuizRun.class));
             verify(quizRepository, times(1)).findById(QUIZ_ID);
             verify(quizRecordRepository, times(1)).saveAll(any(List.class));
             verifyNoMoreInteractions(quizRunRepository, quizRecordRepository, quizRepository);
@@ -454,7 +502,7 @@ public class QuizRunControllerTest {
             var expected = expectedAll.get(quizRecord.getId());
             assertThat(quizRecord.getNumberOfRuns(), is(expected[0]));
             assertThat(quizRecord.getNumberOfSuccesses(), is(expected[1]));
-            assertEquals((float)expected[2], quizRecord.getCurrentScore(), 0.04);
+            assertEquals((float)expected[2], quizRecord.getCurrentScore(), 0.03);
             assertTrue((float)expected[2] <= 1.0f);
             assertTrue((float)expected[2] >= 0.0f);
         }

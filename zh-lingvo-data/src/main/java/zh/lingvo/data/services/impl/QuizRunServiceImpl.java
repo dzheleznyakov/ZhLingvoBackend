@@ -87,6 +87,7 @@ public class QuizRunServiceImpl implements QuizRunService {
         QuizRunEvaluator quizRunEvaluator = new QuizRunEvaluator(optionalFoundQuiz.get(), quizRun);
         quizRunEvaluator.evaluate();
         quizRecordRepository.saveAll(quizRecords);
+        quizRunRepository.delete(quizRun);
 
         return Either.right(true);
     }

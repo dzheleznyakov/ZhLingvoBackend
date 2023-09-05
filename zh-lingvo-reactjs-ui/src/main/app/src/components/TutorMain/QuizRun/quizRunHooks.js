@@ -11,7 +11,6 @@ export const useQuizRunner = (quizSettings, records) => {
     const [currentQuizRunner, setQuizRunner] = useState();
     const { qid: quizId, runid: quizRunId } = useParams();
     const fetchedQuizRun = useSelector(selectors.quizRunSelector);
-    const selectedQuiz = useSelector(selectors.quizRecordsOverviewsSelector);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -28,7 +27,7 @@ export const useQuizRunner = (quizSettings, records) => {
             const quizRunner = QuizRunner.fromQuizRun(fetchedQuizRun, { records });
             setQuizRunner(quizRunner);
         }
-    }, [quizSettings, currentQuizRunner, records, quizId, quizRunId, dispatch]);
+    }, [quizSettings, currentQuizRunner, records, quizId, quizRunId, dispatch, fetchedQuizRun]);
 
     return currentQuizRunner;
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,6 +17,11 @@ const QuizRunResult = () => {
     const dispatch = useDispatch();
 
     useActionOnMount(actions.completeQuizRun(quizRun, qid));
+
+
+    useEffect(() => {
+        return () => dispatch(actions.setQuizRun(null));
+    }, []);
 
     const correctAswers = quizRun && records.length 
         ? quizRun.doneRecords
