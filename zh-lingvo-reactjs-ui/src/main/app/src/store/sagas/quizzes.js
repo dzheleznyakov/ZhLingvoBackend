@@ -169,6 +169,7 @@ export function* createQuizRunSaga(action) {
 
     try {
         const { data } = yield call(api.post, `/quizzes/${quizId}/runs`, quizRun);
+        yield put(actions.setQuizRun(data))
         yield put(actions.navigateTo(`/quiz/${quizId}/run/${data.id}`));
     } catch (error) {
         yield put(actions.addError(

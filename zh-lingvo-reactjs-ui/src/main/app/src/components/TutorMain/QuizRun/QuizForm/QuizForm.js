@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import QUIZ_REGIMES from '../../../../static/constants/quizRegimes';
-import { useAutofocus } from '../../../../hooks';
+import { useActionOnMount, useAutofocus } from '../../../../hooks';
 import { FormBase, formInputTypes } from '../../../UI';
 import { refType } from '../../../../static/types/generalTypes';
+import { quizRunSelector, selectedQuizSelector } from '../../../../store/selectors';
+import * as actions from '../../../../store/actions';
 
 const quizFormTranslationType = PropTypes.shape({
     value: PropTypes.string.isRequired,
@@ -73,23 +77,36 @@ const QuizForm = props => {
         onSubmit,
     } = props;
 
+    const quizRun = useSelector(quizRunSelector);
+    const langCode = quizRun && quizRun.targetLanguage ? quizRun.targetLanguage.code : null;
+
     const quizFormGroup = {
         key: 'quizFormGroup',
         label: 'Quiz',
     };
 
     const mainFormListeners = {};
-    if (quizRegime === QUIZ_REGIMES.BACKWARD)
+    if (quizRegime === QUIZ_REGIMES.BACKWARD) {
         mainFormListeners.onKeyDown = event => {
             if (event.keyCode === ENTER_KEY_CODE) {
                 event.preventDefault();
                 onSubmit();
             }
         };
+        // mainFormListeners.onKeyUp = event => {
+        //     if (langCode == null)
+        //         return;
+        //     event.preventDefault();
+        //     const { value } = mainFormLog;
+        //     const updatedValue = value + 'x';
+        //     event.target.value = updatedValue;
+        //     setMainFormLog({ ...mainFormLog, value: updatedValue });
+        // };
+    }
     const mainFormField = {
         key: 'mainFormField',
         label: 'Word',
-        type: formInputTypes.TEXT,
+        type: quizRegime === QUIZ_REGIMES.FORWARD ? formInputTypes.TEXT : formInputTypes.LOCALE_TEXT,
         defaultValue: getMainFormValue(quizRegime, shouldRevealAnswer, record),
         groupKey: quizFormGroup.key,
         forwardRef: mainFormRef,

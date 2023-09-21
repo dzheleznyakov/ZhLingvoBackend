@@ -9,6 +9,7 @@ import * as selectors from '../../../store/selectors';
 
 export const useQuizRunner = (quizSettings, records) => {
     const [currentQuizRunner, setQuizRunner] = useState();
+    const [fetchingQuizRun, setFetchingQuizRun] = useState(false);
     const { qid: quizId, runid: quizRunId } = useParams();
     const fetchedQuizRun = useSelector(selectors.quizRunSelector);
     const dispatch = useDispatch();
@@ -21,13 +22,24 @@ export const useQuizRunner = (quizSettings, records) => {
             dispatch(actions.createQuizRun(quizRunner.toQuizRun(), quizId));
         } else if (quizRunId != null && currentQuizRunner && currentQuizRunner.id == null) {
             currentQuizRunner.setId(quizRunId);
-        } else if (quizRunId != null && currentQuizRunner == null && fetchedQuizRun == null) {
+        } else if (quizRunId != null && currentQuizRunner == null && fetchedQuizRun == null && !fetchingQuizRun) {
+            setFetchingQuizRun(true);
             dispatch(actions.fetchQuizRun(quizId, quizRunId));
         } else if (quizRunId != null && currentQuizRunner == null && fetchedQuizRun != null) {
+            setFetchingQuizRun(false);
             const quizRunner = QuizRunner.fromQuizRun(fetchedQuizRun, { records });
             setQuizRunner(quizRunner);
         }
-    }, [quizSettings, currentQuizRunner, records, quizId, quizRunId, dispatch, fetchedQuizRun]);
+    }, [
+        quizSettings,
+        currentQuizRunner,
+        records,
+        quizId, 
+        quizRunId, 
+        dispatch, 
+        fetchedQuizRun,
+        fetchingQuizRun,
+    ]);
 
     return currentQuizRunner;
 };

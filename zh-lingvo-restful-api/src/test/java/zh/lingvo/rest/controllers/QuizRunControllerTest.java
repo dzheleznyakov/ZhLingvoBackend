@@ -29,6 +29,7 @@ import zh.lingvo.data.services.QuizService;
 import zh.lingvo.data.services.impl.QuizRunServiceImpl;
 import zh.lingvo.data.services.impl.QuizServiceImpl;
 import zh.lingvo.rest.commands.QuizRunCommand;
+import zh.lingvo.rest.converters.LanguageToLanguageCommand;
 import zh.lingvo.rest.converters.QuizRunCommandToQuizRun;
 import zh.lingvo.rest.converters.QuizRunToQuizRunCommand;
 import zh.lingvo.rest.util.RequestContext;
@@ -91,7 +92,7 @@ public class QuizRunControllerTest {
         QuizRunService quizRunService = new QuizRunServiceImpl(quizRunRepository, quizService, quizRecordRepository);
         QuizRunController controller = new QuizRunController(
                 new QuizRunCommandToQuizRun(),
-                new QuizRunToQuizRunCommand(),
+                new QuizRunToQuizRunCommand(new LanguageToLanguageCommand()),
                 quizRunService,
                 context);
 

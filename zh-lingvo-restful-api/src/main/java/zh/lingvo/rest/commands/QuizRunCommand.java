@@ -18,6 +18,7 @@ import java.util.List;
 public class QuizRunCommand {
     private Long id;
     private Long quizId;
+    private LanguageCommand targetLanguage;
     private String quizRegime;
     private String matchingRegime;
     private Long ts;

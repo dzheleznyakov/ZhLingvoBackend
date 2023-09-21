@@ -67,6 +67,8 @@ CREATE TABLE IF NOT EXISTS quiz_run (
     accessed_timestamp INTEGER,
     FOREIGN KEY (quiz_id) REFERENCES quiz(id)
 );
+--ALTER TABLE quiz_run
+--    ADD target_lang_id INTEGER NOT NULL;
 
 CREATE TABLE IF NOT EXISTS dictionary (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
