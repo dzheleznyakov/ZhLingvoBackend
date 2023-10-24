@@ -7,48 +7,65 @@ import QuizRunner from './QuizRunner/QuizRunner';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
 
-export const useQuizRunner = (quizSettings, records) => {
+const NULL_QUIZ = { id: -1, name: '', targetLanguage: {}};
+
+export const useQuizRunner = () => {
+    const records = useSelector(selectors.allQuizRecordsSelector);
+    const quiz = useSelector(selectors.loadedQuizSelector) || NULL_QUIZ;
+    const quizSettings = useSelector(selectors.quizSettingsSelector)[quiz.id];
     const [currentQuizRunner, setQuizRunner] = useState();
-    const [fetchingQuizRun, setFetchingQuizRun] = useState(false);
     const { qid: quizId, runid: quizRunId } = useParams();
     const fetchedQuizRun = useSelector(selectors.quizRunSelector);
     const dispatch = useDispatch();
 
+    const dataIsFetched = 
+        records && records.length > 0 
+        && quiz && quiz.id >= 0 
+        && quizSettings != null && quizSettings.quizId >= 0;
+
     useEffect(() => {
-        if (quizRunId == null && quizSettings != null && currentQuizRunner == null && records.length > 0) {
-            const quizRunner = buildQuizRunner(quizSettings, records);
+        if (quizRunId == null && currentQuizRunner == null && !dataIsFetched) {
+            dispatch(actions.fetchQuizRunData(quizId));
+        } else if (quizRunId == null && currentQuizRunner == null && dataIsFetched) {
+            const quizRunner = buildNewQuizRunner(quizSettings, records);
             quizRunner.initRun();
             setQuizRunner(quizRunner);
             dispatch(actions.createQuizRun(quizRunner.toQuizRun(), quizId));
-        } else if (quizRunId != null && currentQuizRunner && currentQuizRunner.id == null) {
+        } else if (quizRunId != null && currentQuizRunner != null && currentQuizRunner.id == null && dataIsFetched) {
             currentQuizRunner.setId(quizRunId);
-        } else if (quizRunId != null && currentQuizRunner == null && fetchedQuizRun == null && !fetchingQuizRun) {
-            setFetchingQuizRun(true);
+            setQuizRunner(currentQuizRunner);
+        } else if (quizRunId != null && currentQuizRunner == null && !dataIsFetched) {
             dispatch(actions.fetchQuizRun(quizId, quizRunId));
-        } else if (quizRunId != null && currentQuizRunner == null && fetchedQuizRun != null) {
-            setFetchingQuizRun(false);
-            const quizRunner = QuizRunner.fromQuizRun(fetchedQuizRun, { records });
+        } else if (quizRunId != null && currentQuizRunner == null && dataIsFetched) {
+            const quizRunner = QuizRunner.fromQuizRun(
+                fetchedQuizRun, 
+                { records: getQuizRunnerRecords(records) },
+            );
             setQuizRunner(quizRunner);
         }
     }, [
-        quizSettings,
+        quizId,
+        quizRunId,
         currentQuizRunner,
+        dataIsFetched,
+        dispatch,
+        quizSettings,
         records,
-        quizId, 
-        quizRunId, 
-        dispatch, 
-        fetchedQuizRun,
-        fetchingQuizRun,
     ]);
 
     return currentQuizRunner;
 };
 
-function buildQuizRunner(quizSettings, records) {
+function buildNewQuizRunner(quizSettings, records) {
     const quiz = _.cloneDeep(quizSettings)
     quiz.id = quiz.quizId;
     delete quiz.quizId;
-    quiz.records = records.map(record => ({
+    quiz.records = getQuizRunnerRecords(records);
+    return QuizRunner.fromQuiz(quiz);
+}
+
+function getQuizRunnerRecords(records = []) {
+    return records.map(record => ({
         id: record.id,
         wordMainForm: record.wordMainForm,
         currentScore: record.currentScore,
@@ -63,5 +80,4 @@ function buildQuizRunner(quizSettings, records) {
                 .replaceAll(/,/g, '');
         }),
     }));
-    return QuizRunner.fromQuiz(quiz);
 }

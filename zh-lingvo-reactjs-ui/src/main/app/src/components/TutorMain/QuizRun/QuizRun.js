@@ -49,9 +49,6 @@ const QuizRun = () => {
     const [lastAnswerIsCorrect, setLastAnswerIsCorrect] = useState(false);
     const shouldRevealAnswer = phase === QUIZ_PHASE.ANSWER || phase === QUIZ_PHASE.COMPLETED;
 
-    useConditionalActionOnMount(actions.fetchQuiz(qid), qid != null, qid);
-    useConditionalActionOnMount(actions.fetchQuizRecords(qid), qid != null, qid);
-    useConditionalActionOnMount(actions.fetchQuizSettings(qid), qid != null, qid);
     useActionOnMount(actions.setAllQuizRuns([]));
 
     useQuizRunBreadcrumbs(qid, quiz);

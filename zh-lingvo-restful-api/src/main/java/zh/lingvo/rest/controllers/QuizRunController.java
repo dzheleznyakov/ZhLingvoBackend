@@ -1,6 +1,7 @@
 package zh.lingvo.rest.controllers;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import zh.lingvo.rest.util.RequestContext;
 import zh.lingvo.util.Either;
 
 import java.util.List;
+import java.util.Map;
 
 import static zh.lingvo.util.Preconditions.checkCondition;
 
@@ -32,17 +34,24 @@ public class QuizRunController {
     private final QuizRunToQuizRunCommand quizRunConverter;
     private final QuizRunService quizRunService;
     private final RequestContext requestContext;
+    private final QuizController quizController;
+    private final QuizSettingsController quizSettingsController;
+    private final QuizRecordController quizRecordController;
 
     public QuizRunController(
             QuizRunCommandToQuizRun quizRunCommandConverter,
             QuizRunToQuizRunCommand quizRunConverter,
             QuizRunService quizRunService,
-            RequestContext requestContext
-    ) {
+            RequestContext requestContext,
+            QuizController quizController,
+            QuizSettingsController quizSettingsController, QuizRecordController quizRecordController) {
         this.quizRunCommandConverter = quizRunCommandConverter;
         this.quizRunConverter = quizRunConverter;
         this.quizRunService = quizRunService;
         this.requestContext = requestContext;
+        this.quizController = quizController;
+        this.quizSettingsController = quizSettingsController;
+        this.quizRecordController = quizRecordController;
     }
 
     @GetMapping
@@ -62,6 +71,19 @@ public class QuizRunController {
                 .orElse(null);
     }
 
+    @GetMapping("/{runId}/data")
+    public Map<String, Object> getQuizRunWithData(
+            @PathVariable("runId") Long quizRunId,
+            @PathVariable("id") Long quizId
+    ) {
+        return ImmutableMap.of(
+                "quizRun", this.getQuizRun(quizRunId),
+                "quiz", quizController.getQuiz(quizId),
+                "settings", quizSettingsController.getSettings(quizId),
+                "records", quizRecordController.getAllRecords(quizId)
+        );
+    }
+
     @PostMapping
     public QuizRunCommand newQuizRun(
             @PathVariable("id") Long quizId,
@@ -74,6 +96,15 @@ public class QuizRunController {
                 .map(quizRunConverter::convert)
                 .orElseThrow(() -> new ResourceNotFound(String.format(
                         "Quiz run not found when trying to create one for quiz [%d]", quizId)));
+    }
+
+    @GetMapping("/data")
+    public Map<String ,Object> getQuizRunData(@PathVariable("id") Long quizId) {
+        return ImmutableMap.of(
+                "quiz", quizController.getQuiz(quizId),
+                "settings", quizSettingsController.getSettings(quizId),
+                "records", quizRecordController.getAllRecords(quizId)
+        );
     }
 
     @PutMapping

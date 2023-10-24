@@ -94,7 +94,10 @@ public class QuizRunControllerTest {
                 new QuizRunCommandToQuizRun(),
                 new QuizRunToQuizRunCommand(new LanguageToLanguageCommand()),
                 quizRunService,
-                context);
+                context,
+                null,
+                null,
+                null);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(new ExceptionsAdvice())
