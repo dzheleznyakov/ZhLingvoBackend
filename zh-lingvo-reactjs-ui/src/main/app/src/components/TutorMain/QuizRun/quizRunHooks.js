@@ -51,6 +51,7 @@ export const useQuizRunner = () => {
         dispatch,
         quizSettings,
         records,
+        fetchedQuizRun,
     ]);
 
     return currentQuizRunner;
