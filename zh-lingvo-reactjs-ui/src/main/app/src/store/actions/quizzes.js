@@ -171,6 +171,11 @@ export const fetchQuizRun = (quizId, quizRunId) => ({
     quizRunId,
 });
 
+export const fetchQuizRunData = quizId => ({
+    type: actionTypes.FETCH_QUIZ_RUN_DATA,
+    quizId,
+});
+
 export const setAllQuizRuns = quizRuns => ({
     type: actionTypes.SET_ALL_QUIZ_RUNS,
     quizRuns,

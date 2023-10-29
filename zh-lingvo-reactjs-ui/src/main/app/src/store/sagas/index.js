@@ -53,6 +53,7 @@ export function* quizzesWatcher() {
     yield takeEvery(actionTypes.COMPLETE_QUIZ_RUN, quizzesSagas.completeQuizRunSaga);
     yield takeEvery(actionTypes.FETCH_ALL_QUIZ_RUNS, quizzesSagas.fetchAllQuizRunsSaga);
     yield takeLatest(actionTypes.FETCH_QUIZ_RUN, quizzesSagas.fetchQuizRunSaga);
+    yield takeLatest(actionTypes.FETCH_QUIZ_RUN_DATA, quizzesSagas.fetchQuizRunDataSaga);
 }
 
 export function* quizRecordsWatcher() {

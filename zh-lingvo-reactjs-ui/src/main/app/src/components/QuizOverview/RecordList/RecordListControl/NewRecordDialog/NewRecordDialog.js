@@ -21,8 +21,9 @@ const NewRecordDialog = props => {
     const mainFormField = {
         key: 'mainForm',
         label: 'Main Form',
-        type: formInputTypes.TEXT,
+        type: formInputTypes.LOCALE_TEXT,
         defaultValue: '',
+        autocomplete: false,
         groupKey: recordGroup.key,
         forwardRef: mainFormRef,
         validation: [{

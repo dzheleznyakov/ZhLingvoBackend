@@ -5,7 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.QuizRun;
+import zh.lingvo.rest.commands.LanguageCommand;
 import zh.lingvo.rest.commands.QuizRunCommand;
 
 import javax.annotation.Nonnull;
@@ -23,17 +25,29 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 
 @Component
 public class QuizRunToQuizRunCommand implements Converter<QuizRun, QuizRunCommand> {
+    private final LanguageToLanguageCommand languageConverter;
+
+    public QuizRunToQuizRunCommand(LanguageToLanguageCommand languageConverter) {
+        this.languageConverter = languageConverter;
+    }
+
     @Override
     public QuizRunCommand convert(@Nullable QuizRun source) {
         return source == null ? null : QuizRunCommand.builder()
                 .id(source.getId())
                 .quizId(source.getQuiz().getId())
+                .targetLanguage(getTargetLanguage(source))
                 .quizRegime(source.getQuizRegime().getCode())
                 .matchingRegime(source.getMatchingRegime().getCode())
                 .ts(getTimestamp(source))
                 .records(source.getRecords())
                 .doneRecords(getDoneRecords(source))
                 .build();
+    }
+
+    private LanguageCommand getTargetLanguage(QuizRun source) {
+        Language language = source.getQuiz().getLanguage();
+        return languageConverter.convert(language);
     }
 
     private static Long getTimestamp(QuizRun source) {

@@ -169,6 +169,7 @@ export function* createQuizRunSaga(action) {
 
     try {
         const { data } = yield call(api.post, `/quizzes/${quizId}/runs`, quizRun);
+        yield put(actions.setQuizRun(data))
         yield put(actions.navigateTo(`/quiz/${quizId}/run/${data.id}`));
     } catch (error) {
         yield put(actions.addError(
@@ -224,12 +225,31 @@ export function* fetchQuizRunSaga(action) {
     const { quizId, quizRunId } = action;
     
     try {
-        const { data: quizRun } = yield call(api.get, `quizzes/${quizId}/runs/${quizRunId}`);
+        const { data } = yield call(api.get, `quizzes/${quizId}/runs/${quizRunId}/data`);
+        const { quizRun, quiz, settings, records } = data;
         yield put(actions.setQuizRun(quizRun));
+        yield put(actions.fetchQuizSuccess(quiz));
+        yield put(actions.fetchQuizRecordsSuccess(records));
+        yield put(actions.fetchQuizSettingsSuccess(quizId, settings));
     } catch (error) {
         yield put(actions.addError(
             error.response.data,
             `Error while fetching quiz run [${quizRunId}] for quiz [${quizId}]`));
+    }
+}
+
+export function* fetchQuizRunDataSaga(action) {
+    const { quizId } = action;
+    try {
+        const { data } = yield call(api.get, `quizzes/${quizId}/runs/data`);
+        const { quiz, settings, records } = data;
+        yield put(actions.fetchQuizSuccess(quiz));
+        yield put(actions.fetchQuizRecordsSuccess(records));
+        yield put(actions.fetchQuizSettingsSuccess(quizId, settings));
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while fetching quiz run data for quiz [${quizId}]`));
     }
 }
 

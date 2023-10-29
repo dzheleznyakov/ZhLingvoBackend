@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import * as inputTypes from './inputTypes';
 import { validationType } from './formTypes';
 import { refType } from '../../../static/types/generalTypes';
+import LocaleInput from './LocaleInput/LocaleInput';
 
 const inputTypesArray = Object.keys(inputTypes).map(key => inputTypes[key]);
 
@@ -50,7 +51,7 @@ const Input = props => {
     }, [type, forwardRef, defaultValue]);
 
     switch (type) {
-        case inputTypes.TEXT:  
+        case inputTypes.TEXT:
             return (
                 <input
                     id={id}
@@ -108,6 +109,8 @@ const Input = props => {
                     { ...listeners }
                 />
             );
+        case inputTypes.LOCALE_TEXT:
+            return <LocaleInput { ...props } />;
         default: return null;
     }
 };
