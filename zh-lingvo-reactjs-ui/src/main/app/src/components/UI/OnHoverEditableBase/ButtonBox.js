@@ -9,6 +9,7 @@ const ButtonBox = props => {
         newModalType,
         editModalType,
         deleteModalType,
+        redirectModalType,
         show,
         buttonsCoordinates,
         afterActionCb,
@@ -25,6 +26,7 @@ const ButtonBox = props => {
     const onNew = getOnAction(newModalType);
     const onEdit = getOnAction(editModalType);
     const onDelete = getOnAction(deleteModalType);
+    const onRedirect = getOnAction(redirectModalType);
 
     const newButton = show && newModalType && (
         <IconButton
@@ -48,6 +50,14 @@ const ButtonBox = props => {
         />
     );
 
+    const redirectButton = show && redirectModalType && (
+        <IconButton
+            type={iconButtonTypes.REDIRECT}
+            size={buttonSizes.SMALL}
+            clicked={onRedirect}
+        />
+    );
+
     const { x, y } = buttonsCoordinates;
     const buttonPositioning = {
         left: `${x}px`,
@@ -59,14 +69,16 @@ const ButtonBox = props => {
             {newButton}
             {editButton}
             {deleteButton}
+            {redirectButton}
         </div>
     );
 };
 
 ButtonBox.propTypes = {
+    newModalType: PropTypes.string,
     editModalType: PropTypes.string,
     deleteModalType: PropTypes.string,
-    newModalType: PropTypes.string,
+    redirectModalType: PropTypes.string,
     show: PropTypes.bool,
     afterActionCb: PropTypes.func.isRequired,
     buttonsCoordinates: PropTypes.shape({

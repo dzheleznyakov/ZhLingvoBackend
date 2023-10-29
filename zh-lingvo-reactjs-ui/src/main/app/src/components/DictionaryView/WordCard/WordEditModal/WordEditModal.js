@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Modal } from '../../../UI';
 import * as selectors from '../../../../store/selectors';
 import * as actions from '../../../../store/actions';
 import * as modalTypes from '../../../../static/constants/wordEditModalTypes';
@@ -30,13 +29,29 @@ const WordEditModal = () => {
         case modalTypes.EXAMPLE_DELETE: panel = <dialogs.ExampleDeleteDialog />; break;
         case modalTypes.MEANING_NEW: panel = <dialogs.MeaningEditDialog />; break;
         case modalTypes.MEANING_DELETE: panel = <dialogs.MeaningDeleteDialog />; break;
+        case modalTypes.MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD: 
+            panel = <dialogs.MeaningToQuizRecordDialog />; 
+            break;
+        case modalTypes.MEANING_TO_QUIZ_RECORD__CHOOSE_QUIZ: 
+            panel = <dialogs.MeaningToQuizRecordDialog_ChooseQuiz />; 
+            break;
+        case modalTypes.MEANING_TO_QUIZ_RECORD__NEW_QUIZ:
+            panel = <dialogs.MeaningToQuizRecordDialog_NewQuiz />;
+            break;
+        case modalTypes.MEANING_TO_QUIZ_RECORD__RESULT:
+            panel = <dialogs.MeaningToQuizRecordDialog_Result />;
+            break;
         case modalTypes.SEM_BLOCK_NEW: panel = <dialogs.SemanticBlockEditDialog />; break;
         case modalTypes.SEM_BLOCK_EDIT: panel = <dialogs.SemanticBlockEditDialog editing />; break;
         case modalTypes.SEM_BLOCK_DELETE: panel = <dialogs.SemanticBlockDeleteDialog />; break;
         default: panel = null;
     }
 
-    useModal(showWordEditModal, () => dispatch(actions.shouldShowWordEditModal(false)), panel);
+    useModal(
+        showWordEditModal, 
+        () => dispatch(actions.shouldShowWordEditModal(false)), 
+        panel,
+        [wordEditModalType]);
 
     return <></>;
 };

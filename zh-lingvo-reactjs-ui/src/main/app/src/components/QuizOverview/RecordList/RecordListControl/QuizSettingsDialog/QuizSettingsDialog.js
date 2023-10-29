@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
 import QuizSettingsDialogBase from '../../../QuizSettingsDialogBase/QuizSettingsDialogBase';
 
 const QuizSettingsDialog = props => {
-    const { close } = props;
-    const { qid: quizId } = useParams();
+    const { close, quizId } = props;
     
     return <QuizSettingsDialogBase
         close={close}
@@ -15,6 +13,7 @@ const QuizSettingsDialog = props => {
 
 QuizSettingsDialog.propTypes = {
     close: PropTypes.func.isRequired,
+    quizId: PropTypes.string.isRequired,
 };
 
 export default QuizSettingsDialog;

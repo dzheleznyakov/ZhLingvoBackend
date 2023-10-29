@@ -5,12 +5,12 @@ import { useHistory } from 'react-router-dom';
 import { getCookie, setCookie } from '../utils/cookies';
 import * as actions from '../store/actions';
 
-export const useActionOnMount = action => {
+export const useActionOnMount = (action, ...deps) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(action);
-    }, [dispatch]);
+    }, [dispatch].concat(deps));
 };
 
 export const useConditionalActionOnMount = (action, condition, ...deps) => {
@@ -44,12 +44,12 @@ export const useLastVisitedPage = () => {
     }, []);
 };
 
-export const useModal = (show, onClosed, content) => {
+export const useModal = (show, onClosed, content, deps = []) => {
     const dispatch = useDispatch();
     useEffect(() => {
         if (show)
             dispatch(actions.setModal(onClosed, content));
         else
             dispatch(actions.clearModal());
-    }, [show]);
+    }, [show, ...deps]);
 };

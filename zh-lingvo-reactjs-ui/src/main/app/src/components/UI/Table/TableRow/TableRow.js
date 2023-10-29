@@ -20,14 +20,14 @@ const TableRow = ({
 
     useEffect(() => {
         if (selectable && selected)
-            setCssClasses(cssClasses.concat([classes.Focused]))
+            setCssClasses(c => c.concat([classes.Focused]))
         else {
             const updatedCssClasses = [].concat(cssClasses);
             const index = updatedCssClasses.indexOf(classes.Focused);
             updatedCssClasses.splice(index, 1);
             setCssClasses(updatedCssClasses);
         }
-    }, [selected, selectable, trRef]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [selected, selectable, trRef]);
 
     const onClick = () => {
         rowOnClickCb && rowOnClickCb(rowData, rowIndex);

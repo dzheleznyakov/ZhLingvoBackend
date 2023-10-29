@@ -1,5 +1,6 @@
 @import "../../../static/styles/colours";
 @import "../../../static/styles/sizes";
+@import "../../../static/styles/classes";
 
 .Input {
     border: 1px solid map-get($palette, dark-primary);
@@ -9,13 +10,7 @@
 }
 
 .LoginButton {
-    width: 4.5rem;
-    height: 1.5rem;
-    margin: 8px 0;
-    background-color: map-get($palette, light);
-    border: 1px solid map-get($palette, dark-primary);
-    border-radius: $button-border-radius;
-    cursor: pointer;
+    @include regularButton();
 }
 
 .Details {

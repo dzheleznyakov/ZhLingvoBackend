@@ -10,7 +10,7 @@ import { WordMainForm } from './WordView/SubWordParts';
 import WordView from './WordView/WordView';
 import WordViewControl from './WordViewControl/WordViewControl';
 import WordEditModal from './WordEditModal/WordEditModal';
-import { useConditionalActionOnMount } from '../../../hooks';
+import { useActionOnMount, useConditionalActionOnMount } from '../../../hooks';
 import * as selectors from '../../../store/selectors';
 import * as actions from '../../../store/actions';
 
@@ -31,6 +31,7 @@ const WordCard = props => {
         actions.fetchWord(dictionaryId, wordMainForm),
         dictionaryId >= 0 && wordMainForm,
         dictionaryId, wordMainForm);
+    useActionOnMount(actions.setWordEditing(false));
 
     const wordIndex = wordsList.indexOf(wordMainForm);
     const wordIsInList = wordIndex >= 0;

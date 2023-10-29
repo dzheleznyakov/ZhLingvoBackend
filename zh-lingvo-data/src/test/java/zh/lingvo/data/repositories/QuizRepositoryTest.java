@@ -70,6 +70,20 @@ class QuizRepositoryTest extends BaseRepositoryTest<QuizRepository> {
     }
 
     @Test
+    @DisplayName("findAllByUserAndLanguage()")
+    void findAllByUserAndLanguage() {
+        List<Quiz> quizzes = repository.findAllByUserAndLanguage(USER_1, LANGUAGE_1);
+
+        ImmutableSet<String> actualQuzNames = quizzes.stream()
+                .map(Quiz::getName)
+                .collect(ImmutableSet.toImmutableSet());
+        ImmutableSet<String> expectedQuizNames = ImmutableList.of(QUIZ_1).stream()
+                .map(Quiz::getName)
+                .collect(ImmutableSet.toImmutableSet());
+        assertThat(actualQuzNames, is(equalTo(expectedQuizNames)));
+    }
+
+    @Test
     @DisplayName("findByIdAndUser() should return the quiz if it exists and belongs to the user")
     void findByIdAndUser_QuizExists_BelongsToUser() {
         Optional<Quiz> quizOptional = repository.findByIdAndUser(QUIZ_1.getId(), USER_1);

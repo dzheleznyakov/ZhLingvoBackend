@@ -15,9 +15,6 @@ CREATE TABLE IF NOT EXISTS language (
 --    note VARCHAR
 --);
 
----
----
----
 CREATE TABLE IF NOT EXISTS quiz (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
@@ -59,9 +56,19 @@ CREATE TABLE IF NOT EXISTS quiz_example (
     FOREIGN KEY (record_id) REFERENCES quiz_record(id)
 );
 
----
----
----
+CREATE TABLE IF NOT EXISTS quiz_run (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    quiz_id INTEGER NOT NULL,
+    quiz_regime VARCHAR(10),
+    matching_regime VARCHAR(8),
+    records TEXT,
+    done_records TEXT,
+    created_timestamp INTEGER,
+    accessed_timestamp INTEGER,
+    FOREIGN KEY (quiz_id) REFERENCES quiz(id)
+);
+--ALTER TABLE quiz_run
+--    ADD target_lang_id INTEGER NOT NULL;
 
 CREATE TABLE IF NOT EXISTS dictionary (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -32,6 +32,7 @@ const QuizRecordEditModal = () => {
         showModal,
         () => dispatch(shouldShowQuizRecordEditModal(false)),
         panel,
+        [modalType]
     );
 
     return <></>;

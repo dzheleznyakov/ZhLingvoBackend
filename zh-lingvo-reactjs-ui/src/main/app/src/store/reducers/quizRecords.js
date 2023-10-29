@@ -6,6 +6,7 @@ import { NONE } from '../../static/constants/quizRecordEditModalTypes';
 
 const initialState = {
     quizRecordsOverviews: [],
+    quizRecords: [],
     selectedQuizRecordIndex: -1,
     loading: false,
     loadedQuizRecord: null,
@@ -14,11 +15,17 @@ const initialState = {
     showQuizRecordEditModal: false,
     quizRecordEditModalType: NONE,
     quizRecordEditPath: [],
+    convertingMeaingToQuizRecord: false,
 };
+
+const fetchQuizRecordsOverviewsSuccess = (state, action) => ({
+    ...state,
+    quizRecordsOverviews: action.overviews,
+});
 
 const fetchQuizRecordsSuccess = (state, action) => ({
     ...state,
-    quizRecordsOverviews: action.overviews,
+    quizRecords: action.records,
 });
 
 const selectQuizRecord = (state, action) => ({
@@ -31,7 +38,7 @@ const fetchQuizRecordStart = state => ({
     loading: true,
 });
 
-const fetchQuizRecordSuccess = (state, action) =>({
+const fetchQuizRecordSuccess = (state, action) => ({
     ...state,
     loading: false,
     loadedQuizRecord: action.quizRecord,
@@ -85,13 +92,29 @@ const updateQuizRecordMainForm = (state, action) => updateQuizRecord(state, acti
 const updateQuizRecordElement = (state, action) => updateQuizRecord(state, action,
     (nuqr, action) => _.set(nuqr, action.path, action.value));
 
+const convertMeaningToQuizRecordStart = state => ({
+    ...state,
+    convertingMeaingToQuizRecord: true,
+});
+
+const convertMeaningToQuizRecordFailure = state => ({
+    ...state,
+    convertingMeaingToQuizRecord: false,
+});
+
+const convertMeaningToQuizRecordSuccess = state => ({
+    ...state,
+    convertingMeaingToQuizRecord: false,
+});
+
 const signOut = () => ({
     ...initialState
 });
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.FETCH_QUIZ_RECORDS_SUCCESS: return fetchQuizRecordsSuccess(state, action);
+        case actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS_SUCCESS: return fetchQuizRecordsOverviewsSuccess(state, action);
+        case actionTypes.FETCH_QUIZ_RECORDS_SUCCESS: return fetchQuizRecordsSuccess (state, action);
         case actionTypes.SELECT_QUIZ_RECORD: return selectQuizRecord(state, action);
         case actionTypes.FETCH_QUIZ_RECORD_START: return fetchQuizRecordStart(state, action);
         case actionTypes.FETCH_QUIZ_RECORD_SUCCESS: return fetchQuizRecordSuccess(state, action);
@@ -101,6 +124,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SHOULD_SHOW_QUIZ_RECORD_EDIT_MODAL: return shouldShowQuizRecordEditModal(state, action);
         case actionTypes.UPDATE_QUIZ_RECORD_MAIN_FORM: return updateQuizRecordMainForm(state, action);
         case actionTypes.UPDATE_QUIZ_RECORD_ELEMENT: return updateQuizRecordElement(state, action);
+        case actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_START: return convertMeaningToQuizRecordStart(state, action);
+        case actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_FAILURE: return convertMeaningToQuizRecordFailure(state, action);       
+        case actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_SUCCESS: return convertMeaningToQuizRecordSuccess(state, action);       
         case SIGN_OUT: return signOut();
         default: return state;
     }

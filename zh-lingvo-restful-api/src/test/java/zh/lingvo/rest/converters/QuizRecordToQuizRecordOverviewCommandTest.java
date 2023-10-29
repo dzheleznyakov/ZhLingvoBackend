@@ -38,6 +38,7 @@ class QuizRecordToQuizRecordOverviewCommandTest {
     void convertQuizRecord() {
         Long id = 42L;
         String wordMainForm = "main";
+        Float currentScore = 0.739749f;
 
         Long translationId1 = 101L;
         Long translationId2 = 102L;
@@ -53,6 +54,7 @@ class QuizRecordToQuizRecordOverviewCommandTest {
         QuizRecord quizRecord = QuizRecord.builder()
                 .id(id)
                 .wordMainForm(wordMainForm)
+                .currentScore(currentScore)
                 .translations(quizTranslations)
                 .build();
 
@@ -61,6 +63,7 @@ class QuizRecordToQuizRecordOverviewCommandTest {
         assertThat(command, is(notNullValue()));
         assertThat(command.getId(), is(id));
         assertThat(command.getWordMainForm(), is(wordMainForm));
+        assertThat(command.getCurrentScore(), is(currentScore));
 
         assertThat(command.getTranslations(), is(notNullValue()));
         assertThat(command.getTranslations(), hasSize(2));

@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import StaticEditable from '../Editable/StaticEditable';
 import NewPartButton from '../NewPartButton';
 import { meaningType } from '../../wordTypes';
-import { MEANING_NEW, MEANING_DELETE } from '../../../../../../static/constants/wordEditModalTypes';
+import { 
+    MEANING_NEW, 
+    MEANING_DELETE, 
+    MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD 
+} from '../../../../../../static/constants/wordEditModalTypes';
 import { Meaning } from '..';
 
 export const NULL_MEANING = { id: -1 };
@@ -24,6 +28,7 @@ const EditableMeaning = props => {
     return (
         <StaticEditable
             deleteModalType={MEANING_DELETE}
+            redirectModalType={MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD}
             path={path}
             block
         >

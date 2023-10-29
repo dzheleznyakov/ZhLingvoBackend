@@ -7,7 +7,7 @@ export const columnDef = PropTypes.shape({
 })
 
 export const dataCellDef = PropTypes.shape({
-    value: PropTypes.string.isRequired,
+    value: PropTypes.node.isRequired,
 });
 
 export const dataRowDef = PropTypes.objectOf(dataCellDef);

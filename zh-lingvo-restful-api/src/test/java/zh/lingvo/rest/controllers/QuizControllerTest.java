@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.User;
+import zh.lingvo.data.services.LanguageService;
 import zh.lingvo.data.services.QuizService;
 import zh.lingvo.rest.commands.LanguageCommand;
 import zh.lingvo.rest.commands.QuizCommand;
@@ -60,6 +61,9 @@ class QuizControllerTest {
     @Mock
     private QuizService quizService;
 
+    @Mock
+    LanguageService languageService;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -71,6 +75,7 @@ class QuizControllerTest {
         LanguageCommandToLanguage languageCommandConverter = new LanguageCommandToLanguage();
         var quizController = new QuizController(
                 quizService,
+                languageService,
                 quizConverter,
                 languageCommandConverter,
                 context);
@@ -80,15 +85,18 @@ class QuizControllerTest {
                 .build();
     }
 
-    private String toPayload(Object object) {
+    private static String toPayload(Object object) {
         return GSON.toJson(object);
     }
 
     @Nested
     @DisplayName("Test GET /api/quizzes")
     class GetAllQuizzes {
+        private final String URL_WITH_QUERY_PARAMS = URL + "?lang={lang}";
+        private final String LANG_CODE_1 = LANGUAGE_1.getTwoLetterCode();
+
         @Test
-        @DisplayName("Should return an empty list if not quizzes found for the user")
+        @DisplayName("Should return an empty list if no quizzes found for the user")
         void quizzesNotFound_ReturnEmptyList() throws Exception {
             when(quizService.findAll(USER)).thenReturn(ImmutableList.of());
 
@@ -98,6 +106,21 @@ class QuizControllerTest {
                     .andExpect(jsonPath("$", is(empty())));
 
             verify(quizService, only()).findAll(USER);
+        }
+
+        @Test
+        @DisplayName("Should return an empty list if no quizzes by language found for the user")
+        void quizzesByLanguageNotFound_ReturnEmptyList() throws Exception {
+            when(languageService.findByTwoLetterCode(LANG_CODE_1)).thenReturn(Optional.of(LANGUAGE_1));
+            when(quizService.findAll(USER, LANGUAGE_1)).thenReturn(ImmutableList.of());
+
+            mockMvc.perform(get(URL_WITH_QUERY_PARAMS, LANG_CODE_1))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$", is(empty())));
+
+            verify(quizService, only()).findAll(USER, LANGUAGE_1);
+            verify(languageService, only()).findByTwoLetterCode(LANG_CODE_1);
         }
 
         @Test
@@ -117,6 +140,24 @@ class QuizControllerTest {
                     .andExpect(jsonPath("$[1].targetLanguage.id", is(2)));
 
             verify(quizService, only()).findAll(USER);
+        }
+
+        @Test
+        @DisplayName("Should return list of found quizzes by language for the user")
+        void returnFoundQuizzesByLanguage() throws Exception {
+            when(languageService.findByTwoLetterCode(LANG_CODE_1)).thenReturn(Optional.of(LANGUAGE_1));
+            when(quizService.findAll(USER, LANGUAGE_1)).thenReturn(ImmutableList.of(QUIZ_1));
+
+            mockMvc.perform(get(URL_WITH_QUERY_PARAMS, LANG_CODE_1))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$", hasSize(1)))
+                    .andExpect(jsonPath("$[0].id", is(1)))
+                    .andExpect(jsonPath("$[0].name", is("Q1")))
+                    .andExpect(jsonPath("$[0].targetLanguage.id", is(1)));
+
+            verify(languageService, only()).findByTwoLetterCode(LANG_CODE_1);
+            verify(quizService, only()).findAll(USER, LANGUAGE_1);
         }
     }
 

@@ -11,7 +11,7 @@ const TranscriptionEditDialog = props => {
     const { editing } = props;
     const path = useSelector(selectors.quizRecordEditPathSelector);
     const transcription = useSelector(
-        selectors.quizRecordStringPropertyToUpdateSelectorFactory(path));
+        selectors.quizRecordStringPropertyToUpdateSelectorFactory(path)) || '';
     const dispatch = useDispatch();
 
     const transcriptionGroup = {
@@ -32,7 +32,7 @@ const TranscriptionEditDialog = props => {
             failureMessage: 'Transcription cannot be empty',
         }],
     };
-
+    
     useAutofocus(transcriptionRef);
 
     const onCanceled = () => 
