@@ -7,9 +7,10 @@ import ButtonBox from './ButtonBox';
 const StaticEditableBase = props => {
     const {
         children,
+        newModalType,
         editModalType,
         deleteModalType,
-        newModalType,
+        redirectModalType,
         block,
         isEditing,
         modalTypeToAction,
@@ -33,6 +34,7 @@ const StaticEditableBase = props => {
         newModalType={newModalType}
         editModalType={editModalType}
         deleteModalType={deleteModalType}
+        redirectModalType={redirectModalType}
         show={hovered}
         buttonsCoordinates={buttonsCoordinates}
         afterActionCb={() => setHovered(false)}
@@ -58,9 +60,10 @@ const StaticEditableBase = props => {
 
 StaticEditableBase.propTypes = {
     children: PropTypes.node.isRequired,
+    newModalType: PropTypes.string,
     editModalType: PropTypes.string,
     deleteModalType: PropTypes.string,
-    newModalType: PropTypes.string,
+    redirectModalType: PropTypes.string,
     block: PropTypes.bool,
     isEditing: PropTypes.bool,
     modalTypeToAction: PropTypes.func.isRequired,

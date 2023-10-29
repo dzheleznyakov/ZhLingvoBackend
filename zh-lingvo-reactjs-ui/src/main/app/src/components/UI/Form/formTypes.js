@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import * as inputTypes from './inputTypes';
+import { refType } from '../../../static/types/generalTypes';
 
 const inputTypesArray = Object.keys(inputTypes).map(key => inputTypes[key]);
 
@@ -19,9 +20,11 @@ export const fieldType = PropTypes.shape({
     label: PropTypes.string.isRequired,
     type: PropTypes.oneOf(inputTypesArray).isRequired,
     defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    forwardRef: PropTypes.object.isRequired,
+    forwardRef: refType,
     values: PropTypes.arrayOf(PropTypes.string),
     disabled: PropTypes.bool,
+    autocomplete: PropTypes.bool,
     groupKey: PropTypes.string,
     validation: PropTypes.arrayOf(validationType),
+    listeners: PropTypes.objectOf(PropTypes.func),
 });

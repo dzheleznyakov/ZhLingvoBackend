@@ -1,6 +1,7 @@
 package zh.lingvo.rest.controllers;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,11 +14,18 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import zh.lingvo.core.domain.PartOfSpeech;
+import zh.lingvo.data.model.Example;
 import zh.lingvo.data.model.Language;
+import zh.lingvo.data.model.Meaning;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.QuizRecord;
+import zh.lingvo.data.model.SemanticBlock;
+import zh.lingvo.data.model.Translation;
 import zh.lingvo.data.model.User;
+import zh.lingvo.data.model.Word;
+import zh.lingvo.data.services.MeaningService;
 import zh.lingvo.data.services.QuizRecordService;
+import zh.lingvo.data.services.QuizService;
 import zh.lingvo.rest.commands.QuizRecordCommand;
 import zh.lingvo.rest.converters.ExampleCommandToQuizExample;
 import zh.lingvo.rest.converters.QuizExampleToExampleCommand;
@@ -31,6 +39,7 @@ import zh.lingvo.rest.util.RequestContext;
 
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -65,6 +74,12 @@ class QuizRecordControllerTest {
     @Mock
     private QuizRecordService quizRecordService;
 
+    @Mock
+    private QuizService quizService;
+
+    @Mock
+    private MeaningService meaningService;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -85,10 +100,11 @@ class QuizRecordControllerTest {
                 quizToCommandConverter,
                 commandConverter);
 
-        QuizRecordController controller =
-                new QuizRecordController(
+        QuizRecordController controller = new QuizRecordController(
                 quizRecordService,
-                        quizRecordConverter,
+                quizService,
+                meaningService,
+                quizRecordConverter,
                 context);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -274,6 +290,107 @@ class QuizRecordControllerTest {
             verify(quizRecordService, only())
                     .create(any(QuizRecord.class), eq(QUIZ_ID), eq(user));
             verifyNoMoreInteractions(quizRecordService);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test POST /api/quizzes/{id}/records/meaning/{mid}")
+    class CreateQuizRecordFromMeaning {
+        private final String POST_URL_TEMPLATE = URL_TEMPLATE + "/meaning/{mid}";
+        private final Long MEANING_ID = 100L;
+
+        @Test
+        @DisplayName("Should return 404 NOT FOUND if the meaning does not exist for the user")
+        void meaningNotFound_Throw() throws Exception {
+            when(meaningService.findById(MEANING_ID, user)).thenReturn(Optional.empty());
+
+            mockMvc.perform(post(POST_URL_TEMPLATE, QUIZ_ID, MEANING_ID))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", matchesRegex(".*not found.*")));
+
+            verify(meaningService, only()).findById(MEANING_ID, user);
+            verifyNoInteractions(quizRecordService, quizService);
+        }
+
+        @Test
+        @DisplayName("Should return 404 NOT FOUND if the quiz does not exist for the user")
+        void quizNotFound_Throw() throws Exception {
+            when(meaningService.findById(MEANING_ID, user)).thenReturn(Optional.of(new Meaning()));
+            when(quizService.findById(QUIZ_ID, user)).thenReturn(Optional.empty());
+
+            mockMvc.perform(post(POST_URL_TEMPLATE, QUIZ_ID, MEANING_ID))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.message", matchesRegex(".*not found.*")));
+
+            verify(meaningService, only()).findById(MEANING_ID, user);
+            verify(quizService, only()).findById(QUIZ_ID, user);
+            verifyNoInteractions(quizRecordService);
+        }
+
+        @Test
+        @DisplayName("Should return OK 200 and new quiz record when the payload is full")
+        void createNewQuizRecordFromMeaning_HappyPath() throws Exception {
+            String wordMainForm = "form";
+            String transcription = "fɔːm";
+            PartOfSpeech pos = PartOfSpeech.NOUN;
+            Word word = Word.builder()
+                    .mainForm(wordMainForm)
+                    .transcription(transcription)
+                    .build();
+            SemanticBlock sb = SemanticBlock.builder()
+                    .word(word)
+                    .pos(pos)
+                    .build();
+            Translation translation = Translation.builder()
+                    .value("tr_value")
+                    .elaboration("tr_elab")
+                    .build();
+            Example example = Example.builder()
+                    .remark("ex_rem")
+                    .expression("ex_expr")
+                    .explanation("ex_expl")
+                    .build();
+            Meaning meaning = Meaning.builder()
+                    .id(MEANING_ID)
+                    .semBlock(sb)
+                    .translations(ImmutableSet.of(translation))
+                    .examples(ImmutableSet.of(example))
+                    .build();
+
+            when(meaningService.findById(MEANING_ID, user)).thenReturn(Optional.of(meaning));
+            when(quizService.findById(QUIZ_ID, user)).thenReturn(Optional.of(quiz));
+            when(quizRecordService.create(any(QuizRecord.class), eq(QUIZ_ID), eq(user)))
+                    .thenAnswer(invocation -> {
+                        QuizRecord record = invocation.getArgument(0);
+                        assertThat(record.getQuiz(), is(notNullValue()));
+                        return Optional.of(record);
+                    });
+
+            mockMvc.perform(post(POST_URL_TEMPLATE, QUIZ_ID, MEANING_ID))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.wordMainForm", is(wordMainForm)))
+                    .andExpect(jsonPath("$.transcription", is(transcription)))
+                    .andExpect(jsonPath("$.pos", is(pos.getShortName())))
+                    .andExpect(jsonPath("$.currentScore", is(0.0)))
+                    .andExpect(jsonPath("$.numberOfRuns", is(0)))
+                    .andExpect(jsonPath("$.numberOfSuccesses", is(0)))
+                    .andExpect(jsonPath("$.translations", is(notNullValue())))
+                    .andExpect(jsonPath("$.translations", hasSize(1)))
+                    .andExpect(jsonPath("$.translations[0].value", is("tr_value")))
+                    .andExpect(jsonPath("$.translations[0].elaboration", is("tr_elab")))
+                    .andExpect(jsonPath("$.examples", is(notNullValue())))
+                    .andExpect(jsonPath("$.examples", hasSize(1)))
+                    .andExpect(jsonPath("$.examples[0].remark", is("ex_rem")))
+                    .andExpect(jsonPath("$.examples[0].expression", is("ex_expr")))
+                    .andExpect(jsonPath("$.examples[0].explanation", is("ex_expl")));
+
+            verify(meaningService, only()).findById(MEANING_ID, user);
+            verify(quizService, only()).findById(QUIZ_ID, user);
+            verify(quizRecordService, only()).create(any(QuizRecord.class), eq(QUIZ_ID), eq(user));
+            verifyNoMoreInteractions(meaningService, quizService, quizRecordService);
         }
     }
 

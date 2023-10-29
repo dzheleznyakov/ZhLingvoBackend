@@ -9,9 +9,10 @@ import { StaticEditableBase } from '../../../../../UI';
 const StaticEditable = props => {
     const { 
         children, 
+        newModalType,
         editModalType, 
         deleteModalType,
-        newModalType,
+        redirectModalType,
         path, 
         block,
     } = props;
@@ -22,6 +23,7 @@ const StaticEditable = props => {
             newModalType={newModalType}
             editModalType={editModalType}
             deleteModalType={deleteModalType}
+            redirectModalType={redirectModalType}
             block={block}
             isEditing={isEditing}
             modalTypeToAction={modalType => {
@@ -36,9 +38,10 @@ const StaticEditable = props => {
 
 StaticEditable.propTypes = {
     children: PropTypes.node.isRequired,
+    newModalType: PropTypes.string,
     editModalType: PropTypes.string,
     deleteModalType: PropTypes.string,
-    newModalType: PropTypes.string,
+    redirectModalType: PropTypes.string,
     path: PropTypes.arrayOf(PropTypes.string),
     block: PropTypes.bool,
 };

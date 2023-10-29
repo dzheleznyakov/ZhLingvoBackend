@@ -1,13 +1,23 @@
 import * as actionTypes from '../actionTypes/quizRecords';
 
-export const fetchQuizRecords = quizId => ({
-    type: actionTypes.FETCH_QUIZ_RECORDS,
+export const fetchQuizRecordsOverviews = quizId => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS,
     quizId,
 })
 
-export const fetchQuizRecordsSuccess = overviews => ({
-    type: actionTypes.FETCH_QUIZ_RECORDS_SUCCESS,
+export const fetchQuizRecordsOverviewsSuccess = overviews => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS_SUCCESS,
     overviews,
+});
+
+export const fetchQuizRecords = quizId => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS,
+    quizId,
+});
+
+export const fetchQuizRecordsSuccess = records => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS_SUCCESS,
+    records,
 });
 
 export const selectQuizRecord = index => ({
@@ -77,4 +87,21 @@ export const setQuizRecordEditModalType = (modalType, path) => ({
 export const updateQuizRecord = quizId => ({
     type: actionTypes.UPDATE_QUIZ_RECORD,
     quizId,
+});
+
+export const convertMeaningToQuizRecord = meaning => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD,
+    meaning,
+});
+
+export const convertMeaningToQuizRecordStart = () => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_START,
+});
+
+export const convertMeaningToQuizRecordFailure = () => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_FAILURE,
+});
+
+export const convertMeaningToQuizRecordSuccess = () => ({
+    type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_SUCCESS,
 });

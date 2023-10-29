@@ -49,11 +49,11 @@ public class QuizExample {
         if (this == o) return true;
         if (!(o instanceof QuizExample)) return false;
         QuizExample that = (QuizExample) o;
-        return Objects.equal(id, that.id);
+        return Objects.equal(id, that.id) && Objects.equal(remark, that.remark) && Objects.equal(expression, that.expression) && Objects.equal(explanation, that.explanation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(id, remark, expression, explanation);
     }
 }

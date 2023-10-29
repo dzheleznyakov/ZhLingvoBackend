@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import zh.lingvo.data.model.Meaning;
+import zh.lingvo.data.model.Quiz;
+import zh.lingvo.data.model.QuizRecord;
 import zh.lingvo.data.model.User;
+import zh.lingvo.data.services.MeaningService;
 import zh.lingvo.data.services.QuizRecordService;
+import zh.lingvo.data.services.QuizService;
 import zh.lingvo.rest.annotations.ApiController;
 import zh.lingvo.rest.commands.QuizRecordCommand;
 import zh.lingvo.rest.commands.QuizRecordOverviewCommand;
@@ -31,15 +36,21 @@ import static zh.lingvo.util.Preconditions.checkNull;
 @RequestMapping("/api/quizzes/{id}/records")
 public class QuizRecordController {
     private final QuizRecordService quizRecordService;
+    private final QuizService quizService;
+    private final MeaningService meaningService;
     private final QuizRecordConverter quizRecordConverter;
     private final RequestContext context;
 
     public QuizRecordController(
             QuizRecordService quizRecordService,
+            QuizService quizService,
+            MeaningService meaningService,
             QuizRecordConverter quizRecordConverter,
             RequestContext context
     ) {
         this.quizRecordService = quizRecordService;
+        this.quizService = quizService;
+        this.meaningService = meaningService;
         this.quizRecordConverter = quizRecordConverter;
         this.context = context;
     }
@@ -49,6 +60,14 @@ public class QuizRecordController {
         return quizRecordService.findAll(quizId, getUser())
                 .stream()
                 .map(quizRecordConverter::toOverviewCommand)
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    @GetMapping
+    public List<QuizRecordCommand> getAllRecords(@PathVariable("id") Long quizId) {
+        return quizRecordService.findAll(quizId, getUser())
+                .stream()
+                .map(quizRecordConverter::toCommand)
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -78,6 +97,27 @@ public class QuizRecordController {
                 .create(quizRecordConverter.createQuizRecord(command), quizId, getUser())
                 .map(quizRecordConverter::toCommand)
                 .orElseThrow(() -> new ResourceNotFound(String.format("Quiz id=[%d] not found", quizId)));
+    }
+
+    @PostMapping("/meaning/{mid}")
+    public QuizRecordCommand createQuizRecord(
+            @PathVariable("id") Long quizId,
+            @PathVariable("mid") Long meaningId
+    ) {
+        User user = getUser();
+        Meaning meaning = meaningService.findById(meaningId, user)
+                .orElseThrow(() -> new ResourceNotFound(String.format(
+                        "Meaning [%d] not found for user [%d]", meaningId, user.getId())));
+        Quiz quiz = quizService.findById(quizId, user)
+                .orElseThrow(() -> new ResourceNotFound(String.format(
+                        "Quiz [%d] not found for user [%d]", quizId, user.getId())));
+        QuizRecord quizRecord = quizRecordConverter.createQuizRecord(meaning);
+        quizRecord.setQuiz(quiz);
+        return quizRecordService
+                .create(quizRecord, quizId, user)
+                .map(quizRecordConverter::toCommand)
+                .orElseThrow(() -> new InternalError(String.format(
+                        "Failed to create new quiz record from meaning [%d] for quiz [%d]", meaningId, quizId)));
     }
 
     @PutMapping

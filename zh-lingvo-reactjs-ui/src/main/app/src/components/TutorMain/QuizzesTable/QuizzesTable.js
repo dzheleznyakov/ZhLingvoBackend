@@ -9,6 +9,7 @@ import { BREADCRUMBS_TYPES } from '../../../utils/breadcrumbs';
 import { useActionOnMount, useBreadcrumbs } from '../../../hooks';
 import * as actions from '../../../store/actions';
 import TableControl from './TableControl/TableControl';
+import QuizRunsTable from '../QuizRunsTable/QuizRunsTable';
 
 const BREADCRUMB = { type: BREADCRUMBS_TYPES.TEXT, text: 'Tutor' };
 
@@ -49,6 +50,9 @@ const QuizzesTable = () => {
         <div className={classes.QuizzesTableWrapper}>
             {table}
             {control}
+            <div style={{marginTop: 32}}>
+                <QuizRunsTable />
+            </div>
         </div>
     )
 };

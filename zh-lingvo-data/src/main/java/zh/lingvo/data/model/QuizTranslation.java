@@ -46,11 +46,11 @@ public class QuizTranslation {
         if (this == o) return true;
         if (!(o instanceof QuizTranslation)) return false;
         QuizTranslation that = (QuizTranslation) o;
-        return Objects.equal(id, that.id);
+        return Objects.equal(id, that.id) && Objects.equal(value, that.value) && Objects.equal(elaboration, that.elaboration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(id, value, elaboration);
     }
 }

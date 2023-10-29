@@ -19,7 +19,6 @@ const QuizSettingsDialogBase = props => {
     const { close, quizId } = props;
     const dispatch = useDispatch();
     const matchingRegimes = useSelector(matchingRegimesSelector);
-    console.log(matchingRegimes);
     const quizRegimes = useSelector(quizRegimeSelector);
     const settingsMap = useSelector(quizSettingsSelector);
     const settings = settingsMap ? settingsMap[quizId] || NULL_SETTINGS : NULL_SETTINGS;

@@ -2,6 +2,7 @@ package zh.lingvo.data.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.repositories.QuizRepository;
@@ -34,6 +35,10 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public List<Quiz> findAll(User user) {
         return quizRepository.findAllByUser(user);
+    }
+
+    public List<Quiz> findAll(User user, Language language) {
+        return quizRepository.findAllByUserAndLanguage(user, language);
     }
 
     @Override

@@ -18,5 +18,6 @@ import java.util.List;
 public class QuizRecordOverviewCommand {
     private Long id;
     private String wordMainForm;
+    private Float currentScore;
     private List<TranslationCommand> translations;
 }

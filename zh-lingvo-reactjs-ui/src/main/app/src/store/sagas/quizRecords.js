@@ -6,13 +6,26 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import * as actionTypes from '../actionTypes';
 
-export function* fetchQuizRecords(action) {
+export function* fetchQuizRecordsOverviewsSaga(action) {
     const { quizId } = action;
 
     try {
         const { data } = yield call(
             api.get, 
             `/quizzes/${quizId}/records/overviews`);
+        yield put(actions.fetchQuizRecordsOverviewsSuccess(data));
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while fetching quiz records overviews for quiz [${quizId}]`));
+    }
+}
+
+export function* fetchQuizRecordsSaga(action) {
+    const { quizId } = action;
+
+    try {
+        const { data } = yield call(api.get, `/quizzes/${quizId}/records`);
         yield put(actions.fetchQuizRecordsSuccess(data));
     } catch (error) {
         yield put(actions.addError(
@@ -21,7 +34,7 @@ export function* fetchQuizRecords(action) {
     }
 }
 
-export function* createQuizSaga(action) {
+export function* createQuizRecordSaga(action) {
     const { quizId, wordMainForm, pos } = action;
     try { 
         const newRecord = { wordMainForm, pos };
@@ -33,8 +46,8 @@ export function* createQuizSaga(action) {
         return;
     }
 
-    yield put(actions.fetchQuizRecords(quizId));
-    const { overviews } = yield take(actionTypes.FETCH_QUIZ_RECORDS_SUCCESS);
+    yield put(actions.fetchQuizRecordsOverviews(quizId));
+    const { overviews } = yield take(actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS_SUCCESS);
     const selectedQuizRecordIndex = overviews
         .findLastIndex(overview => overview.wordMainForm === wordMainForm);
     const selectedQuizRecordId = overviews[selectedQuizRecordIndex].id;
@@ -78,8 +91,8 @@ export function* deleteQuizRecordSaga(action) {
     }
 
     const selectedQuizRecordIndex = yield select(selectors.selectedQuizRecordIndexSelector);
-    yield put(actions.fetchQuizRecords(quizId));
-    const { overviews } = yield take(actionTypes.FETCH_QUIZ_RECORDS_SUCCESS);
+    yield put(actions.fetchQuizRecordsOverviews(quizId));
+    const { overviews } = yield take(actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS_SUCCESS);
     
     if (overviews.length === 0) {
         yield put(actions.selectQuizRecord(-1));
@@ -118,10 +131,31 @@ export function* updateQuizRecordSaga(action) {
     }
 
     yield put(actions.setQuizRecordEditing(false));
-    yield put(actions.fetchQuizRecords(quizId));
+    yield put(actions.fetchQuizRecordsOverviews(quizId));
     yield put(actions.fetchQuizRecord(quizId, record.id));
-    const { overviews: recordList } = yield take(actionTypes.FETCH_QUIZ_RECORDS_SUCCESS);
+    const { overviews: recordList } = yield take(actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS_SUCCESS);
     const selectedQuizRecordIndex = recordList.findIndex(rec => rec.id === record.id);
     yield put(actions.selectQuizRecord(selectedQuizRecordIndex));
     yield put(actions.navigateTo(`/tutor/quiz/${quizId}/${record.id}`));
+}
+
+export function* convertMeaningToQuizRecordSaga(action) {
+    const { meaning } = action;
+    
+    yield put(actions.convertMeaningToQuizRecordStart());
+    const { targetQuiz: quiz } = yield select(selectors.meaningToQuizRecordSelector);
+
+    const meaningId = meaning.id;
+    const quizId = quiz.id;
+
+    try {
+        yield call(api.post, `/quizzes/${quizId}/records/meaning/${meaningId}`, {});
+        yield put(actions.convertMeaningToQuizRecordSuccess());
+    } catch (error) {
+        yield put(actions.addError(
+            error.response.data,
+            `Error while creating a quiz record from meaning [${meaningId}] for quiz [${quizId}]`,
+        ));
+        yield put(actions.convertMeaningToQuizRecordFailure());
+    }
 }

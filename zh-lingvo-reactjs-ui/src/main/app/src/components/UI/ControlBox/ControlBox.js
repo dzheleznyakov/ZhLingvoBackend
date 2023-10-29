@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 
 import classes from './ControlBox.module.scss';
 
-import { IconButton, iconButtonTypes, Modal } from '../../UI';
-import * as actions from '../../../store/actions';
+import { IconButton, iconButtonTypes } from '../../UI';
 import { useModal } from '../../../hooks';
 
 export const MODAL_TYPES = {
@@ -14,6 +12,7 @@ export const MODAL_TYPES = {
     SETTINGS: 'SETTINGS',
     EDIT: 'EDIT',
     FORWARD: 'FORWARD',
+    PLAY: 'PLAY',
     NONE: 'NONE',
 };
 
@@ -23,25 +22,25 @@ const ControlBox = props => {
     const { panelKeyPrefix, disabled, panels } = props;
     const [modalType, setModalType] = useState(MODAL_TYPES.NONE);
     const showModal = modalType !== MODAL_TYPES.NONE;
-    const dispatch = useDispatch();
 
     const closeModal = () => setModalType(MODAL_TYPES.NONE);
 
     const panelContainer = panels
         .filter(panelConfig => panelConfig.modalType === modalType)
-        .map(panelConfig => panelConfig.panel);
-    const Panel = panelContainer.length === 0 ? () => null : panelContainer[0];
+        .map(panelConfig => [panelConfig.panel, panelConfig.panelProps]);
+    const [Panel, panelProps = {}] = panelContainer.length === 0 ? [() => null, {}] : panelContainer[0];
+    const panel = <Panel {...panelProps} close={closeModal} />;
 
     const buttons = panels
         .map(panelConfig => {
             const buttonType = panelConfig.modalType;
 
             let { disabled: buttonDisabled } = panelConfig;
-            if (buttonDisabled === null || buttonDisabled === undefined)
+            if (buttonDisabled == null)
                 buttonDisabled = disabled;
 
             let buttonClicked = panelConfig.clicked;
-            if (buttonClicked === null || buttonClicked === undefined)
+            if (buttonClicked == null)
                 buttonClicked = () => setModalType(buttonType);
 
             return <IconButton
@@ -52,7 +51,7 @@ const ControlBox = props => {
             />;
         });
 
-    useModal(showModal, closeModal, <Panel close={closeModal} />);
+    useModal(showModal, closeModal, panel, [modalType]);
 
     return (
         <div className={classes.ButtonBox}>
@@ -68,6 +67,7 @@ ControlBox.propTypes = {
             PropTypes.shape({
                 modalType: PropTypes.oneOf(modalTypesArray).isRequired,
                 panel: PropTypes.func,
+                panelProps: PropTypes.shape({}),
                 clicked: PropTypes.func,
                 disabled: PropTypes.bool,
         })
