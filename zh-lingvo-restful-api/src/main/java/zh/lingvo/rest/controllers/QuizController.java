@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.User;
+import zh.lingvo.data.services.LanguageService;
 import zh.lingvo.data.services.QuizService;
 import zh.lingvo.rest.annotations.ApiController;
 import zh.lingvo.rest.commands.QuizCommand;
@@ -29,16 +31,19 @@ import static zh.lingvo.util.Preconditions.checkNull;
 @RequestMapping("/api/quizzes")
 public class QuizController {
     private final QuizService quizService;
+    private final LanguageService languageService;
     private final QuizToQuizCommand quizConverter;
     private final LanguageCommandToLanguage languageCommandConverter;
     private final RequestContext requestContext;
 
     public QuizController(
             QuizService quizService,
+            LanguageService languageService,
             QuizToQuizCommand quizConverter,
             LanguageCommandToLanguage languageCommandConverter, RequestContext requestContext
     ) {
         this.quizService = quizService;
+        this.languageService = languageService;
         this.quizConverter = quizConverter;
         this.languageCommandConverter = languageCommandConverter;
         this.requestContext = requestContext;
@@ -46,11 +51,22 @@ public class QuizController {
     }
 
     @GetMapping
-    public List<QuizCommand> getAllQuizzes() {
-        return quizService.findAll(getUser())
+    public List<QuizCommand> getAllQuizzes(
+            @RequestParam(name = "lang", required = false) String langCode
+    ) {
+        return getQuizzes(langCode)
                 .stream()
                 .map(quizConverter::convert)
                 .collect(ImmutableList.toImmutableList());
+    }
+
+    private List<Quiz> getQuizzes(String langCode) {
+        if (langCode != null)
+            return languageService.findByTwoLetterCode(langCode)
+                    .map(language -> quizService.findAll(getUser(), language))
+                    .orElse(ImmutableList.of());
+
+        return quizService.findAll(getUser());
     }
 
     @GetMapping("/{id}")

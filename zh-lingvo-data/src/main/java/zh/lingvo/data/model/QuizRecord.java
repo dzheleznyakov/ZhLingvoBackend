@@ -54,13 +54,13 @@ public class QuizRecord implements Persistable {
     private String transcription;
 
     @Column(name = "current_score", nullable = false)
-    private Float currentScore;
+    private Float currentScore = 0f;
 
     @Column(name = "number_of_runs", nullable = false)
-    private Integer numberOfRuns;
+    private Integer numberOfRuns = 0;
 
     @Column(name = "number_of_successes", nullable = false)
-    private Integer numberOfSuccesses;
+    private Integer numberOfSuccesses = 0;
 
     @OneToMany(mappedBy = "record", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<QuizTranslation> translations = new LinkedHashSet<>();

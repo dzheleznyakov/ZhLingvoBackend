@@ -12,7 +12,9 @@ import zh.lingvo.rest.commands.QuizRecordCommand;
 import zh.lingvo.rest.commands.TranslationCommand;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -55,6 +57,8 @@ public class QuizRecordToQuizRecordCommand implements Converter<QuizRecord, Quiz
         return firstNonNull(source.getExamples(), ImmutableSet.<QuizExample>of())
                 .stream()
                 .map(exampleConverter::convert)
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparingLong(ExampleCommand::getId))
                 .collect(ImmutableList.toImmutableList());
     }
 }

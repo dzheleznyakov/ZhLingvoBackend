@@ -5,10 +5,10 @@ import classes from './ListView.module.scss';
 
 
 const ListView = props => {
-    const { items, onItemClick, width, selectedIndex } = props;
+    const { items, onItemClick, width, height, selectedIndex } = props;
     
     const getItemClassName = index => (index === selectedIndex ? classes.SelectedWord : null);
-    const style = { width };
+    const style = { width, minHeight: height, height };
 
     return (
         <ul className={classes.ListViewPort} style={style}>
@@ -32,6 +32,7 @@ ListView.propTypes = {
     })),
     onItemClick: PropTypes.func,
     width: PropTypes.number,
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     selectedIndex: PropTypes.number,
 };
 

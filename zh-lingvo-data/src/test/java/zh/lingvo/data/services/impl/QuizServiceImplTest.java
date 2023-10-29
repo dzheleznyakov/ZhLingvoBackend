@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.Quiz;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.repositories.QuizRepository;
@@ -41,6 +42,7 @@ class QuizServiceImplTest {
 
     private final User user = User.builder().id(1L).build();
     private final User otherUser = User.builder().id(2L).build();
+    private final Language language = Language.builder().name("Lang").twoLetterCode("Ln").build();
 
     @BeforeEach
     void setUp() {
@@ -119,8 +121,8 @@ class QuizServiceImplTest {
     @DisplayName("Test QuizServiceImpl.findAll(user)")
     class FindAll {
         @Test
-        @DisplayName("Should return empty list if the user does not have quizes")
-        void userHasNoQuizes_ReturnEmptyList() {
+        @DisplayName("Should return empty list if the user does not have quizzes")
+        void userHasNoQuizzes_ReturnEmptyList() {
             when(quizRepository.findAllByUser(user)).thenReturn(ImmutableList.of());
 
             List<Quiz> quizzes = service.findAll(user);
@@ -141,6 +143,36 @@ class QuizServiceImplTest {
 
             assertThat(quizzes, is(equalTo(ImmutableList.of(quiz1, quiz2))));
             verify(quizRepository, only()).findAllByUser(user);
+        }
+    }
+
+    @Nested
+    @DisplayName("Test QuizServiceImpl.findById(user, language)")
+    class FindAllFilterByLanguage {
+        @Test
+        @DisplayName("Should return empty list if the user does not have quizzes by the given language")
+        void userHasNoQuizzes_ReturnEmptyList() {
+            when(quizRepository.findAllByUserAndLanguage(user, language))
+                    .thenReturn(ImmutableList.of());
+
+            List<Quiz> quizzes = service.findAll(user, language);
+
+            assertThat(quizzes, is(Matchers.empty()));
+            verify(quizRepository, only()).findAllByUserAndLanguage(user, language);
+        }
+
+        @Test
+        @DisplayName("Should return all found user's quizzes by the language")
+        void userHasQuizzed_ReturnThem() {
+            Quiz quiz1 = Quiz.builder().id(1L).build();
+            Quiz quiz2 = Quiz.builder().id(2L).build();
+            when(quizRepository.findAllByUserAndLanguage(user, language))
+                    .thenReturn(ImmutableList.of(quiz1, quiz2));
+
+            List<Quiz> quizzes = service.findAll(user, language);
+
+            assertThat(quizzes, is(equalTo(ImmutableList.of(quiz1, quiz2))));
+            verify(quizRepository, only()).findAllByUserAndLanguage(user, language);
         }
     }
 

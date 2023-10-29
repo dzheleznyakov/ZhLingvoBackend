@@ -1,0 +1,12 @@
+@import "./colours";
+@import "./sizes";
+
+@mixin regularButton($width: 4.5rem) {
+    width: $width;
+    height: 1.5rem;
+    margin: 8px 0;
+    background-color: map-get($palette, light);
+    border: 1px solid map-get($palette, dark-primary);
+    border-radius: $button-border-radius;
+    cursor: pointer;
+}

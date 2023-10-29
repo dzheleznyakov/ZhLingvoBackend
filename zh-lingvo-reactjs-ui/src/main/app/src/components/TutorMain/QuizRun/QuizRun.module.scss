@@ -1,0 +1,52 @@
+@import "../../../static/styles/sizes";
+@import "../../../static/styles/colours";
+
+.QuizRunWrapper {
+    min-width: 100%;
+}
+
+.QuizRunContent {
+    margin: 0 auto;
+    padding: 20px 16px 10px;
+    width: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.QuizRunControl {
+    display: flex;
+    width: 100%;
+}
+
+.QuizRunButton {
+    width: 100%;
+    padding: 16px 10px;
+    border-radius: $button-border-radius;
+    background-color: lightblue;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.QuizRunIndicator {
+    border: 2px solid black;
+    border-radius: $button-border-radius;
+    padding: 16px;
+    margin-right: 8px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.IndicatorQuestion {
+    background-color: map-get($palette, 'light');
+}
+
+.IndicatorCorrect {
+    background-color: map-get($palette, 'lighter-primary');
+}
+
+.IndicatorIncorrect {
+    background-color: map-get($palette, 'lighter-secondary');
+}

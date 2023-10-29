@@ -77,11 +77,12 @@ public class WordServiceImpl implements WordService {
                 .filter(word -> userIsAuthorised(word, user));
     }
 
-    private boolean userIsAuthorised(Word word, User user) {
+    @Override
+    public boolean userIsAuthorised(Word word, User user) {
         try {
             Long userIdForWord = wordIdsToUserIds.get(word.getId());
             return Objects.equals(userIdForWord, user.getId());
-        } catch (Exception   e) {
+        } catch (Exception e) {
             log.error("Error when verifying user [{}] for word [{}]", user, word, e);
         }
         return false;

@@ -96,3 +96,87 @@ export const updateQuizSettingsSuccess = (quizId, settings) => ({
     quizId,
     settings,
 });
+
+export const fetchAllQuizzesByLanguage = language => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE,
+    language,
+});
+
+export const fetchAllQuizzesByLanguageStart = () => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_START,
+});
+
+export const fetchAllQuizzesByLanguageSuccess = quizzes => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_SUCCESS,
+    quizzes,
+});
+
+export const fetchAllQuizzesByLanguageFailure = () => ({
+    type: actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE_FAILURE,
+});
+
+export const createQuizForMeaningToQuizRecord = (name, targetLanguage) => ({
+    type: actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD,
+    name,
+    targetLanguage,
+});
+
+export const createQuizForMeaningToQuizRecordSuccess = quiz => ({
+    type: actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD_SUCCESS,
+    quiz,
+});
+
+export const navigateToQuiz = quizId => ({
+    type: actionTypes.NAVIGATE_TO_QUIZ,
+    quizId,
+});
+
+export const setQuizRun = quizRun => ({
+    type: actionTypes.SET_QUIZ_RUN,
+    quizRun,
+});
+
+export const createQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.CREATE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const updateQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.UPDATE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const deleteQuizRun = (quizId, quizRunId) => ({
+    type: actionTypes.DELETE_QUIZ_RUN,
+    quizId, 
+    quizRunId,
+});
+
+export const completeQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.COMPLETE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const fetchAllQuizRuns = quizId => ({
+    type: actionTypes.FETCH_ALL_QUIZ_RUNS,
+    quizId,
+});
+
+export const fetchQuizRun = (quizId, quizRunId) => ({
+    type: actionTypes.FETCH_QUIZ_RUN,
+    quizId,
+    quizRunId,
+});
+
+export const fetchQuizRunData = quizId => ({
+    type: actionTypes.FETCH_QUIZ_RUN_DATA,
+    quizId,
+});
+
+export const setAllQuizRuns = quizRuns => ({
+    type: actionTypes.SET_ALL_QUIZ_RUNS,
+    quizRuns,
+});

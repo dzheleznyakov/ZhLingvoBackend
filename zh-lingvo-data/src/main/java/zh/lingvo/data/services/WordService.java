@@ -20,4 +20,6 @@ public interface WordService {
     Word update(Word word, Long dictionaryId, User user);
 
     void delete(Word word, User user);
+
+    boolean userIsAuthorised(Word word, User user);
 }

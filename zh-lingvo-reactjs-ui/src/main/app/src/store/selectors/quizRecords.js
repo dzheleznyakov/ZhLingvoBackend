@@ -14,11 +14,15 @@ export const quizRecordEditPathSelector = simpleSelectorFactory('quizRecordEditP
 
 export const showQuizRecordEditModalSelector = simpleSelectorFactory('showQuizRecordEditModal');
 
+export const convertingMeaningToQuizRecordSelector = simpleSelectorFactory('convertingMeaingToQuizRecord');
+
 export const selectedQuizRecordSelector = createSelector(
     quizRecordsOverviewsSelector,
     selectedQuizRecordIndexSelector,
     (overviews, index) => index >= 0 ? overviews[index] : {},
 );
+
+export const allQuizRecordsSelector = simpleSelectorFactory('quizRecords');
 
 export const quizRecordMainFormToUpdateSelector =
     state => _.get(state, 'quizRecords.updatedQuizRecord.wordMainForm', '');
