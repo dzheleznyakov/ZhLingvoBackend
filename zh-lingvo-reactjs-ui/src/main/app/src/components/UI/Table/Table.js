@@ -14,7 +14,7 @@ const Table = props => {
     const headers = columnsDef.map(({ name, label }) => <th key={label}>{name}</th>);
     let body = data.map((d, i) => {
         const rowData = columnsDef.map(def => d[def.label]);
-        const rows = columnsDef.map((def, colIndex) => (
+        const cells = columnsDef.map((def, colIndex) => (
             <TableCell 
                 key={`${def.label}-${colIndex}`} 
                 cellData={rowData[colIndex]} 
@@ -32,7 +32,7 @@ const Table = props => {
                 rowOnDbClickCb={rowOnDbClickCb}
                 selectable
                 selected={rowIsSelected}
-            >{rows}</TableRow>
+            >{cells}</TableRow>
         );
     });
     if (!data.length) {

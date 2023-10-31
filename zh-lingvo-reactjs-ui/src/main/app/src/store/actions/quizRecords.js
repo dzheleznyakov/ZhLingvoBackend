@@ -1,13 +1,23 @@
 import * as actionTypes from '../actionTypes/quizRecords';
 
-export const fetchQuizRecords = quizId => ({
-    type: actionTypes.FETCH_QUIZ_RECORDS,
+export const fetchQuizRecordsOverviews = quizId => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS,
     quizId,
 })
 
-export const fetchQuizRecordsSuccess = overviews => ({
-    type: actionTypes.FETCH_QUIZ_RECORDS_SUCCESS,
+export const fetchQuizRecordsOverviewsSuccess = overviews => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS_SUCCESS,
     overviews,
+});
+
+export const fetchQuizRecords = quizId => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS,
+    quizId,
+});
+
+export const fetchQuizRecordsSuccess = records => ({
+    type: actionTypes.FETCH_QUIZ_RECORDS_SUCCESS,
+    records,
 });
 
 export const selectQuizRecord = index => ({

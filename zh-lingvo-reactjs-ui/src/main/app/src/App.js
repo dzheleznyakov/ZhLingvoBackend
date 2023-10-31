@@ -34,6 +34,14 @@ const QuizOverview = lazy(() => {
   return import('./components/QuizOverview/QuizOverview');
 });
 
+const QuizRun = lazy(() => {
+  return import('./components/TutorMain/QuizRun/QuizRun');
+});
+
+const QuizRunResult = lazy(() => {
+  return import('./components/TutorMain/QuizRun/QuizRunResult/QuizRunResult');
+});
+
 const App = () => {
   const loggedIn = useSelector(loggedInSelector);
 
@@ -46,6 +54,8 @@ const App = () => {
       <Route exact path={paths.DICTIONARIES_ROOT} render={() => <Dictionaries />} />
       <Route exact path={paths.TUTOR_ROOT} render={() => <Tutor />} />
       <Route exact path={paths.TUTOR_QUIZ} render={() => <QuizOverview />} />
+      <Route exact path={paths.TUTOR_QUIZ_RUN} render={() => <QuizRun />} />
+      <Route exact path={paths.TUTOR_QUIZ_RUN_RESULT} render={() => <QuizRunResult />} />
       <Redirect to={paths.DICTIONARIES_ROOT} />
     </Switch>
   ) : (

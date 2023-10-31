@@ -130,3 +130,53 @@ export const navigateToQuiz = quizId => ({
     type: actionTypes.NAVIGATE_TO_QUIZ,
     quizId,
 });
+
+export const setQuizRun = quizRun => ({
+    type: actionTypes.SET_QUIZ_RUN,
+    quizRun,
+});
+
+export const createQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.CREATE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const updateQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.UPDATE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const deleteQuizRun = (quizId, quizRunId) => ({
+    type: actionTypes.DELETE_QUIZ_RUN,
+    quizId, 
+    quizRunId,
+});
+
+export const completeQuizRun = (quizRun, quizId) => ({
+    type: actionTypes.COMPLETE_QUIZ_RUN,
+    quizRun,
+    quizId,
+});
+
+export const fetchAllQuizRuns = quizId => ({
+    type: actionTypes.FETCH_ALL_QUIZ_RUNS,
+    quizId,
+});
+
+export const fetchQuizRun = (quizId, quizRunId) => ({
+    type: actionTypes.FETCH_QUIZ_RUN,
+    quizId,
+    quizRunId,
+});
+
+export const fetchQuizRunData = quizId => ({
+    type: actionTypes.FETCH_QUIZ_RUN_DATA,
+    quizId,
+});
+
+export const setAllQuizRuns = quizRuns => ({
+    type: actionTypes.SET_ALL_QUIZ_RUNS,
+    quizRuns,
+});

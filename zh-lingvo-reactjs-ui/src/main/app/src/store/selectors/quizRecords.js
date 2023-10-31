@@ -22,6 +22,8 @@ export const selectedQuizRecordSelector = createSelector(
     (overviews, index) => index >= 0 ? overviews[index] : {},
 );
 
+export const allQuizRecordsSelector = simpleSelectorFactory('quizRecords');
+
 export const quizRecordMainFormToUpdateSelector =
     state => _.get(state, 'quizRecords.updatedQuizRecord.wordMainForm', '');
 export const quizRecordStringPropertyToUpdateSelectorFactory = path =>

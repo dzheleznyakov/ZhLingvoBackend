@@ -1,0 +1,15 @@
+@import "../../../../static/styles/classes";
+
+.QuizRunResultWrapper {
+    min-width: 100%;
+}
+
+.QuizRunResultContent {
+    margin: 0 auto;
+    padding: 20px 16px 10px;
+    width: fit-content;
+}
+
+.BackButton {
+    @include regularButton(7rem);
+}

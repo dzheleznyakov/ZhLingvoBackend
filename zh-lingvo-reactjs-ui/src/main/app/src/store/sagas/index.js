@@ -46,10 +46,19 @@ export function* quizzesWatcher() {
     yield takeEvery(actionTypes.FETCH_ALL_QUIZZES_BY_LANGUAGE, quizzesSagas.fetchAllQuizzesByLanguageSaga);
     yield takeEvery(actionTypes.CREATE_QUIZ_FOR_MEANING_TO_QUIZ_RECORD, quizzesSagas.createQuizForMeaningToQuizRecordSaga);
     yield takeEvery(actionTypes.NAVIGATE_TO_QUIZ, quizzesSagas.navigateToQuizSaga);
+    
+    yield takeEvery(actionTypes.CREATE_QUIZ_RUN, quizzesSagas.createQuizRunSaga);
+    yield takeEvery(actionTypes.UPDATE_QUIZ_RUN, quizzesSagas.updateQuizRunSaga);
+    yield takeEvery(actionTypes.DELETE_QUIZ_RUN, quizzesSagas.deleteQuizRunSaga);
+    yield takeEvery(actionTypes.COMPLETE_QUIZ_RUN, quizzesSagas.completeQuizRunSaga);
+    yield takeEvery(actionTypes.FETCH_ALL_QUIZ_RUNS, quizzesSagas.fetchAllQuizRunsSaga);
+    yield takeLatest(actionTypes.FETCH_QUIZ_RUN, quizzesSagas.fetchQuizRunSaga);
+    yield takeLatest(actionTypes.FETCH_QUIZ_RUN_DATA, quizzesSagas.fetchQuizRunDataSaga);
 }
 
 export function* quizRecordsWatcher() {
-    yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS, quizRecordsSagas.fetchQuizRecords);
+    yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS_OVERVIEWS, quizRecordsSagas.fetchQuizRecordsOverviewsSaga);
+    yield takeEvery(actionTypes.FETCH_QUIZ_RECORDS, quizRecordsSagas.fetchQuizRecordsSaga);
     yield takeEvery(actionTypes.CREATE_QUIZ_RECORD, quizRecordsSagas.createQuizRecordSaga);
     yield takeEvery(actionTypes.DELETE_QUIZ_RECORD, quizRecordsSagas.deleteQuizRecordSaga);
     yield takeEvery(actionTypes.FETCH_QUIZ_RECORD, quizRecordsSagas.fetchQuizRecordSaga);

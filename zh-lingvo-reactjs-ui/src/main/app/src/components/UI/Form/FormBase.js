@@ -32,7 +32,9 @@ const getFieldEntries = (field, groupKey, onValidateByKey   ) => {
         values,
         forwardRef,
         disabled,
+        autocomplete,
         validation,
+        listeners,
     } = field;
     const formLabel = (
         <label key={`${groupKey}-${key}-label`}>{label}:</label>
@@ -45,8 +47,10 @@ const getFieldEntries = (field, groupKey, onValidateByKey   ) => {
         forwardRef={forwardRef}
         values={values}
         disabled={disabled}
+        autocomplete={autocomplete}
         validation={validation}
-        onValidate={onValidateByKey(key)} />;
+        onValidate={onValidateByKey(key)}
+        listeners={listeners} />;
     return [formLabel, input];
 };
 

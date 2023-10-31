@@ -28,6 +28,7 @@ const ExampleEditDialog = props => {
         label: 'Remark',
         type: formInputTypes.TEXT,
         defaultValue: remark || '',
+        autocomplete: false,
         groupKey: exampleGroup.key,
         forwardRef: remarkRef,
     };
@@ -38,6 +39,7 @@ const ExampleEditDialog = props => {
         label: 'Expression',
         type: formInputTypes.TEXT,
         defaultValue: expression || '',
+        autocomplete: false,
         groupKey: exampleGroup.key,
         forwardRef: expressionRef,
         validation: [{
@@ -52,6 +54,7 @@ const ExampleEditDialog = props => {
         label: 'Explanation',
         type: formInputTypes.TEXT,
         defaultValue: explanation || '',
+        autocomplete: false,
         groupKey: exampleGroup.key,
         forwardRef: explanationRef,
         validation: [{

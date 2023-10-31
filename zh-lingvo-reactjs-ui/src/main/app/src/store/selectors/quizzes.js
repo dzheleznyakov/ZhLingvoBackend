@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import _ from 'lodash';
 
 export const loadingQuizzesSelector = state => state.quizzes.loading;
 export const quizzesSelector = state => state.quizzes.quizzes;
@@ -27,3 +28,9 @@ export const quizzesTableDataSelector = createSelector(
 );
 
 export const meaningToQuizRecordSelector = state => state.quizzes.meaningToQuizRecord;
+
+export const quizRunSelector = state => state.quizzes.quizRun;
+export const quizRunTargetLanguageSelector = state => 
+    _.get(state, 'quizzes.quizRun.targetLanguage.code')
+    || _.get(state, 'quizzes.loadedQuiz.targetLanguage.code');
+export const allQuizRunsSelector = state => state.quizzes.quizRuns;
