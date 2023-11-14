@@ -56,6 +56,7 @@ public class ConfigParser implements Parser {
                     SyntaxError.Type.REGEXP_MISSING_MATCHER,
                     "RegExp matcher cannot be null",
                     line,
+                    pos
             ));
         if (substitution == null)
             regexpErrors.add(new SyntaxError(
