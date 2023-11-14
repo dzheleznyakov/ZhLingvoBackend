@@ -7,14 +7,15 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static zh.config.parser.lexer.Lexer.State.COMMENT;
-import static zh.config.parser.lexer.Lexer.State.EOF;
-import static zh.config.parser.lexer.Lexer.State.ESCAPE;
-import static zh.config.parser.lexer.Lexer.State.NAME;
-import static zh.config.parser.lexer.Lexer.State.NEW_TOKEN;
-import static zh.config.parser.lexer.Lexer.State.SIMPLE_STRING;
-import static zh.config.parser.lexer.Lexer.State.SLASH;
-import static zh.config.parser.lexer.Lexer.State.STRING;
+import static zh.config.parser.lexer.Lexer.BasicState.COMMENT;
+import static zh.config.parser.lexer.Lexer.BasicState.EOF;
+import static zh.config.parser.lexer.Lexer.BasicState.ESCAPE;
+import static zh.config.parser.lexer.Lexer.BasicState.MACRO_START;
+import static zh.config.parser.lexer.Lexer.BasicState.NAME;
+import static zh.config.parser.lexer.Lexer.BasicState.NEW_TOKEN;
+import static zh.config.parser.lexer.Lexer.BasicState.SIMPLE_STRING;
+import static zh.config.parser.lexer.Lexer.BasicState.SLASH;
+import static zh.config.parser.lexer.Lexer.BasicState.STRING;
 
 public class Lexer {
     private static final char NULL_EVENT = '\0';
@@ -28,16 +29,16 @@ public class Lexer {
     private static final char LINE_FEED = '\n';
     private static final char UNDERSCORE = '_';
 
-    private final TokenCollector collector;
+    final TokenCollector collector;
     private Map<State, List<Transition>> transitions;
     private Transition errorTransition;
     private State state = NEW_TOKEN;
-    private int line = -1;
-    private int linePos = -1;
-    private int totalPos = -1;
-    private int stringishStart = -1;
-    private String input = "";
-    private String stringToken = "";
+    int line = -1;
+    int linePos = -1;
+    int totalPos = -1;
+    int stringishStart = -1;
+    String input = "";
+    String stringToken = "";
     private String nameToken = "";
 
     public Lexer(TokenCollector collector) {
@@ -47,9 +48,8 @@ public class Lexer {
 
     public void lex(String input) {
         init(input);
-        for (int i = 0; i < input.length(); ++i) {
+        for (int i = 0; i < input.length(); ++i)
             handleEvent(input.charAt(i));
-        }
         handleEvent(NULL_EVENT);
     }
 
@@ -69,17 +69,24 @@ public class Lexer {
                 .run();
     }
 
-    enum State {
-        NEW_TOKEN, NAME, SIMPLE_STRING, STRING, ESCAPE, SLASH, COMMENT, EOF
+    interface State {}
+
+    enum BasicState implements State {
+        NEW_TOKEN, NAME, SIMPLE_STRING, STRING, ESCAPE, SLASH, MACRO_START, COMMENT, EOF
     }
 
-    private class Transition {
+    class Transition {
         private final State currentState;
         private final Predicate<Character> eventTest;
         private final State nextState;
         private final Runnable action;
 
-        private Transition(State currentState, Predicate<Character> eventTest, State nextState, Runnable action) {
+        Transition(
+                State currentState,
+                Predicate<Character> eventTest,
+                State nextState,
+                Runnable action
+        ) {
             this.currentState = currentState;
             this.eventTest = eventTest;
             this.nextState = nextState;
@@ -93,10 +100,19 @@ public class Lexer {
         }
     }
 
+    final Transition newTransition(
+            State currentState,
+            Predicate<Character> eventTest,
+            State nextState,
+            Runnable action
+    ) {
+        return new Transition(currentState, eventTest, nextState, action);
+    }
+
     final void initTransitions() {
         errorTransition = new Transition(null, ch -> true, NEW_TOKEN, () -> collector.error(line, linePos));
 
-        transitions = Arrays.stream(new Transition[]{
+        var transitions = Arrays.stream(new Transition[]{
                 new Transition(NEW_TOKEN, this::isOpenBrace, NEW_TOKEN, () -> collector.openBrace(line, moveForward())),
                 new Transition(NEW_TOKEN, this::isClosedBrace, NEW_TOKEN, () -> collector.closedBrace(line, moveForward())),
                 new Transition(NEW_TOKEN, this::isOpenBracket, NEW_TOKEN, () -> collector.openBracket(line, moveForward())),
@@ -107,8 +123,8 @@ public class Lexer {
                 new Transition(NEW_TOKEN, this::isStartOfSimpleStringChar, SIMPLE_STRING, () -> markNameStartAt(totalPos)),
                 new Transition(NEW_TOKEN, this::isDoubleQuotation, STRING, () -> markNameStartAt(totalPos + 1)),
                 new Transition(NEW_TOKEN, this::isForwardslash, SLASH, this::moveForward),
+                new Transition(NEW_TOKEN, this::isBackslash, MACRO_START, this::moveForward),
                 new Transition(NEW_TOKEN, this::isNullChar, EOF, this::finish),
-
 
                 new Transition(NAME, this::isNameChar, NAME, this::moveForward),
                 new Transition(NAME, this::isNewLine, NEW_TOKEN, () -> {
@@ -190,14 +206,18 @@ public class Lexer {
 
                 new Transition(COMMENT, ch -> !isNewLine(ch) && !isNullChar(ch), COMMENT, this::moveForward),
                 new Transition(COMMENT, this::isNewLine, NEW_TOKEN, this::newLine),
-                new Transition(COMMENT, this::isNullChar, EOF, this::finish)
-        }).collect(Collectors.groupingBy(tr -> tr.currentState));
+                new Transition(COMMENT, this::isNullChar, EOF, this::finish),
+        });
+        var regexpLexer = new RegExpMacroLexer(this);
+
+        transitions = regexpLexer.streamTransitions(transitions);
+        this.transitions = transitions.collect(Collectors.groupingBy(tr -> tr.currentState));
     }
 
     private void collectNameOrString() {
-        if (nameToken.length() > 0)
+        if (!nameToken.isEmpty())
             collector.name(nameToken, line, ++linePos);
-        if (stringToken.length() > 0)
+        if (!stringToken.isEmpty())
             collector.string(stringToken, line, ++linePos);
         stringToken = "";
         nameToken = "";
@@ -215,11 +235,11 @@ public class Lexer {
         return ch.equals(DOUBLE_QUOT);
     }
 
-    private boolean isOpenBrace(Character ch) {
+    boolean isOpenBrace(Character ch) {
         return ch.equals(OPEN_BRACE);
     }
 
-    private boolean isClosedBrace(Character ch) {
+    boolean isClosedBrace(Character ch) {
         return ch.equals(CLOSED_BRACE);
     }
 
@@ -231,7 +251,7 @@ public class Lexer {
         return ch.equals(CLOSED_BRACKET);
     }
 
-    private boolean isNullChar(Character ch) {
+    boolean isNullChar(Character ch) {
         return ch.equals(NULL_EVENT);
     }
 
@@ -279,17 +299,20 @@ public class Lexer {
     }
 
     private boolean isStartOfSimpleStringChar(char ch) {
-        return (isNotNameChar(ch) &&
+        return (
+                isNotNameChar(ch) &&
                 !isDoubleQuotation(ch) &&
-                !isForwardslash(ch)) || Character.isDigit(ch);
+                !isForwardslash(ch) &&
+                !isBackslash(ch)
+        ) || Character.isDigit(ch);
     }
 
-    private void markNameStartAt(int totalPos) {
+    void markNameStartAt(int totalPos) {
         stringishStart = totalPos;
         moveForward();
     }
 
-    private int moveForward() {
+    int moveForward() {
         return ++linePos;
     }
 

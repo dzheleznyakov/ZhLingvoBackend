@@ -108,7 +108,7 @@ public class LanguageDescriptionsBuilder implements Builder<LanguageDescriptions
 
         private void buildLanguageSpecNativeName(Map<String, ConfigValue> specMap, LanguageSpec spec, String languageName) {
             ConfigValue configValue = specMap.get(NATIVE_NAME_CONFIG_KEY);
-            if (configValue == null || configValue.getString().equals(""))
+            if (configValue == null || configValue.getString().isEmpty())
                 structure.errors.add(new SyntaxError(STRUCTURAL_ERROR,
                         String.format("Language [%s] native name is not defined.", languageName)));
             else
@@ -117,7 +117,7 @@ public class LanguageDescriptionsBuilder implements Builder<LanguageDescriptions
 
         private void buildLanguageSpecCode(Map<String, ConfigValue> specMap, LanguageSpec spec, String languageName) {
             ConfigValue configValue = specMap.get(CODE_CONFIG_KEY);
-            if (configValue == null || configValue.getString().equals(""))
+            if (configValue == null || configValue.getString().isEmpty())
                 structure.errors.add(new SyntaxError(STRUCTURAL_ERROR,
                         String.format("Language [%s] code is not defined.", languageName)));
             else

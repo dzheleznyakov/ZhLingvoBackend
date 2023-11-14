@@ -7,6 +7,7 @@ public interface TokenCollector {
     void closedBracket(int line, int pos);
     void name(String name, int line, int pos);
     void string(String str, int line, int pos);
+    void regexp(String matcher, String substitution, int line, int pos);
     void error(int line, int pos);
 
     default void done(int line, int pos) {}

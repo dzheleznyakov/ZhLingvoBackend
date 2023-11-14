@@ -3,6 +3,7 @@ package zh.config.parser;
 import zh.config.parser.SyntaxError.Type;
 import zh.config.parser.syntax.ConfigValue;
 import zh.config.parser.syntax.ListValue;
+import zh.config.parser.syntax.RegExpValue;
 import zh.config.parser.syntax.StringValue;
 
 import java.util.ArrayList;
@@ -57,12 +58,21 @@ public class ListParser extends ValueParser {
     }
 
     @Override
+    public void regexp(String matcher, String substitution, int line, int pos) {
+        RegExpValue value = RegExpValue.builder()
+                .setMatcher(matcher)
+                .setSubstitution(substitution)
+                .build();
+        listBuilder.add(value);
+    }
+
+    @Override
     public void error(int line, int pos) {
         errors.add(new SyntaxError(Type.SYNTAX_ERROR, "", line, pos));
     }
 
     private void closeWithValue(ConfigValue value) {
-        exitAciton.accept(value);
+        exitAction.accept(value);
         registry.remove(this);
     }
 }

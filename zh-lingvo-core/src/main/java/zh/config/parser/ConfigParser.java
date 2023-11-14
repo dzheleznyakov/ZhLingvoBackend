@@ -49,6 +49,27 @@ public class ConfigParser implements Parser {
     }
 
     @Override
+    public void regexp(String matcher, String substitution, int line, int pos) {
+        List<SyntaxError> regexpErrors = new ArrayList<>();
+        if (matcher == null)
+            regexpErrors.add(new SyntaxError(
+                    SyntaxError.Type.REGEXP_MISSING_MATCHER,
+                    "RegExp matcher cannot be null",
+                    line,
+            ));
+        if (substitution == null)
+            regexpErrors.add(new SyntaxError(
+                    SyntaxError.Type.REGEXP_MISSING_SUBSTITUTION,
+                    "RegExp substitution cannot be null",
+                    line,
+                    pos
+            ));
+        errors.addAll(regexpErrors);
+        if (regexpErrors.isEmpty())
+            getCurrentParser().regexp(matcher, substitution, line, pos);
+    }
+
+    @Override
     public void error(int line, int pos) {
         getCurrentParser().error(line, pos);
     }

@@ -42,7 +42,8 @@ public class SyntaxError {
         MISMATCHING_BRACE,
         MISMATCHING_BRACKET,
         MAP_NAME_MISSING,
-        LIST_ERROR,
+        REGEXP_MISSING_MATCHER,
+        REGEXP_MISSING_SUBSTITUTION,
         SYNTAX_ERROR,
         STRUCTURAL_ERROR
     }

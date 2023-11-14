@@ -14,7 +14,7 @@ class LexerTest implements TokenCollector {
     private final Lexer lexer = new Lexer(this);
 
     private void add(String s) {
-        if (output.length() > 0)
+        if (!output.isEmpty())
             output += " ";
         output += s;
     }
@@ -52,6 +52,11 @@ class LexerTest implements TokenCollector {
     @Override
     public void string(String str, int line, int pos) {
         add("#" + str + "#");
+    }
+
+    @Override
+    public void regexp(String matcher, String substitution, int line, int pos) {
+        add("REGEXP(" + matcher + " :=>: " + substitution + ")");
     }
 
     @Override
@@ -188,7 +193,7 @@ class LexerTest implements TokenCollector {
         }
 
         @Test
-        @DisplayName("Should parse a simple string that starts a number")
+        @DisplayName("Should parse a simple string that starts with a number")
         void parseSimpleString_StartingWithNumber() {
             assertLexed("123", "#123#");
         }
@@ -291,6 +296,15 @@ class LexerTest implements TokenCollector {
     }
 
     @Nested
+    class Regexp {
+        @Test
+        @DisplayName("Should parse regexp")
+        void parseRegexp() {
+            assertLexed("\\{-(c)s => -(c)id}", "REGEXP(-(c)s :=>: -(c)id)");
+        }
+    }
+
+    @Nested
     class Comments {
         @Test
         @DisplayName("Should ignore comment till the end of an input")
@@ -338,9 +352,15 @@ class LexerTest implements TokenCollector {
     @Nested
     class Errors {
         @Test
-        @DisplayName("An error should occurs if the file ends before the string is closed")
+        @DisplayName("An error should occur if the file ends before the string is closed")
         void stringShouldBeClosedBeforeEndOfFile() {
             assertLexed("name\n\"abc", "_name_ Error{2,4}");
+        }
+
+        @Test
+        @DisplayName("An error should occur if the file ends before the regexp is closed")
+        void regexpShouldBeClosedBeforeEndOfFile() {
+             assertLexed("\\{abc", "Error{1,5}");
         }
     }
 

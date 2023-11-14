@@ -23,13 +23,12 @@ public class LanguageDescriptorManager {
                         Function.identity()));
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     public LanguageDescriptorManager() throws IOException {
         ClassPath classPath = ClassPath.from(getClass().getClassLoader());
         String packageName = getClass().getPackageName() + "." + DESCRIPTORS_SUBPACKAGE;
         descriptorsByCodes = classPath.getTopLevelClasses(packageName).stream()
                 .map(ClassPath.ClassInfo::load)
-                .filter(cls -> LanguageDescriptor.class.isAssignableFrom(cls))
+                .filter(LanguageDescriptor.class::isAssignableFrom)
                 .map(this::getConsturctor)
                 .map(this::newLanguageDescriptor)
                 .collect(ImmutableMap.toImmutableMap(LanguageDescriptor::getLanguageCode, Function.identity()));
@@ -46,7 +45,7 @@ public class LanguageDescriptorManager {
         return constructor.newInstance();
     }
 
-    public List<String> getLanguageCodes() throws IOException {
+    public List<String> getLanguageCodes() {
         return descriptorsByCodes.values().stream()
                 .map(LanguageDescriptor::getLanguageCode)
                 .collect(ImmutableList.toImmutableList());

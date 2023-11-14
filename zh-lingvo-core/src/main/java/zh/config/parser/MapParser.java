@@ -3,6 +3,7 @@ package zh.config.parser;
 import zh.config.parser.SyntaxError.Type;
 import zh.config.parser.syntax.ConfigValue;
 import zh.config.parser.syntax.MapValue;
+import zh.config.parser.syntax.RegExpValue;
 import zh.config.parser.syntax.StringValue;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class MapParser extends ValueParser {
 
     @Override
     public void closedBrace(int line, int pos) {
-        exitAciton.accept(mapBuilder.build());
+        exitAction.accept(mapBuilder.build());
         registry.remove(this);
     }
 
@@ -58,6 +59,15 @@ public class MapParser extends ValueParser {
     @Override
     public void string(String str, int line, int pos) {
         addEntry(new StringValue(str), line, pos);
+    }
+
+    @Override
+    public void regexp(String matcher, String substitution, int line, int pos) {
+        RegExpValue value = RegExpValue.builder()
+                .setMatcher(matcher)
+                .setSubstitution(substitution)
+                .build();
+        addEntry(value, line, pos);
     }
 
     private void addEntry(ConfigValue configValue, int line, int pos) {

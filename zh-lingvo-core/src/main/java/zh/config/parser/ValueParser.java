@@ -9,12 +9,12 @@ import java.util.function.Consumer;
 public abstract class ValueParser implements Parser {
     protected final ArrayList<Parser> registry;
     protected final List<SyntaxError> errors;
-    protected final Consumer<ConfigValue> exitAciton;
+    protected final Consumer<ConfigValue> exitAction;
 
     protected ValueParser(ArrayList<Parser> registry, List<SyntaxError> errors, Consumer<ConfigValue> exitAction) {
         this.registry = registry;
         this.errors = errors;
-        this.exitAciton = exitAction;
+        this.exitAction = exitAction;
 
         registry.add(this);
     }
