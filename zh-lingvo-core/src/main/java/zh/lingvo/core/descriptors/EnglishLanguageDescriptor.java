@@ -7,12 +7,13 @@ package zh.lingvo.core.descriptors;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import zh.lingvo.core.LanguageDescriptor;
 import zh.lingvo.core.domain.PartOfSpeech;
 
 import java.util.List;
 import java.util.Map;
 
-public class EnglishLanguageDescriptor implements zh.lingvo.core.LanguageDescriptor {
+public class EnglishLanguageDescriptor implements LanguageDescriptor {
     private static final Map<PartOfSpeech, String[]> POS_DATA = ImmutableMap.<PartOfSpeech, String[]>builder()
             .put(PartOfSpeech.NOUN, new String[]{"n", "noun"})
             .put(PartOfSpeech.VERB, new String[]{"v", "verb"})

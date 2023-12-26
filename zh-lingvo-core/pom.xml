@@ -62,6 +62,23 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>zh.lingvo.plugins</groupId>
+                <artifactId>zh-lingvo-generator-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-zh-lingvo-code</goal>
+                        </goals>
+                        <configuration>
+                            <basePackage>zh.lingvo.core</basePackage>
+                            <outputDirectory>zh-lingvo-core/src/main/java</outputDirectory>
+                            <configPath>zh-lingvo-core/src/main/resources/desc.lingvo.zhson</configPath>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     

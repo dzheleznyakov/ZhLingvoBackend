@@ -16,16 +16,12 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>@project.groupId@</groupId>
-        <artifactId>@project.artifactId@</artifactId>
-        <version>@project.version@</version>
+        <groupId>zh.lingvo.plugins</groupId>
+        <artifactId>zh-lingvo-generator-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
         <executions>
           <execution>
             <id>touch</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>touch</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>

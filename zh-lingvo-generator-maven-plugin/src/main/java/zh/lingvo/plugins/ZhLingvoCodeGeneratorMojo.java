@@ -18,12 +18,14 @@ package zh.lingvo.plugins;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import zh.lingvo.config.generators.LingvoDescriptionGenerator;
 
-@Mojo( name = "touch", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+import java.io.IOException;
+
+@Mojo( name = "generate-zh-lingvo-code", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class ZhLingvoCodeGeneratorMojo extends AbstractMojo {
     @Parameter(property = "outputDir", required = true)
     private String outputDirectory;
@@ -35,5 +37,14 @@ public class ZhLingvoCodeGeneratorMojo extends AbstractMojo {
     private String configPath;
 
     public void execute() throws MojoExecutionException {
+        try {
+            LingvoDescriptionGenerator.main(new String[]{
+                    "-o", outputDirectory,
+                    "-p", basePackage,
+                    configPath
+            });
+        } catch (IOException e) {
+            throw new MojoExecutionException(e);
+        }
     }
 }

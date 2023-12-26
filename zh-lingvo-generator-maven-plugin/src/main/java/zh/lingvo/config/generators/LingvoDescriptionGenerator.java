@@ -3,12 +3,12 @@ package zh.lingvo.config.generators;
 import com.google.common.collect.ImmutableMap;
 import zh.args.Args;
 import zh.args.ArgsException;
+import zh.lingvo.config.LanguageDescriptionsBuilder;
+import zh.lingvo.config.LanguageDescriptionsStructure;
 import zh.lingvo.config.parser.Builder;
 import zh.lingvo.config.parser.ConfigParser;
 import zh.lingvo.config.parser.SyntaxError;
 import zh.lingvo.config.parser.lexer.Lexer;
-import zh.lingvo.config.LanguageDescriptionsBuilder;
-import zh.lingvo.config.LanguageDescriptionsStructure;
 
 import java.io.File;
 import java.io.IOException;
