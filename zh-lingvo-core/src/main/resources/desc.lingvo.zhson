@@ -9,6 +9,7 @@ parts_of_speech [
     [CONJUNCTION conj]
     [INTERJECTION interj]
     [DETERMINER det]
+    [CONTRACTION contr]
 ]
 
 language_descriptions {
@@ -59,7 +60,26 @@ language_descriptions {
             [CONJUNCTION conj conjunsión]
             [INTERJECTION interj interjección]
             [DETERMINER det determinador]
+            [CONTRACTION art artículo]
         ]
     }
+
+    Portuguese {
+            name Português
+            code Pt
+            parts_of_speech [
+                [NOUN s "substantivo"]
+                [VERB v verbo]
+                [ADJECTIVE adj adjetivo]
+                [ADVERB adv advérbio]
+                [PRONOUN pron pronome]
+                [NUMERAL num numeral]
+                [PREPOSITION prep preposição]
+                [CONJUNCTION conj conjunção]
+                [INTERJECTION interj interjeição]
+                [DETERMINER art artigo]
+                [CONTRACTION contr contração]
+            ]
+        }
 }
 
