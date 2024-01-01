@@ -37,13 +37,18 @@ public class ZhLingvoCodeGeneratorMojo extends AbstractMojo {
     private String configPath;
 
     public void execute() throws MojoExecutionException {
+        getLog().info("Starting generating Zh.Lingvo code.");
         try {
+            LingvoDescriptionGenerator.LOG_INFO = str -> getLog().info(str);
+            LingvoDescriptionGenerator.LOG_ERROR = str -> getLog().error(str);
             LingvoDescriptionGenerator.main(new String[]{
                     "-o", outputDirectory,
                     "-p", basePackage,
                     configPath
             });
+            getLog().info("Generating Zh.Lingvo code completed.");
         } catch (IOException e) {
+            getLog().error("Error while generating Zh.Lingvo code.");
             throw new MojoExecutionException(e);
         }
     }

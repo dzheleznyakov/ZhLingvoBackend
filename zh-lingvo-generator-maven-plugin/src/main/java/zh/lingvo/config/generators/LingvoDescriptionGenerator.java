@@ -17,17 +17,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class LingvoDescriptionGenerator {
     private static final String ARGS_SCHEMA = "p*,o*";
+    public static Consumer<String> LOG_INFO = System.out::println;
+    public static Consumer<String> LOG_ERROR = System.out::println;
 
     public static void main(String[] args) throws IOException {
         try {
             Args argsParser = new Args(ARGS_SCHEMA, args);
             new DescriptionCompiler(argsParser, args).run();
         } catch (ArgsException e) {
-            System.out.printf("Usage: %s file%n", ARGS_SCHEMA);
-            System.out.println(e.errorMessage());
+            LOG_ERROR.accept(String.format("Usage: %s file%n", ARGS_SCHEMA));
+            LOG_INFO.accept(e.errorMessage());
             System.exit(0);
         }
     }
@@ -83,13 +86,13 @@ public class LingvoDescriptionGenerator {
 
         private int reportSyntaxErrors(LanguageDescriptionsStructure structure) {
             int syntaxErrorCount = structure.errors.size();
-            System.out.printf(
+            LOG_INFO.accept(String.format(
                     "Complied with %d syntax error%s.%n",
                     syntaxErrorCount,
-                    (syntaxErrorCount == 1 ? "" : "s"));
+                    (syntaxErrorCount == 1 ? "" : "s")));
 
             for (SyntaxError error : structure.errors)
-                System.out.println(error);
+                LOG_ERROR.accept(error.toString());
 
             return syntaxErrorCount;
         }
