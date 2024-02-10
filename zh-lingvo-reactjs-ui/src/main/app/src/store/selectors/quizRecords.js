@@ -28,6 +28,9 @@ export const quizRecordsOverviewsCountSelector = createSelector(
 
 export const allQuizRecordsSelector = simpleSelectorFactory('quizRecords');
 
+export const meaningToConvertToQuizRecordSelector = 
+    simpleSelectorFactory('meaningToConvertToQuizRecord');
+
 export const quizRecordMainFormToUpdateSelector =
     state => _.get(state, 'quizRecords.updatedQuizRecord.wordMainForm', '');
 export const quizRecordStringPropertyToUpdateSelectorFactory = path =>

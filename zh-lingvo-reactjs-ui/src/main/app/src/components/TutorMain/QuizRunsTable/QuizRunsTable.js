@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import classes from './QuizRunsTable.module.scss';
 import { ControlBox, Greeting, MODAL_TYPES, Table } from '../../UI';
-import { useActionOnMount, useConditionalActionOnMount } from '../../../hooks';
+import { useConditionalActionOnMount } from '../../../hooks';
 import * as selectors from '../../../store/selectors';
 import * as actions from '../../../store/actions';
 
@@ -14,7 +14,6 @@ const QuizRunsTable = () => {
     const dispatch = useDispatch();
 
     useConditionalActionOnMount(actions.fetchAllQuizRuns(quizId), quizId != null, quizId);
-    // useActionOnMount(actions.setQuizRun(null));
 
     const columnsDef = [
         { name: '', label: 'ts' },
