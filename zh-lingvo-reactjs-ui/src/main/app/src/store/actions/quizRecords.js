@@ -105,3 +105,8 @@ export const convertMeaningToQuizRecordFailure = () => ({
 export const convertMeaningToQuizRecordSuccess = () => ({
     type: actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_SUCCESS,
 });
+
+export const storeMeaningToConvertToQuizRecord = (meaning) => ({
+    type: actionTypes.STORE_MEANING_TO_CONVERT_TO_QUIZ_RECORD,
+    meaning,
+});

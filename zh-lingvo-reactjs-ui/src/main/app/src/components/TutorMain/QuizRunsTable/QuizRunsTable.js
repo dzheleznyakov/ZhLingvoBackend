@@ -14,7 +14,6 @@ const QuizRunsTable = () => {
     const dispatch = useDispatch();
 
     useConditionalActionOnMount(actions.fetchAllQuizRuns(quizId), quizId != null, quizId);
-    // useActionOnMount(actions.setQuizRun(null));
 
     const columnsDef = [
         { name: '', label: 'ts' },

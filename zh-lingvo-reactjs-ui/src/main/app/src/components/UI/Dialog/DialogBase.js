@@ -5,10 +5,14 @@ import classes from './Dialog.module.scss';
 import DialogButtonBox, { dialogButtonConfigType } from './DialogButtonBox';
 
 const DialogBase = props => {
-    const { children, buttons } = props;
+    const { children, buttons, className } = props;
+
+    const cssClasses = [classes.Dialog];
+    if (className)
+        cssClasses.push(className)
 
     return (
-        <div className={classes.Dialog}>
+        <div className={cssClasses.join(' ')}>
             {children}
             <DialogButtonBox buttons={buttons} />
         </div>
@@ -17,7 +21,8 @@ const DialogBase = props => {
 
 DialogBase.propTypes = {
     children: PropTypes.node,
-    buttons: PropTypes.arrayOf(dialogButtonConfigType)
+    buttons: PropTypes.arrayOf(dialogButtonConfigType),
+    className: PropTypes.string,
 };
 
 DialogBase.defaultProps = {

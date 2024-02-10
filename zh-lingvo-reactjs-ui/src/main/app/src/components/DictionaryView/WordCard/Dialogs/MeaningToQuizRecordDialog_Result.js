@@ -8,17 +8,22 @@ import {
     convertingMeaningToQuizRecordSelector,
     meaningToQuizRecordSelector,
     objectPropertyToUpdateSelectorFactory, 
-    wordEditPathSelector 
+    quizRecordObjectPropertyToUpdateSelectorFactory,
+    wordEditPathSelector,
+    meaningToConvertToQuizRecordSelector,
 } from '../../../../store/selectors';
 import { useActionOnMount } from '../../../../hooks';
 import * as actions from '../../../../store/actions';
 
 const MeaningToQuizRecordDialog_Result = () => {
     const path = useSelector(wordEditPathSelector);
-    const meaning = useSelector(objectPropertyToUpdateSelectorFactory(path));
+    // const meaning = useSelector(objectPropertyToUpdateSelectorFactory(path));
+    const meaning = useSelector(meaningToConvertToQuizRecordSelector);
     const converting = useSelector(convertingMeaningToQuizRecordSelector);
     const { targetQuiz } = useSelector(meaningToQuizRecordSelector);
     const dispatch = useDispatch();
+
+    console.log(meaning)
 
     useActionOnMount(actions.convertMeaningToQuizRecord(meaning));
 
