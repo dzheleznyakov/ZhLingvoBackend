@@ -61,8 +61,12 @@ const QuizRunResult = () => {
         <div className={classes.QuizRunResultContent}>
             Number of questions in the run:{' '}
             {quizRun.doneRecords.length}
-            <CollapsableListView heading='Correct answers:' items={correctAswers} />
-            <CollapsableListView heading='Incorrect answers:' items={incorrectAnswers} />
+            <CollapsableListView 
+                heading={`Correct answers (${correctAswers.length || 0}):`}
+                items={correctAswers} />
+            <CollapsableListView 
+                heading={`Incorrect answers (${incorrectAnswers.length | 0}):`}
+                items={incorrectAnswers} />
             <button 
                 className={classes.BackButton}
                 onClick={onBackToQuizClicked}
