@@ -23,7 +23,7 @@ export const meaningType = PropTypes.shape({
 export const semBlockType = PropTypes.shape({
     id: PropTypes.number.isRequired,
     pos: PropTypes.string.isRequired,
-    gender: PropTypes.string,
+    //gender: PropTypes.string,
     meanings: PropTypes.arrayOf(meaningType),
 });
 
