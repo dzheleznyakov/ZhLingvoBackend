@@ -25,7 +25,6 @@ public class SemanticBlockCommandToSemanticBlock implements Converter<SemanticBl
     public SemanticBlock convert(@Nullable SemanticBlockCommand source) {
         return source == null ? null : SemanticBlock.builder()
                 .id(source.getId())
-                .gender(source.getGender())
                 .pos(convertPos(source))
                 .meanings(convertMeanings(source))
                 .build();

@@ -63,7 +63,6 @@ class SemanticBlockCommandToSemanticBlockTest {
         SemanticBlockCommand sbCommand = SemanticBlockCommand.builder()
                 .id(42L)
                 .pos(posName)
-                .gender("f")
                 .meanings(ImmutableList.of(mCommand1, mCommand2))
                 .build();
 
@@ -72,7 +71,6 @@ class SemanticBlockCommandToSemanticBlockTest {
         assertThat(sBlock, is(notNullValue()));
         assertThat(sBlock.getId(), is(sbCommand.getId()));
         assertThat(sBlock.getPos(), is(equalTo(PartOfSpeech.NOUN)));
-        assertThat(sBlock.getGender(), is(equalTo(sbCommand.getGender())));
 
         assertThat(sBlock.getMeanings(), is(notNullValue()));
         assertThat(sBlock.getMeanings(), hasSize(2));

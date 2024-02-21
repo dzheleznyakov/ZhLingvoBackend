@@ -18,6 +18,5 @@ import java.util.List;
 public class SemanticBlockCommand {
     private Long id;
     private String pos;
-    private String gender;
     private List<MeaningCommand> meanings;
 }
