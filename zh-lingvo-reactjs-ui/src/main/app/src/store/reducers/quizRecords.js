@@ -16,6 +16,7 @@ const initialState = {
     quizRecordEditModalType: NONE,
     quizRecordEditPath: [],
     convertingMeaingToQuizRecord: false,
+    meaningToConvertToQuizRecord: null,
 };
 
 const fetchQuizRecordsOverviewsSuccess = (state, action) => ({
@@ -107,6 +108,11 @@ const convertMeaningToQuizRecordSuccess = state => ({
     convertingMeaingToQuizRecord: false,
 });
 
+const storeMeaningToConvertToQuizRecord = (state, action) => ({
+    ...state,
+    meaningToConvertToQuizRecord: _.cloneDeep(action.meaning),
+});
+
 const signOut = () => ({
     ...initialState
 });
@@ -127,6 +133,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_START: return convertMeaningToQuizRecordStart(state, action);
         case actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_FAILURE: return convertMeaningToQuizRecordFailure(state, action);       
         case actionTypes.CONVERT_MEANING_TO_QUIZ_RECORD_SUCCESS: return convertMeaningToQuizRecordSuccess(state, action);       
+        case actionTypes.STORE_MEANING_TO_CONVERT_TO_QUIZ_RECORD: return storeMeaningToConvertToQuizRecord(state, action);
         case SIGN_OUT: return signOut();
         default: return state;
     }
