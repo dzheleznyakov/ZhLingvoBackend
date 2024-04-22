@@ -21,8 +21,15 @@ export const selectedQuizRecordSelector = createSelector(
     selectedQuizRecordIndexSelector,
     (overviews, index) => index >= 0 ? overviews[index] : {},
 );
+export const quizRecordsOverviewsCountSelector = createSelector(
+    quizRecordsOverviewsSelector,
+    overviews => (overviews || []).length,
+);
 
 export const allQuizRecordsSelector = simpleSelectorFactory('quizRecords');
+
+export const meaningToConvertToQuizRecordSelector = 
+    simpleSelectorFactory('meaningToConvertToQuizRecord');
 
 export const quizRecordMainFormToUpdateSelector =
     state => _.get(state, 'quizRecords.updatedQuizRecord.wordMainForm', '');

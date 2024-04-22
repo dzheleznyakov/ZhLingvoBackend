@@ -14,8 +14,10 @@ const MeaningToQuizRecordDialog_ConfirmRecord = () => {
 
     const onClosed = () => 
         dispatch(actions.shouldShowWordEditModal(false));
-    const onConfirmed = () => 
+    const onConfirmed = () => {
+        dispatch(actions.storeMeaningToConvertToQuizRecord(meaning));
         dispatch(actions.setWordEditModalType(MEANING_TO_QUIZ_RECORD__CHOOSE_QUIZ, path));
+    };
 
     return meaning.id != null && (
         <Dialog

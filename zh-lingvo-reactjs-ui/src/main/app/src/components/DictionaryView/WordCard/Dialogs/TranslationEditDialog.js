@@ -28,6 +28,7 @@ const TranslationEditDialog = props => {
         type: formInputTypes.TEXT,
         defaultValue: value || '',
         groupKey: translationGroup.key,
+        autocomplete: false,
         forwardRef: translationRef,
         validation: [{
             validate: validators.notEmpty(),
@@ -42,6 +43,7 @@ const TranslationEditDialog = props => {
         type: formInputTypes.TEXT,
         defaultValue: elaboration || '',
         groupKey: translationGroup.key,
+        autocomplete: false,
         forwardRef: elaborationRef,
     };
 

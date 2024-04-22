@@ -22,6 +22,7 @@ const MainFormDialog = () => {
         type: formInputTypes.TEXT,
         defaultValue: mainForm,
         groupKey: mainFormGroup.key,
+        autocomplete: false,
         forwardRef: mainFormRef,
         validation: [{
             validate: validators.notEmpty(),

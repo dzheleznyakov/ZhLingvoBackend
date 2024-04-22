@@ -8,7 +8,15 @@ import DialogButtonBox from './DialogButtonBox';
 import DialogBase from './DialogBase';
 
 const Dialog = props => {
-    const { children, close, confirmed, cancelled, disabled, chained } = props;
+    const { 
+        children, 
+        close, 
+        confirmed, 
+        cancelled, 
+        disabled, 
+        chained,
+        className,
+    } = props;
 
     const onConfirm = event => {
         confirmed && confirmed(event);
@@ -28,7 +36,7 @@ const Dialog = props => {
     ];
 
     return (
-        <DialogBase buttons={buttons}>
+        <DialogBase buttons={buttons} className={className}>
             {children}
         </DialogBase>
     );
@@ -41,6 +49,7 @@ Dialog.propTypes = {
     disabled: PropTypes.bool,
     chained: PropTypes.bool,
     children: PropTypes.node,
+    className: PropTypes.string,
 };
 
 Dialog.defaultProps = {

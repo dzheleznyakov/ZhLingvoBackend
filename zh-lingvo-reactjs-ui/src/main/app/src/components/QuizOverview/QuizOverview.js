@@ -14,6 +14,7 @@ import QuizRecordCard from './QuizRecordCard/QuizRecordCard';
 const QuizOverview = () => {
     const { qid: quizId } = useParams();
     const dispatch = useDispatch();
+    const recordsCount = useSelector(selectors.quizRecordsOverviewsCountSelector);
     useActionOnMount(actions.fetchQuiz(+quizId));
 
     const quiz = useSelector(selectors.loadedQuizSelector);
@@ -33,6 +34,7 @@ const QuizOverview = () => {
         <div>
             <h1 className={classes.QuizName}>{quizName}</h1>
             <h2 className={classes.LanguageName}>{quiz && quiz.targetLanguage.name}</h2>
+            <h2 className={classes.RecordsCount}>Number of records: {recordsCount}</h2>
             {quizIsLoading && <Spinner />}
             <div className={classes.ContentWrapper}>
                 <RecordList />

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,9 +16,16 @@ const RecordList = () => {
     const dispatch = useDispatch();
     const overviews = useSelector(selectors.quizRecordsOverviewsSelector);
     const isEditing = useSelector(selectors.quizRecordIsEditingSelector);
+    const displayedOverviews = [...overviews];
+    displayedOverviews.sort((a, b) => {
+        const scoreDiff = a.currentScore - b.currentScore;
+        if (scoreDiff !== 0)
+            return scoreDiff;
+        return a.id - b.id;
+    });
 
     const selectedIndex = rid !== null && rid !== undefined
-        ? overviews.findIndex(overview => overview.id === +rid)
+        ? displayedOverviews.findIndex(overview => overview.id === +rid)
         : -1;
 
     useActionOnMount(actions.fetchQuizRecordsOverviews(quizId));
@@ -34,23 +41,17 @@ const RecordList = () => {
     if (rid !== null && rid !== undefined)
         wrapperClasses.push(classes.Active);
 
-    const items = overviews
+    const items = displayedOverviews
         .map(overview => 
             ({ 
                 key: `${overview.id}`, 
                 node: <RecordListItem quizRecord={overview} /> ,
                 currentScore: overview.currentScore,
             }));
-    items.sort((a, b) => {
-        const scoreDiff = a.currentScore - b.currentScore;
-        if (scoreDiff !== 0)
-            return scoreDiff;
-        return a.id - b.id;
-    });
 
     const onRecordClick = index => () => {
         dispatch(actions.selectQuizRecord(index));
-        const recordId = overviews[index].id;
+        const recordId = displayedOverviews[index].id;
         dispatch(actions.navigateTo(`/tutor/quiz/${quizId}/${recordId}`));
     };
 
