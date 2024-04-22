@@ -17,3 +17,7 @@ WHERE NOT EXISTS (SELECT 1 FROM language WHERE code='Es');
 INSERT INTO language (name, code)
 SELECT 'Russian', 'Ru'
 WHERE NOT EXISTS (SELECT 1 FROM language WHERE code='Ru');
+
+INSERT INTO language (name, code)
+SELECT 'Portuguese', 'Pt'
+WHERE NOT EXISTS (SELECT 1 FROM language WHERE code='Pt');

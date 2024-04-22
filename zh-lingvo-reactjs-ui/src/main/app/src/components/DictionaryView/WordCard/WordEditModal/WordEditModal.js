@@ -29,6 +29,9 @@ const WordEditModal = () => {
         case modalTypes.EXAMPLE_DELETE: panel = <dialogs.ExampleDeleteDialog />; break;
         case modalTypes.MEANING_NEW: panel = <dialogs.MeaningEditDialog />; break;
         case modalTypes.MEANING_DELETE: panel = <dialogs.MeaningDeleteDialog />; break;
+        case modalTypes.MEANING_TO_QUIZ_RECORD__SELECT_MEANING: 
+            panel = <dialogs.MeaningToQuizRecordDialog_SelectMeaning />; 
+            break;
         case modalTypes.MEANING_TO_QUIZ_RECORD__CONFIRM_RECORD: 
             panel = <dialogs.MeaningToQuizRecordDialog />; 
             break;

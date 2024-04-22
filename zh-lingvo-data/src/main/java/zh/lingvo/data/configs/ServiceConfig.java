@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import zh.lingvo.core.LanguageDescriptor;
 import zh.lingvo.core.LanguageDescriptorManager;
 import zh.lingvo.core.descriptors.EnglishLanguageDescriptor;
+import zh.lingvo.core.descriptors.PortugueseLanguageDescriptor;
 import zh.lingvo.core.descriptors.RussianLanguageDescriptor;
 import zh.lingvo.core.descriptors.SpanishLanguageDescriptor;
 
@@ -22,8 +23,9 @@ public class ServiceConfig {
     private Collection<LanguageDescriptor> getLanguageDescriptors() {
         return ImmutableList.of(
                 new EnglishLanguageDescriptor(),
-                new SpanishLanguageDescriptor(),
-                new RussianLanguageDescriptor()
+                new PortugueseLanguageDescriptor(),
+                new RussianLanguageDescriptor(),
+                new SpanishLanguageDescriptor()
         );
     }
 }

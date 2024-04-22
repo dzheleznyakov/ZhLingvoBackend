@@ -7,15 +7,15 @@ import { actionButtonTypes, DialogBase, Spinner } from '../../../UI';
 import { 
     convertingMeaningToQuizRecordSelector,
     meaningToQuizRecordSelector,
-    objectPropertyToUpdateSelectorFactory, 
-    wordEditPathSelector 
+    wordEditPathSelector,
+    meaningToConvertToQuizRecordSelector,
 } from '../../../../store/selectors';
 import { useActionOnMount } from '../../../../hooks';
 import * as actions from '../../../../store/actions';
 
 const MeaningToQuizRecordDialog_Result = () => {
     const path = useSelector(wordEditPathSelector);
-    const meaning = useSelector(objectPropertyToUpdateSelectorFactory(path));
+    const meaning = useSelector(meaningToConvertToQuizRecordSelector);
     const converting = useSelector(convertingMeaningToQuizRecordSelector);
     const { targetQuiz } = useSelector(meaningToQuizRecordSelector);
     const dispatch = useDispatch();

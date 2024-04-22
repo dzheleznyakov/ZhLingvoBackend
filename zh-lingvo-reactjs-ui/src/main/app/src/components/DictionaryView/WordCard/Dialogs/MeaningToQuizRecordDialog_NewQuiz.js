@@ -33,6 +33,7 @@ const MeaningToQuizRecordDialog_NewQuiz = () => {
         defaultValue: '',
         groupKey: quizGroup.key,
         forwardRef: nameRef,
+        autocomplete: false,
         disabled: creatingNewQuiz,
         validation: [{
             validate: validators.minLength(3),

@@ -31,6 +31,7 @@ const QuizForm = props => {
         groupKey: quizGroup.key,
         forwardRef: nameRef,
         disabled: disabledInputs.name,
+        autocomplete: false,
         validation: [{
             validate: validators.minLength(3),
             failureMessage: 'Quiz name should contain at least 3 characters',

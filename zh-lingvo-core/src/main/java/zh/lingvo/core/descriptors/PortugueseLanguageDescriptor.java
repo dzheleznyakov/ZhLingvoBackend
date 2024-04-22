@@ -12,34 +12,34 @@ import zh.lingvo.core.domain.PartOfSpeech;
 import java.util.List;
 import java.util.Map;
 
-public class SpanishLanguageDescriptor implements zh.lingvo.core.LanguageDescriptor {
+public class PortugueseLanguageDescriptor implements zh.lingvo.core.LanguageDescriptor {
     private static final Map<PartOfSpeech, String[]> POS_DATA = ImmutableMap.<PartOfSpeech, String[]>builder()
-            .put(PartOfSpeech.NOUN, new String[]{"n", "nombre sustantivo"})
+            .put(PartOfSpeech.NOUN, new String[]{"s", "substantivo"})
             .put(PartOfSpeech.VERB, new String[]{"v", "verbo"})
             .put(PartOfSpeech.ADJECTIVE, new String[]{"adj", "adjetivo"})
-            .put(PartOfSpeech.ADVERB, new String[]{"adv", "adverbio"})
-            .put(PartOfSpeech.PRONOUN, new String[]{"pron", "pronombre"})
+            .put(PartOfSpeech.ADVERB, new String[]{"adv", "advérbio"})
+            .put(PartOfSpeech.PRONOUN, new String[]{"pron", "pronome"})
             .put(PartOfSpeech.NUMERAL, new String[]{"num", "numeral"})
-            .put(PartOfSpeech.PREPOSITION, new String[]{"prep", "preposición"})
-            .put(PartOfSpeech.CONJUNCTION, new String[]{"conj", "conjunsión"})
-            .put(PartOfSpeech.INTERJECTION, new String[]{"interj", "interjección"})
-            .put(PartOfSpeech.DETERMINER, new String[]{"det", "determinador"})
-            .put(PartOfSpeech.CONTRACTION, new String[]{"art", "artículo"})
+            .put(PartOfSpeech.PREPOSITION, new String[]{"prep", "preposição"})
+            .put(PartOfSpeech.CONJUNCTION, new String[]{"conj", "conjunção"})
+            .put(PartOfSpeech.INTERJECTION, new String[]{"interj", "interjeição"})
+            .put(PartOfSpeech.DETERMINER, new String[]{"art", "artigo"})
+            .put(PartOfSpeech.CONTRACTION, new String[]{"contr", "contração"})
             .build();
 
     @Override
     public String getLanguageName() {
-        return "Spanish";
+        return "Portuguese";
     }
 
     @Override
     public String getLanguageNativeName() {
-        return "Español";
+        return "Português";
     }
 
     @Override
     public String getLanguageCode() {
-        return "Es";
+        return "Pt";
     }
 
     @Override

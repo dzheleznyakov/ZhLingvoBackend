@@ -26,11 +26,11 @@ class LanguageDescriptorManagerIT {
     }
 
     @Test
-    @DisplayName("Should support languages: En, Es, Ru")
+    @DisplayName("Should support languages: En, Es, Ru, Pt")
     public void testGetLanguageCodes() throws IOException {
         List<String> actualCodes = manager.getLanguageCodes();
 
-        Set<String> expectedCodes = ImmutableSet.of("En", "Es", "Ru");
+        Set<String> expectedCodes = ImmutableSet.of("En", "Es", "Ru", "Pt");
 
         assertThat(actualCodes, is(notNullValue()));
         assertThat(ImmutableSet.copyOf(actualCodes), is(equalTo(expectedCodes)));

@@ -4,7 +4,7 @@
 
     <groupId>zh.lingvo</groupId>
     <artifactId>zh-lingvo-backend</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.2.4-SNAPSHOT</version>
 
     <modules>
         <module>zh-lingvo-util</module>
