@@ -26,6 +26,7 @@ const TranscriptionEditDialog = props => {
         defaultValue: transcription || '',
         groupKey: transcriptionGroup.key,
         forwardRef: transcriptionRef,
+        autocomplete: false,
         validation: [{
             validate: validators.notEmpty(),
             failureMessage: 'Transcription cannot be empty',

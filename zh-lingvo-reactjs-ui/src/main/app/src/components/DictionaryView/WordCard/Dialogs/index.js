@@ -14,6 +14,7 @@ import ExampleDeleteDialogComponent from './ExampleDeleteDialog';
 
 import MeaningEditDialogComponent from './MeaningEditDialog';
 import MeaningDeleteDialogComponent from './MeaningDeleteDialog';
+import MeaningToQuizRecordDialogComponent_SelectMeaning  from './MeaningToQuizRecordDialog_SelectMeaning';
 import MeaningToQuizRecordDialogComponent from './MeaningToQuizRecordDialog_ConfirmRecord';
 import MeaningToQuizRecordDialog_ChooseQuizComponent from './MeaningToQuizRecordDialog_ChooseQuiz';
 import MeaningToQuizRecordDialog_NewQuizComponent from './MeaningToQuizRecordDialog_NewQuiz';
@@ -39,6 +40,7 @@ export const ExampleDeleteDialog = ExampleDeleteDialogComponent;
 
 export const MeaningEditDialog = MeaningEditDialogComponent;
 export const MeaningDeleteDialog = MeaningDeleteDialogComponent;
+export const MeaningToQuizRecordDialog_SelectMeaning = MeaningToQuizRecordDialogComponent_SelectMeaning;
 export const MeaningToQuizRecordDialog = MeaningToQuizRecordDialogComponent;
 export const MeaningToQuizRecordDialog_ChooseQuiz = MeaningToQuizRecordDialog_ChooseQuizComponent;
 export const MeaningToQuizRecordDialog_NewQuiz = MeaningToQuizRecordDialog_NewQuizComponent;

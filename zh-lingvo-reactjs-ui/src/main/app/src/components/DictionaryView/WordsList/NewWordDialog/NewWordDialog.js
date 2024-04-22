@@ -24,6 +24,7 @@ const NewWordDialog = props => {
         defaultValue: '',
         groupKey: wordGroup.key,
         forwardRef: mainFormRef,
+        autocomplete: false,
         validation: [{
             validate: validators.notEmpty(),
             failureMessage: 'Word main form cannot be empty',

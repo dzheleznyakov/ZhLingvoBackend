@@ -25,6 +25,7 @@ const RemarkEditDialog = props => {
         type: formInputTypes.TEXT,
         defaultValue: remark || '',
         groupKey: remarkGroup.key,
+        autocomplete: false,
         forwardRef: remarkRef,
         validation: [{
             validate: validators.notEmpty(),
