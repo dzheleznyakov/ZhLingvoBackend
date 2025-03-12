@@ -4,7 +4,7 @@
 
     <groupId>zh.lingvo</groupId>
     <artifactId>zh-lingvo-backend</artifactId>
-    <version>0.2.4</version>
+    <version>0.2.5-SNAPSHOT</version>
 
     <modules>
         <module>zh-lingvo-util</module>
@@ -135,6 +135,6 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com:dzheleznyakov/ZhLingvoBackend.git</developerConnection>
-        <tag>zh-lingvo-backend-0.2.4</tag>
+        <tag>zh-lingvo-backend-0.1.0</tag>
     </scm>
 </project>
