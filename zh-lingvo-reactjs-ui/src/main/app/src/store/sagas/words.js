@@ -9,8 +9,12 @@ import * as actionTypes from '../actionTypes';
 export function* fetchWordsListSaga(action) {
     const { dictionaryId } = action;
     try {
-        const { data } = yield call(axios.get, `/words/dictionary/${dictionaryId}`);
-        yield put(actions.fetchWordsListSuccess(data));
+        const { data } = yield call(
+            axios.get, 
+            `/words/dictionary/${dictionaryId}?offset=0&limit=25`
+        );
+        console.log(data);
+        yield put(actions.fetchWordsListSuccess(data.words || []));
     } catch (error) {
         yield put(actions.addError(
             error.response.data, 

@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import zh.lingvo.data.exceptions.FailedToPersist;
+import zh.lingvo.data.fixtures.OffsetBasedPageRequest;
+import zh.lingvo.data.fixtures.PageableList;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.SemanticBlock;
@@ -105,6 +107,8 @@ class WordControllerTest {
     @DisplayName("Test GET /api/words/dictionary/{dictionaryId}")
     class GetAllWords {
         private static final String URL_TEMPLATE = "/api/words/dictionary/{dictionaryId}";
+        private static final String URL_TEMPLATE_WITH_PAGE =
+                "/api/words/dictionary/{dictionaryId}?offset={offset}&limit={limit}";
 
         @Test
         @DisplayName("Should return an empty list if no words found for the dictionary")
@@ -114,7 +118,7 @@ class WordControllerTest {
             mockMvc.perform(get(URL_TEMPLATE, DICTIONARY_ID))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", is(notNullValue())))
-                    .andExpect(jsonPath("$", hasSize(0)));
+                    .andExpect(jsonPath("$.words", hasSize(0)));
 
             verify(wordService, only()).findAll(DICTIONARY_ID, USER);
         }
@@ -127,11 +131,31 @@ class WordControllerTest {
             mockMvc.perform(get(URL_TEMPLATE, DICTIONARY_ID))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", is(notNullValue())))
-                    .andExpect(jsonPath("$", hasSize(2)))
-                    .andExpect(jsonPath("$[0]", is("word1")))
-                    .andExpect(jsonPath("$[1]", is("word2")));
+                    .andExpect(jsonPath("$.words", hasSize(2)))
+                    .andExpect(jsonPath("$.words[0]", is("word1")))
+                    .andExpect(jsonPath("$.words[1]", is("word2")));
 
             verify(wordService, only()).findAll(DICTIONARY_ID, USER);
+        }
+
+        @Test
+        @DisplayName("Should return the paginated overview of the words from the dictionary")
+        void wordsFoundWithPagination() throws Exception {
+            final int offset = 0;
+            final int limit = 1;
+            when(wordService.findAll(DICTIONARY_ID, USER, offset, limit)).thenReturn(
+                    new PageableList<>(
+                            ImmutableList.of(WORD_1),
+                            new OffsetBasedPageRequest(limit, offset, "mock_property").next())
+            );
+
+            mockMvc.perform(get(URL_TEMPLATE_WITH_PAGE, DICTIONARY_ID, offset, limit))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", is(notNullValue())))
+                    .andExpect(jsonPath("$.words", hasSize(1)))
+                    .andExpect(jsonPath("$.words[0]", is("word1")))
+                    .andExpect(jsonPath("$.next.offset", is(1)))
+                    .andExpect(jsonPath("$.next.limit", is(1)));
         }
     }
 

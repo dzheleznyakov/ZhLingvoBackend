@@ -2,16 +2,21 @@ package zh.lingvo.data.repositories;
 
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import zh.lingvo.core.domain.PartOfSpeech;
+import zh.lingvo.data.fixtures.OffsetBasedPageRequest;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Language;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,17 +31,18 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     private static final String MAIN_FORM_1 = "word";
     private static final String MAIN_FORM_3 = "draw";
     private static final String MAIN_FORM_4 = "cook";
+    private static final String MAIN_FORM_5 = "look";
     private static final String TRANSCRIPTION_1 = "t1";
     private static final String TRANSCRIPTION_2 = "t2";
     private static final String TRANSCRIPTION_3 = "t3";
     private static final String TRANSCRIPTION_4 = "t4";
     private static final String TRANSCRIPTION_5 = "t5";
+    private static final String TRANSCRIPTION_6 = "t6";
 
     private final User user = User.builder().name("test").build();
     private final Language language = Language.builder().name("Lang").twoLetterCode("Ln").build();
     private final Dictionary dictionary = Dictionary.builder().name("Dictionary").language(language).user(user).build();
     private final Dictionary dictionary2 = Dictionary.builder().name("Dictionary 2").language(language).user(user).build();
-    private final PartOfSpeech pos = PartOfSpeech.VERB;
 
     @BeforeEach
     void setUpDb() {
@@ -49,6 +55,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
         entityManager.persist(getWord(MAIN_FORM_3, TRANSCRIPTION_3));
         entityManager.persist(getWord(MAIN_FORM_4, TRANSCRIPTION_4, dictionary2));
         entityManager.persist(getWord(MAIN_FORM_1, TRANSCRIPTION_5, dictionary2));
+        entityManager.persist(getWord(MAIN_FORM_5, TRANSCRIPTION_6));
         entityManager.flush();
     }
 
@@ -86,9 +93,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     void findAllByMainForm_ThreeWords() {
         List<Word> words = repository.findAllByMainForm(MAIN_FORM_1);
 
-        Set<String> actualTranscriptions = words.stream()
-                .map(Word::getTranscription)
-                .collect(ImmutableSet.toImmutableSet());
+        Set<String> actualTranscriptions = mapToAttributes(words, Word::getTranscription);
         Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2, TRANSCRIPTION_5);
         assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
     }
@@ -101,15 +106,26 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
         Set<String> actualTranscriptions = words.stream()
                 .map(Word::getTranscription)
                 .collect(ImmutableSet.toImmutableSet());
-        Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2, TRANSCRIPTION_3);
+        Set<String> expectedTranscriptions = ImmutableSet.of(
+                TRANSCRIPTION_1, TRANSCRIPTION_2, TRANSCRIPTION_3, TRANSCRIPTION_6);
         assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
 
         words = repository.findAllByDictionary(dictionary2);
 
-        actualTranscriptions = words.stream()
-                .map(Word::getTranscription)
-                .collect(ImmutableSet.toImmutableSet());
+        actualTranscriptions = mapToAttributes(words, Word::getTranscription);
         expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_4, TRANSCRIPTION_5);
+        assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
+    }
+
+    @Test
+    @DisplayName("Should return all words from the given dictionary, sorted and pageable")
+    @Disabled("It's a perfectly fine test to run on its own, but it fails when running alongside other JPA tests (https://github.com/spring-projects/spring-boot/issues/1454)")
+    void findAllByDictionary_pageable() {
+        Pageable pageable = new OffsetBasedPageRequest(2, 1, "mainForm", "id");
+        List<Word> words = repository.findAllByDictionary(dictionary, pageable);
+
+        Set<String> actualTranscriptions = mapToAttributes(words, Word::getTranscription);
+        Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_6, TRANSCRIPTION_1);
         assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
     }
 
@@ -118,9 +134,7 @@ class WordRepositoryTest extends BaseRepositoryTest<WordRepository> {
     void findAllByMainFormAndDictionary() {
         List<Word> words = repository.findAllByMainFormAndDictionary(MAIN_FORM_1, dictionary);
 
-        Set<String> actualTranscriptions = words.stream()
-                .map(Word::getTranscription)
-                .collect(ImmutableSet.toImmutableSet());
+        Set<String> actualTranscriptions = mapToAttributes(words, Word::getTranscription);
         Set<String> expectedTranscriptions = ImmutableSet.of(TRANSCRIPTION_1, TRANSCRIPTION_2);
         assertThat(actualTranscriptions, is(equalTo(expectedTranscriptions)));
     }

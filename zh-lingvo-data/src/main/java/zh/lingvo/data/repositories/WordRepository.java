@@ -1,5 +1,6 @@
 package zh.lingvo.data.repositories;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +14,8 @@ public interface WordRepository extends CrudRepository<Word, Long> {
     List<Word> findAllByMainForm(String mainForm);
 
     List<Word> findAllByDictionary(Dictionary dictionary);
+
+    List<Word> findAllByDictionary(Dictionary dictionary, Pageable pageable);
 
     List<Word> findAllByMainFormAndDictionary(String mainForm, Dictionary dictionary);
 

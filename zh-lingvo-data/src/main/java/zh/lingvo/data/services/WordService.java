@@ -1,5 +1,6 @@
 package zh.lingvo.data.services;
 
+import zh.lingvo.data.fixtures.PageableList;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 public interface WordService {
     List<Word> findAll(Long dictionaryId, User user);
+    PageableList<Word> findAll(Long dictionaryId, User user, int offset, int limit);
 
     List<Word> findAllByMainForm(String mainForm, Long dictionaryId, User user);
 

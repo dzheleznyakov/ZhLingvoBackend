@@ -7,8 +7,11 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import zh.lingvo.data.exceptions.FailedToPersist;
+import zh.lingvo.data.fixtures.OffsetBasedPageRequest;
+import zh.lingvo.data.fixtures.PageableList;
 import zh.lingvo.data.model.Dictionary;
 import zh.lingvo.data.model.Example;
 import zh.lingvo.data.model.Meaning;
@@ -49,6 +52,13 @@ public class WordServiceImpl implements WordService {
     @Override
     public List<Word> findAll(Long dictionaryId, User user) {
         return findAll(dictionaryId, user, wordRepository::findAllByDictionary);
+    }
+
+    @Override
+    public PageableList<Word> findAll(Long dictionaryId, User user, int offset, int limit) {
+        Pageable pageable = new OffsetBasedPageRequest(limit, offset, "mainForm", "id");
+        List<Word> list = findAll(dictionaryId, user, dictionary -> wordRepository.findAllByDictionary(dictionary, pageable));
+        return new PageableList<>(list, pageable.next());
     }
 
     @Override

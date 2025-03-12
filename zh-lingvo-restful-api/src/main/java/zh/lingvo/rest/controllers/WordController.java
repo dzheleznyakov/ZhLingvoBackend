@@ -1,6 +1,8 @@
 package zh.lingvo.rest.controllers;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import zh.lingvo.data.exceptions.FailedToPersist;
+import zh.lingvo.data.fixtures.PageableList;
 import zh.lingvo.data.model.User;
 import zh.lingvo.data.model.Word;
 import zh.lingvo.data.services.WordService;
@@ -22,7 +26,9 @@ import zh.lingvo.rest.util.RequestContext;
 import zh.lingvo.util.CollectionsHelper;
 
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static zh.lingvo.util.Preconditions.checkNull;
@@ -46,12 +52,30 @@ public class WordController {
     }
 
     @GetMapping("/dictionary/{dictionaryId}")
-    public Set<String> getAllWords(@PathVariable("dictionaryId") Long dictionaryId) {
-        return wordService.findAll(dictionaryId, getUser())
+    public WordListResponse getAllWords(
+            @PathVariable("dictionaryId") Long dictionaryId,
+            @RequestParam(name = "limit", defaultValue = "-1") Integer limit,
+            @RequestParam(name = "offset", defaultValue = "-1") Integer offset
+    ) {
+        if (limit == null || offset == null || limit < 0 || offset < 0) {
+            Set<String> words = wordService.findAll(dictionaryId, getUser())
+                    .stream()
+                    .map(Word::getMainForm)
+                    .sorted()
+                    .collect(CollectionsHelper.toLinkedHashSet());
+            return new WordListResponse(words);
+        }
+
+        PageableList<Word> pageableWords = wordService.findAll(dictionaryId, getUser(), offset, limit);
+        LinkedHashSet<String> words = pageableWords
                 .stream()
                 .map(Word::getMainForm)
                 .sorted()
                 .collect(CollectionsHelper.toLinkedHashSet());
+        return new WordListResponse(
+                words,
+                pageableWords.getPageable().getPageSize(),
+                pageableWords.getPageable().getOffset());
     }
 
     @GetMapping("/dictionary/{dictionaryId}/mainForm/{mainForm}")
@@ -113,5 +137,24 @@ public class WordController {
 
     private User getUser() {
         return context.getUser();
+    }
+
+    @Getter
+    public static class WordListResponse {
+        private final Set<String> words;
+        private final Map<String, Number> next;
+
+        WordListResponse(Set<String> words) {
+            this.words = words;
+            next = null;
+        }
+
+        WordListResponse(Set<String> words, int limit, long offset) {
+            this.words = words;
+            this.next = ImmutableMap.of(
+                    "limit", limit,
+                    "offset", offset
+            );
+        }
     }
 }

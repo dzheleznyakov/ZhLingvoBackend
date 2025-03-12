@@ -11,6 +11,7 @@ import { useActionOnMount, useDynamicBreadcrumbs } from '../../../hooks';
 import * as actions from '../../../store/actions';
 import * as selectors from '../../../store/selectors';
 import { ListView } from '../../UI';
+import ResusableListView from '../../UI/ListView/ResusableListView';
 
 const URLS = {
     DICTIONARIES: '/dictionaries',
@@ -75,7 +76,7 @@ const WordsList = props => {
 
     const listView = items.length === 0 
         ? null 
-        : <ListView 
+        : <ResusableListView
             items={items} 
             onItemClick={onWordClick} 
             selectedIndex={selectedIndex} />;
