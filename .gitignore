@@ -9,6 +9,7 @@
 
 # VSC
 **/*.code-workspace
+**/.vscode
 
 # IDEA
 .idea

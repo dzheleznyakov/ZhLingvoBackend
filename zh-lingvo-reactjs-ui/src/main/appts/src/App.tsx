@@ -1,11 +1,13 @@
 import './App.css'
 
+import Layout from './features/hoc/components/Layout'
+
 function App() {
 
   return (
-    <>
-      Hello Lingvo!
-    </>
+    <Layout>
+      <div>Child Component</div>
+    </Layout>
   )
 }
 
