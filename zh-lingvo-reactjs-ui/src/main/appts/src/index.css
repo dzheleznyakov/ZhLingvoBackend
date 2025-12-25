@@ -10,3 +10,9 @@
     @apply bg-bg-canvas text-text-primary;
   }
 }
+
+@layer components {
+  .page {
+    @apply container;
+  }
+}

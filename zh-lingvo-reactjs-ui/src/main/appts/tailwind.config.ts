@@ -4,6 +4,22 @@ export default {
   content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
 
   theme: {
+    container: {
+      center: true,
+
+      padding: {
+        DEFAULT: "1rem",
+        sm: "1.25rem",
+        md: "1.5rem",
+        lg: "2rm",
+      },
+
+      screens: {
+        lg: "1024px",
+        xl: "1200px",
+      },
+    },
+
     extend: {
       colors: {
         brand: {
