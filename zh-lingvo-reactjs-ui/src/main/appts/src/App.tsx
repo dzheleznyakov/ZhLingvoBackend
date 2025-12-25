@@ -1,6 +1,6 @@
-import "./App.css";
+import Layout from './features/layout/components/Layout';
 
-import Layout from "./features/hoc/components/Layout";
+import './App.css';
 
 function App() {
   return (
