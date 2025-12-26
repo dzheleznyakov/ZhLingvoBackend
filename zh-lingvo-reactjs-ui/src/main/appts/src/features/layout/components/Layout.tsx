@@ -1,5 +1,3 @@
-import type React from 'react';
-
 import Header from './header/Header';
 
 type Props = {
@@ -10,7 +8,7 @@ const Layout = ({ children }: Props) => {
   return (
     <div>
       <Header />
-      {children}
+      <div className="page">{children}</div>
     </div>
   );
 };
