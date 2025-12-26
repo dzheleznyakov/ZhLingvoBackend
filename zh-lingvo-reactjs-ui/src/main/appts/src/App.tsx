@@ -1,7 +1,5 @@
 import Layout from './features/layout/components/Layout';
 
-import './App.css';
-
 function App() {
   return (
     <Layout>

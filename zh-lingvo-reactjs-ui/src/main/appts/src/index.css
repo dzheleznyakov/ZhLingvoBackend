@@ -1,11 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @config "../tailwind.config.ts";
 
 @layer base {
   body {
-    font-family: "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif, -apple-system, BlinkMacSystemFont;
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif, -apple-system, BlinkMacSystemFont;
 
     @apply bg-bg-canvas text-text-primary;
   }
@@ -15,4 +14,8 @@
   .page {
     @apply container;
   }
+}
+
+nav li {
+  list-style: none;
 }
